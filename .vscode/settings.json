@@ -1,0 +1,17 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.addMissingImports": "explicit",
+    "editor.codeLens": "explicit"
+  },
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+  "tailwindCSS.classFunctions": ["cva", "cn"],
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "js/ts.tsdk.path": "node_modules/typescript/lib"
+}
