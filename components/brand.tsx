@@ -24,7 +24,7 @@ export function Brand({
       )}
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
     >
-      <BrandMark className={cn('h-8 w-auto', className)} />
+      <BrandLogo className={cn('h-8 w-auto', className)} />
     </div>
   );
 
@@ -37,7 +37,7 @@ export function Brand({
   );
 }
 
-export const BrandMark = (props: React.ComponentProps<'svg'>) => (
+export const BrandLogo = (props: React.ComponentProps<'svg'>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 400 212"
