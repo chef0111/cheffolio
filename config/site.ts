@@ -1,0 +1,20 @@
+import { NavItem } from '@/modules/navbar/nav';
+
+export const MAIN_NAV: NavItem[] = [
+  {
+    title: 'About',
+    href: '#about',
+  },
+  {
+    title: 'Stack',
+    href: '#stack',
+  },
+  {
+    title: 'Projects',
+    href: '#projects',
+  },
+  {
+    title: 'Awards',
+    href: '#awards',
+  },
+];
