@@ -3,7 +3,7 @@
 import { cn } from '@/lib/utils';
 import { useScroll } from '@/hooks/use-scroll';
 import { Button } from '@/components/ui/button';
-import ThemeToggle from '@/components/ui/theme-toggle';
+import ThemeToggle from './theme-toggle';
 import { GithubIcon } from '@/components/icons';
 import { Brand } from '@/components/ui/brand';
 import { DesktopNav } from './desktop-nav';
