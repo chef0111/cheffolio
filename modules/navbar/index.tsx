@@ -7,6 +7,8 @@ import ThemeToggle from './theme-toggle';
 import { GithubIcon } from '@/components/icons';
 import { Brand } from '@/components/ui/brand';
 import { DesktopNav } from './desktop-nav';
+import { MAIN_NAV } from '@/config/site';
+import { CommandMenu } from '@/components/command-menu';
 
 export function Header() {
   const scrolled = useScroll(10);
@@ -32,8 +34,9 @@ export function Header() {
         <div className="flex items-center gap-5">
           <Brand href="/" />
         </div>
-        <div className="hidden items-center gap-2 md:flex">
-          <DesktopNav />
+        <div className="flex items-center gap-2 *:first:mr-2 max-sm:*:data-[slot=command-menu-trigger]:hidden">
+          <DesktopNav items={MAIN_NAV} />
+          <CommandMenu />
           <Button size="icon" variant="ghost">
             <a href="https://github.com/chef0111/cheffolio" target="_blank">
               <GithubIcon />
