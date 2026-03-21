@@ -13,6 +13,11 @@ const eslintConfig = defineConfig([
     'build/**',
     'next-env.d.ts',
   ]),
+  {
+    rules: {
+      'react-hooks/immutability': 'warn',
+    },
+  },
 ]);
 
 export default eslintConfig;

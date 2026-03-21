@@ -2,6 +2,7 @@ import { cn } from '@/lib/utils';
 import { USER } from '@/modules/portfolio/data/user';
 import { ProfilePage, WithContext } from 'schema-dts';
 import { ProfileCover } from '@/modules/portfolio/components/profile-cover';
+import { FullWidthDivider } from '@/components/ui/full-width-divider';
 
 export default function Page() {
   return (
@@ -17,8 +18,9 @@ export default function Page() {
           'mx-auto min-h-screen md:max-w-4xl *:[[id]]:scroll-mt-22'
         )}
       >
-        <div className="cover-background h-14 w-full" />
+        <div className="cover-background h-12 w-full" />
         <ProfileCover />
+        <FullWidthDivider />
       </main>
     </>
   );

@@ -40,7 +40,7 @@ export function Brand({
 export const BrandLogo = (props: React.ComponentProps<'svg'>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 400 212"
+    viewBox="0 0 370 212"
     fill="none"
     aria-hidden
     {...props}
