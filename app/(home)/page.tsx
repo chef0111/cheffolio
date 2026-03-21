@@ -3,6 +3,8 @@ import { USER } from '@/modules/portfolio/data/user';
 import { ProfilePage, WithContext } from 'schema-dts';
 import { ProfileCover } from '@/modules/portfolio/components/profile-cover';
 import { FullWidthDivider } from '@/components/ui/full-width-divider';
+import { ProfileHeader } from '@/modules/portfolio/components/profile-header';
+import { TailwindSeparator } from '@/components/tailwind-separator';
 
 export default function Page() {
   return (
@@ -21,6 +23,8 @@ export default function Page() {
         <div className="cover-background h-12 w-full" />
         <ProfileCover />
         <FullWidthDivider />
+        <ProfileHeader />
+        <TailwindSeparator />
       </main>
     </>
   );

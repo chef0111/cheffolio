@@ -21,25 +21,10 @@ export type User = {
   website: string;
   /** Primary/current role shown on profile */
   jobTitle: string;
-  /** Work history entries */
-  jobs: {
-    title: string;
-    company: string;
-    website: string;
-    experienceId?: string;
-  }[];
   /** Rich about section; supports Markdown */
   about: string;
   /** Public URL to avatar image */
   avatar: string;
-  /** Open Graph image URL for social sharing */
-  ogImage: string;
-  /** Audio URL for name pronunciation */
-  namePronunciationUrl: string;
-  /** SEO keywords list for metadata */
-  keywords: string[];
-  /** Time zone in IANA format (e.g., "Asia/Ho_Chi_Minh") */
-  timeZone: string;
   /** Profile/site start date in YYYY-MM-DD */
   dateCreated: string;
 };
