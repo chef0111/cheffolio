@@ -10,15 +10,15 @@ import { MAIN_NAV } from '@/config/site';
 import { CommandMenu } from '@/components/command-menu';
 import { NavbarLogo } from './navbar-logo';
 
-export function Header() {
+export function Navbar() {
   const scrolled = useScroll(10);
 
   return (
     <header
       className={cn(
-        'sticky top-2 z-50 mx-auto w-full max-w-4xl border-b border-transparent md:rounded-md md:border md:transition-all md:ease-out',
+        'border-b-line! border-x-line! bg-background fixed top-0 left-1/2 z-50 mx-auto w-full max-w-4xl -translate-x-1/2 rounded-b-none border-b border-transparent pt-2 md:border md:transition-all md:ease-out',
         {
-          'border-border bg-background/95 supports-backdrop-filter:bg-background/50 backdrop-blur-sm md:max-w-[calc(var(--container-4xl)-1rem)] md:shadow':
+          'border-border top-2 pt-0 md:max-w-[calc(var(--container-4xl)-1rem)] md:rounded-md md:shadow':
             scrolled,
         }
       )}
