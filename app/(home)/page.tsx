@@ -30,7 +30,6 @@ export default function Page() {
         <TailwindSeparator />
 
         <About />
-        <div className="border-line flex h-2 w-full border-x" />
         <GitHubContributions />
         <TailwindSeparator />
       </main>
