@@ -10,6 +10,7 @@ import { MAIN_NAV } from '@/config/site';
 import { CommandMenu } from '@/components/cheffolio/command-menu';
 import { NavbarLogo } from './navbar-logo';
 import { FullWidthDivider } from '@/components/cheffolio/full-width-divider';
+import Link from 'next/link';
 
 export function Navbar() {
   const scrolled = useScroll(10);
@@ -32,11 +33,17 @@ export function Navbar() {
           }
         )}
       >
-        <NavbarLogo />
+        <Link
+          className="transition-[scale] ease-out active:scale-98 has-data-[visible=false]:pointer-events-none [&_svg]:h-8"
+          href="/"
+          aria-label="Home"
+        >
+          <NavbarLogo />
+        </Link>
         <div className="flex items-center gap-2 *:first:mr-2 max-sm:*:data-[slot=command-menu-trigger]:hidden">
           <DesktopNav items={MAIN_NAV} />
           <CommandMenu />
-          <Button size="icon" variant="ghost">
+          <Button size="icon" variant="ghost" asChild>
             <a href="https://github.com/chef0111/cheffolio" target="_blank">
               <GithubIcon />
             </a>

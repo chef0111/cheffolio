@@ -8,7 +8,7 @@ import { Brand } from '@/components/cheffolio/brand';
 const calcDistance = (el: HTMLElement) => {
   const rect = el.getBoundingClientRect();
   const scrollTop = document.documentElement.scrollTop;
-  const headerHeight = 56;
+  const headerHeight = 62;
   return scrollTop + rect.top + rect.height - headerHeight;
 };
 
@@ -39,7 +39,6 @@ function BrandMotion() {
 
   return (
     <Brand
-      href="/"
       data-visible={visible}
       className="translate-y-2 opacity-0 transition-[opacity,translate] duration-300 data-[visible=true]:translate-y-0 data-[visible=true]:opacity-100"
     />
@@ -49,5 +48,5 @@ function BrandMotion() {
 export function NavbarLogo() {
   const pathname = usePathname();
   const isHome = ['/', '/index'].includes(pathname);
-  return isHome ? <BrandMotion /> : <Brand href="/" />;
+  return isHome ? <BrandMotion /> : <Brand />;
 }
