@@ -18,3 +18,7 @@ export const MAIN_NAV: NavItem[] = [
     href: '#awards',
   },
 ];
+
+export const UTM_PARAMS = {
+  utm_source: 'https://cheffolio.vercel.app',
+};

@@ -5,6 +5,7 @@ import { ProfileCover } from '@/modules/portfolio/components/profile-cover';
 import { FullWidthDivider } from '@/components/ui/full-width-divider';
 import { ProfileHeader } from '@/modules/portfolio/components/profile-header';
 import { TailwindSeparator } from '@/components/tailwind-separator';
+import { Overview } from '@/modules/portfolio/components/overview';
 
 export default function Page() {
   return (
@@ -17,14 +18,15 @@ export default function Page() {
       />
       <main
         className={cn(
-          'mx-auto min-h-screen md:max-w-4xl *:[[id]]:scroll-mt-22'
+          'mx-auto overflow-x-hidden md:max-w-4xl *:[[id]]:scroll-mt-22'
         )}
       >
-        <div className="cover-background h-12 w-full" />
         <ProfileCover />
         <FullWidthDivider />
         <ProfileHeader />
         <TailwindSeparator />
+
+        <Overview />
       </main>
     </>
   );

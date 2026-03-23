@@ -3,6 +3,7 @@ import { USER } from '@/modules/portfolio/data/user';
 import { VerifiedIcon } from './verified-icon';
 import Image from 'next/image';
 import { TextFlip } from '@/components/ui/text-flip';
+import { Label } from '@/components/ui/label';
 
 export function ProfileHeader() {
   return (
@@ -30,15 +31,21 @@ export function ProfileHeader() {
         </div>
 
         <div className="border-line border-t">
-          <div className="flex items-center gap-2 pl-4">
-            <h1 className="-translate-y-px pt-2 text-3xl font-semibold tracking-tight">
-              {USER.displayName}
-            </h1>
+          <div className="flex flex-wrap items-center gap-2 pl-4">
+            <div className="flex items-center gap-2">
+              <h1 className="-translate-y-px truncate text-3xl font-semibold tracking-tight">
+                {USER.displayName}
+              </h1>
 
-            <VerifiedIcon
-              className="text-info mt-2 size-4.5 select-none"
-              aria-label="Verified"
-            />
+              <VerifiedIcon
+                className="text-info size-4.5 select-none"
+                aria-label="Verified"
+              />
+            </div>
+
+            <Label className="text-muted-foreground text-lg font-light">
+              @{USER.username}
+            </Label>
           </div>
 
           <div className="border-line h-12.5 border-t py-1 pl-4 sm:h-9">
@@ -49,7 +56,7 @@ export function ProfileHeader() {
                 animate: { y: -1, opacity: 1 },
                 exit: { y: 10, opacity: 0 },
               }}
-              interval={1.5}
+              interval={2}
             >
               {USER.flipSentences}
             </TextFlip>
