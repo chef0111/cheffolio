@@ -2,20 +2,23 @@ import Link from 'next/link';
 import { Route } from 'next';
 import { cn } from '@/lib/utils';
 
-interface BrandProps {
+interface BrandPropsWithSvg extends Omit<
+  React.ComponentProps<'svg'>,
+  'xmlns' | 'viewBox' | 'fill' | 'href'
+> {
   href?: Route | null;
   showText?: boolean;
   size?: number;
-  className?: string;
   containerClassName?: string;
   textClassName?: string;
 }
 
 export function Brand({
-  href = '/',
+  href,
   className,
   containerClassName,
-}: BrandProps) {
+  ...svgProps
+}: BrandPropsWithSvg) {
   const content = (
     <div
       className={cn(
@@ -23,7 +26,7 @@ export function Brand({
         containerClassName
       )}
     >
-      <BrandLogo className={cn('h-8 w-auto', className)} />
+      <BrandLogo {...svgProps} className={cn('h-8 w-auto', className)} />
     </div>
   );
 

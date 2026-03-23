@@ -3,7 +3,7 @@ import { User } from '@/modules/portfolio/types/user';
 export const USER: User = {
   firstName: 'Bảo',
   lastName: 'Lê',
-  displayName: 'Bao Lee',
+  displayName: 'Gia Bảo',
   username: 'chef0111',
   gender: 'male',
   pronouns: 'he/him',
