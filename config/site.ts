@@ -1,4 +1,4 @@
-import { NavItem } from '@/modules/navbar/nav';
+import { NavItem } from '@/modules/header/nav';
 
 export const MAIN_NAV: NavItem[] = [
   {

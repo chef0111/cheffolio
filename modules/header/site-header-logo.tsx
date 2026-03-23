@@ -45,7 +45,7 @@ function BrandMotion() {
   );
 }
 
-export function NavbarLogo() {
+export function SiteHeaderLogo() {
   const pathname = usePathname();
   const isHome = ['/', '/index'].includes(pathname);
   return isHome ? <BrandMotion /> : <Brand />;

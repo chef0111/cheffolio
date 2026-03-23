@@ -8,11 +8,11 @@ import { GithubIcon } from '@/components/icons';
 import { DesktopNav } from './desktop-nav';
 import { MAIN_NAV } from '@/config/site';
 import { CommandMenu } from '@/components/cheffolio/command-menu';
-import { NavbarLogo } from './navbar-logo';
+import { SiteHeaderLogo } from './site-header-logo';
 import { FullWidthDivider } from '@/components/cheffolio/full-width-divider';
 import Link from 'next/link';
 
-export function Navbar() {
+export function SiteHeader() {
   const scrolled = useScroll(10);
 
   return (
@@ -38,7 +38,7 @@ export function Navbar() {
           href="/"
           aria-label="Home"
         >
-          <NavbarLogo />
+          <SiteHeaderLogo />
         </Link>
         <div className="flex items-center gap-2 *:first:mr-2 max-sm:*:data-[slot=command-menu-trigger]:hidden">
           <DesktopNav items={MAIN_NAV} />
