@@ -23,7 +23,6 @@ export const USER: User = {
       title: 'Senior Student',
       company: 'UIT - VNUHCM',
       website: 'https://uit.edu.vn',
-      experienceId: 'uit',
     },
   ],
   about: `

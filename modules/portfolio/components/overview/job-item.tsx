@@ -43,6 +43,8 @@ export function JobItem({
               }
             : {
                 href: addQueryParams(website, UTM_PARAMS),
+                target: '_blank',
+                rel: 'noopener noreferrer',
               })}
         >
           {company}
