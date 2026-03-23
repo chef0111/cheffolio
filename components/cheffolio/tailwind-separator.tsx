@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { FullWidthDivider } from './ui/full-width-divider';
+import { FullWidthDivider } from './full-width-divider';
 
 export function TailwindSeparator({ className }: { className?: string }) {
   return (

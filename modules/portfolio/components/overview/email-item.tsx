@@ -6,7 +6,7 @@ import { useWebHaptics } from 'web-haptics/react';
 import { useHotkey } from '@tanstack/react-hotkeys';
 
 import { useIsClient } from '@/hooks/use-is-client';
-import { CopyButton } from '@/components/copy-button';
+import { CopyButton } from '@/components/cheffolio/copy-button';
 import { decodeEmail } from '@/utils/string';
 
 import {

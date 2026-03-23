@@ -3,7 +3,7 @@ import { Geist, Geist_Mono as GeistMono } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/context/theme-provider';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import { ScrollToTop } from '@/components/scroll-to-top';
+import { ScrollToTop } from '@/components/cheffolio/scroll-to-top';
 import { Toaster } from '@/components/ui/sonner';
 
 const geistSans = Geist({

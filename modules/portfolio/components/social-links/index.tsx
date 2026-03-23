@@ -1,5 +1,5 @@
 import { SOCIAL_LINKS } from '@/modules/portfolio/data/social-links';
-import { Panel } from '@/components/panel';
+import { Panel } from '@/components/cheffolio/panel';
 import { SocialLinkItem } from './item';
 
 export function SocialLinks() {

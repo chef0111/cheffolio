@@ -7,9 +7,9 @@ import ThemeToggle from './theme-toggle';
 import { GithubIcon } from '@/components/icons';
 import { DesktopNav } from './desktop-nav';
 import { MAIN_NAV } from '@/config/site';
-import { CommandMenu } from '@/components/command-menu';
+import { CommandMenu } from '@/components/cheffolio/command-menu';
 import { NavbarLogo } from './navbar-logo';
-import { FullWidthDivider } from '@/components/ui/full-width-divider';
+import { FullWidthDivider } from '@/components/cheffolio/full-width-divider';
 
 export function Navbar() {
   const scrolled = useScroll(10);

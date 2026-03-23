@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { BrandLogo } from '@/components/brand';
-import { CanvasReveal } from '@/components/canvas-reveal';
+import { BrandLogo } from '@/components/cheffolio/brand';
+import { CanvasReveal } from '@/components/cheffolio/canvas-reveal';
 import { AnimatePresence, motion } from 'motion/react';
 import { Label } from '@/components/ui/label';
 
