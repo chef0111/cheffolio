@@ -2,12 +2,18 @@ import { USER } from '@/modules/portfolio/data/user';
 
 import { VerifiedIcon } from './verified-icon';
 import Image from 'next/image';
-import { TextFlip } from '@/components/ui/text-flip';
 import { Label } from '@/components/ui/label';
+import { TextFlip } from '@/components/cheffolio/text-flip';
+import { DecorIcon } from '@/components/cheffolio/decor-icon';
 
 export function ProfileHeader() {
   return (
-    <div className="border-line flex border-x">
+    <div className="border-line relative flex border-x">
+      <DecorIcon className="size-4" position="top-left" />
+      <DecorIcon className="size-4" position="top-right" />
+      <DecorIcon className="size-4" position="bottom-left" />
+      <DecorIcon className="size-4" position="bottom-right" />
+
       <div className="border-line shrink-0 border-r">
         <div className="relative mx-0.5 my-0.75 size-30 sm:size-40">
           <Image

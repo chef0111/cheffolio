@@ -1,4 +1,4 @@
-import { Panel, PanelContent } from '@/components/panel';
+import { Panel, PanelContent } from '@/components/cheffolio/panel';
 import { JobItem } from './job-item';
 import {
   IntroItem,
@@ -18,7 +18,7 @@ import { LocalTime } from './local-item';
 import { PhoneItem } from './phone-item';
 import { EmailItem } from './email-item';
 import { urlToName } from '@/utils/url';
-import { User } from '../../types/user';
+import { User } from '@/modules/portfolio/types/user';
 
 export function Overview() {
   return (

@@ -13,7 +13,7 @@ export const USER: User = {
     'Senior Student',
     'Fullstack Developer',
   ],
-  address: 'Ho Chi Minh City, Viet Nam',
+  address: 'Hue City, Viet Nam',
   phoneNumber: 'Kzg0IDg2NSA2NzUgOTA4', // E.164 format, base64 encoded (https://t.io.vn/base64-string-converter)
   email: 'bGV0cmFuZ2lhYmFvMTRAZ21haWwuY29t', // base64 encoded
   website: 'https://github.com/chef0111',
@@ -28,8 +28,9 @@ export const USER: User = {
   ],
   about: `
 - **Senior Student** with a strong passion for software engineering — especially in web development.
-- Hands-on experience working with modern web frameworks like Next.js, and I enjoy building high-performance, scalable and user-centered web applications.
-- Having a goal to consistently improve my technical skills and contribute to impactful software projects
+- Hands-on experience working with modern web frameworks like **Next.js**, and I enjoy building high-performance, scalable and user-centered web applications.
+- Having a goal to consistently improve my technical skills and contribute to impactful software projects.
+- Creator of [TKU Sparring System](https://tku-sparring.netlify.app/): User-friendly web application for managing Taekwondo sparring matches.
 `,
   avatar:
     'https://res.cloudinary.com/dpuqj2n2q/image/upload/v1774121182/chef0111-avatar.webp',

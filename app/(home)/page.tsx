@@ -1,11 +1,14 @@
-import { cn } from '@/lib/utils';
 import { USER } from '@/modules/portfolio/data/user';
 import { ProfilePage, WithContext } from 'schema-dts';
 import { ProfileCover } from '@/modules/portfolio/components/profile-cover';
-import { FullWidthDivider } from '@/components/ui/full-width-divider';
+import { FullWidthDivider } from '@/components/cheffolio/full-width-divider';
 import { ProfileHeader } from '@/modules/portfolio/components/profile-header';
-import { TailwindSeparator } from '@/components/tailwind-separator';
+import { TailwindSeparator } from '@/components/cheffolio/tailwind-separator';
 import { Overview } from '@/modules/portfolio/components/overview';
+import { SocialLinks } from '@/modules/portfolio/components/social-links';
+import { About } from '@/modules/portfolio/components/about';
+import { headers } from 'next/headers';
+import { GitHubContributions } from '@/modules/portfolio/components/github-contributions';
 
 export default function Page() {
   return (
@@ -16,23 +19,28 @@ export default function Page() {
           __html: JSON.stringify(getPageJsonLd()).replace(/</g, '\\u003c'),
         }}
       />
-      <main
-        className={cn(
-          'mx-auto overflow-x-hidden md:max-w-4xl *:[[id]]:scroll-mt-22'
-        )}
-      >
+      <main className="mx-auto md:max-w-4xl *:[[id]]:scroll-mt-22">
         <ProfileCover />
         <FullWidthDivider />
         <ProfileHeader />
         <TailwindSeparator />
 
         <Overview />
+        <SocialLinks />
+        <TailwindSeparator />
+
+        <About />
+        <div className="border-line flex h-2 w-full border-x" />
+        <GitHubContributions />
+        <TailwindSeparator />
       </main>
     </>
   );
 }
 
-function getPageJsonLd(): WithContext<ProfilePage> {
+async function getPageJsonLd(): Promise<WithContext<ProfilePage>> {
+  await headers();
+
   return {
     '@context': 'https://schema.org',
     '@type': 'ProfilePage',

@@ -7,8 +7,9 @@ import ThemeToggle from './theme-toggle';
 import { GithubIcon } from '@/components/icons';
 import { DesktopNav } from './desktop-nav';
 import { MAIN_NAV } from '@/config/site';
-import { CommandMenu } from '@/components/command-menu';
+import { CommandMenu } from '@/components/cheffolio/command-menu';
 import { NavbarLogo } from './navbar-logo';
+import { FullWidthDivider } from '@/components/cheffolio/full-width-divider';
 
 export function Navbar() {
   const scrolled = useScroll(10);
@@ -16,9 +17,9 @@ export function Navbar() {
   return (
     <header
       className={cn(
-        'border-b-border border-x-line bg-background fixed top-0 left-1/2 z-50 mx-auto w-full max-w-4xl -translate-x-1/2 rounded-b-none border border-t-transparent sm:transition-all sm:ease-out',
+        'border-b-line border-x-line bg-background fixed top-0 left-1/2 z-50 mx-auto w-full max-w-4xl -translate-x-1/2 rounded-b-none border border-t-transparent sm:transition-all sm:ease-out',
         {
-          'border-border sm:top-2 sm:max-w-[calc(var(--container-4xl)-1rem)] sm:rounded-md sm:shadow':
+          'border-border bg-background/95 supports-backdrop-filter:bg-background/50 backdrop-blur-sm sm:top-2 sm:max-w-[calc(var(--container-4xl)-1rem)] sm:rounded-md sm:shadow':
             scrolled,
         }
       )}
@@ -43,6 +44,9 @@ export function Navbar() {
           <ThemeToggle />
         </div>
       </nav>
+      <FullWidthDivider
+        className={cn('transition-none', { hidden: scrolled })}
+      />
     </header>
   );
 }

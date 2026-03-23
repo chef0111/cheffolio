@@ -15,7 +15,7 @@ import {
   IntroItemIcon,
   IntroItemLink,
 } from './intro-item';
-import { CopyButton } from '@/components/copy-button';
+import { CopyButton } from '@/components/cheffolio/copy-button';
 
 type PhoneItemProps = {
   phoneNumber: string;
