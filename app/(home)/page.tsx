@@ -6,6 +6,7 @@ import { FullWidthDivider } from '@/components/ui/full-width-divider';
 import { ProfileHeader } from '@/modules/portfolio/components/profile-header';
 import { TailwindSeparator } from '@/components/tailwind-separator';
 import { Overview } from '@/modules/portfolio/components/overview';
+import { SocialLinks } from '@/modules/portfolio/components/social-links';
 
 export default function Page() {
   return (
@@ -27,6 +28,7 @@ export default function Page() {
         <TailwindSeparator />
 
         <Overview />
+        <SocialLinks />
       </main>
     </>
   );

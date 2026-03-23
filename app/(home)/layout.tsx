@@ -9,7 +9,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="group/layout">
       <Navbar />
-      <main className="max-w-screen overflow-x-hidden px-2">{children}</main>
+      <main className="overflow-x-hidden px-2">{children}</main>
       <ScrollToTop />
     </div>
   );

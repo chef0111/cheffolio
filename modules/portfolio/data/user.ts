@@ -13,7 +13,7 @@ export const USER: User = {
     'Senior Student',
     'Fullstack Developer',
   ],
-  address: 'Ho Chi Minh City, Viet Nam',
+  address: 'Hue City, Viet Nam',
   phoneNumber: 'Kzg0IDg2NSA2NzUgOTA4', // E.164 format, base64 encoded (https://t.io.vn/base64-string-converter)
   email: 'bGV0cmFuZ2lhYmFvMTRAZ21haWwuY29t', // base64 encoded
   website: 'https://github.com/chef0111',
