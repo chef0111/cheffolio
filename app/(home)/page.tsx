@@ -9,6 +9,7 @@ import { SocialLinks } from '@/modules/portfolio/components/social-links';
 import { About } from '@/modules/portfolio/components/about';
 import { headers } from 'next/headers';
 import { GitHubContributions } from '@/modules/portfolio/components/github-contributions';
+import { TechStack } from '@/modules/portfolio/components/tech-stack';
 
 export default function Page() {
   return (
@@ -31,6 +32,9 @@ export default function Page() {
 
         <About />
         <GitHubContributions />
+        <TailwindSeparator />
+
+        <TechStack />
         <TailwindSeparator />
       </main>
     </>
