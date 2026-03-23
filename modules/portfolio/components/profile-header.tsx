@@ -19,12 +19,14 @@ export function ProfileHeader() {
         <DecorIcon className="size-4" position="top-right" />
         <DecorIcon className="size-4" position="bottom-right" />
         <AvatarElectric>
-          <div className="relative mx-0.5 my-0.75 size-30 sm:size-40">
+          <div className="relative mx-0.5 my-0.75 size-32 sm:size-40">
             <Image
               className="ring-border ring-offset-background rounded-full object-cover ring-1 ring-offset-2 select-none"
               alt="Avatar"
-              fill
+              width={160}
+              height={160}
               src={USER.avatar}
+              loading="eager"
               fetchPriority="high"
             />
           </div>

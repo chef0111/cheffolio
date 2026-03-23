@@ -32,7 +32,7 @@ export const USER: User = {
 - Creator of [TKU Sparring System](https://tku-sparring.netlify.app/): User-friendly web application for managing Taekwondo sparring matches.
 `,
   avatar:
-    'https://res.cloudinary.com/dpuqj2n2q/image/upload/v1774121182/chef0111-avatar.webp',
+    'https://res.cloudinary.com/dpuqj2n2q/image/upload/chef0111-avatar.webp',
   timeZone: 'Asia/Ho_Chi_Minh',
   dateCreated: '2026-03-22',
 };
