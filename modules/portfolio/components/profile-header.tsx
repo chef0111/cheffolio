@@ -2,8 +2,8 @@ import { USER } from '@/modules/portfolio/data/user';
 
 import { VerifiedIcon } from './verified-icon';
 import Image from 'next/image';
-import { TextFlip } from '@/components/ui/text-flip';
 import { Label } from '@/components/ui/label';
+import { TextFlip } from '@/components/cheffolio/text-flip';
 import { DecorIcon } from '@/components/cheffolio/decor-icon';
 
 export function ProfileHeader() {

@@ -15,7 +15,7 @@ export function ProfileCover() {
             id="js-cover-mark"
             className="h-auto w-28 translate-y-5 transition duration-300 group-hover/canvas:translate-y-0 sm:w-32"
           />
-          <Label className="text-xl font-bold tracking-wider opacity-0 transition duration-300 group-hover/canvas:opacity-100">
+          <Label className="text-lg font-bold tracking-wider opacity-0 transition duration-300 group-hover/canvas:opacity-100 sm:text-xl">
             - cheffolio -
           </Label>
         </div>

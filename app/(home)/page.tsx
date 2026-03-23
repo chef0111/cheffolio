@@ -7,6 +7,8 @@ import { TailwindSeparator } from '@/components/cheffolio/tailwind-separator';
 import { Overview } from '@/modules/portfolio/components/overview';
 import { SocialLinks } from '@/modules/portfolio/components/social-links';
 import { About } from '@/modules/portfolio/components/about';
+import { headers } from 'next/headers';
+import { GitHubContributions } from '@/modules/portfolio/components/github-contributions';
 
 export default function Page() {
   return (
@@ -28,12 +30,17 @@ export default function Page() {
         <TailwindSeparator />
 
         <About />
+        <div className="border-line flex h-2 w-full border-x" />
+        <GitHubContributions />
+        <TailwindSeparator />
       </main>
     </>
   );
 }
 
-function getPageJsonLd(): WithContext<ProfilePage> {
+async function getPageJsonLd(): Promise<WithContext<ProfilePage>> {
+  await headers();
+
   return {
     '@context': 'https://schema.org',
     '@type': 'ProfilePage',
