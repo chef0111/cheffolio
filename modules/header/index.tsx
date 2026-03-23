@@ -20,7 +20,7 @@ export function SiteHeader() {
       className={cn(
         'border-b-line border-x-line bg-background fixed top-0 left-1/2 z-50 mx-auto w-full max-w-4xl -translate-x-1/2 rounded-b-none border border-t-transparent sm:transition-all sm:ease-out',
         {
-          'border-border bg-background/95 supports-backdrop-filter:bg-background/50 backdrop-blur-sm sm:top-2 sm:max-w-[calc(var(--container-4xl)-1rem)] sm:rounded-md sm:shadow':
+          'border-border bg-background/95 supports-backdrop-filter:bg-background/50 backdrop-blur-md sm:top-2 sm:max-w-[calc(var(--container-4xl)-1rem)] sm:rounded-md sm:shadow':
             scrolled,
         }
       )}
