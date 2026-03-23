@@ -19,10 +19,15 @@ import { PhoneItem } from './phone-item';
 import { EmailItem } from './email-item';
 import { urlToName } from '@/utils/url';
 import { User } from '@/modules/portfolio/types/user';
+import { DecorIcon } from '@/components/cheffolio/decor-icon';
 
 export function Overview() {
   return (
-    <Panel className="after:content-none">
+    <Panel className="relative after:content-none">
+      <DecorIcon className="size-4" position="top-left" />
+      <DecorIcon className="size-4" position="top-right" />
+      <DecorIcon className="size-4" position="bottom-left" />
+      <DecorIcon className="size-4" position="bottom-right" />
       <h2 className="sr-only">Profile overview</h2>
       <PanelContent className="space-y-2.5">
         {USER.jobs.map((job, index) => {

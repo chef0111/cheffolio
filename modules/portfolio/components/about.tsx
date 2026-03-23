@@ -6,12 +6,15 @@ import {
 } from '@/components/cheffolio/panel';
 import { ProseMono } from '@/components/ui/typography';
 import { Markdown } from '@/components/cheffolio/markdown';
+import { DecorIcon } from '@/components/cheffolio/decor-icon';
 import { USER } from '../data/user';
 
 export function About() {
   return (
     <Panel id="about">
-      <PanelHeader>
+      <PanelHeader className="relative">
+        <DecorIcon className="size-4" position="top-left" />
+        <DecorIcon className="size-4" position="top-right" />
         <PanelTitle>About</PanelTitle>
       </PanelHeader>
 

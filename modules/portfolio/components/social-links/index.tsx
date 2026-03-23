@@ -1,12 +1,14 @@
 import { SOCIAL_LINKS } from '@/modules/portfolio/data/social-links';
 import { Panel } from '@/components/cheffolio/panel';
 import { SocialLinkItem } from './item';
+import { DecorIcon } from '@/components/cheffolio/decor-icon';
 
 export function SocialLinks() {
   return (
-    <Panel className="before:content-none after:content-none">
+    <Panel className="relative before:content-none after:content-none">
+      <DecorIcon className="size-4" position="bottom-left" />
+      <DecorIcon className="size-4" position="bottom-right" />
       <h2 className="sr-only">Social Links</h2>
-
       <div className="relative">
         <div className="pointer-events-none absolute inset-0 -z-1 grid grid-cols-2 gap-2 md:grid-cols-3">
           <div className="border-line border-r" />
