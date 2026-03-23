@@ -1,4 +1,4 @@
-import { Navbar } from '@/modules/navbar';
+import { SiteHeader } from '@/modules/header';
 import dynamic from 'next/dynamic';
 
 const ScrollToTop = dynamic(() =>
@@ -8,7 +8,7 @@ const ScrollToTop = dynamic(() =>
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="group/layout">
-      <Navbar />
+      <SiteHeader />
       <main className="max-w-full overflow-x-hidden px-2">{children}</main>
       <ScrollToTop />
     </div>
