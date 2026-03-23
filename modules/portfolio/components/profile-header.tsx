@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { Label } from '@/components/ui/label';
 import { TextFlip } from '@/components/cheffolio/text-flip';
 import { DecorIcon } from '@/components/cheffolio/decor-icon';
+import { AvatarElectric } from './avatar-eletric';
 
 export function ProfileHeader() {
   return (
@@ -14,16 +15,20 @@ export function ProfileHeader() {
       <DecorIcon className="size-4" position="bottom-left" />
       <DecorIcon className="size-4" position="bottom-right" />
 
-      <div className="border-line shrink-0 border-r">
-        <div className="relative mx-0.5 my-0.75 size-30 sm:size-40">
-          <Image
-            className="ring-border ring-offset-background rounded-full object-cover ring-1 ring-offset-2 select-none"
-            alt="Avatar"
-            fill
-            src={USER.avatar}
-            fetchPriority="high"
-          />
-        </div>
+      <div className="border-line relative shrink-0 border-r">
+        <DecorIcon className="size-4" position="top-right" />
+        <DecorIcon className="size-4" position="bottom-right" />
+        <AvatarElectric>
+          <div className="relative mx-0.5 my-0.75 size-30 sm:size-40">
+            <Image
+              className="ring-border ring-offset-background rounded-full object-cover ring-1 ring-offset-2 select-none"
+              alt="Avatar"
+              fill
+              src={USER.avatar}
+              fetchPriority="high"
+            />
+          </div>
+        </AvatarElectric>
       </div>
 
       <div className="flex flex-1 flex-col">
@@ -49,7 +54,7 @@ export function ProfileHeader() {
               />
             </div>
 
-            <Label className="text-muted-foreground text-lg font-light">
+            <Label className="text-muted-foreground text-lg leading-none font-light">
               @{USER.username}
             </Label>
           </div>

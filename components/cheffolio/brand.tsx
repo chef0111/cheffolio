@@ -22,7 +22,6 @@ export function Brand({
         'flex items-center justify-center gap-2',
         containerClassName
       )}
-      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
     >
       <BrandLogo className={cn('h-8 w-auto', className)} />
     </div>

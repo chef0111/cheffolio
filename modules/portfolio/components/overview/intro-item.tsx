@@ -33,7 +33,7 @@ export function IntroItemContent({
   ...props
 }: React.ComponentProps<'p'>) {
   return (
-    <p className={cn('text-base sm:text-balance', className)} {...props} />
+    <p className={cn('sm:text-base sm:text-balance', className)} {...props} />
   );
 }
 
