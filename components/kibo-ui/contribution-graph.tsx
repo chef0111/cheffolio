@@ -468,10 +468,12 @@ export type ContributionGraphLegendProps = Omit<
   'children'
 > & {
   children?: (props: { level: number }) => ReactNode;
+  levelClassName?: string;
 };
 
 export const ContributionGraphLegend = ({
   className,
+  levelClassName,
   children,
   ...props
 }: ContributionGraphLegendProps) => {
@@ -498,7 +500,8 @@ export const ContributionGraphLegend = ({
                 'data-[level="1"]:fill-muted-foreground/20',
                 'data-[level="2"]:fill-muted-foreground/40',
                 'data-[level="3"]:fill-muted-foreground/60',
-                'data-[level="4"]:fill-muted-foreground/80'
+                'data-[level="4"]:fill-muted-foreground/80',
+                levelClassName
               )}
               data-level={level}
               height={blockSize}
