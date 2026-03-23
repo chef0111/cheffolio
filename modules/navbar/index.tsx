@@ -16,9 +16,9 @@ export function Navbar() {
   return (
     <header
       className={cn(
-        'border-b-border border-x-line bg-background fixed top-0 left-1/2 z-50 mx-auto w-full max-w-4xl -translate-x-1/2 rounded-b-none border-t-transparent md:border md:transition-all md:ease-out',
+        'border-b-border border-x-line bg-background fixed top-0 left-1/2 z-50 mx-auto w-full max-w-4xl -translate-x-1/2 rounded-b-none border border-t-transparent sm:transition-all sm:ease-out',
         {
-          'border-border top-2 md:max-w-[calc(var(--container-4xl)-1rem)] md:rounded-md md:shadow':
+          'border-border sm:top-2 sm:max-w-[calc(var(--container-4xl)-1rem)] sm:rounded-md sm:shadow':
             scrolled,
         }
       )}

@@ -4,6 +4,7 @@ import './globals.css';
 import { ThemeProvider } from '@/context/theme-provider';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { ScrollToTop } from '@/components/scroll-to-top';
+import { Toaster } from '@/components/ui/sonner';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -42,6 +43,7 @@ export default function RootLayout({
             {children}
             <ScrollToTop />
           </TooltipProvider>
+          <Toaster richColors position="top-center" />
         </ThemeProvider>
       </body>
     </html>

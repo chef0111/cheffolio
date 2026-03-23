@@ -166,5 +166,5 @@
 }
 
 @utility cover-background {
-  @apply border-line flex aspect-2/1 items-center justify-center border-x bg-black/0.75 bg-[radial-gradient(var(--pattern-foreground)_1px,transparent_0)] bg-size-[10px_10px] bg-center text-black select-none [--pattern-foreground:var(--color-zinc-950)]/5 before:-top-px after:-bottom-px sm:aspect-3/1 dark:bg-white/0.75 dark:text-white dark:[--pattern-foreground:var(--color-white)]/5;
+  @apply border-line flex aspect-video items-center justify-center border-x bg-black/0.75 bg-[radial-gradient(var(--pattern-foreground)_1px,transparent_0)] bg-size-[10px_10px] bg-center text-black select-none [--pattern-foreground:var(--color-zinc-950)]/5 before:-top-px after:-bottom-px sm:aspect-24/9 dark:bg-white/0.75 dark:text-white dark:[--pattern-foreground:var(--color-white)]/5;
 }
