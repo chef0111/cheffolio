@@ -10,7 +10,6 @@ export const EXPERIENCES: Experience[] = [
         title: 'University of Information Technology — VNUHCM',
         employmentPeriod: {
           start: '08.2023',
-          end: '11.2027',
         },
         icon: 'education',
         description: `- Currently studying for a Bachelor's degree in Information Systems (Advanced Program).
@@ -34,7 +33,7 @@ export const EXPERIENCES: Experience[] = [
       },
       {
         id: '2',
-        title: 'Hai Ba Trung High School - Hue City',
+        title: 'Hai Ba Trung High School — Hue City',
         employmentPeriod: {
           start: '09.2020',
           end: '06.2023',
@@ -44,7 +43,7 @@ export const EXPERIENCES: Experience[] = [
       },
       {
         id: '1',
-        title: 'Nguyen Tri Phuong Secondary School - Hue City',
+        title: 'Nguyen Tri Phuong Secondary School — Hue City',
         employmentPeriod: {
           start: '08.2016',
           end: '06.2020',

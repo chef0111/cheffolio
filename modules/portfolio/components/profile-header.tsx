@@ -61,7 +61,7 @@ export function ProfileHeader() {
             </Label>
           </div>
 
-          <div className="border-line h-12.5 border-t py-1 pl-4 sm:h-9">
+          <div className="border-line h-9 border-t py-1 pl-4">
             <TextFlip
               className="font-pixel-square text-muted-foreground text-sm text-balance"
               variants={{
