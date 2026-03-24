@@ -10,6 +10,10 @@ export const MAIN_NAV: NavItem[] = [
     href: '#stack',
   },
   {
+    title: 'Experience',
+    href: '#experience',
+  },
+  {
     title: 'Projects',
     href: '#projects',
   },

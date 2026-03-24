@@ -46,12 +46,28 @@ export type NavItem = {
 export function NavItem({
   className,
   active,
+  href,
+  onClick,
   ...props
 }: React.ComponentProps<typeof Link> & {
   active?: boolean;
 }) {
+  const hrefString = typeof href === 'string' ? href : (href.hash ?? '');
+
   return (
     <Link
+      href={href}
+      onClick={(e) => {
+        if (hrefString.startsWith('#')) {
+          e.preventDefault();
+          const el = document.getElementById(hrefString.slice(1));
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth' });
+            window.history.pushState(null, '', hrefString);
+          }
+        }
+        if (onClick) onClick(e);
+      }}
       className={cn(
         'text-muted-foreground hover:text-foreground font-mono text-sm font-medium transition-[color]',
         active && 'text-foreground',

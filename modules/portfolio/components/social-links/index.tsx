@@ -1,6 +1,6 @@
 import { SOCIAL_LINKS } from '@/modules/portfolio/data/social-links';
 import { Panel } from '@/components/cheffolio/panel';
-import { SocialLinkItem } from './item';
+import { SocialLinkItem } from './link-item';
 import { DecorIcon } from '@/components/cheffolio/decor-icon';
 
 export function SocialLinks() {
