@@ -134,6 +134,19 @@ export const TECH_STACK: TechStack[] = [
     categories: ['Database'],
   },
   {
+    key: 'prisma',
+    title: 'Prisma',
+    href: 'https://www.prisma.io/',
+    categories: ['Database', 'ORM'],
+    theme: true,
+  },
+  {
+    key: 'drizzle-orm',
+    title: 'Drizzle',
+    href: 'https://orm.drizzle.team/',
+    categories: ['Database', 'ORM'],
+  },
+  {
     key: 'figma',
     title: 'Figma',
     href: 'https://www.figma.com/',
