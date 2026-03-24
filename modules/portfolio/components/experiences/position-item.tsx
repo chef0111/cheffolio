@@ -33,7 +33,7 @@ export function ExperiencePositionItem({
 
   return (
     <Collapsible
-      className="last:before:bg-background relative last:before:absolute last:before:h-full last:before:w-4"
+      className="before:bg-border relative before:absolute before:top-3 before:-bottom-8 before:left-3 before:w-px last:before:absolute last:before:h-full last:before:w-4 last:before:content-none"
       defaultOpen={position.isExpanded}
       disabled={!position.description}
     >
