@@ -18,16 +18,16 @@ export function SiteHeader() {
   return (
     <header
       className={cn(
-        'border-b-line border-x-line bg-background fixed top-0 left-1/2 z-50 mx-auto w-full max-w-4xl -translate-x-1/2 rounded-b-none border border-t-transparent sm:transition-all sm:ease-out',
+        'border-b-line border-x-line bg-background fixed top-0 left-1/2 z-50 mx-auto w-full max-w-4xl -translate-x-1/2 rounded-b-none border border-t-transparent transition-all ease-out [@media(max-width:896px)]:max-w-[calc(100%-1rem)]',
         {
-          'border-border bg-background/95 supports-backdrop-filter:bg-background/50 backdrop-blur-sm sm:top-2 sm:max-w-[calc(var(--container-4xl)-1rem)] sm:rounded-md sm:shadow':
+          'border-border bg-background/95 supports-backdrop-filter:bg-background/50 top-2 rounded-md shadow backdrop-blur-md [@media(max-width:896px)]:max-w-[calc(100%-2rem)] [@media(min-width:896px)]:max-w-[calc(var(--container-4xl)-1rem)]':
             scrolled,
         }
       )}
     >
       <nav
         className={cn(
-          'mx-auto flex h-12 w-full items-center justify-between px-4 md:transition-all md:ease-out',
+          'mx-auto flex h-12 w-full items-center justify-between px-2 md:transition-all md:ease-out',
           {
             'md:px-2': scrolled,
           }
