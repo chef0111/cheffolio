@@ -62,7 +62,7 @@ export function ExperienceItem({ experience }: { experience: Experience }) {
         )}
       </div>
 
-      <div className="before:bg-border relative space-y-4 before:absolute before:left-3 before:h-full before:w-px">
+      <div className="relative space-y-4">
         {experience.positions.map((position) => (
           <ExperiencePositionItem key={position.id} position={position} />
         ))}
