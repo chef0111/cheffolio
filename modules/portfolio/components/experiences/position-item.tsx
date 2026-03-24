@@ -9,9 +9,10 @@ import {
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
 import { Markdown } from '@/components/cheffolio/markdown';
-import { Separator } from '@/components/ui/separator';
-import { Tag } from '@/components/ui/tag';
 import { ProseMono } from '@/components/ui/typography';
+import { Separator } from '@/components/ui/separator';
+import { Label } from '@/components/ui/label';
+import { Tag } from '@/components/ui/tag';
 import { cn } from '@/lib/utils';
 
 import type { ExperiencePosition } from '@/modules/portfolio/types/experiences';
@@ -55,11 +56,10 @@ export function ExperiencePositionItem({
             <ExperienceIcon className="size-4" icon={position.icon} />
           </div>
 
-          <div className="flex items-center gap-2">
-            <h4 className="flex-1 truncate font-medium text-balance">
+          <div className="flex min-w-0 flex-1 items-center gap-1">
+            <Label className="self-start text-base font-medium text-pretty">
               {position.title}
-            </h4>
-
+            </Label>
             {position.isCurrentPosition && (
               <Status status="maintenance" className="bg-transparent">
                 <StatusIndicator />
@@ -106,7 +106,7 @@ export function ExperiencePositionItem({
         </div>
       </CollapsibleTrigger>
 
-      <CollapsibleContent className="data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down overflow-hidden">
+      <CollapsibleContent className="sm:data-[state=closed]:animate-collapsible-up sm:data-[state=open]:animate-collapsible-down overflow-hidden">
         {position.description && (
           <ProseMono className="pt-2 pl-9">
             <Markdown>{position.description}</Markdown>
