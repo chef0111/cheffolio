@@ -29,6 +29,8 @@ export function EmailItem({ email }: EmailItemProps) {
     const success = await copyText(emailDecoded);
     if (success) {
       toast.success('Email copied');
+    } else {
+      toast.error('Failed to copy email');
     }
   });
 
