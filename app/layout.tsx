@@ -43,7 +43,7 @@ export default function RootLayout({
             {children}
             <ScrollToTop />
           </TooltipProvider>
-          <Toaster richColors position="top-center" />
+          <Toaster richColors closeButton position="bottom-center" />
         </ThemeProvider>
       </body>
     </html>
