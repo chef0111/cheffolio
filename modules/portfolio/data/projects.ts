@@ -4,6 +4,26 @@ const baseUrl = 'https://res.cloudinary.com/dpuqj2n2q/image/upload';
 
 export const PROJECTS: Project[] = [
   {
+    id: 'cheffolio',
+    title: 'Cheffolio',
+    period: {
+      start: '03.2026',
+    },
+    link: 'https://github.com/chef0111/cheffolio',
+    skills: [
+      'Next.js 16',
+      'TypeScript',
+      'TailwindCSS',
+      'Motion',
+      'shadcn/ui',
+      'Vercel',
+      'Portfolio',
+    ],
+    description: 'A minimal, pixel-perfect, shadcn/ui inspired dev portfolio.',
+    logo: `${baseUrl}/cheffolio.svg`,
+    isExpanded: true,
+  },
+  {
     id: 'tku-sparring-app',
     title: 'TKU Sparring System',
     period: {
@@ -30,23 +50,61 @@ export const PROJECTS: Project[] = [
     isExpanded: true,
   },
   {
-    id: 'cheffolio',
-    title: 'Cheffolio',
+    id: 'dev4room',
+    title: 'Dev4Room',
     period: {
-      start: '03.2026',
+      start: '09.2025',
+      end: '01.2026',
     },
-    link: 'https://github.com/chef0111/cheffolio',
+    link: 'https://github.com/chef0111/dev4room',
     skills: [
       'Next.js 16',
       'TypeScript',
+      'Better-Auth',
       'TailwindCSS',
-      'Motion',
       'shadcn/ui',
+      'PostgreSQL',
+      'Drizzle',
       'Vercel',
-      'Portfolio',
+      'Q&A Platform',
+      'AI-powered Answers',
     ],
-    description: 'A minimal, pixel-perfect, shadcn/ui inspired dev portfolio.',
-    logo: `${baseUrl}/cheffolio.svg`,
+    description: `Community-driven platform for developers to ask questions, post answers, and get help from other developers. Live at [dev4room.pro](https://dev4room.pro)
+- Authentication system with email/password and OAuth providers
+- AI-powered answer generation using OpenAI's GPT-4.0, providing instant answers to user questions
+- Real-time semantic search support, allow users to find relevant questions and answers quickly
+- Responsive design ensuring a seamless experience across devices
+`,
+    logo: `${baseUrl}/dev4room.svg`,
+    isExpanded: true,
+  },
+  {
+    id: 'physthink',
+    title: 'PhysThink',
+    period: {
+      start: '02.2026',
+      end: '03.2026',
+    },
+    link: 'https://github.com/chef0111/physthink',
+    skills: [
+      'Next.js 16',
+      'TypeScript',
+      'Better-Auth',
+      'TailwindCSS',
+      'shadcn/ui',
+      'PostgreSQL',
+      'Prisma',
+      'Vercel',
+      'AI-SDK',
+      'Hackathon',
+      'K2Think V2',
+    ],
+    description: `An intuitive Learning Management System built with Next.js 16, powered by **K2 Think V2**.
+- AI-powered 3D illustration generation, allow users to create custom 3D models for Physics subjects
+- Agentic experience using K2 Think V2, provide users with an interactive learning environment
+- Competed in [Build with K2 Think V2](https://build.k2think.ai) hackathon, hosted by [MBZUAI](https://mbzuai.ac.ae)
+`,
+    logo: `${baseUrl}/physthink.svg`,
     isExpanded: true,
   },
 ];
