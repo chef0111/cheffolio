@@ -21,12 +21,12 @@ export function TechStack() {
   return (
     <Panel id="stack">
       <PanelHeader className="relative">
-        <DecorIcon className="size-4" position="top-left" />
-        <DecorIcon className="size-4" position="top-right" />
         <PanelTitle>Tech Stack</PanelTitle>
       </PanelHeader>
 
       <PanelContent className="relative">
+        <DecorIcon className="size-4" position="top-left" />
+        <DecorIcon className="size-4" position="top-right" />
         <DecorIcon className="size-4" position="bottom-left" />
         <DecorIcon className="size-4" position="bottom-right" />
 
