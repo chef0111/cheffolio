@@ -5,12 +5,12 @@ import { addQueryParams } from '@/utils/url';
 
 import type { Experience } from '@/modules/portfolio/types/experiences';
 import { ExperiencePositionItem } from './position-item';
-import { DecorIcon } from '@/components/cheffolio/decor-icon';
 import {
   Status,
   StatusIndicator,
   StatusLabel,
 } from '@/components/kibo-ui/status';
+// import { DecorIcon } from '@/components/cheffolio/decor-icon';
 
 export function ExperienceItem({ experience }: { experience: Experience }) {
   return (

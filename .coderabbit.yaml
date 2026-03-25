@@ -1,0 +1,6 @@
+language: 'en-US'
+reviews:
+  path_filters:
+    - '!public/**'
+    - '!assets/**'
+    - '!.vscode/**'
