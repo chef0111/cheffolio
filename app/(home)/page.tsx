@@ -11,6 +11,7 @@ import { headers } from 'next/headers';
 import { GitHubContributions } from '@/modules/portfolio/components/github-contributions';
 import { TechStack } from '@/modules/portfolio/components/tech-stack';
 import { Experiences } from '@/modules/portfolio/components/experiences';
+import { Projects } from '@/modules/portfolio/components/projects';
 
 export default function Page() {
   return (
@@ -39,6 +40,9 @@ export default function Page() {
         <TailwindSeparator />
 
         <Experiences />
+        <TailwindSeparator />
+
+        <Projects />
         <TailwindSeparator />
       </main>
     </>
