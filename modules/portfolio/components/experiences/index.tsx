@@ -6,8 +6,6 @@ import { DecorIcon } from '@/components/cheffolio/decor-icon';
 export function Experiences() {
   return (
     <Panel id="experience" className="relative">
-      <DecorIcon className="size-4" position="top-left" />
-      <DecorIcon className="size-4" position="top-right" />
       <DecorIcon className="size-4" position="bottom-left" />
       <DecorIcon className="size-4" position="bottom-right" />
 

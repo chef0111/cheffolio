@@ -30,6 +30,8 @@ export function PhoneItem({ phoneNumber }: PhoneItemProps) {
     const success = await copyText(phoneNumberDecoded);
     if (success) {
       toast.success('Phone number copied');
+    } else {
+      toast.error('Failed to copy phone number');
     }
   });
 

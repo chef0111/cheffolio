@@ -13,12 +13,12 @@ export function About() {
   return (
     <Panel id="about">
       <PanelHeader className="relative">
-        <DecorIcon className="size-4" position="top-left" />
-        <DecorIcon className="size-4" position="top-right" />
         <PanelTitle>About</PanelTitle>
       </PanelHeader>
 
-      <PanelContent>
+      <PanelContent className="relative">
+        <DecorIcon className="size-4" position="top-left" />
+        <DecorIcon className="size-4" position="top-right" />
         <ProseMono>
           <Markdown>{USER.about}</Markdown>
         </ProseMono>

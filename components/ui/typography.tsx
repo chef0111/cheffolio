@@ -17,13 +17,7 @@ function Prose({
     <Comp
       data-slot="prose"
       className={cn(
-        'prose prose-ncdai prose-zinc dark:prose-invert max-w-none',
-        // "prose-headings:tracking-tight prose-headings:text-balance prose-h2:font-semibold",
-        // "prose-a:font-medium prose-a:wrap-break-word prose-a:text-foreground prose-a:underline prose-a:underline-offset-4",
-        // "prose-code:rounded-md prose-code:border prose-code:bg-muted/50 prose-code:px-[0.3rem] prose-code:py-[0.2rem] prose-code:text-sm prose-code:font-normal prose-code:before:content-none prose-code:after:content-none",
-        // "prose-strong:font-medium",
-        // "prose-hr:border-line",
-        // "prose-blockquote:border-s-border prose-blockquote:[&_p:first-of-type]:before:content-none prose-blockquote:[&_p:last-of-type]:after:content-none",
+        'prose prose-chef prose-zinc dark:prose-invert max-w-none',
         className
       )}
       {...props}
@@ -49,11 +43,7 @@ function Code({ className, ...props }: React.ComponentProps<'code'>) {
   return (
     <code
       data-slot={isCodeBlock ? 'code-block' : 'code-inline'}
-      className={cn(
-        // !isCodeBlock && "not-prose rounded-md border bg-muted/50 px-1.5 py-0.5 font-mono text-sm whitespace-pre-wrap in-data-table-nowrap:whitespace-nowrap",
-        !isCodeBlock && 'not-prose code-inline',
-        className
-      )}
+      className={cn(!isCodeBlock && 'not-prose code-inline', className)}
       {...props}
     />
   );

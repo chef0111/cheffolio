@@ -39,7 +39,7 @@ export const EXPERIENCES: Experience[] = [
           end: '06.2023',
         },
         icon: 'education',
-        skills: ['Algorithms', 'C++', 'HTML', 'CSS', 'JavaScript'],
+        skills: ['Algorithms', 'C++', 'HTML', 'CSS', 'Bootstrap'],
       },
       {
         id: '1',
