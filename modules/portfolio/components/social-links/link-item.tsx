@@ -34,7 +34,7 @@ export function SocialLinkItem({ icon, title, href }: SocialLink) {
 
       <h3 className="flex-1 font-medium">{title}</h3>
 
-      <div className="absolute top-0 right-0 size-full overflow-hidden">
+      <div className="pointer-events-none absolute top-0 right-0 size-full overflow-hidden">
         <div className="pointer-events-none absolute top-0 left-1/2 -mt-2 -ml-20 size-full mask-[radial-gradient(farthest-side_at_top,white,transparent)]">
           <GridPattern
             className="stroke-border absolute inset-0 size-full"
