@@ -49,8 +49,8 @@ export const PROJECTS: Project[] = [
       'Teamwork',
     ],
     description: `A modern, user-friendly web application for multimedia event retrieval.
-- Competed in [VBS2026](https://videobrowsershowdown.org/call-for-papers) and achieved 1st place — [Best Video Browsing System Award](https://www.facebook.com/share/p/179vdqNtxj), demonstrating strong performance in retrieving relevant multimedia content based on user queries
-- Competed in [HCMC AI Challenge 2025](https://www.facebook.com/share/p/1LXSW3kDCv) and achieved 5th place, showcasing the system's effectiveness in handling complex multimedia retrieval tasks
+- Competed in [VBS2026](https://videobrowsershowdown.org/call-for-papers) and achieved 1st place — [Best Video Browsing System Award](https://www.facebook.com/uittaekwondo/posts/pfbid0znk1hsiFbrU4eqEX6KaQffeNYcvMkssE7xUJFoYNXL7pXGUoMGfEXiTVBEpKQCZAl), demonstrating strong performance in retrieving relevant multimedia content based on user queries
+- Competed in [HCMC AI Challenge 2025](https://www.facebook.com/uittaekwondo/posts/pfbid0QMqR86PCN8nmDP6diMgXJbq1NRYHXQjFpdbdKJmnkgZKvL2QgQMY21HvsJLe7xW5l#) and achieved 5th place, showcasing the system's effectiveness in handling complex multimedia retrieval tasks
 `,
     isExpanded: true,
   },

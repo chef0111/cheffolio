@@ -1,0 +1,115 @@
+import { format } from 'date-fns';
+import { AwardIcon } from 'lucide-react';
+
+import {
+  Collapsible,
+  CollapsibleChevronsIcon,
+} from '@/components/ui/collapsible-animated';
+import {
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible';
+import { Markdown } from '@/components/cheffolio/markdown';
+import { Separator } from '@/components/ui/separator';
+import { ProseMono } from '@/components/ui/typography';
+
+import type { Award } from '@/modules/portfolio/types/awards';
+import { DecorIcon } from '@/components/cheffolio/decor-icon';
+import { GridPattern } from '@/components/cheffolio/grid-pattern';
+import { AwardReference } from './awared-reference';
+
+export function AwardItem({
+  className,
+  award,
+}: {
+  className?: string;
+  award: Award;
+}) {
+  const canExpand = !!award.description;
+
+  return (
+    <Collapsible className={className} disabled={!canExpand}>
+      <DecorIcon className="size-4" position="top-left" />
+      <DecorIcon className="size-4" position="top-right" />
+
+      <div className="hover:bg-accent-muted my-auto flex items-stretch">
+        <div className="relative flex items-center">
+          <div className="border-muted-foreground/15 bg-muted ring-line ring-offset-background mx-4 flex size-6 shrink-0 items-center justify-center rounded-lg border ring-1 ring-offset-1">
+            <AwardIcon className="text-muted-foreground pointer-events-none size-4" />
+          </div>
+        </div>
+
+        <div className="border-line relative flex-1 overflow-hidden border-l border-dashed">
+          <CollapsibleTrigger className="flex w-full items-center gap-2 p-4 pr-2 text-left">
+            <div className="flex-1">
+              <h3 className="mb-1 leading-snug font-medium text-balance">
+                {award.title}
+              </h3>
+
+              <div className="text-muted-foreground flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
+                <dl>
+                  <dt className="sr-only">Prize</dt>
+                  <dd>{award.prize}</dd>
+                </dl>
+
+                <Separator
+                  className="data-vertical:h-4 data-vertical:self-center"
+                  orientation="vertical"
+                />
+
+                <dl>
+                  <dt className="sr-only">Awarded in</dt>
+                  <dd>
+                    <time dateTime={new Date(award.date).toISOString()}>
+                      {format(new Date(award.date), 'MM.yyyy')}
+                    </time>
+                  </dd>
+                </dl>
+
+                <Separator
+                  className="data-vertical:h-4 data-vertical:self-center"
+                  orientation="vertical"
+                />
+
+                <dl>
+                  <dt className="sr-only">Received in Grade</dt>
+                  <dd>{award.grade}</dd>
+                </dl>
+              </div>
+            </div>
+
+            {award.referenceLink && (
+              <AwardReference href={award.referenceLink} />
+            )}
+
+            {canExpand && (
+              <div className="text-muted-foreground shrink-0 [&_svg]:size-4">
+                <CollapsibleChevronsIcon duration={0.15} />
+              </div>
+            )}
+          </CollapsibleTrigger>
+
+          <div className="pointer-events-none absolute top-0 left-1/2 -mt-2 -ml-20 size-full mask-[radial-gradient(farthest-side_at_top,white,transparent)]">
+            <GridPattern
+              className="stroke-border absolute inset-0 size-full"
+              height={25}
+              width={25}
+              x={12}
+              y={6}
+            />
+          </div>
+        </div>
+      </div>
+
+      {canExpand && (
+        <CollapsibleContent className="sm:data-[state=closed]:animate-collapsible-up sm:data-[state=open]:animate-collapsible-down overflow-hidden">
+          <ProseMono className="border-line border-t p-4">
+            <Markdown>{award.description}</Markdown>
+          </ProseMono>
+        </CollapsibleContent>
+      )}
+
+      <Separator className="bg-line w-full" />
+    </Collapsible>
+  );
+}
