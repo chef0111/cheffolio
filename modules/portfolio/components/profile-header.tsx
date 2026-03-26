@@ -36,7 +36,7 @@ export function ProfileHeader() {
       <div className="flex flex-1 flex-col">
         <div className="flex grow items-end pb-1 pl-4">
           <div
-            className="line-clamp-1 font-mono text-xs text-zinc-400 select-none max-sm:hidden dark:text-zinc-700"
+            className="line-clamp-1 font-mono text-xs text-zinc-400 select-none dark:text-zinc-700"
             aria-hidden
           >
             {'Love coding catchy things :>'}
@@ -45,13 +45,13 @@ export function ProfileHeader() {
 
         <div className="border-line border-t">
           <div className="flex flex-wrap items-center gap-2 pl-4">
-            <div className="flex items-center gap-2">
-              <h1 className="-translate-y-px truncate text-3xl font-semibold tracking-tight">
+            <div className="flex items-center gap-2 py-1">
+              <h1 className="-translate-y-px truncate text-3xl leading-none font-semibold tracking-tight">
                 {USER.displayName}
               </h1>
 
               <VerifiedIcon
-                className="text-info size-4.5 select-none"
+                className="text-info size-4.5 py-0 select-none"
                 aria-label="Verified"
               />
             </div>
@@ -61,7 +61,7 @@ export function ProfileHeader() {
             </Label>
           </div>
 
-          <div className="border-line h-9 border-t py-1 pl-4">
+          <div className="border-line border-t py-1 pl-4">
             <TextFlip
               className="font-pixel-square text-muted-foreground text-sm text-balance"
               variants={{

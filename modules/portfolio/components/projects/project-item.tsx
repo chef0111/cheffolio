@@ -51,8 +51,8 @@ export function ProjectItem({
             />
           </div>
         ) : (
-          <div className="border-muted-foreground/15 bg-muted text-muted-foreground ring-line ring-offset-background mx-4 flex size-6 shrink-0 items-center justify-center rounded-lg border ring-1 ring-offset-1 select-none">
-            <BoxIcon className="size-4" />
+          <div className="border-muted-foreground/15 bg-muted text-muted-foreground ring-line ring-offset-background mx-4 flex size-8 shrink-0 items-center justify-center rounded-lg border ring-1 ring-offset-1 select-none">
+            <BoxIcon className="size-6" />
           </div>
         )}
 
