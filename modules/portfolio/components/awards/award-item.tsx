@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { AwardIcon, FileCheckIcon } from 'lucide-react';
+import { AwardIcon } from 'lucide-react';
 
 import {
   Collapsible,
@@ -9,11 +9,6 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 import { Markdown } from '@/components/cheffolio/markdown';
 import { Separator } from '@/components/ui/separator';
 import { ProseMono } from '@/components/ui/typography';
@@ -21,6 +16,7 @@ import { ProseMono } from '@/components/ui/typography';
 import type { Award } from '@/modules/portfolio/types/awards';
 import { DecorIcon } from '@/components/cheffolio/decor-icon';
 import { GridPattern } from '@/components/cheffolio/grid-pattern';
+import { AwardReference } from './awared-reference';
 
 export function AwardItem({
   className,
@@ -83,22 +79,7 @@ export function AwardItem({
             </div>
 
             {award.referenceLink && (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <a
-                    className="text-muted-foreground hover:text-foreground relative flex size-6 shrink-0 items-center justify-center after:absolute after:-inset-2"
-                    href={award.referenceLink}
-                    target="_blank"
-                    rel="noopener"
-                  >
-                    <FileCheckIcon className="pointer-events-none size-4" />
-                    <span className="sr-only">Open Reference Attachment</span>
-                  </a>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Open Reference Attachment</p>
-                </TooltipContent>
-              </Tooltip>
+              <AwardReference href={award.referenceLink} />
             )}
 
             {canExpand && (

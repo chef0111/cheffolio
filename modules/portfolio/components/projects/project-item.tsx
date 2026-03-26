@@ -1,4 +1,4 @@
-import { BoxIcon, InfinityIcon, LinkIcon } from 'lucide-react';
+import { BoxIcon, InfinityIcon } from 'lucide-react';
 import Image from 'next/image';
 
 import {
@@ -9,11 +9,6 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 import { Markdown } from '@/components/cheffolio/markdown';
 import { Tag } from '@/components/ui/tag';
 import { ProseMono } from '@/components/ui/typography';
@@ -22,6 +17,7 @@ import { addQueryParams } from '@/utils/url';
 
 import type { Project } from '@/modules/portfolio/types/projects';
 import { GridPattern } from '@/components/cheffolio/grid-pattern';
+import { ProjectLink } from './project-link';
 
 export function ProjectItem({
   className,
@@ -86,22 +82,7 @@ export function ProjectItem({
               </dl>
             </div>
 
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <a
-                  className="text-muted-foreground hover:text-foreground relative flex size-6 shrink-0 items-center justify-center after:absolute after:-inset-2"
-                  href={addQueryParams(project.link, UTM_PARAMS)}
-                  target="_blank"
-                  rel="noopener"
-                >
-                  <LinkIcon className="pointer-events-none size-4" />
-                  <span className="sr-only">Open Project Link</span>
-                </a>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Open Project Link</p>
-              </TooltipContent>
-            </Tooltip>
+            <ProjectLink href={addQueryParams(project.link, UTM_PARAMS)} />
 
             <div className="text-muted-foreground shrink-0 [&_svg]:size-4">
               <CollapsibleChevronsIcon duration={0.15} />
