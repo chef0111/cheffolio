@@ -13,6 +13,7 @@ import { TechStack } from '@/modules/portfolio/components/tech-stack';
 import { Experiences } from '@/modules/portfolio/components/experiences';
 import { Projects } from '@/modules/portfolio/components/projects';
 import { Awards } from '@/modules/portfolio/components/awards';
+import { Footer } from '@/modules/footer';
 
 export default function Page() {
   return (
@@ -48,6 +49,8 @@ export default function Page() {
 
         <Awards />
         <TailwindSeparator />
+
+        <Footer />
       </main>
     </>
   );
