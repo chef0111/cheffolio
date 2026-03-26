@@ -12,6 +12,7 @@ import { GitHubContributions } from '@/modules/portfolio/components/github-contr
 import { TechStack } from '@/modules/portfolio/components/tech-stack';
 import { Experiences } from '@/modules/portfolio/components/experiences';
 import { Projects } from '@/modules/portfolio/components/projects';
+import { Awards } from '@/modules/portfolio/components/awards';
 
 export default function Page() {
   return (
@@ -43,6 +44,9 @@ export default function Page() {
         <TailwindSeparator />
 
         <Projects />
+        <TailwindSeparator />
+
+        <Awards />
         <TailwindSeparator />
       </main>
     </>
