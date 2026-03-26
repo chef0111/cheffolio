@@ -167,8 +167,8 @@ export const TECH_STACK: TechStack[] = [
   },
   {
     key: 'chatgpt',
-    title: 'ChatGPT',
-    href: 'https://chatgpt.com/',
+    title: 'Codex',
+    href: 'https://openai.com/codex/',
     categories: ['Tools', 'AI'],
     theme: true,
   },
