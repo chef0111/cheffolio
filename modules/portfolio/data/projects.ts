@@ -4,26 +4,6 @@ const baseUrl = 'https://res.cloudinary.com/dpuqj2n2q/image/upload';
 
 export const PROJECTS: Project[] = [
   {
-    id: 'cheffolio',
-    title: 'Cheffolio',
-    period: {
-      start: '03.2026',
-    },
-    link: 'https://github.com/chef0111/cheffolio',
-    skills: [
-      'Next.js 16',
-      'TypeScript',
-      'TailwindCSS',
-      'Motion',
-      'shadcn/ui',
-      'Vercel',
-      'Portfolio',
-    ],
-    description: 'A minimal, pixel-perfect, shadcn/ui inspired dev portfolio.',
-    logo: `${baseUrl}/cheffolio.svg`,
-    isExpanded: true,
-  },
-  {
     id: 'tku-sparring-app',
     title: 'TKU Sparring System',
     period: {
@@ -50,32 +30,28 @@ export const PROJECTS: Project[] = [
     isExpanded: true,
   },
   {
-    id: 'dev4room',
-    title: 'Dev4Room',
+    id: 'fusionista',
+    title: 'Fusionista 2.0',
     period: {
-      start: '09.2025',
+      start: '12.2025',
       end: '01.2026',
     },
-    link: 'https://github.com/chef0111/dev4room',
+    link: 'https://github.com/AIC-ICE-BEAR',
     skills: [
-      'Next.js 16',
+      'React',
       'TypeScript',
-      'Better-Auth',
-      'TailwindCSS',
-      'shadcn/ui',
-      'PostgreSQL',
-      'Drizzle',
-      'Vercel',
-      'Q&A Platform',
-      'AI-powered Answers',
+      'Vite',
+      'FastAPI',
+      'Event Retrieval',
+      'Multimedia Modeling',
+      'Embeddings',
+      'GCP',
+      'Teamwork',
     ],
-    description: `Community-driven platform for developers to ask questions, post answers, and get help from other developers. Live at [dev4room.pro](https://dev4room.pro)
-- Authentication system with email/password and OAuth providers
-- AI-powered answer generation using OpenAI's GPT-4.0, providing instant answers to user questions
-- Real-time semantic search support, allow users to find relevant questions and answers quickly
-- Responsive design ensuring a seamless experience across devices
+    description: `A modern, user-friendly web application for multimedia event retrieval.
+- Competed in [VBS2026](https://videobrowsershowdown.org/call-for-papers) and achieved 1st place — [Best Video Browsing System Award](https://www.facebook.com/share/p/179vdqNtxj), demonstrating strong performance in retrieving relevant multimedia content based on user queries
+- Competed in [HCMC AI Challenge 2025](https://www.facebook.com/share/p/1LXSW3kDCv) and achieved 5th place, showcasing the system's effectiveness in handling complex multimedia retrieval tasks
 `,
-    logo: `${baseUrl}/dev4room.svg`,
     isExpanded: true,
   },
   {
@@ -105,6 +81,52 @@ export const PROJECTS: Project[] = [
 - Competed in [Build with K2 Think V2](https://build.k2think.ai) hackathon, hosted by [MBZUAI](https://mbzuai.ac.ae)
 `,
     logo: `${baseUrl}/physthink.svg`,
-    isExpanded: true,
+  },
+  {
+    id: 'dev4room',
+    title: 'Dev4Room',
+    period: {
+      start: '09.2025',
+      end: '01.2026',
+    },
+    link: 'https://github.com/chef0111/dev4room',
+    skills: [
+      'Next.js 16',
+      'TypeScript',
+      'Better-Auth',
+      'TailwindCSS',
+      'shadcn/ui',
+      'PostgreSQL',
+      'Drizzle',
+      'Vercel',
+      'Q&A Platform',
+      'AI-powered Answers',
+    ],
+    description: `Community-driven platform for developers to ask questions, post answers, and get help from other developers. Live at [dev4room.pro](https://dev4room.pro)
+- Authentication system with email/password and OAuth providers
+- AI-powered answer generation using OpenAI's GPT-4.0, providing instant answers to user questions
+- Real-time semantic search support, allow users to find relevant questions and answers quickly
+- Responsive design ensuring a seamless experience across devices
+`,
+    logo: `${baseUrl}/dev4room.svg`,
+  },
+  {
+    id: 'cheffolio',
+    title: 'Cheffolio',
+    period: {
+      start: '03.2026',
+    },
+    link: 'https://github.com/chef0111/cheffolio',
+    skills: [
+      'Next.js 16',
+      'TypeScript',
+      'TailwindCSS',
+      'Motion',
+      'shadcn/ui',
+      'Vercel',
+      'Portfolio',
+    ],
+    description: 'A minimal, pixel-perfect, shadcn/ui inspired dev portfolio.',
+    logo: `${baseUrl}/cheffolio.svg`,
   },
 ];

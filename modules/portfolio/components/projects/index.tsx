@@ -28,7 +28,7 @@ export function Projects() {
         <DecorIcon className="size-4" position="bottom-right" />
         <CollapsibleList
           items={PROJECTS}
-          max={4}
+          max={5}
           renderItem={(item) => <ProjectItem project={item} />}
         />
       </PanelContent>

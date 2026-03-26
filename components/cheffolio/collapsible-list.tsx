@@ -8,22 +8,23 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
+import { cn } from '@/lib/utils';
 
 export function CollapsibleList<T>({
   items,
   max = 3,
-
+  className,
   keyExtractor,
   renderItem,
 }: {
   items: T[];
   max?: number;
-
+  className?: string;
   keyExtractor?: (item: T) => string;
   renderItem: (item: T) => React.ReactNode;
 }) {
   return (
-    <Collapsible className="group/collapsible">
+    <Collapsible className={cn('group/collapsible', className)}>
       {items.slice(0, max).map((award, index) => (
         <Slot.Root
           key={typeof keyExtractor === 'function' ? keyExtractor(award) : index}

@@ -492,7 +492,6 @@ export const ContributionGraphLegend = ({
           <Fragment key={level}>{children({ level })}</Fragment>
         ) : (
           <svg height={blockSize} key={level} width={blockSize}>
-            <title>{`${level} contributions`}</title>
             <rect
               className={cn(
                 'stroke-border stroke-[1px]',
