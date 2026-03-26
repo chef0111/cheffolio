@@ -4,26 +4,6 @@ const baseUrl = 'https://res.cloudinary.com/dpuqj2n2q/image/upload';
 
 export const PROJECTS: Project[] = [
   {
-    id: 'cheffolio',
-    title: 'Cheffolio',
-    period: {
-      start: '03.2026',
-    },
-    link: 'https://github.com/chef0111/cheffolio',
-    skills: [
-      'Next.js 16',
-      'TypeScript',
-      'TailwindCSS',
-      'Motion',
-      'shadcn/ui',
-      'Vercel',
-      'Portfolio',
-    ],
-    description: 'A minimal, pixel-perfect, shadcn/ui inspired dev portfolio.',
-    logo: `${baseUrl}/cheffolio.svg`,
-    isExpanded: true,
-  },
-  {
     id: 'tku-sparring-app',
     title: 'TKU Sparring System',
     period: {
@@ -129,5 +109,24 @@ export const PROJECTS: Project[] = [
 - Responsive design ensuring a seamless experience across devices
 `,
     logo: `${baseUrl}/dev4room.svg`,
+  },
+  {
+    id: 'cheffolio',
+    title: 'Cheffolio',
+    period: {
+      start: '03.2026',
+    },
+    link: 'https://github.com/chef0111/cheffolio',
+    skills: [
+      'Next.js 16',
+      'TypeScript',
+      'TailwindCSS',
+      'Motion',
+      'shadcn/ui',
+      'Vercel',
+      'Portfolio',
+    ],
+    description: 'A minimal, pixel-perfect, shadcn/ui inspired dev portfolio.',
+    logo: `${baseUrl}/cheffolio.svg`,
   },
 ];
