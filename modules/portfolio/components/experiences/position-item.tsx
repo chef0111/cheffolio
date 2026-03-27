@@ -23,6 +23,14 @@ import {
   StatusLabel,
 } from '@/components/kibo-ui/status';
 
+/**
+ * Render a collapsible UI item for a single work experience position showing title, icon, employment metadata, description, and skills.
+ *
+ * The collapsible is non-interactive when `position.description` is absent. Employment period displays `start`—`end`, or a present indicator when `end` is not provided. If `position.isCurrentPosition` is true a visually hidden "Current Position" status is included. When present, `position.skills` are rendered as tag elements.
+ *
+ * @param position - The `ExperiencePosition` to render (expected to include properties such as `title`, `icon`, `employmentPeriod`, `employmentType`, `description`, `skills`, `isExpanded`, and `isCurrentPosition`)
+ * @returns The rendered JSX element for the experience position item
+ */
 export function ExperiencePositionItem({
   position,
 }: {

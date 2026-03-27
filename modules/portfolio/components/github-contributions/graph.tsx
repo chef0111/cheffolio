@@ -22,6 +22,14 @@ import { addQueryParams } from '@/utils/url';
 import { Loader } from '@/components/ui/loader';
 import { cn } from '@/lib/utils';
 
+/**
+ * Renders a GitHub-style contribution graph using the provided activity data.
+ *
+ * Renders a calendar of daily contribution blocks with per-day tooltips, a total-count footer linking to the GitHub profile, and a legend that maps contribution levels to colors.
+ *
+ * @param contributions - A Promise that resolves to an array of activity entries used to populate the graph
+ * @returns The contribution graph UI for the resolved activity data
+ */
 export function GitHubContributionGraph({
   contributions,
 }: {

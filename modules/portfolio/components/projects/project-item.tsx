@@ -19,6 +19,17 @@ import type { Project } from '@/modules/portfolio/types/projects';
 import { GridPattern } from '@/components/cheffolio/grid-pattern';
 import { ProjectLink } from './project-link';
 
+/**
+ * Render a collapsible project entry showing title, period, logo (or placeholder), link, and expandable details.
+ *
+ * The header displays the project's title, formatted period (start and optional end or "Present"), logo or placeholder icon,
+ * a project link augmented with UTM parameters, and an expand/collapse chevron. When expanded, the item shows the project's
+ * markdown description and a list of skill tags if present.
+ *
+ * @param className - Optional additional CSS class names applied to the root Collapsible container
+ * @param project - Project data used to populate the item (title, period, logo, link, description, skills, isExpanded)
+ * @returns A React element representing the project item with header and expandable content
+ */
 export function ProjectItem({
   className,
   project,

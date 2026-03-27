@@ -8,6 +8,12 @@ import { FullWidthDivider } from '@/components/cheffolio/full-width-divider';
 import { addQueryParams } from '@/utils/url';
 import { UTM_PARAMS } from '@/config/site';
 
+/**
+ * Renders the site footer with brand and social icon row, a link to the project's GitHub source,
+ * a slogan navigation strip, a full-width divider, and the copyright area.
+ *
+ * @returns The footer JSX element.
+ */
 export function Footer() {
   return (
     <footer className="relative">
