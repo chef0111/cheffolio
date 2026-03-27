@@ -40,10 +40,13 @@ function BrandMotion() {
   }, [mobile]);
 
   return (
-    <Brand
-      data-visible={visible}
-      className="translate-y-2 opacity-0 transition-[opacity,translate] duration-300 data-[visible=true]:translate-y-0 data-[visible=true]:opacity-100"
-    />
+    <div data-visible={visible} className="group/motion relative">
+      <Brand
+        fillOpacity={0}
+        className="stroke-foreground pointer-events-none absolute top-0 left-0 opacity-100 transition-opacity duration-300 group-data-[visible=true]/motion:opacity-0"
+      />
+      <Brand className="translate-y-2 opacity-0 transition-[opacity,translate] duration-300 group-data-[visible=true]/motion:translate-y-0 group-data-[visible=true]/motion:opacity-100" />
+    </div>
   );
 }
 
