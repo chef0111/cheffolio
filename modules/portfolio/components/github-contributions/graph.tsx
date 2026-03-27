@@ -39,7 +39,7 @@ export function GitHubContributionGraph({
     >
       <ContributionGraphCalendar
         className="no-scrollbar px-2"
-        title="GitHub Contributions"
+        aria-label="GitHub contributions"
       >
         {({ activity, dayIndex, weekIndex }) => (
           <Tooltip delayDuration={300}>

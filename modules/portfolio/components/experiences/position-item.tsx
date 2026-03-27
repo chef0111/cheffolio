@@ -40,7 +40,7 @@ export function ExperiencePositionItem({
       <CollapsibleTrigger
         className={cn(
           'group block w-full text-left',
-          'hover:before:bg-accent-muted relative before:absolute before:-top-1 before:-right-1 before:-bottom-1.5 before:left-7 before:-z-1 before:rounded-lg before:transition-[background-color] before:ease-out',
+          'hover:before:bg-accent-muted active:before:bg-accent-muted relative before:absolute before:-top-1 before:-right-1 before:-bottom-1.5 before:left-7 before:-z-1 before:rounded-lg before:transition-[background-color] before:ease-out',
           'focus-visible:before:ring-ring/50 outline-none focus-visible:before:ring-2 focus-visible:before:ring-inset',
           'data-disabled:before:content-none'
         )}

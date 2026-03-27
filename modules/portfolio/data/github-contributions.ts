@@ -16,7 +16,7 @@ export const getGitHubContributions = async () => {
 
   cacheTag('github-contributions');
   cacheLife({
-    revalidate: 84600, // Cache for 1 day
+    revalidate: 42300, // Cache for 12 hours
   });
 
   return data.contributions;
