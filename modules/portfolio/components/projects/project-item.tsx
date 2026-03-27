@@ -32,7 +32,7 @@ export function ProjectItem({
 
   return (
     <Collapsible className={className} defaultOpen={project.isExpanded}>
-      <div className="hover:bg-accent bg-accent/50 dark:bg-muted/20 dark:hover:bg-muted/30 transition-color m-2 flex items-stretch rounded-lg border duration-200">
+      <div className="hover:bg-muted-accent active:bg-muted-accent bg-accent/50 dark:bg-muted/20 transition-color m-2 flex items-stretch rounded-lg border duration-200">
         {project.logo ? (
           <div className="bg-background m-1.5 mr-0 flex items-center rounded-md border">
             <Image
