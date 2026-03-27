@@ -11,7 +11,7 @@ export function SocialLinkItem({ icon, title, href }: SocialLink) {
   return (
     <a
       className={cn(
-        'group hover:bg-accent-muted relative flex items-center gap-4 p-4 pr-2 transition-[background-color] ease-out',
+        'group hover:bg-accent-muted active:bg-accent-muted relative flex items-center gap-4 p-4 pr-2 transition-[background-color] ease-out',
         'max-md:nth-[2n+1]:screen-line-top max-md:nth-[2n+1]:screen-line-bottom',
         'md:nth-[3n+1]:screen-line-top md:nth-[3n+1]:screen-line-bottom'
       )}
