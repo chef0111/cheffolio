@@ -5,7 +5,6 @@ import { Brand } from '@/components/cheffolio/brand';
 import { Suspense } from 'react';
 import { FooterCopyright } from './copyright';
 import { FullWidthDivider } from '@/components/cheffolio/full-width-divider';
-import { Separator } from '@/components/ui/separator';
 import { addQueryParams } from '@/utils/url';
 import { UTM_PARAMS } from '@/config/site';
 
@@ -53,22 +52,17 @@ export function Footer() {
           </div>
 
           <nav className="screen-line-top mx-auto">
-            <ul className="text-muted-foreground flex flex-wrap gap-1.5 text-sm font-medium sm:gap-3">
+            <ul className="text-muted-foreground flex items-center text-sm font-medium">
               {slogan.map((word) => (
-                <li key={word.key}>
-                  <span className="hover:text-foreground flex items-center gap-1.5 font-mono select-none sm:gap-3 sm:font-semibold">
-                    <Separator
-                      className="border-line h-6 sm:h-8"
-                      orientation="vertical"
-                    />
+                <li
+                  key={word.key}
+                  className="hover:text-foreground border-line border-x first:border-l-2 last:border-r-2"
+                >
+                  <span className="flex h-6 items-center px-1.5 text-center font-mono select-none sm:h-8 sm:px-3 sm:font-semibold">
                     {word.label}
                   </span>
                 </li>
               ))}
-              <Separator
-                className="border-line h-6 sm:h-8"
-                orientation="vertical"
-              />
             </ul>
           </nav>
         </div>
