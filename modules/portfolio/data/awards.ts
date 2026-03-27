@@ -31,6 +31,6 @@ export const AWARDS: Award[] = [
     description:
       '- Organized in Ho Chi Minh, Viet Nam\n- Field: Multimedia Event Retrieval\n- Ended in 5th place among 300+ teams',
     referenceLink:
-      'https://www.facebook.com/uittaekwondo/posts/pfbid0QMqR86PCN8nmDP6diMgXJbq1NRYHXQjFpdbdKJmnkgZKvL2QgQMY21HvsJLe7xW5l#',
+      'https://www.facebook.com/uittaekwondo/posts/pfbid0QMqR86PCN8nmDP6diMgXJbq1NRYHXQjFpdbdKJmnkgZKvL2QgQMY21HvsJLe7xW5l',
   },
 ];

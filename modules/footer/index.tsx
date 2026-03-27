@@ -6,6 +6,8 @@ import { Suspense } from 'react';
 import { FooterCopyright } from './copyright';
 import { FullWidthDivider } from '@/components/cheffolio/full-width-divider';
 import { Separator } from '@/components/ui/separator';
+import { addQueryParams } from '@/utils/url';
+import { UTM_PARAMS } from '@/config/site';
 
 export function Footer() {
   return (
@@ -37,7 +39,10 @@ export function Footer() {
             <p className="text-muted-foreground text-center font-mono text-sm text-balance">
               Source code available on{' '}
               <a
-                href="https://github.com/chef0111/cheffolio?utm_source=cheffolio.vercel.app"
+                href={addQueryParams(
+                  'https://github.com/chef0111/cheffolio',
+                  UTM_PARAMS
+                )}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-foreground underline underline-offset-4"
@@ -98,17 +103,17 @@ const slogan = [
 
 const socialLinks = [
   {
-    href: 'https://x.com/cheff0111?utm_source=cheffolio.vercel.app',
+    href: addQueryParams('https://x.com/cheff0111', UTM_PARAMS),
     label: 'X',
     icon: <XIcon />,
   },
   {
-    href: 'https://github.com/chef0111?utm_source=cheffolio.vercel.app',
+    href: addQueryParams('https://github.com/chef0111', UTM_PARAMS),
     label: 'Github',
     icon: <GithubIcon />,
   },
   {
-    href: 'https://www.linkedin.com/in/chef0111?utm_source=cheffolio.vercel.app',
+    href: addQueryParams('https://www.linkedin.com/in/chef0111', UTM_PARAMS),
     label: 'Linkedin',
     icon: <LinkedinIcon />,
   },

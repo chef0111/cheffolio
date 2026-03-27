@@ -17,6 +17,8 @@ import type { Award } from '@/modules/portfolio/types/awards';
 import { DecorIcon } from '@/components/cheffolio/decor-icon';
 import { GridPattern } from '@/components/cheffolio/grid-pattern';
 import { AwardReference } from './awared-reference';
+import { addQueryParams } from '@/utils/url';
+import { UTM_PARAMS } from '@/config/site';
 
 export function AwardItem({
   className,
@@ -33,8 +35,8 @@ export function AwardItem({
       <DecorIcon className="size-4" position="top-right" />
 
       <div className="hover:bg-accent-muted my-auto flex items-center">
-        <div className="border-muted-foreground/15 bg-muted ring-line ring-offset-background mx-4 flex size-6 shrink-0 items-center justify-center rounded-lg border ring-1 ring-offset-1">
-          <AwardIcon className="text-muted-foreground pointer-events-none size-4" />
+        <div className="border-muted-foreground/15 bg-muted ring-line ring-offset-background mx-4 flex size-6 shrink-0 items-center justify-center rounded-lg border ring-1 ring-offset-1 sm:size-7">
+          <AwardIcon className="text-muted-foreground pointer-events-none size-4 sm:size-4.5" />
         </div>
 
         <div className="border-line relative flex-1 overflow-hidden border-l border-dashed">
@@ -77,7 +79,9 @@ export function AwardItem({
             </div>
 
             {award.referenceLink && (
-              <AwardReference href={award.referenceLink} />
+              <AwardReference
+                href={addQueryParams(award.referenceLink, UTM_PARAMS)}
+              />
             )}
 
             {canExpand && (
