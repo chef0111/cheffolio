@@ -23,10 +23,10 @@ export default function ThemeToggle() {
     setTheme(resolvedTheme === 'light' ? 'dark' : 'light');
   }, [resolvedTheme, setTheme]);
 
-  const toggleTheme = () => {
+  const toggleTheme = useCallback(() => {
     playToggle();
     switchTheme();
-  };
+  }, [playToggle, switchTheme]);
 
   useHotkey('D', () => switchTheme());
 

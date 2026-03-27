@@ -9,7 +9,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 const audioCache = new Map<
   string,
   {
-    buffer: AudioBuffer;
+    buffer: AudioBuffer | null;
     loading: Promise<AudioBuffer>;
   } | null
 >();
@@ -93,7 +93,12 @@ export function useSound(url: string) {
 
     // Start loading
     const loadingPromise = fetch(url)
-      .then((res) => res.arrayBuffer())
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}: Failed to fetch ${url}`);
+        }
+        return res.arrayBuffer();
+      })
       .then((data) => audioCtx.decodeAudioData(data))
       .then((decoded) => {
         // Store in cache
@@ -114,6 +119,10 @@ export function useSound(url: string) {
 
   const play = useCallback((volume: number = 1) => {
     if (audioCtxRef.current && bufferRef.current) {
+      if (audioCtxRef.current.state === 'suspended') {
+        audioCtxRef.current.resume();
+      }
+
       const source = audioCtxRef.current.createBufferSource();
       const gainNode = audioCtxRef.current.createGain();
 
@@ -236,7 +245,12 @@ export function useSoundLazy(url: string) {
     // Start new load
     setIsLoading(true);
     const loadingPromise = fetch(url)
-      .then((res) => res.arrayBuffer())
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}: Failed to fetch ${url}`);
+        }
+        return res.arrayBuffer();
+      })
       .then((data) => audioCtx.decodeAudioData(data))
       .then((decoded) => {
         audioCache.set(url, { buffer: decoded, loading: loadingPromise });
