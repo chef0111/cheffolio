@@ -28,3 +28,7 @@ export const UTM_PARAMS = {
 };
 
 export const GITHUB_USERNAME = 'chef0111';
+
+export const SOUNDS = {
+  toggle: 'https://res.cloudinary.com/dpuqj2n2q/video/upload/toggle.mp3',
+};
