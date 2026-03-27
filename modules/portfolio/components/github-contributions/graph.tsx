@@ -37,7 +37,10 @@ export function GitHubContributionGraph({
       blockMargin={3}
       blockRadius={3}
     >
-      <ContributionGraphCalendar className="no-scrollbar px-2">
+      <ContributionGraphCalendar
+        className="no-scrollbar px-2"
+        aria-label="GitHub contributions"
+      >
         {({ activity, dayIndex, weekIndex }) => (
           <Tooltip delayDuration={300}>
             <TooltipTrigger asChild>
