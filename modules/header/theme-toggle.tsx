@@ -11,13 +11,22 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { Kbd } from '@/components/ui/kbd';
+import { useSound } from '@/hooks/use-sound';
+import { SOUNDS } from '@/config/site';
 
 export default function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
 
+  const playToggle = useSound(SOUNDS.toggle);
+
   const switchTheme = useCallback(() => {
     setTheme(resolvedTheme === 'light' ? 'dark' : 'light');
   }, [resolvedTheme, setTheme]);
+
+  const toggleTheme = () => {
+    playToggle();
+    switchTheme();
+  };
 
   useHotkey('D', () => switchTheme());
 
@@ -27,7 +36,7 @@ export default function ThemeToggle() {
         <Button
           variant="outline"
           size="icon"
-          onClick={switchTheme}
+          onClick={toggleTheme}
           aria-label="Toggle theme"
           className="active:scale-100"
         >
