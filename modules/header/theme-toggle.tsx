@@ -24,7 +24,7 @@ export default function ThemeToggle() {
   }, [resolvedTheme, setTheme]);
 
   const toggleTheme = useCallback(() => {
-    playToggle();
+    playToggle(0.25);
     switchTheme();
   }, [playToggle, switchTheme]);
 
