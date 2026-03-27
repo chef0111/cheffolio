@@ -42,6 +42,9 @@ function BrandMotion() {
   return (
     <div data-visible={visible} className="group/motion relative">
       <Brand
+        href={null}
+        aria-hidden="true"
+        focusable={false}
         fillOpacity={0}
         className="stroke-foreground pointer-events-none absolute top-0 left-0 opacity-100 transition-opacity duration-300 group-data-[visible=true]/motion:opacity-0"
       />
