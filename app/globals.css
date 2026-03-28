@@ -109,7 +109,7 @@
   --accent-muted: color-mix(in oklab, var(--muted) 20%, transparent);
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
+  --border: oklch(0.274 0.006 286.033);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.552 0.016 285.938);
   --chart-1: oklch(0.879 0.169 91.605);
@@ -141,29 +141,29 @@
   [role='button'] {
     cursor: pointer;
   }
-}
-
-::-webkit-scrollbar {
-  width: 5px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 5px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--muted);
-  cursor: pointer;
-}
-::-webkit-scrollbar-thumb:active {
-  background: var(--border);
-  cursor: pointer;
-}
-* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 5px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--muted);
+    cursor: pointer;
+  }
+  ::-webkit-scrollbar-thumb:active {
+    background: var(--border);
+    cursor: pointer;
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
 }
 
 @utility screen-line-top {
