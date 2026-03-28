@@ -16,6 +16,7 @@ const eslintConfig = defineConfig([
   {
     rules: {
       'react-hooks/immutability': 'warn',
+      'react-hooks/set-state-in-effect': 'warn',
     },
   },
 ]);

@@ -17,10 +17,12 @@ import {
   ContributionGraphLegend,
   ContributionGraphTotalCount,
 } from '@/components/kibo-ui/contribution-graph';
-import { GITHUB_USERNAME, UTM_PARAMS } from '@/config/site';
-import { addQueryParams } from '@/utils/url';
 import { Loader } from '@/components/ui/loader';
+import { GITHUB_USERNAME, UTM_PARAMS } from '@/config/site';
+import { useBreakpoints } from '@/hooks/use-breakpoint';
+import { addQueryParams } from '@/utils/url';
 import { cn } from '@/lib/utils';
+import { useMounted } from '@/hooks/use-mounted';
 
 export function GitHubContributionGraph({
   contributions,
@@ -28,14 +30,29 @@ export function GitHubContributionGraph({
   contributions: Promise<Activity[]>;
 }) {
   const data = use(contributions);
+  const { sm, md, lg, xl } = useBreakpoints(['sm', 'md', 'lg', 'xl']);
+  const mounted = useMounted();
+
+  const sizes: [boolean, number][] = [
+    [sm, 9],
+    [md, 11],
+    [lg, 12],
+    [xl, 13],
+  ];
+
+  const blockSize = mounted
+    ? (sizes.find(([condition]) => condition)?.[1] ?? 13)
+    : 13;
+  const blockMargin = mounted ? (md ? 2 : 3) : 3;
+  const blockRadius = mounted ? (md ? 2 : 3) : 3;
 
   return (
     <ContributionGraph
       className="mx-auto py-2"
       data={data}
-      blockSize={13}
-      blockMargin={3}
-      blockRadius={3}
+      blockSize={blockSize}
+      blockMargin={blockMargin}
+      blockRadius={blockRadius}
     >
       <ContributionGraphCalendar
         className="no-scrollbar px-2"
