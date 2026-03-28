@@ -96,7 +96,7 @@ export function AwardItem({
               className="stroke-border absolute inset-0 size-full"
               height={25}
               width={25}
-              x={12}
+              x={-2}
               y={6}
             />
           </div>
