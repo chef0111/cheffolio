@@ -116,6 +116,12 @@ export const TECH_STACK: TechStack[] = [
     categories: ['Containerization'],
   },
   {
+    key: 'gcp',
+    title: 'GCP',
+    href: 'https://cloud.google.com/',
+    categories: ['Cloud Platform'],
+  },
+  {
     key: 'mysql',
     title: 'MySQL',
     href: 'https://www.mysql.com/',
