@@ -28,7 +28,7 @@ export const USER: User = {
   about: `
 - **Senior Student** with a strong passion for software engineering — especially in web development.
 - Hands-on experience working with modern web frameworks like **Next.js**, **TanStack Start**,...; enjoy building high-performance, scalable and user-centered web applications.
-- Having a goal to consistently improve my technical skills and contribute to impactful software projects.
+- Having a goal to consistently improve self technical skills and contribute to impactful software projects.
 - Creator of [TKU Sparring System](https://tku-sparring.netlify.app/): User-friendly web application for managing Taekwondo sparring matches.
 `,
   avatar:

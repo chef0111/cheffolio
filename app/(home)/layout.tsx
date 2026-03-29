@@ -1,5 +1,5 @@
-import { SiteHeader } from '@/modules/header';
 import dynamic from 'next/dynamic';
+import { SiteHeader } from '@/modules/header';
 
 const ScrollToTop = dynamic(() =>
   import('@/components/cheffolio/scroll-to-top').then((mod) => mod.ScrollToTop)

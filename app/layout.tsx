@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono as GeistMono } from 'next/font/google';
-import './globals.css';
+import './styles/globals.css';
 import { ThemeProvider } from '@/context/theme-provider';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { ScrollToTop } from '@/components/cheffolio/scroll-to-top';
