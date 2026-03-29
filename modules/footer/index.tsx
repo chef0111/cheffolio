@@ -1,8 +1,7 @@
-import { cn } from '@/lib/utils';
+import { Suspense } from 'react';
 import { Button } from '@/components/ui/button';
 import { GithubIcon, XIcon, LinkedinIcon } from '@/components/icons';
 import { Brand } from '@/components/cheffolio/brand';
-import { Suspense } from 'react';
 import { FooterCopyright } from './copyright';
 import { FullWidthDivider } from '@/components/cheffolio/full-width-divider';
 import { addQueryParams } from '@/utils/url';
@@ -11,7 +10,7 @@ import { UTM_PARAMS } from '@/config/site';
 export function Footer() {
   return (
     <footer className="relative">
-      <div className={cn('border-line mx-auto max-w-4xl border-x px-4')}>
+      <div className="border-line mx-auto max-w-4xl border-x px-4">
         <div className="flex flex-col gap-4 pt-4">
           <div className="flex flex-col items-center justify-center">
             <div className="flex items-center gap-2">
