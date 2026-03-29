@@ -96,7 +96,6 @@ export function CommandMenu({
   const router = useRouter();
   const { setTheme } = useTheme();
   const [open, setOpen] = useState(false);
-  const [searchValue, setSearchValue] = useState('');
 
   useHotkey(
     'Mod+K',
@@ -139,11 +138,8 @@ export function CommandMenu({
       <CommandMenuTrigger onClick={() => setOpen(true)} />
 
       <CommandDialog open={open} onOpenChange={setOpen} modal={false}>
-        <CommandInput
-          placeholder="Type a command or search…"
-          value={searchValue}
-          onValueChange={setSearchValue}
-        />
+        <CommandMenuInput />
+
         <CommandList className="bg-background dark:bg-background/50 mx-1 min-h-80 rounded-xl py-1 shadow-sm">
           <CommandEmpty>No results found.</CommandEmpty>
           <CommandLinkGroup
@@ -240,6 +236,18 @@ function CommandMenuTrigger({ ...props }: React.ComponentProps<typeof Button>) {
         <Kbd className="w-5 min-w-5">K</Kbd>
       </KbdGroup>
     </Button>
+  );
+}
+
+function CommandMenuInput() {
+  const [searchValue, setSearchValue] = useState('');
+
+  return (
+    <CommandInput
+      placeholder="Type a command or search…"
+      value={searchValue}
+      onValueChange={setSearchValue}
+    />
   );
 }
 
