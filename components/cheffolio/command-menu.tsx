@@ -102,7 +102,7 @@ export function CommandMenu({
       e.preventDefault();
       setOpen((open) => !open);
     },
-    { enabled: enabledHotkeys, conflictBehavior: 'replace' }
+    { enabled: enabledHotkeys, conflictBehavior: 'allow' }
   );
 
   const handleOpenLink = useCallback(
@@ -139,7 +139,7 @@ export function CommandMenu({
       <CommandDialog open={open} onOpenChange={setOpen} modal={false}>
         <CommandMenuInput />
 
-        <CommandList className="bg-background dark:bg-background/50 mx-1 min-h-80 rounded-xl py-1 shadow-sm">
+        <CommandList className="bg-background dark:bg-background/50 mx-1 min-h-80 rounded-xl border py-1">
           <CommandEmpty>No results found.</CommandEmpty>
           <CommandLinkGroup
             heading="Portfolio"
