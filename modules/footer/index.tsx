@@ -74,8 +74,8 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="pb-[env(safe-area-inset-bottom,0px)]">
-        <div className="flex h-16 sm:h-2" />
+      <div className="pb-[env(safe-area-inset-bottom,0px)] sm:hidden">
+        <div className="flex h-16" />
       </div>
     </footer>
   );

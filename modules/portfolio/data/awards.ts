@@ -11,6 +11,7 @@ export const AWARDS: Award[] = [
       '- Organized in Prague, Czech Republic\n- Field: Video Retrieval\n- System: Fusionista2.0 — Efficiency Retrieval System for Large-Scale Datasets',
     referenceLink:
       'https://www.facebook.com/uittaekwondo/posts/pfbid0znk1hsiFbrU4eqEX6KaQffeNYcvMkssE7xUJFoYNXL7pXGUoMGfEXiTVBEpKQCZAl',
+    isExpanded: true,
   },
   {
     id: 'mmm-2026',
@@ -21,6 +22,7 @@ export const AWARDS: Award[] = [
     description:
       '- Organized in Prague, Czech Republic\n- Field: Multimedia Modeling\n- Paper: Fusionista2.0 — Efficiency Retrieval System for Large-Scale Datasets',
     referenceLink: 'https://arxiv.org/abs/2511.12255',
+    isExpanded: true,
   },
   {
     id: 'aic-2025',
@@ -32,5 +34,6 @@ export const AWARDS: Award[] = [
       '- Organized in Ho Chi Minh, Viet Nam\n- Field: Multimedia Event Retrieval\n- Ended in 5th place among 300+ teams',
     referenceLink:
       'https://www.facebook.com/uittaekwondo/posts/pfbid0QMqR86PCN8nmDP6diMgXJbq1NRYHXQjFpdbdKJmnkgZKvL2QgQMY21HvsJLe7xW5l',
+    isExpanded: true,
   },
 ];

@@ -6,4 +6,5 @@ export type Award = {
   grade: string;
   description?: string;
   referenceLink?: string;
+  isExpanded?: boolean;
 };
