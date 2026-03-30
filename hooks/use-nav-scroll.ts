@@ -6,6 +6,22 @@ import { usePathname } from 'next/navigation';
 /** Viewport offset from top (sticky header + small margin), px */
 const DEFAULT_SCROLL_OFFSET = 88.5;
 
+/** Flag to skip replaceState for a short time after user-initiated navigation */
+let recentUserNavigation = false;
+let userNavTimeout: ReturnType<typeof setTimeout> | null = null;
+
+/**
+ * Call this immediately before user-initiated pushState to prevent
+ * scroll-based replaceState from racing/overwriting the history entry.
+ */
+export function markUserNavigation() {
+  recentUserNavigation = true;
+  if (userNavTimeout) clearTimeout(userNavTimeout);
+  userNavTimeout = setTimeout(() => {
+    recentUserNavigation = false;
+  }, 100);
+}
+
 /**
  * Returns scroll-based `#section` for nav highlight (home only).
  * `ready` becomes true after the first measurement so callers can prefer URL hash
@@ -69,7 +85,7 @@ export function useNavScroll(
       const nextUrl = nextHash
         ? `${path}${search}${nextHash}`
         : `${path}${search}`;
-      if (window.location.hash !== nextHash) {
+      if (window.location.hash !== nextHash && !recentUserNavigation) {
         window.history.replaceState(null, '', nextUrl);
       }
     };

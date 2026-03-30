@@ -1,6 +1,7 @@
 export function normalizeHash(value: string) {
   if (!value) return '';
-  return value.startsWith('#') ? value : `#${value.replace(/^#/, '')}`;
+  const body = value.replace(/^#+/, '');
+  return body ? `#${body}` : '';
 }
 
 /**

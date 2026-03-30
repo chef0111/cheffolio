@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 
 import { cn } from '@/lib/utils';
 import { useLocationHash } from '@/hooks/use-location-hash';
-import { useNavScroll } from '@/hooks/use-nav-scroll';
+import { useNavScroll, markUserNavigation } from '@/hooks/use-nav-scroll';
 import { isNavItemActive } from './utils/nav-active';
 import { NavItem } from './types/nav';
 
@@ -67,6 +67,7 @@ function DesktopNavItem({
           const el = document.getElementById(hrefString.slice(1));
           if (el) {
             el.scrollIntoView({ behavior: 'smooth' });
+            markUserNavigation();
             window.history.pushState(null, '', hrefString);
             window.dispatchEvent(new Event('hashchange'));
           }
