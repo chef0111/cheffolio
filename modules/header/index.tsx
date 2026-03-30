@@ -26,8 +26,13 @@ export function SiteHeader() {
         <DesktopNav items={MAIN_NAV} />
         <CommandMenu enabledHotkeys />
         <Button size="icon" variant="ghost" asChild>
-          <a href="https://github.com/chef0111/cheffolio" target="_blank">
-            <GithubIcon />
+          <a
+            href="https://github.com/chef0111/cheffolio"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Open GitHub Repository"
+          >
+            <GithubIcon aria-hidden="true" />
           </a>
         </Button>
         <ThemeToggle />

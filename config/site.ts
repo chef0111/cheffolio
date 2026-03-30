@@ -1,4 +1,4 @@
-import { NavItem } from '@/modules/header/nav';
+import { NavItem } from '@/modules/header/types/nav';
 import {
   AwardIcon,
   BoxIcon,

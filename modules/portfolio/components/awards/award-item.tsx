@@ -30,7 +30,11 @@ export function AwardItem({
   const canExpand = !!award.description;
 
   return (
-    <Collapsible className={className} disabled={!canExpand}>
+    <Collapsible
+      className={className}
+      disabled={!canExpand}
+      defaultOpen={award.isExpanded}
+    >
       <DecorIcon className="size-4" position="top-left" />
       <DecorIcon className="size-4" position="top-right" />
 

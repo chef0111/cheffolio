@@ -8,7 +8,6 @@ import { Overview } from '@/modules/portfolio/components/overview';
 import { SocialLinks } from '@/modules/portfolio/components/social-links';
 import { About } from '@/modules/portfolio/components/about';
 import { headers } from 'next/headers';
-import { GitHubContributions } from '@/modules/portfolio/components/github-contributions';
 import { TechStack } from '@/modules/portfolio/components/tech-stack';
 import { Experiences } from '@/modules/portfolio/components/experiences';
 import { Projects } from '@/modules/portfolio/components/projects';
@@ -35,7 +34,6 @@ export default function Page() {
         <TailwindSeparator />
 
         <About />
-        <GitHubContributions />
         <TailwindSeparator />
 
         <TechStack />

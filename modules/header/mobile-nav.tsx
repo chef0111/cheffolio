@@ -2,10 +2,13 @@
 
 import React, { useCallback, useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { useLocationHash } from '@/hooks/use-location-hash';
+import { useNavScroll } from '@/hooks/use-nav-scroll';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { usePathname } from 'next/navigation';
 import { haptic } from '@/lib/haptic';
-import { NavItem } from './nav';
+import { isNavItemActive } from './utils/nav-active';
+import type { NavItem } from './types/nav';
 import {
   Popover,
   PopoverTrigger,
@@ -19,6 +22,14 @@ export function MobileNav({ items }: { items: NavItem[] }) {
   const isDesktop = useMediaQuery('(min-width: 40rem)'); // sm breakpoint
 
   const pathname = usePathname();
+  const locationHash = useLocationHash();
+  const { hash: scrollHash, ready: scrollReady } = useNavScroll(items);
+  const isHome = pathname === '/' || pathname === '/index';
+  const effectiveHash = isHome
+    ? scrollReady
+      ? scrollHash
+      : scrollHash || locationHash
+    : locationHash;
 
   const handleOpenChange = useCallback((open: boolean) => {
     haptic();
@@ -38,16 +49,12 @@ export function MobileNav({ items }: { items: NavItem[] }) {
       <PopoverContent
         className="w-56 rounded-xl border p-1"
         side="top"
-        sideOffset={8}
+        sideOffset={12}
         onCloseAutoFocus={(e) => e.preventDefault()}
       >
         <div className="flex flex-col">
           {items.map((link) => {
-            const active =
-              pathname === link.href ||
-              (link.href === '/' // Home page
-                ? ['/', '/index'].includes(pathname || '')
-                : pathname?.startsWith(link.href));
+            const active = isNavItemActive(link.href, pathname, effectiveHash);
 
             const Icon = link?.icon ?? React.Fragment;
 
