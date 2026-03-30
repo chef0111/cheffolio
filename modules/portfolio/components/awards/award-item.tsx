@@ -19,6 +19,7 @@ import { GridPattern } from '@/components/cheffolio/grid-pattern';
 import { AwardReference } from './awared-reference';
 import { addQueryParams } from '@/utils/url';
 import { UTM_PARAMS } from '@/config/site';
+import { IntroItemIcon } from '@/components/cheffolio/intro-item';
 
 export function AwardItem({
   className,
@@ -39,9 +40,9 @@ export function AwardItem({
       <DecorIcon className="size-4" position="top-right" />
 
       <div className="hover:bg-accent-muted active:bg-accent-muted my-auto flex items-center transition-colors">
-        <div className="border-muted-foreground/15 bg-muted ring-line ring-offset-background mx-4 flex size-6 shrink-0 items-center justify-center rounded-lg border ring-1 ring-offset-1 sm:size-7">
+        <IntroItemIcon className="mx-4 sm:size-7">
           <AwardIcon className="text-muted-foreground pointer-events-none size-4 sm:size-4.5" />
-        </div>
+        </IntroItemIcon>
 
         <div className="border-line relative flex-1 overflow-hidden border-l border-dashed">
           <CollapsibleTrigger className="flex w-full items-center gap-2 p-4 pr-2 text-left">

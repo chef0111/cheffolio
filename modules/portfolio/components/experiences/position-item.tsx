@@ -8,6 +8,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
+import { IntroItemIcon } from '@/components/cheffolio/intro-item';
 import { Markdown } from '@/components/cheffolio/markdown';
 import { ProseMono } from '@/components/ui/typography';
 import { Separator } from '@/components/ui/separator';
@@ -46,15 +47,9 @@ export function ExperiencePositionItem({
         )}
       >
         <div className="relative z-1 mb-1 flex items-center gap-3">
-          <div
-            className={cn(
-              'flex size-6 shrink-0 items-center justify-center rounded-lg',
-              'bg-muted text-muted-foreground',
-              'border-muted-foreground/15 ring-line ring-offset-background border ring-1 ring-offset-1'
-            )}
-          >
+          <IntroItemIcon>
             <ExperienceIcon className="size-4" icon={position.icon} />
-          </div>
+          </IntroItemIcon>
 
           <div className="flex min-w-0 flex-1 items-center gap-1">
             <Label className="self-start text-base font-medium text-pretty">

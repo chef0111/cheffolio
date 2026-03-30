@@ -25,7 +25,11 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 
-import { IntroItem, IntroItemContent, IntroItemIcon } from './intro-item';
+import {
+  IntroItem,
+  IntroItemContent,
+  IntroItemIcon,
+} from '@/components/cheffolio/intro-item';
 
 const CLOCK_ICONS: Record<number, LucideIcon> = {
   1: Clock1Icon,

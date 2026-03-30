@@ -12,7 +12,7 @@ import {
   IntroItemContent,
   IntroItemIcon,
   IntroItemLink,
-} from './intro-item';
+} from '@/components/cheffolio/intro-item';
 
 type JobItemProps = {
   title: string;

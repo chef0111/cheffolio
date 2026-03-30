@@ -14,7 +14,7 @@ import {
   IntroItemContent,
   IntroItemIcon,
   IntroItemLink,
-} from './intro-item';
+} from '@/components/cheffolio/intro-item';
 import { copyText } from '@/utils/copy';
 
 type EmailItemProps = {
