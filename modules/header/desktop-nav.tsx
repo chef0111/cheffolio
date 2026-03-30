@@ -14,9 +14,8 @@ export function DesktopNav({ items }: { items: NavItem[] }) {
   const pathname = usePathname();
   const locationHash = useLocationHash();
   const { hash: scrollHash, ready: scrollReady } = useNavScroll(items);
-  const isHome = pathname === '/' || pathname === '/index';
-  // After first scroll measurement on home, trust scroll (empty = no section at anchor).
-  // Before that, fall back to URL hash so deep links still highlight.
+  const isHome = pathname === '/';
+
   const effectiveHash = isHome
     ? scrollReady
       ? scrollHash

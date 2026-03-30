@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 
 /** Viewport offset from top (sticky header + small margin), px */
@@ -47,6 +47,7 @@ export function useNavScroll(
 
   const [activeHash, setActiveHash] = useState('');
   const [ready, setReady] = useState(false);
+  const urlDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (!isHome) {
@@ -85,9 +86,18 @@ export function useNavScroll(
       const nextUrl = nextHash
         ? `${path}${search}${nextHash}`
         : `${path}${search}`;
-      if (window.location.hash !== nextHash && !recentUserNavigation) {
-        window.history.replaceState(null, '', nextUrl);
+
+      if (urlDebounceRef.current) {
+        clearTimeout(urlDebounceRef.current);
       }
+
+      const nextHashForUrl = nextHash;
+      const nextUrlForUrl = nextUrl;
+      urlDebounceRef.current = setTimeout(() => {
+        if (recentUserNavigation) return;
+        if (window.location.hash === nextHashForUrl) return;
+        window.history.replaceState(null, '', nextUrlForUrl);
+      }, 300);
     };
 
     let raf = 0;
@@ -103,6 +113,10 @@ export function useNavScroll(
 
     return () => {
       cancelAnimationFrame(raf);
+      if (urlDebounceRef.current) {
+        clearTimeout(urlDebounceRef.current);
+        urlDebounceRef.current = null;
+      }
       window.removeEventListener('scroll', onScrollOrResize);
       window.removeEventListener('resize', onScrollOrResize);
     };

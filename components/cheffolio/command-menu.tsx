@@ -102,7 +102,7 @@ export function CommandMenu({
       e.preventDefault();
       setOpen((open) => !open);
     },
-    { enabled: enabledHotkeys }
+    { enabled: enabledHotkeys, conflictBehavior: 'replace' }
   );
 
   const handleOpenLink = useCallback(
