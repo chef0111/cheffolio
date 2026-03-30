@@ -28,7 +28,7 @@ export function EmailItem({ email }: EmailItemProps) {
   useHotkey('Shift+E', async () => {
     const success = await copyText(emailDecoded);
     if (success) {
-      toast.success('Email copied');
+      toast.success('Email address copied to clipboard');
     } else {
       toast.error('Failed to copy email');
     }

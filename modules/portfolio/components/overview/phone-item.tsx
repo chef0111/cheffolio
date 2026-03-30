@@ -29,7 +29,7 @@ export function PhoneItem({ phoneNumber }: PhoneItemProps) {
   useHotkey('Shift+P', async () => {
     const success = await copyText(phoneNumberDecoded);
     if (success) {
-      toast.success('Phone number copied');
+      toast.success('Phone number copied to clipboard');
     } else {
       toast.error('Failed to copy phone number');
     }
