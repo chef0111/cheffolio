@@ -46,7 +46,6 @@ import { USER } from '@/modules/portfolio/data/user';
 type CommandLinkItem = {
   title: string;
   href: string;
-
   icon?: React.ComponentType<LucideProps>;
   iconImage?: string;
   keywords?: string[];

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import React from 'react';
 
 import { cn } from '@/lib/utils';
+import { LucideProps } from 'lucide-react';
 
 export function Nav({
   items,
@@ -41,6 +42,7 @@ export type NavItem = {
   title: string;
   href: string;
   className?: string;
+  icon?: React.ComponentType<LucideProps>;
 };
 
 export function NavItem({

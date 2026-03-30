@@ -1,24 +1,23 @@
 import { useEffect, useState } from 'react';
 
+/**
+ * Subscribes to `matchMedia` after mount. The initial value is always `false` so
+ * server HTML and the first client render match (avoids hydration mismatches when
+ * branching UI on viewport — e.g. Radix popover trigger vs plain button).
+ */
 export function useMediaQuery(query: string) {
-  const [value, setValue] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return window.matchMedia(query).matches;
-    }
-    return true;
-  });
+  const [matches, setMatches] = useState(false);
 
   useEffect(() => {
-    function onChange(event: MediaQueryListEvent) {
-      setValue(event.matches);
-    }
+    const mql = window.matchMedia(query);
+    const onChange = (event: MediaQueryListEvent) => {
+      setMatches(event.matches);
+    };
 
-    const result = matchMedia(query);
-    result.addEventListener('change', onChange);
-    setValue(result.matches); // eslint-disable-line
-
-    return () => result.removeEventListener('change', onChange);
+    setMatches(mql.matches);
+    mql.addEventListener('change', onChange);
+    return () => mql.removeEventListener('change', onChange);
   }, [query]);
 
-  return value;
+  return matches;
 }
