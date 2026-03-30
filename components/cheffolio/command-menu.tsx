@@ -102,7 +102,7 @@ export function CommandMenu({
       e.preventDefault();
       setOpen((open) => !open);
     },
-    { enabled: enabledHotkeys, conflictBehavior: 'replace' }
+    { enabled: enabledHotkeys, conflictBehavior: 'allow' }
   );
 
   const handleOpenLink = useCallback(
@@ -139,7 +139,7 @@ export function CommandMenu({
       <CommandDialog open={open} onOpenChange={setOpen} modal={false}>
         <CommandMenuInput />
 
-        <CommandList className="bg-background dark:bg-background/50 mx-1 min-h-80 rounded-xl py-1 shadow-sm">
+        <CommandList className="bg-background dark:bg-background/50 mx-1 min-h-80 rounded-xl border py-1">
           <CommandEmpty>No results found.</CommandEmpty>
           <CommandLinkGroup
             heading="Portfolio"
@@ -166,7 +166,7 @@ export function CommandMenu({
               }}
             >
               <MailIcon className="text-muted-foreground" />
-              Copy email address
+              Copy Email Address
             </CommandItem>
             <CommandItem
               onSelect={() => {
@@ -177,7 +177,7 @@ export function CommandMenu({
               }}
             >
               <PhoneIcon className="text-muted-foreground" />
-              Copy phone number
+              Copy Phone Number
             </CommandItem>
           </CommandGroup>
 
@@ -292,9 +292,9 @@ function CommandLinkGroup({
   );
 }
 
-type CommandKind = 'command' | 'page' | 'link';
+type CommandType = 'command' | 'page' | 'link';
 
-const ENTER_ACTION_LABELS: Record<CommandKind, string> = {
+const ENTER_ACTION_LABELS: Record<CommandType, string> = {
   command: 'Run Command',
   page: 'Go to Page',
   link: 'Open Link',
@@ -303,7 +303,7 @@ const ENTER_ACTION_LABELS: Record<CommandKind, string> = {
 type CommandMetaMap = Map<
   string,
   {
-    commandType: CommandKind;
+    commandType: CommandType;
   }
 >;
 
