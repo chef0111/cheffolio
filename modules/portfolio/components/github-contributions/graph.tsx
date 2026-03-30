@@ -30,10 +30,11 @@ export function GitHubContributionGraph({
   contributions: Promise<Activity[]>;
 }) {
   const data = use(contributions);
-  const { sm, md, lg, xl } = useBreakpoints(['sm', 'md', 'lg', 'xl']);
+  const { xs, sm, md, lg, xl } = useBreakpoints(['xs', 'sm', 'md', 'lg', 'xl']);
   const mounted = useMounted();
 
   const sizes: [boolean, number][] = [
+    [xs, 8],
     [sm, 9],
     [md, 11],
     [lg, 12],
@@ -45,11 +46,13 @@ export function GitHubContributionGraph({
     : 13;
   const blockMargin = mounted ? (md ? 2 : 3) : 3;
   const blockRadius = mounted ? (md ? 2 : 3) : 3;
+  const fontSize = mounted ? (md ? 11 : lg ? 13 : 14) : 14;
 
   return (
     <ContributionGraph
       className="mx-auto py-2"
       data={data}
+      fontSize={fontSize}
       blockSize={blockSize}
       blockMargin={blockMargin}
       blockRadius={blockRadius}
