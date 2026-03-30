@@ -1,4 +1,10 @@
 import { NavItem } from '@/modules/header/nav';
+import {
+  AwardIcon,
+  BoxIcon,
+  BriefcaseBusiness,
+  TextInitial,
+} from 'lucide-react';
 
 export const MAIN_NAV: NavItem[] = [
   {
@@ -16,6 +22,29 @@ export const MAIN_NAV: NavItem[] = [
   {
     title: 'Awards',
     href: '#awards',
+  },
+];
+
+export const MOBILE_NAV: NavItem[] = [
+  {
+    title: 'About',
+    href: '#about',
+    icon: TextInitial,
+  },
+  {
+    title: 'Experience',
+    href: '#experience',
+    icon: BriefcaseBusiness,
+  },
+  {
+    title: 'Projects',
+    href: '#projects',
+    icon: BoxIcon,
+  },
+  {
+    title: 'Awards',
+    href: '#awards',
+    icon: AwardIcon,
   },
 ];
 

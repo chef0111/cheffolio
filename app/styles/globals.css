@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
+@import './scroll-fade-effect.css';
 
 @plugin '@tailwindcss/typography';
 @plugin '@toolwind/corner-shape';
@@ -184,6 +185,12 @@
 
 @custom-variant supports-corner-shape {
   @supports (corner-shape: initial) {
+    @slot;
+  }
+}
+
+@custom-variant supports-timeline-scroll {
+  @supports (animation-timeline: scroll()) {
     @slot;
   }
 }
