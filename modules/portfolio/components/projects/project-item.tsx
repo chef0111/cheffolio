@@ -18,6 +18,7 @@ import { addQueryParams } from '@/utils/url';
 import type { Project } from '@/modules/portfolio/types/projects';
 import { GridPattern } from '@/components/cheffolio/grid-pattern';
 import { ProjectLink } from './project-link';
+import { IntroItemIcon } from '@/components/cheffolio/intro-item';
 
 export function ProjectItem({
   className,
@@ -48,9 +49,9 @@ export function ProjectItem({
           </div>
         ) : (
           <div className="bg-background m-1.5 mr-0 flex items-center rounded-md border">
-            <div className="border-muted-foreground/15 bg-muted text-muted-foreground ring-line ring-offset-background mx-3 flex size-8 shrink-0 items-center justify-center rounded-lg border ring-1 ring-offset-1 select-none">
+            <IntroItemIcon className="mx-3 size-8">
               <BoxIcon className="size-5" />
-            </div>
+            </IntroItemIcon>
           </div>
         )}
 

@@ -5,7 +5,7 @@ import {
   IntroItemIcon,
   IntroItemContent,
   IntroItemLink,
-} from './intro-item';
+} from '@/components/cheffolio/intro-item';
 import {
   LinkIcon,
   MapPinIcon,
