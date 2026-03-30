@@ -46,7 +46,7 @@ export function SocialLinkItem({ icon, title, href }: SocialLink) {
         </div>
       </div>
 
-      <ArrowUpRightIcon className="text-muted-foreground size-4 transition-[rotate] duration-300 group-hover:rotate-45" />
+      <ArrowUpRightIcon className="text-muted-foreground size-4 transition-[rotate] duration-300 group-hover:rotate-45 group-active:rotate-45" />
     </a>
   );
 }
