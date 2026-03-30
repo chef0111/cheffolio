@@ -14,6 +14,8 @@ import {
   PanelContent,
 } from '@/components/cheffolio/panel';
 import { DecorIcon } from '@/components/cheffolio/decor-icon';
+import { addQueryParams } from '@/utils/url';
+import { UTM_PARAMS } from '@/config/site';
 
 export function TechStack() {
   const baseUrl = 'https://res.cloudinary.com/dpuqj2n2q/image/upload';
@@ -37,7 +39,7 @@ export function TechStack() {
                 <Tooltip>
                   <TooltipTrigger>
                     <a
-                      href={tech.href}
+                      href={addQueryParams(tech.href, UTM_PARAMS)}
                       target="_blank"
                       rel="noopener"
                       aria-label={tech.title}

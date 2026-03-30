@@ -20,7 +20,7 @@ export function isNavItemActive(
 
   if (href.startsWith('/#')) {
     try {
-      const u = new URL(href, 'http://localhost');
+      const u = new URL(href, process.env.NEXT_PUBLIC_SITE_URL);
       const pathMatches =
         pathname === u.pathname ||
         (u.pathname === '/' && ['/', '/index'].includes(pathname || ''));
