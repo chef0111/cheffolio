@@ -10,6 +10,7 @@ import { ThemeProvider } from '@/context/theme-provider';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { ScrollToTop } from '@/components/cheffolio/scroll-to-top';
 import { Toaster } from '@/components/ui/sonner';
+import Script from 'next/script';
 
 function getWebSiteJsonLd(): WithContext<WebSite> {
   return {
@@ -79,6 +80,27 @@ export const metadata: Metadata = {
   },
 };
 
+const darkModeScript = String.raw`
+  try {
+    if (localStorage.theme === 'dark' || ((!('theme' in localStorage) || localStorage.theme === 'system') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#09090b')
+    }
+  } catch (_) {}
+
+  try {
+    if (/(Mac|iPhone|iPod|iPad)/i.test(navigator.platform)) {
+      document.documentElement.classList.add('os-macos')
+    }
+  } catch (_) {}
+`;
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+  themeColor: '#ffffff',
+};
+
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
@@ -101,6 +123,11 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        <script
+          type="text/javascript"
+          dangerouslySetInnerHTML={{ __html: darkModeScript }}
+        />
+        <Script src={`data:text/javascript;base64,${btoa(darkModeScript)}`} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
