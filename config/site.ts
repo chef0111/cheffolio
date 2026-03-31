@@ -1,10 +1,19 @@
 import { NavItem } from '@/modules/header/types/nav';
+import { USER } from '@/modules/portfolio/data/user';
 import {
   AwardIcon,
   BoxIcon,
   BriefcaseBusiness,
   TextInitial,
 } from 'lucide-react';
+
+export const SITE_INFO = {
+  name: USER.displayName,
+  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://cheffolio.vercel.app',
+  ogImage: USER.ogImage,
+  description: USER.bio,
+  keywords: USER.keywords,
+};
 
 export const MAIN_NAV: NavItem[] = [
   {

@@ -33,6 +33,19 @@ export const USER: User = {
 `,
   avatar:
     'https://res.cloudinary.com/dpuqj2n2q/image/upload/chef0111-avatar.webp',
+  ogImage:
+    'https://res.cloudinary.com/dpuqj2n2q/image/upload/cheffolio.ogImage.png',
   timeZone: 'Asia/Ho_Chi_Minh',
+  keywords: [
+    'chef0111',
+    'cheffolio',
+    'gia bảo',
+    '@chef0111',
+    'codingaschef',
+    'cheff0111',
+    'chef.0111',
+    'coding as chef',
+    'lê trần gia bảo',
+  ],
   dateCreated: '2026-03-22',
 };
