@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import { headers } from 'next/headers';
 
 import { USER } from '@/modules/portfolio/data/user';
 import { ProfilePage, WithContext } from 'schema-dts';
@@ -62,14 +61,11 @@ export default function Page() {
   );
 }
 
-async function getPageJsonLd(): Promise<WithContext<ProfilePage>> {
-  await headers();
-
+function getPageJsonLd(): WithContext<ProfilePage> {
   return {
     '@context': 'https://schema.org',
     '@type': 'ProfilePage',
     dateCreated: new Date(USER.dateCreated).toISOString(),
-    dateModified: new Date().toISOString(),
     mainEntity: {
       '@type': 'Person',
       name: USER.displayName,
