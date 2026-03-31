@@ -100,6 +100,14 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(getWebSiteJsonLd()).replace(/</g, '\\u003c'),
+          }}
+        />
+      </head>
       <body className="flex min-h-full flex-col overflow-x-hidden">
         <ThemeProvider
           attribute="class"
