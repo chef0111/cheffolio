@@ -15,6 +15,11 @@ export const SITE_INFO = {
   keywords: USER.keywords,
 };
 
+export const META_THEME_COLORS = {
+  light: '#ffffff',
+  dark: '#09090b',
+};
+
 export const MAIN_NAV: NavItem[] = [
   {
     title: 'About',

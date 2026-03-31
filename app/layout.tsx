@@ -3,7 +3,7 @@ import './styles/globals.css';
 import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono as GeistMono } from 'next/font/google';
 import type { WebSite, WithContext } from 'schema-dts';
-import { SITE_INFO, X_USERNAME } from '@/config/site';
+import { META_THEME_COLORS, SITE_INFO, X_USERNAME } from '@/config/site';
 
 import { USER } from '@/modules/portfolio/data/user';
 import { ThemeProvider } from '@/context/theme-provider';
@@ -83,7 +83,7 @@ export const metadata: Metadata = {
 const darkModeScript = String.raw`
   try {
     if (localStorage.theme === 'dark' || ((!('theme' in localStorage) || localStorage.theme === 'system') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#09090b')
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '${META_THEME_COLORS.dark}')
     }
   } catch (_) {}
 
@@ -98,7 +98,7 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
-  themeColor: '#ffffff',
+  themeColor: META_THEME_COLORS.light,
 };
 
 const geistSans = Geist({
