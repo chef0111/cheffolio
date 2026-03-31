@@ -1,3 +1,5 @@
+import { Metadata } from 'next';
+
 import { USER } from '@/modules/portfolio/data/user';
 import { ProfilePage, WithContext } from 'schema-dts';
 import { ProfileCover } from '@/modules/portfolio/components/profile-cover';
@@ -7,12 +9,17 @@ import { TailwindSeparator } from '@/components/cheffolio/tailwind-separator';
 import { Overview } from '@/modules/portfolio/components/overview';
 import { SocialLinks } from '@/modules/portfolio/components/social-links';
 import { About } from '@/modules/portfolio/components/about';
-import { headers } from 'next/headers';
 import { TechStack } from '@/modules/portfolio/components/tech-stack';
 import { Experiences } from '@/modules/portfolio/components/experiences';
 import { Projects } from '@/modules/portfolio/components/projects';
 import { Awards } from '@/modules/portfolio/components/awards';
 import { Footer } from '@/modules/footer';
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: '/',
+  },
+};
 
 export default function Page() {
   return (
@@ -54,14 +61,11 @@ export default function Page() {
   );
 }
 
-async function getPageJsonLd(): Promise<WithContext<ProfilePage>> {
-  await headers();
-
+function getPageJsonLd(): WithContext<ProfilePage> {
   return {
     '@context': 'https://schema.org',
     '@type': 'ProfilePage',
     dateCreated: new Date(USER.dateCreated).toISOString(),
-    dateModified: new Date().toISOString(),
     mainEntity: {
       '@type': 'Person',
       name: USER.displayName,

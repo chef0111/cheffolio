@@ -2,26 +2,34 @@
 
 import { useCallback } from 'react';
 import { useTheme } from 'next-themes';
+import { useSound } from '@/hooks/use-sound';
+import { useMetaColor } from '@/hooks/use-meta-color';
+import { useHotkey } from '@tanstack/react-hotkeys';
+import { META_THEME_COLORS, SOUNDS } from '@/config/site';
+
 import { Button } from '@/components/ui/button';
 import { MoonIcon, SunIcon } from '@/components/icons';
-import { useHotkey } from '@tanstack/react-hotkeys';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { Kbd } from '@/components/ui/kbd';
-import { useSound } from '@/hooks/use-sound';
-import { SOUNDS } from '@/config/site';
 
 export default function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
+  const { setMetaColor } = useMetaColor();
 
   const playToggle = useSound(SOUNDS.toggle);
 
   const switchTheme = useCallback(() => {
     setTheme(resolvedTheme === 'light' ? 'dark' : 'light');
-  }, [resolvedTheme, setTheme]);
+    setMetaColor(
+      resolvedTheme === 'dark'
+        ? META_THEME_COLORS.light
+        : META_THEME_COLORS.dark
+    );
+  }, [resolvedTheme, setTheme, setMetaColor]);
 
   const toggleTheme = useCallback(() => {
     playToggle(0.25);

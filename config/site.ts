@@ -1,10 +1,24 @@
 import { NavItem } from '@/modules/header/types/nav';
+import { USER } from '@/modules/portfolio/data/user';
 import {
   AwardIcon,
   BoxIcon,
   BriefcaseBusiness,
   TextInitial,
 } from 'lucide-react';
+
+export const SITE_INFO = {
+  name: 'Cheffolio',
+  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://cheffolio.vercel.app',
+  ogImage: USER.ogImage,
+  description: USER.bio,
+  keywords: USER.keywords,
+};
+
+export const META_THEME_COLORS = {
+  light: '#ffffff',
+  dark: '#09090b',
+};
 
 export const MAIN_NAV: NavItem[] = [
   {
@@ -53,6 +67,7 @@ export const UTM_PARAMS = {
 };
 
 export const GITHUB_USERNAME = 'chef0111';
+export const X_USERNAME = '@cheff0111';
 
 export const SOUNDS = {
   toggle: 'https://res.cloudinary.com/dpuqj2n2q/video/upload/toggle.mp3',
