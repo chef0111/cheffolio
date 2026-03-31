@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 
 export const SITE_INFO = {
-  name: USER.displayName,
+  name: 'Cheffolio',
   url: process.env.NEXT_PUBLIC_SITE_URL || 'https://cheffolio.vercel.app',
   ogImage: USER.ogImage,
   description: USER.bio,
@@ -62,6 +62,7 @@ export const UTM_PARAMS = {
 };
 
 export const GITHUB_USERNAME = 'chef0111';
+export const X_USERNAME = '@cheff0111';
 
 export const SOUNDS = {
   toggle: 'https://res.cloudinary.com/dpuqj2n2q/video/upload/toggle.mp3',

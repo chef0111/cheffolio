@@ -1,10 +1,83 @@
-import type { Metadata } from 'next';
-import { Geist, Geist_Mono as GeistMono } from 'next/font/google';
 import './styles/globals.css';
+
+import type { Metadata, Viewport } from 'next';
+import { Geist, Geist_Mono as GeistMono } from 'next/font/google';
+import type { WebSite, WithContext } from 'schema-dts';
+import { SITE_INFO, X_USERNAME } from '@/config/site';
+
+import { USER } from '@/modules/portfolio/data/user';
 import { ThemeProvider } from '@/context/theme-provider';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { ScrollToTop } from '@/components/cheffolio/scroll-to-top';
 import { Toaster } from '@/components/ui/sonner';
+
+function getWebSiteJsonLd(): WithContext<WebSite> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: SITE_INFO.name,
+    url: SITE_INFO.url,
+    alternateName: [USER.username],
+  };
+}
+
+export const metadata: Metadata = {
+  metadataBase: new URL(SITE_INFO.url),
+  title: {
+    template: `%s – ${SITE_INFO.name}`,
+    default: `${SITE_INFO.name}`,
+  },
+  description: SITE_INFO.description,
+  keywords: SITE_INFO.keywords,
+  authors: [
+    {
+      name: 'ncdai',
+      url: SITE_INFO.url,
+    },
+  ],
+  creator: 'ncdai',
+  openGraph: {
+    siteName: SITE_INFO.name,
+    url: '/',
+    type: 'profile',
+    locale: 'en_US',
+    firstName: USER.firstName,
+    lastName: USER.lastName,
+    username: USER.username,
+    gender: USER.gender,
+    images: [
+      {
+        url: SITE_INFO.ogImage,
+        width: 1200,
+        height: 630,
+        alt: SITE_INFO.name,
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: X_USERNAME,
+    creator: X_USERNAME,
+    images: [SITE_INFO.ogImage],
+  },
+  icons: {
+    icon: [
+      {
+        url: 'https://res.cloudinary.com/dpuqj2n2q/image/upload/cheffolio.favicon.ico',
+        sizes: 'any',
+      },
+      {
+        url: 'https://res.cloudinary.com/dpuqj2n2q/image/upload/cheffolio.svg',
+        type: 'image/svg+xml',
+      },
+    ],
+    apple: {
+      url: 'https://res.cloudinary.com/dpuqj2n2q/image/upload/apple-touch-icon.png',
+      type: 'image/png',
+      sizes: '180x180',
+    },
+  },
+};
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -15,11 +88,6 @@ const geistMono = GeistMono({
   variable: '--font-geist-mono',
   subsets: ['latin'],
 });
-
-export const metadata: Metadata = {
-  title: 'Cheffolio',
-  description: 'A minimalist, pixel-perfect portfolio of @chef0111.',
-};
 
 export default function RootLayout({
   children,
