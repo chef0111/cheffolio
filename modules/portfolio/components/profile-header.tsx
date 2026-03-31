@@ -39,7 +39,7 @@ export function ProfileHeader() {
             className="line-clamp-1 font-mono text-xs text-zinc-400 select-none dark:text-zinc-700"
             aria-hidden
           >
-            {'Love coding catchy things :>'}
+            {USER.bio}
           </div>
         </div>
 

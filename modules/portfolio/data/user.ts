@@ -7,7 +7,7 @@ export const USER: User = {
   username: 'chef0111',
   gender: 'male',
   pronouns: 'he/him',
-  bio: 'Creating with code. Small details matter.',
+  bio: 'Love coding catchy things :>',
   flipSentences: [
     'Next.js Enthusiast',
     'Senior Student',
