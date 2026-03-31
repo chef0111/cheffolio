@@ -37,7 +37,7 @@ export function ProfileHeader() {
         <div className="flex grow items-end pb-1 pl-4">
           <div
             className="line-clamp-1 font-mono text-xs text-zinc-400 select-none dark:text-zinc-700"
-            aria-hidden
+            aria-label="User bio"
           >
             {USER.bio}
           </div>
@@ -61,7 +61,10 @@ export function ProfileHeader() {
             </Label>
           </div>
 
-          <div className="border-line border-t py-1 pl-4">
+          <div
+            className="border-line border-t py-1 pl-4"
+            aria-label="Flip sentences"
+          >
             <TextFlip
               className="font-pixel-square text-muted-foreground text-sm text-balance"
               variants={{
