@@ -30,7 +30,10 @@ export default function Page() {
           __html: JSON.stringify(getPageJsonLd()).replace(/</g, '\\u003c'),
         }}
       />
-      <main className="mx-auto md:max-w-4xl *:[[id]]:scroll-mt-22">
+      <main
+        className="mx-auto md:max-w-4xl *:[[id]]:scroll-mt-22"
+        aria-label="Portfolio"
+      >
         <ProfileCover />
         <FullWidthDivider />
         <ProfileHeader />

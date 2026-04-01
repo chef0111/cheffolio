@@ -9,7 +9,7 @@ import { UTM_PARAMS } from '@/config/site';
 
 export function Footer() {
   return (
-    <footer className="relative">
+    <footer className="relative" aria-label="Site footer">
       <div className="border-line mx-auto max-w-4xl border-x px-4">
         <div className="flex flex-col gap-4 pt-4">
           <div className="flex flex-col items-center justify-center">
