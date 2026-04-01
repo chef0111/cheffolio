@@ -15,6 +15,7 @@ import {
   MoonIcon,
   PhoneIcon,
   Search,
+  ServerIcon,
   SunIcon,
   TextInitial,
 } from 'lucide-react';
@@ -33,6 +34,7 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command';
+import { Empty, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
 import { Kbd, KbdGroup } from '@/components/ui/kbd';
 import { Separator } from '@/components/ui/separator';
 import { UTM_PARAMS } from '@/config/site';
@@ -148,7 +150,15 @@ export function CommandMenu({
 
         <CommandList className="bg-background dark:bg-background/50 mx-1 min-h-80 rounded-xl border">
           <ScrollFadeEffect className="no-scrollbar h-79 w-full">
-            <CommandEmpty>No results found.</CommandEmpty>
+            <CommandEmpty>
+              <Empty className="gap-2">
+                <EmptyMedia variant="icon">
+                  <ServerIcon />
+                </EmptyMedia>
+                <EmptyTitle>No results found</EmptyTitle>
+              </Empty>
+            </CommandEmpty>
+
             <CommandLinkGroup
               heading="Portfolio"
               links={PORTFOLIO_LINKS}
