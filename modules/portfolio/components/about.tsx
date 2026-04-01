@@ -1,14 +1,15 @@
+import { DecorIcon } from '@/components/cheffolio/decor-icon';
+import { Markdown } from '@/components/cheffolio/markdown';
 import {
   Panel,
+  PanelContent,
   PanelHeader,
   PanelTitle,
-  PanelContent,
 } from '@/components/cheffolio/panel';
 import { ProseMono } from '@/components/ui/typography';
-import { Markdown } from '@/components/cheffolio/markdown';
-import { DecorIcon } from '@/components/cheffolio/decor-icon';
-import { GitHubContributions } from './github-contributions';
+
 import { USER } from '../data/user';
+import { GitHubContributions } from './github-contributions';
 
 export function About() {
   return (

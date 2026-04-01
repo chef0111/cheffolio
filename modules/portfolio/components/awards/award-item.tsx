@@ -1,25 +1,25 @@
 import { format } from 'date-fns';
 import { AwardIcon } from 'lucide-react';
 
-import {
-  Collapsible,
-  CollapsibleChevronsIcon,
-} from '@/components/ui/collapsible-animated';
+import { DecorIcon } from '@/components/cheffolio/decor-icon';
+import { GridPattern } from '@/components/cheffolio/grid-pattern';
+import { IntroItemIcon } from '@/components/cheffolio/intro-item';
+import { Markdown } from '@/components/cheffolio/markdown';
 import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
-import { Markdown } from '@/components/cheffolio/markdown';
+import {
+  Collapsible,
+  CollapsibleChevronsIcon,
+} from '@/components/ui/collapsible-animated';
 import { Separator } from '@/components/ui/separator';
 import { ProseMono } from '@/components/ui/typography';
-
-import type { Award } from '@/modules/portfolio/types/awards';
-import { DecorIcon } from '@/components/cheffolio/decor-icon';
-import { GridPattern } from '@/components/cheffolio/grid-pattern';
-import { AwardReference } from './awared-reference';
-import { addQueryParams } from '@/utils/url';
 import { UTM_PARAMS } from '@/config/site';
-import { IntroItemIcon } from '@/components/cheffolio/intro-item';
+import type { Award } from '@/modules/portfolio/types/awards';
+import { addQueryParams } from '@/utils/url';
+
+import { AwardReference } from './awared-reference';
 
 export function AwardItem({
   className,

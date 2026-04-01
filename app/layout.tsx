@@ -2,15 +2,15 @@ import './globals.css';
 
 import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono as GeistMono } from 'next/font/google';
+import Script from 'next/script';
 import type { WebSite, WithContext } from 'schema-dts';
-import { META_THEME_COLORS, SITE_INFO, X_USERNAME } from '@/config/site';
 
-import { USER } from '@/modules/portfolio/data/user';
-import { ThemeProvider } from '@/context/theme-provider';
-import { TooltipProvider } from '@/components/ui/tooltip';
 import { ScrollToTop } from '@/components/cheffolio/scroll-to-top';
 import { Toaster } from '@/components/ui/sonner';
-import Script from 'next/script';
+import { TooltipProvider } from '@/components/ui/tooltip';
+import { META_THEME_COLORS, SITE_INFO, X_USERNAME } from '@/config/site';
+import { ThemeProvider } from '@/context/theme-provider';
+import { USER } from '@/modules/portfolio/data/user';
 
 function getWebSiteJsonLd(): WithContext<WebSite> {
   return {

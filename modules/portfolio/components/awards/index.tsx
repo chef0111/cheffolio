@@ -1,8 +1,7 @@
 import { compareDesc } from 'date-fns';
 
 import { CollapsibleList } from '@/components/cheffolio/collapsible-list';
-
-import { AWARDS } from '@/modules/portfolio/data/awards';
+import { DecorIcon } from '@/components/cheffolio/decor-icon';
 import {
   Panel,
   PanelContent,
@@ -10,8 +9,9 @@ import {
   PanelTitle,
   PanelTitleSup,
 } from '@/components/cheffolio/panel';
+import { AWARDS } from '@/modules/portfolio/data/awards';
+
 import { AwardItem } from './award-item';
-import { DecorIcon } from '@/components/cheffolio/decor-icon';
 
 const SORTED_AWARDS = [...AWARDS].sort((a, b) => {
   return compareDesc(new Date(a.date), new Date(b.date));

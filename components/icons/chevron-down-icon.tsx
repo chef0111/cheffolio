@@ -1,27 +1,27 @@
-"use client"
+'use client';
 
-import { motion, useAnimation } from "motion/react"
-import { forwardRef, useImperativeHandle } from "react"
+import { motion, useAnimation } from 'motion/react';
+import { forwardRef, useImperativeHandle } from 'react';
 
 export type ChevronDownIconHandle = {
-  startAnimation: () => void
-  stopAnimation: () => void
-}
+  startAnimation: () => void;
+  stopAnimation: () => void;
+};
 
-export type ChevronDownIconProps = React.ComponentProps<"svg"> & {
-  duration?: number
-}
+export type ChevronDownIconProps = React.ComponentProps<'svg'> & {
+  duration?: number;
+};
 
 const ChevronDownIcon = forwardRef<ChevronDownIconHandle, ChevronDownIconProps>(
   ({ duration = 0.3, ...props }, ref) => {
-    const controls = useAnimation()
+    const controls = useAnimation();
 
     useImperativeHandle(ref, () => {
       return {
-        startAnimation: () => controls.start("animate"),
-        stopAnimation: () => controls.start("normal"),
-      }
-    })
+        startAnimation: () => controls.start('animate'),
+        stopAnimation: () => controls.start('normal'),
+      };
+    });
 
     return (
       <svg
@@ -41,10 +41,10 @@ const ChevronDownIcon = forwardRef<ChevronDownIconHandle, ChevronDownIconProps>(
           d="M6 9L12 15L18 9"
           variants={{
             normal: {
-              d: "M6 9L12 15L18 9",
+              d: 'M6 9L12 15L18 9',
             },
             animate: {
-              d: "M6 15L12 9L18 15",
+              d: 'M6 15L12 9L18 15',
             },
           }}
           initial="normal"
@@ -54,10 +54,10 @@ const ChevronDownIcon = forwardRef<ChevronDownIconHandle, ChevronDownIconProps>(
           }}
         />
       </svg>
-    )
+    );
   }
-)
+);
 
-ChevronDownIcon.displayName = "ChevronDownIcon"
+ChevronDownIcon.displayName = 'ChevronDownIcon';
 
-export { ChevronDownIcon }
+export { ChevronDownIcon };

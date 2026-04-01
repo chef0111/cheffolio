@@ -1,10 +1,11 @@
+import Image from 'next/image';
+
+import { DecorIcon } from '@/components/cheffolio/decor-icon';
+import { TextFlip } from '@/components/cheffolio/text-flip';
+import { VerifiedIcon } from '@/components/icons/verified-icon';
+import { Label } from '@/components/ui/label';
 import { USER } from '@/modules/portfolio/data/user';
 
-import { VerifiedIcon } from './verified-icon';
-import Image from 'next/image';
-import { Label } from '@/components/ui/label';
-import { TextFlip } from '@/components/cheffolio/text-flip';
-import { DecorIcon } from '@/components/cheffolio/decor-icon';
 import { AvatarElectric } from './avatar-eletric';
 
 export function ProfileHeader() {

@@ -1,10 +1,12 @@
 import { Suspense } from 'react';
-import { Button } from '@/components/ui/button';
-import { GithubIcon, XIcon, LinkedinIcon } from '@/components/icons';
+
 import { Brand } from '@/components/cheffolio/brand';
-import { FooterCopyright } from './copyright';
-import { addQueryParams } from '@/utils/url';
+import { GithubIcon, LinkedinIcon, XIcon } from '@/components/icons';
+import { Button } from '@/components/ui/button';
 import { UTM_PARAMS } from '@/config/site';
+import { addQueryParams } from '@/utils/url';
+
+import { FooterCopyright } from './copyright';
 
 export function Footer() {
   return (

@@ -1,12 +1,14 @@
-import Link from 'next/link';
 import dynamic from 'next/dynamic';
-import { SiteHeaderNav } from './site-header-nav';
-import { Button } from '@/components/ui/button';
-import ThemeToggle from './theme-toggle';
+import Link from 'next/link';
+
 import { GithubIcon } from '@/components/icons';
-import { DesktopNav } from './desktop-nav';
+import { Button } from '@/components/ui/button';
 import { MAIN_NAV } from '@/config/site';
+
+import { DesktopNav } from './desktop-nav';
 import { SiteHeaderLogo } from './site-header-logo';
+import { SiteHeaderNav } from './site-header-nav';
+import ThemeToggle from './theme-toggle';
 
 const CommandMenu = dynamic(() =>
   import('@/components/cheffolio/command-menu').then((mod) => mod.CommandMenu)

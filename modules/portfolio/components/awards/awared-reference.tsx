@@ -1,11 +1,12 @@
 'use client';
 
+import { FileCheckIcon } from 'lucide-react';
+
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { FileCheckIcon } from 'lucide-react';
 
 export function AwardReference({ href }: { href: string }) {
   return (

@@ -1,11 +1,3 @@
-import { Panel, PanelContent } from '@/components/cheffolio/panel';
-import { JobItem } from './job-item';
-import {
-  IntroItem,
-  IntroItemIcon,
-  IntroItemContent,
-  IntroItemLink,
-} from '@/components/cheffolio/intro-item';
 import {
   LinkIcon,
   MapPinIcon,
@@ -13,13 +5,23 @@ import {
   NonBinaryIcon,
   VenusIcon,
 } from 'lucide-react';
+
+import { DecorIcon } from '@/components/cheffolio/decor-icon';
+import {
+  IntroItem,
+  IntroItemContent,
+  IntroItemIcon,
+  IntroItemLink,
+} from '@/components/cheffolio/intro-item';
+import { Panel, PanelContent } from '@/components/cheffolio/panel';
 import { USER } from '@/modules/portfolio/data/user';
+import type { User } from '@/modules/portfolio/types/user';
+import { urlToName } from '@/utils/url';
+
+import { EmailItem } from './email-item';
+import { JobItem } from './job-item';
 import { LocalTime } from './local-item';
 import { PhoneItem } from './phone-item';
-import { EmailItem } from './email-item';
-import { urlToName } from '@/utils/url';
-import { User } from '@/modules/portfolio/types/user';
-import { DecorIcon } from '@/components/cheffolio/decor-icon';
 
 export function Overview() {
   return (

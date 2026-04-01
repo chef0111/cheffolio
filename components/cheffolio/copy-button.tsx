@@ -1,13 +1,13 @@
 'use client';
 
-import * as React from 'react';
-import { type VariantProps } from 'class-variance-authority';
-import { AnimatePresence, motion } from 'motion/react';
+import type { VariantProps } from 'class-variance-authority';
 import { CheckIcon, CopyIcon } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
+import * as React from 'react';
 
-import { cn } from '@/lib/utils';
-import { useControlledState } from '@/hooks/use-controlled-state';
 import { Button, buttonVariants } from '@/components/ui/button';
+import { useControlledState } from '@/hooks/use-controlled-state';
+import { cn } from '@/lib/utils';
 
 type CopyButtonBaseProps = Omit<
   React.ComponentPropsWithoutRef<typeof Button>,
@@ -141,4 +141,4 @@ function CopyButton({
   );
 }
 
-export { CopyButton, buttonVariants, type CopyButtonProps };
+export { buttonVariants, CopyButton, type CopyButtonProps };

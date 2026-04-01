@@ -1,9 +1,10 @@
 import { Suspense } from 'react';
 
-import { getGitHubContributions } from '@/modules/portfolio/data/github-contributions';
-import { Panel } from '@/components/cheffolio/panel';
-import { GitHubContributionFallback, GitHubContributionGraph } from './graph';
 import { DecorIcon } from '@/components/cheffolio/decor-icon';
+import { Panel } from '@/components/cheffolio/panel';
+import { getGitHubContributions } from '@/modules/portfolio/data/github-contributions';
+
+import { GitHubContributionFallback, GitHubContributionGraph } from './graph';
 
 export function GitHubContributions() {
   const contributions = getGitHubContributions();

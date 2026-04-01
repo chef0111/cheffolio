@@ -1,21 +1,20 @@
 'use client';
 
-import { toast } from 'sonner';
-import { PhoneIcon } from 'lucide-react';
-import { useWebHaptics } from 'web-haptics/react';
 import { useHotkey } from '@tanstack/react-hotkeys';
+import { PhoneIcon } from 'lucide-react';
+import { toast } from 'sonner';
+import { useWebHaptics } from 'web-haptics/react';
 
-import { useIsClient } from '@/hooks/use-is-client';
-import { copyText } from '@/utils/copy';
-import { decodePhoneNumber, formatPhoneNumber } from '@/utils/string';
-
+import { CopyButton } from '@/components/cheffolio/copy-button';
 import {
   IntroItem,
   IntroItemContent,
   IntroItemIcon,
   IntroItemLink,
 } from '@/components/cheffolio/intro-item';
-import { CopyButton } from '@/components/cheffolio/copy-button';
+import { useIsClient } from '@/hooks/use-is-client';
+import { copyText } from '@/utils/copy';
+import { decodePhoneNumber, formatPhoneNumber } from '@/utils/string';
 
 type PhoneItemProps = {
   phoneNumber: string;

@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 /** Viewport offset from top (sticky header + small margin), px */
 const DEFAULT_SCROLL_OFFSET = 88.5;

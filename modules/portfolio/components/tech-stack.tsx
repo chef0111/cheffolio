@@ -1,21 +1,21 @@
 import Image from 'next/image';
 
+import { DecorIcon } from '@/components/cheffolio/decor-icon';
+import {
+  Panel,
+  PanelContent,
+  PanelHeader,
+  PanelTitle,
+} from '@/components/cheffolio/panel';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { UTM_PARAMS } from '@/config/site';
+import { addQueryParams } from '@/utils/url';
 
 import { TECH_STACK } from '../data/tech-stack';
-import {
-  Panel,
-  PanelHeader,
-  PanelTitle,
-  PanelContent,
-} from '@/components/cheffolio/panel';
-import { DecorIcon } from '@/components/cheffolio/decor-icon';
-import { addQueryParams } from '@/utils/url';
-import { UTM_PARAMS } from '@/config/site';
 
 export function TechStack() {
   const baseUrl = 'https://res.cloudinary.com/dpuqj2n2q/image/upload';

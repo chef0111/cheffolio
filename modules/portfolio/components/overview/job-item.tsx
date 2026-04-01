@@ -4,15 +4,14 @@ import {
   LightbulbIcon,
 } from 'lucide-react';
 
-import { UTM_PARAMS } from '@/config/site';
-import { addQueryParams } from '@/utils/url';
-
 import {
   IntroItem,
   IntroItemContent,
   IntroItemIcon,
   IntroItemLink,
 } from '@/components/cheffolio/intro-item';
+import { UTM_PARAMS } from '@/config/site';
+import { addQueryParams } from '@/utils/url';
 
 type JobItemProps = {
   title: string;

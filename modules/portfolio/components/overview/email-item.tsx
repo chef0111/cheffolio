@@ -1,21 +1,20 @@
 'use client';
 
-import { toast } from 'sonner';
-import { MailIcon } from 'lucide-react';
-import { useWebHaptics } from 'web-haptics/react';
 import { useHotkey } from '@tanstack/react-hotkeys';
+import { MailIcon } from 'lucide-react';
+import { toast } from 'sonner';
+import { useWebHaptics } from 'web-haptics/react';
 
-import { useIsClient } from '@/hooks/use-is-client';
 import { CopyButton } from '@/components/cheffolio/copy-button';
-import { decodeEmail } from '@/utils/string';
-
 import {
   IntroItem,
   IntroItemContent,
   IntroItemIcon,
   IntroItemLink,
 } from '@/components/cheffolio/intro-item';
+import { useIsClient } from '@/hooks/use-is-client';
 import { copyText } from '@/utils/copy';
+import { decodeEmail } from '@/utils/string';
 
 type EmailItemProps = {
   email: string;
