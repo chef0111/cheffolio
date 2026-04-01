@@ -23,7 +23,7 @@ export function SocialLinkItem({ icon, title, href }: SocialLink) {
         <Image
           className="corner-squircle rounded-lg select-none supports-corner-shape:rounded-[50%]"
           src={icon}
-          alt={title}
+          alt={`${title} logo`}
           width={32}
           height={32}
           quality={100}

@@ -36,7 +36,7 @@ export function ProfileHeader() {
       <div className="flex flex-1 flex-col">
         <div className="flex grow items-end pb-1 pl-4">
           <div
-            className="line-clamp-1 font-mono text-xs text-zinc-400 select-none dark:text-zinc-700"
+            className="line-clamp-1 font-mono text-xs text-zinc-400 select-none dark:text-zinc-600"
             aria-label="User bio"
           >
             {USER.bio}
