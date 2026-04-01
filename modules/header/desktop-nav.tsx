@@ -1,14 +1,15 @@
 'use client';
 
-import type { ComponentProps } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import type { ComponentProps } from 'react';
 
-import { cn } from '@/lib/utils';
 import { useLocationHash } from '@/hooks/use-location-hash';
-import { useNavScroll, markUserNavigation } from '@/hooks/use-nav-scroll';
+import { markUserNavigation, useNavScroll } from '@/hooks/use-nav-scroll';
+import { cn } from '@/lib/utils';
+
+import type { NavItem } from './types/nav';
 import { isNavItemActive } from './utils/nav-active';
-import { NavItem } from './types/nav';
 
 export function DesktopNav({ items }: { items: NavItem[] }) {
   const pathname = usePathname();

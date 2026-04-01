@@ -1,29 +1,29 @@
-"use client"
+'use client';
 
-import { motion, useAnimation } from "motion/react"
-import { forwardRef, useImperativeHandle } from "react"
+import { motion, useAnimation } from 'motion/react';
+import { forwardRef, useImperativeHandle } from 'react';
 
 export type ChevronsDownUpIconHandle = {
-  startAnimation: () => void
-  stopAnimation: () => void
-}
+  startAnimation: () => void;
+  stopAnimation: () => void;
+};
 
-export type ChevronsDownUpIconProps = React.ComponentProps<"svg"> & {
-  duration?: number
-}
+export type ChevronsDownUpIconProps = React.ComponentProps<'svg'> & {
+  duration?: number;
+};
 
 const ChevronsDownUpIcon = forwardRef<
   ChevronsDownUpIconHandle,
   ChevronsDownUpIconProps
 >(({ duration = 0.3, ...props }, ref) => {
-  const controls = useAnimation()
+  const controls = useAnimation();
 
   useImperativeHandle(ref, () => {
     return {
-      startAnimation: () => controls.start("animate"),
-      stopAnimation: () => controls.start("normal"),
-    }
-  })
+      startAnimation: () => controls.start('animate'),
+      stopAnimation: () => controls.start('normal'),
+    };
+  });
 
   return (
     <svg
@@ -43,10 +43,10 @@ const ChevronsDownUpIcon = forwardRef<
         d="M7 15L12 20L17 15"
         variants={{
           normal: {
-            d: "M7 15L12 20L17 15",
+            d: 'M7 15L12 20L17 15',
           },
           animate: {
-            d: "M7 20L12 15L17 20",
+            d: 'M7 20L12 15L17 20',
           },
         }}
         initial="normal"
@@ -59,10 +59,10 @@ const ChevronsDownUpIcon = forwardRef<
         d="M7 9L12 4L17 9"
         variants={{
           normal: {
-            d: "M7 9L12 4L17 9",
+            d: 'M7 9L12 4L17 9',
           },
           animate: {
-            d: "M7 4L12 9L17 4",
+            d: 'M7 4L12 9L17 4',
           },
         }}
         initial="normal"
@@ -72,9 +72,9 @@ const ChevronsDownUpIcon = forwardRef<
         }}
       />
     </svg>
-  )
-})
+  );
+});
 
-ChevronsDownUpIcon.displayName = "ChevronsDownUpIcon"
+ChevronsDownUpIcon.displayName = 'ChevronsDownUpIcon';
 
-export { ChevronsDownUpIcon }
+export { ChevronsDownUpIcon };

@@ -1,9 +1,10 @@
 'use client';
 
+import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
+
 import { BrandLogo } from '@/components/cheffolio/brand';
 import { CanvasReveal } from '@/components/cheffolio/canvas-reveal';
-import { AnimatePresence, motion } from 'motion/react';
 import { Label } from '@/components/ui/label';
 
 export function ProfileCover() {

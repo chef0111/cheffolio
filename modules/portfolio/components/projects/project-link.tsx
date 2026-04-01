@@ -1,11 +1,12 @@
 'use client';
 
+import { LinkIcon } from 'lucide-react';
+
 import {
   Tooltip,
-  TooltipTrigger,
   TooltipContent,
+  TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { LinkIcon } from 'lucide-react';
 
 export function ProjectLink({ href }: { href: string }) {
   return (

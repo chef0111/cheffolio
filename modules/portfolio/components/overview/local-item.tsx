@@ -20,16 +20,15 @@ import {
 import { useEffect, useState } from 'react';
 
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
-
-import {
   IntroItem,
   IntroItemContent,
   IntroItemIcon,
 } from '@/components/cheffolio/intro-item';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 const CLOCK_ICONS: Record<number, LucideIcon> = {
   1: Clock1Icon,

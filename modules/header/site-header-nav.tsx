@@ -1,12 +1,13 @@
 'use client';
 
-import { cn } from '@/lib/utils';
-import { useScroll } from '@/hooks/use-scroll';
-import { FullWidthDivider } from '@/components/cheffolio/full-width-divider';
 import { CommandMenu } from '@/components/cheffolio/command-menu';
+import { FullWidthDivider } from '@/components/cheffolio/full-width-divider';
 import { Separator } from '@/components/ui/separator';
-import { MobileNav } from './mobile-nav';
 import { MOBILE_NAV } from '@/config/site';
+import { useScroll } from '@/hooks/use-scroll';
+import { cn } from '@/lib/utils';
+
+import { MobileNav } from './mobile-nav';
 
 export function SiteHeaderNav({ children }: { children?: React.ReactNode }) {
   const scrolled = useScroll(10);

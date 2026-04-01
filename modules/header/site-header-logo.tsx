@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
 import { useMotionValueEvent, useScroll } from 'motion/react';
 import { usePathname } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
+
 import { Brand, BrandLogo } from '@/components/cheffolio/brand';
 import { useMediaQuery } from '@/hooks/use-media-query';
 

@@ -1,11 +1,12 @@
-import { NavItem } from '@/modules/header/types/nav';
-import { USER } from '@/modules/portfolio/data/user';
 import {
   AwardIcon,
   BoxIcon,
   BriefcaseBusiness,
   TextInitial,
 } from 'lucide-react';
+
+import type { NavItem } from '@/modules/header/types/nav';
+import { USER } from '@/modules/portfolio/data/user';
 
 export const SITE_INFO = {
   name: 'Cheffolio',

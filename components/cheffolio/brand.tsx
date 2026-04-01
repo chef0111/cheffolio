@@ -1,5 +1,6 @@
+import type { Route } from 'next';
 import Link from 'next/link';
-import { Route } from 'next';
+
 import { cn } from '@/lib/utils';
 
 interface BrandPropsWithSvg extends Omit<

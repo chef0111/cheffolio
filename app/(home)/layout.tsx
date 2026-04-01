@@ -1,4 +1,5 @@
 import dynamic from 'next/dynamic';
+
 import { SiteHeader } from '@/modules/header';
 
 const ScrollToTop = dynamic(() =>

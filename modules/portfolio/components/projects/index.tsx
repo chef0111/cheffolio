@@ -1,6 +1,5 @@
 import { CollapsibleList } from '@/components/cheffolio/collapsible-list';
-
-import { ProjectItem } from './project-item';
+import { DecorIcon } from '@/components/cheffolio/decor-icon';
 import {
   Panel,
   PanelContent,
@@ -8,8 +7,9 @@ import {
   PanelTitle,
   PanelTitleSup,
 } from '@/components/cheffolio/panel';
-import { DecorIcon } from '@/components/cheffolio/decor-icon';
 import { PROJECTS } from '@/modules/portfolio/data/projects';
+
+import { ProjectItem } from './project-item';
 
 export function Projects() {
   return (

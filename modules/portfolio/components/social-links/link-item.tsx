@@ -1,11 +1,11 @@
 import { ArrowUpRightIcon } from 'lucide-react';
 import Image from 'next/image';
 
-import { UTM_PARAMS } from '@/config/site';
-import type { SocialLink } from '@/modules/portfolio/types/social-links';
-import { cn } from '@/lib/utils';
-import { addQueryParams } from '@/utils/url';
 import { GridPattern } from '@/components/cheffolio/grid-pattern';
+import { UTM_PARAMS } from '@/config/site';
+import { cn } from '@/lib/utils';
+import type { SocialLink } from '@/modules/portfolio/types/social-links';
+import { addQueryParams } from '@/utils/url';
 
 export function SocialLinkItem({ icon, title, href }: SocialLink) {
   return (

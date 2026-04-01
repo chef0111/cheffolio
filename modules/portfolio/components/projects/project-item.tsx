@@ -1,24 +1,24 @@
 import { BoxIcon, InfinityIcon } from 'lucide-react';
 import Image from 'next/image';
 
-import {
-  Collapsible,
-  CollapsibleChevronsIcon,
-} from '@/components/ui/collapsible-animated';
+import { GridPattern } from '@/components/cheffolio/grid-pattern';
+import { IntroItemIcon } from '@/components/cheffolio/intro-item';
+import { Markdown } from '@/components/cheffolio/markdown';
 import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
-import { Markdown } from '@/components/cheffolio/markdown';
+import {
+  Collapsible,
+  CollapsibleChevronsIcon,
+} from '@/components/ui/collapsible-animated';
 import { Tag } from '@/components/ui/tag';
 import { ProseMono } from '@/components/ui/typography';
 import { UTM_PARAMS } from '@/config/site';
+import type { Project } from '@/modules/portfolio/types/projects';
 import { addQueryParams } from '@/utils/url';
 
-import type { Project } from '@/modules/portfolio/types/projects';
-import { GridPattern } from '@/components/cheffolio/grid-pattern';
 import { ProjectLink } from './project-link';
-import { IntroItemIcon } from '@/components/cheffolio/intro-item';
 
 export function ProjectItem({
   className,

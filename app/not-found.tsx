@@ -1,3 +1,6 @@
+import { HomeIcon } from 'lucide-react';
+import Link from 'next/link';
+
 import { FullWidthDivider } from '@/components/cheffolio/full-width-divider';
 import { Button } from '@/components/ui/button';
 import {
@@ -7,8 +10,6 @@ import {
   EmptyHeader,
   EmptyTitle,
 } from '@/components/ui/empty';
-import { HomeIcon } from 'lucide-react';
-import Link from 'next/link';
 
 export default function NotFoundPage() {
   return (

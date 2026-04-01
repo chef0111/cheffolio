@@ -1,13 +1,8 @@
 'use client';
 
-import { use } from 'react';
 import { format } from 'date-fns';
+import { use } from 'react';
 
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 import type { Activity } from '@/components/kibo-ui/contribution-graph';
 import {
   ContributionGraph,
@@ -18,11 +13,16 @@ import {
   ContributionGraphTotalCount,
 } from '@/components/kibo-ui/contribution-graph';
 import { Loader } from '@/components/ui/loader';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { GITHUB_USERNAME, UTM_PARAMS } from '@/config/site';
 import { useBreakpoints } from '@/hooks/use-breakpoint';
-import { addQueryParams } from '@/utils/url';
-import { cn } from '@/lib/utils';
 import { useMounted } from '@/hooks/use-mounted';
+import { cn } from '@/lib/utils';
+import { addQueryParams } from '@/utils/url';
 
 export function GitHubContributionGraph({
   contributions,

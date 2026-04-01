@@ -1,28 +1,8 @@
 'use client';
 
-import React, { useCallback, useState } from 'react';
-import { useTheme } from 'next-themes';
-import { useRouter } from 'next/navigation';
 import { useHotkey } from '@tanstack/react-hotkeys';
 import { useCommandState } from 'cmdk';
-import { decodeEmail, decodePhoneNumber } from '@/utils/string';
-import { addQueryParams } from '@/utils/url';
-import { UTM_PARAMS } from '@/config/site';
-import Image from 'next/image';
-
-import { Brand } from './brand';
-import { Button } from '@/components/ui/button';
-import { KbdGroup, Kbd } from '@/components/ui/kbd';
-import {
-  CommandDialog,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from '@/components/ui/command';
-import { Separator } from '@/components/ui/separator';
-import { SOCIAL_LINKS } from '@/modules/portfolio/data/social-links';
+import type { LucideProps } from 'lucide-react';
 import {
   AwardIcon,
   BoxIcon,
@@ -31,17 +11,41 @@ import {
   CornerDownLeftIcon,
   DownloadIcon,
   LayersIcon,
-  LucideProps,
   MailIcon,
   MoonIcon,
   PhoneIcon,
   Search,
+  ServerIcon,
   SunIcon,
   TextInitial,
 } from 'lucide-react';
-import { copyText } from '@/utils/copy';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useTheme } from 'next-themes';
+import React, { useCallback, useState } from 'react';
 import { toast } from 'sonner';
+
+import { Button } from '@/components/ui/button';
+import {
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command';
+import { Empty, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
+import { Kbd, KbdGroup } from '@/components/ui/kbd';
+import { Separator } from '@/components/ui/separator';
+import { UTM_PARAMS } from '@/config/site';
+import { SOCIAL_LINKS } from '@/modules/portfolio/data/social-links';
 import { USER } from '@/modules/portfolio/data/user';
+import { copyText } from '@/utils/copy';
+import { decodeEmail, decodePhoneNumber } from '@/utils/string';
+import { addQueryParams } from '@/utils/url';
+
+import { Brand } from './brand';
+import { ScrollFadeEffect } from './scroll-fade-effect';
 
 type CommandLinkItem = {
   title: string;
@@ -144,71 +148,81 @@ export function CommandMenu({
       >
         <CommandMenuInput />
 
-        <CommandList className="bg-background dark:bg-background/50 mx-1 min-h-80 rounded-xl border py-1">
-          <CommandEmpty>No results found.</CommandEmpty>
-          <CommandLinkGroup
-            heading="Portfolio"
-            links={PORTFOLIO_LINKS}
-            onLinkSelect={handleOpenLink}
-          />
-          <CommandLinkGroup
-            heading="Social Links"
-            links={SOCIAL_LINK_ITEMS}
-            onLinkSelect={handleOpenLink}
-          />
+        <CommandList className="bg-background dark:bg-background/50 mx-1 min-h-80 rounded-xl border">
+          <ScrollFadeEffect className="no-scrollbar h-79 w-full">
+            <CommandEmpty>
+              <Empty className="gap-2">
+                <EmptyMedia variant="icon">
+                  <ServerIcon />
+                </EmptyMedia>
+                <EmptyTitle>No results found</EmptyTitle>
+              </Empty>
+            </CommandEmpty>
 
-          <CommandGroup heading="Personal Info">
-            <CommandItem onSelect={() => null}>
-              <DownloadIcon className="text-muted-foreground" />
-              Download CV
-            </CommandItem>
-            <CommandItem
-              onSelect={() => {
-                handleCopy(
-                  decodeEmail(USER.email),
-                  'Email address copied to clipboard'
-                );
-              }}
-            >
-              <MailIcon className="text-muted-foreground" />
-              Copy Email Address
-            </CommandItem>
-            <CommandItem
-              onSelect={() => {
-                handleCopy(
-                  decodePhoneNumber(USER.phoneNumber),
-                  'Phone number copied to clipboard'
-                );
-              }}
-            >
-              <PhoneIcon className="text-muted-foreground" />
-              Copy Phone Number
-            </CommandItem>
-          </CommandGroup>
+            <CommandLinkGroup
+              heading="Portfolio"
+              links={PORTFOLIO_LINKS}
+              onLinkSelect={handleOpenLink}
+            />
+            <CommandLinkGroup
+              heading="Social Links"
+              links={SOCIAL_LINK_ITEMS}
+              onLinkSelect={handleOpenLink}
+            />
 
-          <CommandGroup heading="Theme">
-            <CommandItem
-              keywords={['theme']}
-              onSelect={() => handleSetTheme('light')}
-            >
-              <SunIcon className="text-muted-foreground" />
-              Light
-            </CommandItem>
-            <CommandItem
-              keywords={['theme']}
-              onSelect={() => handleSetTheme('dark')}
-            >
-              <MoonIcon className="text-muted-foreground" />
-              Dark
-            </CommandItem>
-            <CommandItem
-              keywords={['theme']}
-              onSelect={() => handleSetTheme('system')}
-            >
-              <ContrastIcon className="text-muted-foreground" />
-              Auto
-            </CommandItem>
-          </CommandGroup>
+            <CommandGroup heading="Personal Info">
+              <CommandItem onSelect={() => null}>
+                <DownloadIcon className="text-muted-foreground" />
+                Download CV
+              </CommandItem>
+              <CommandItem
+                onSelect={() => {
+                  handleCopy(
+                    decodeEmail(USER.email),
+                    'Email address copied to clipboard'
+                  );
+                }}
+              >
+                <MailIcon className="text-muted-foreground" />
+                Copy Email Address
+              </CommandItem>
+              <CommandItem
+                onSelect={() => {
+                  handleCopy(
+                    decodePhoneNumber(USER.phoneNumber),
+                    'Phone number copied to clipboard'
+                  );
+                }}
+              >
+                <PhoneIcon className="text-muted-foreground" />
+                Copy Phone Number
+              </CommandItem>
+            </CommandGroup>
+
+            <CommandGroup heading="Theme">
+              <CommandItem
+                keywords={['theme']}
+                onSelect={() => handleSetTheme('light')}
+              >
+                <SunIcon className="text-muted-foreground" />
+                Light
+              </CommandItem>
+              <CommandItem
+                keywords={['theme']}
+                onSelect={() => handleSetTheme('dark')}
+              >
+                <MoonIcon className="text-muted-foreground" />
+                Dark
+              </CommandItem>
+              <CommandItem
+                keywords={['theme']}
+                onSelect={() => handleSetTheme('system')}
+              >
+                <ContrastIcon className="text-muted-foreground" />
+                Auto
+              </CommandItem>
+            </CommandGroup>
+          </ScrollFadeEffect>
         </CommandList>
 
         <CommandMenuFooter />

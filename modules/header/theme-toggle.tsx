@@ -1,20 +1,20 @@
 'use client';
 
-import { useCallback } from 'react';
-import { useTheme } from 'next-themes';
-import { useSound } from '@/hooks/use-sound';
-import { useMetaColor } from '@/hooks/use-meta-color';
 import { useHotkey } from '@tanstack/react-hotkeys';
-import { META_THEME_COLORS, SOUNDS } from '@/config/site';
+import { useTheme } from 'next-themes';
+import { useCallback } from 'react';
 
-import { Button } from '@/components/ui/button';
 import { MoonIcon, SunIcon } from '@/components/icons';
+import { Button } from '@/components/ui/button';
+import { Kbd } from '@/components/ui/kbd';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { Kbd } from '@/components/ui/kbd';
+import { META_THEME_COLORS, SOUNDS } from '@/config/site';
+import { useMetaColor } from '@/hooks/use-meta-color';
+import { useSound } from '@/hooks/use-sound';
 
 export default function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();

@@ -1,28 +1,28 @@
 import { InfinityIcon } from 'lucide-react';
 
-import {
-  Collapsible,
-  CollapsibleChevronsIcon,
-} from '@/components/ui/collapsible-animated';
-import {
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible';
 import { IntroItemIcon } from '@/components/cheffolio/intro-item';
 import { Markdown } from '@/components/cheffolio/markdown';
-import { ProseMono } from '@/components/ui/typography';
-import { Separator } from '@/components/ui/separator';
-import { Label } from '@/components/ui/label';
-import { Tag } from '@/components/ui/tag';
-import { cn } from '@/lib/utils';
-
-import type { ExperiencePosition } from '@/modules/portfolio/types/experiences';
-import { ExperienceIcon } from './position-icon';
 import {
   Status,
   StatusIndicator,
   StatusLabel,
 } from '@/components/kibo-ui/status';
+import {
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible';
+import {
+  Collapsible,
+  CollapsibleChevronsIcon,
+} from '@/components/ui/collapsible-animated';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
+import { Tag } from '@/components/ui/tag';
+import { ProseMono } from '@/components/ui/typography';
+import { cn } from '@/lib/utils';
+import type { ExperiencePosition } from '@/modules/portfolio/types/experiences';
+
+import { ExperienceIcon } from './position-icon';
 
 export function ExperiencePositionItem({
   position,

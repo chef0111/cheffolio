@@ -1,7 +1,7 @@
 'use client';
 
-import { addQueryParams } from '@/utils/url';
 import { UTM_PARAMS } from '@/config/site';
+import { addQueryParams } from '@/utils/url';
 
 export function FooterCopyright() {
   return (

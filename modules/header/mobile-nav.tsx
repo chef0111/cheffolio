@@ -1,20 +1,22 @@
 'use client';
 
-import React, { useCallback, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { useLocationHash } from '@/hooks/use-location-hash';
-import { useNavScroll } from '@/hooks/use-nav-scroll';
-import { useMediaQuery } from '@/hooks/use-media-query';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { haptic } from '@/lib/haptic';
-import { isNavItemActive } from './utils/nav-active';
-import type { NavItem } from './types/nav';
+import React, { useCallback, useState } from 'react';
+
+import { Button } from '@/components/ui/button';
 import {
   Popover,
-  PopoverTrigger,
   PopoverContent,
+  PopoverTrigger,
 } from '@/components/ui/popover';
-import Link from 'next/link';
+import { useLocationHash } from '@/hooks/use-location-hash';
+import { useMediaQuery } from '@/hooks/use-media-query';
+import { useNavScroll } from '@/hooks/use-nav-scroll';
+import { haptic } from '@/lib/haptic';
+
+import type { NavItem } from './types/nav';
+import { isNavItemActive } from './utils/nav-active';
 
 export function MobileNav({ items }: { items: NavItem[] }) {
   const [open, setOpen] = useState(false);

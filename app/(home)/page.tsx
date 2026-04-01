@@ -1,19 +1,19 @@
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
+import type { ProfilePage, WithContext } from 'schema-dts';
 
-import { USER } from '@/modules/portfolio/data/user';
-import { ProfilePage, WithContext } from 'schema-dts';
-import { ProfileCover } from '@/modules/portfolio/components/profile-cover';
 import { FullWidthDivider } from '@/components/cheffolio/full-width-divider';
-import { ProfileHeader } from '@/modules/portfolio/components/profile-header';
 import { TailwindSeparator } from '@/components/cheffolio/tailwind-separator';
-import { Overview } from '@/modules/portfolio/components/overview';
-import { SocialLinks } from '@/modules/portfolio/components/social-links';
-import { About } from '@/modules/portfolio/components/about';
-import { TechStack } from '@/modules/portfolio/components/tech-stack';
-import { Experiences } from '@/modules/portfolio/components/experiences';
-import { Projects } from '@/modules/portfolio/components/projects';
-import { Awards } from '@/modules/portfolio/components/awards';
 import { Footer } from '@/modules/footer';
+import { About } from '@/modules/portfolio/components/about';
+import { Awards } from '@/modules/portfolio/components/awards';
+import { Experiences } from '@/modules/portfolio/components/experiences';
+import { Overview } from '@/modules/portfolio/components/overview';
+import { ProfileCover } from '@/modules/portfolio/components/profile-cover';
+import { ProfileHeader } from '@/modules/portfolio/components/profile-header';
+import { Projects } from '@/modules/portfolio/components/projects';
+import { SocialLinks } from '@/modules/portfolio/components/social-links';
+import { TechStack } from '@/modules/portfolio/components/tech-stack';
+import { USER } from '@/modules/portfolio/data/user';
 
 export const metadata: Metadata = {
   alternates: {
