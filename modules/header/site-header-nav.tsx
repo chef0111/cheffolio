@@ -21,6 +21,7 @@ export function SiteHeaderNav({ children }: { children?: React.ReactNode }) {
               scrolled,
           }
         )}
+        aria-label="Site header"
       >
         <nav
           className={cn(

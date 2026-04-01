@@ -3,13 +3,12 @@ import { Button } from '@/components/ui/button';
 import { GithubIcon, XIcon, LinkedinIcon } from '@/components/icons';
 import { Brand } from '@/components/cheffolio/brand';
 import { FooterCopyright } from './copyright';
-import { FullWidthDivider } from '@/components/cheffolio/full-width-divider';
 import { addQueryParams } from '@/utils/url';
 import { UTM_PARAMS } from '@/config/site';
 
 export function Footer() {
   return (
-    <footer className="relative">
+    <footer className="relative" aria-label="Site footer">
       <div className="border-line mx-auto max-w-4xl border-x px-4">
         <div className="flex flex-col gap-4 pt-4">
           <div className="flex flex-col items-center justify-center">
@@ -66,8 +65,7 @@ export function Footer() {
           </nav>
         </div>
 
-        <FullWidthDivider />
-        <div className="flex max-w-4xl flex-col justify-between gap-2 py-4">
+        <div className="screen-line-bottom screen-line-top flex max-w-4xl flex-col justify-between gap-2 py-4">
           <Suspense>
             <FooterCopyright />
           </Suspense>

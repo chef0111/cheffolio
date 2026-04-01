@@ -136,7 +136,12 @@ export function CommandMenu({
     <>
       <CommandMenuTrigger onClick={() => setOpen(true)} />
 
-      <CommandDialog open={open} onOpenChange={setOpen} modal={false}>
+      <CommandDialog
+        title="Command Menu"
+        open={open}
+        onOpenChange={setOpen}
+        modal={false}
+      >
         <CommandMenuInput />
 
         <CommandList className="bg-background dark:bg-background/50 mx-1 min-h-80 rounded-xl border py-1">
