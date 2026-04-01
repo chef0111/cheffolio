@@ -120,8 +120,11 @@ function CopyButton({
       data-slot="copy-button"
       className={cn(buttonVariants({ variant, size, className }))}
       onClick={handleCopy}
+      aria-label={isCopied ? 'Copied' : 'Copy to clipboard'}
+      aria-pressed={isCopied}
       {...props}
     >
+      <span className="sr-only">Copy button</span>
       <AnimatePresence mode="popLayout">
         <motion.span
           key={isCopied ? 'check' : 'copy'}
