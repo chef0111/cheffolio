@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useMotionValueEvent, useScroll } from 'motion/react';
 import { usePathname } from 'next/navigation';
-import { Brand } from '@/components/cheffolio/brand';
+import { Brand, BrandLogo } from '@/components/cheffolio/brand';
 import { useMediaQuery } from '@/hooks/use-media-query';
 
 const calcDistance = (el: HTMLElement, mobile: boolean) => {
@@ -41,14 +41,13 @@ function BrandMotion() {
 
   return (
     <div data-visible={visible} className="group/motion relative">
-      <Brand
-        href={null}
-        aria-hidden="true"
-        focusable={false}
+      <BrandLogo
         fillOpacity={0}
-        className="stroke-foreground pointer-events-none absolute top-0 left-0 opacity-100 transition-opacity duration-300 group-data-[visible=true]/motion:opacity-0"
+        aria-hidden="true"
+        className="stroke-foreground no-focus absolute top-0 left-0 opacity-100 transition-opacity duration-300 select-none group-data-[visible=true]/motion:opacity-0"
+        tabIndex={-1}
       />
-      <Brand className="translate-y-2 opacity-0 transition-[opacity,translate] duration-300 group-data-[visible=true]/motion:translate-y-0 group-data-[visible=true]/motion:opacity-100" />
+      <Brand className="no-focus translate-y-2 opacity-0 transition-[opacity,translate] duration-300 group-data-[visible=true]/motion:translate-y-0 group-data-[visible=true]/motion:opacity-100" />
     </div>
   );
 }
