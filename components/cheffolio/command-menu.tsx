@@ -42,6 +42,7 @@ import {
 import { copyText } from '@/utils/copy';
 import { toast } from 'sonner';
 import { USER } from '@/modules/portfolio/data/user';
+import { ScrollFadeEffect } from './scroll-fade-effect';
 
 type CommandLinkItem = {
   title: string;
@@ -145,70 +146,72 @@ export function CommandMenu({
         <CommandMenuInput />
 
         <CommandList className="bg-background dark:bg-background/50 mx-1 min-h-80 rounded-xl border py-1">
-          <CommandEmpty>No results found.</CommandEmpty>
-          <CommandLinkGroup
-            heading="Portfolio"
-            links={PORTFOLIO_LINKS}
-            onLinkSelect={handleOpenLink}
-          />
-          <CommandLinkGroup
-            heading="Social Links"
-            links={SOCIAL_LINK_ITEMS}
-            onLinkSelect={handleOpenLink}
-          />
+          <ScrollFadeEffect className="no-scrollbar h-80">
+            <CommandEmpty>No results found.</CommandEmpty>
+            <CommandLinkGroup
+              heading="Portfolio"
+              links={PORTFOLIO_LINKS}
+              onLinkSelect={handleOpenLink}
+            />
+            <CommandLinkGroup
+              heading="Social Links"
+              links={SOCIAL_LINK_ITEMS}
+              onLinkSelect={handleOpenLink}
+            />
 
-          <CommandGroup heading="Personal Info">
-            <CommandItem onSelect={() => null}>
-              <DownloadIcon className="text-muted-foreground" />
-              Download CV
-            </CommandItem>
-            <CommandItem
-              onSelect={() => {
-                handleCopy(
-                  decodeEmail(USER.email),
-                  'Email address copied to clipboard'
-                );
-              }}
-            >
-              <MailIcon className="text-muted-foreground" />
-              Copy Email Address
-            </CommandItem>
-            <CommandItem
-              onSelect={() => {
-                handleCopy(
-                  decodePhoneNumber(USER.phoneNumber),
-                  'Phone number copied to clipboard'
-                );
-              }}
-            >
-              <PhoneIcon className="text-muted-foreground" />
-              Copy Phone Number
-            </CommandItem>
-          </CommandGroup>
+            <CommandGroup heading="Personal Info">
+              <CommandItem onSelect={() => null}>
+                <DownloadIcon className="text-muted-foreground" />
+                Download CV
+              </CommandItem>
+              <CommandItem
+                onSelect={() => {
+                  handleCopy(
+                    decodeEmail(USER.email),
+                    'Email address copied to clipboard'
+                  );
+                }}
+              >
+                <MailIcon className="text-muted-foreground" />
+                Copy Email Address
+              </CommandItem>
+              <CommandItem
+                onSelect={() => {
+                  handleCopy(
+                    decodePhoneNumber(USER.phoneNumber),
+                    'Phone number copied to clipboard'
+                  );
+                }}
+              >
+                <PhoneIcon className="text-muted-foreground" />
+                Copy Phone Number
+              </CommandItem>
+            </CommandGroup>
 
-          <CommandGroup heading="Theme">
-            <CommandItem
-              keywords={['theme']}
-              onSelect={() => handleSetTheme('light')}
-            >
-              <SunIcon className="text-muted-foreground" />
-              Light
-            </CommandItem>
-            <CommandItem
-              keywords={['theme']}
-              onSelect={() => handleSetTheme('dark')}
-            >
-              <MoonIcon className="text-muted-foreground" />
-              Dark
-            </CommandItem>
-            <CommandItem
-              keywords={['theme']}
-              onSelect={() => handleSetTheme('system')}
-            >
-              <ContrastIcon className="text-muted-foreground" />
-              Auto
-            </CommandItem>
-          </CommandGroup>
+            <CommandGroup heading="Theme">
+              <CommandItem
+                keywords={['theme']}
+                onSelect={() => handleSetTheme('light')}
+              >
+                <SunIcon className="text-muted-foreground" />
+                Light
+              </CommandItem>
+              <CommandItem
+                keywords={['theme']}
+                onSelect={() => handleSetTheme('dark')}
+              >
+                <MoonIcon className="text-muted-foreground" />
+                Dark
+              </CommandItem>
+              <CommandItem
+                keywords={['theme']}
+                onSelect={() => handleSetTheme('system')}
+              >
+                <ContrastIcon className="text-muted-foreground" />
+                Auto
+              </CommandItem>
+            </CommandGroup>
+          </ScrollFadeEffect>
         </CommandList>
 
         <CommandMenuFooter />
