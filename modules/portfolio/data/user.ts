@@ -33,8 +33,7 @@ export const USER: User = {
 `,
   avatar:
     'https://res.cloudinary.com/dpuqj2n2q/image/upload/chef0111-avatar.webp',
-  ogImage:
-    'https://res.cloudinary.com/dpuqj2n2q/image/upload/cheffolio.ogImage.png',
+  ogImage: 'https://res.cloudinary.com/dpuqj2n2q/image/upload/ogImage.png',
   timeZone: 'Asia/Ho_Chi_Minh',
   keywords: [
     'chef0111',
