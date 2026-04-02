@@ -22,6 +22,7 @@ export type User = {
     website: string;
     experienceId?: string;
   }[];
+  resume?: string;
   /** Rich about section; supports Markdown */
   about: string;
   avatar: string;

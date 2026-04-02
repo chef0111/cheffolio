@@ -22,6 +22,7 @@ import { EmailItem } from './email-item';
 import { JobItem } from './job-item';
 import { LocalTime } from './local-item';
 import { PhoneItem } from './phone-item';
+import { ResumeItem } from './resume-item';
 
 export function Overview() {
   return (
@@ -32,17 +33,27 @@ export function Overview() {
       <DecorIcon className="size-4" position="bottom-right" />
       <h2 className="sr-only">Profile overview</h2>
       <PanelContent className="space-y-2.5">
-        {USER.jobs.map((job, index) => {
-          return (
-            <JobItem
-              key={index}
-              title={job.title}
-              company={job.company}
-              website={job.website}
-              experienceId={job.experienceId}
-            />
-          );
-        })}
+        <div className="grid gap-x-4 gap-y-2.5 sm:grid-cols-2">
+          <div className="space-y-2.5">
+            {USER.jobs.map((job, index) => {
+              return (
+                <JobItem
+                  key={index}
+                  title={job.title}
+                  company={job.company}
+                  website={job.website}
+                  experienceId={job.experienceId}
+                />
+              );
+            })}
+          </div>
+
+          {USER.resume && (
+            <div className="mt-auto">
+              <ResumeItem />
+            </div>
+          )}
+        </div>
 
         <div className="grid gap-x-4 gap-y-2.5 sm:grid-cols-2">
           <IntroItem>

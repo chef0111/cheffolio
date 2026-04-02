@@ -55,7 +55,7 @@ export function PhoneItem({ phoneNumber }: PhoneItemProps) {
 
       <div className="-translate-x-3 opacity-0 transition-opacity ease-out group-hover:opacity-100">
         <CopyButton
-          className="bg-transparent"
+          className="text-muted-foreground bg-transparent"
           variant="ghost"
           size="icon-xs"
           content={isClient ? phoneNumberDecoded : '[Phone protected]'}

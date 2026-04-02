@@ -54,7 +54,7 @@ export function EmailItem({ email }: EmailItemProps) {
 
       <div className="-translate-x-3 translate-y-px opacity-0 transition-opacity ease-out group-hover:opacity-100">
         <CopyButton
-          className="bg-transparent"
+          className="text-muted-foreground bg-transparent"
           variant="ghost"
           size="icon-xs"
           content={isClient ? emailDecoded : '[Email protected]'}

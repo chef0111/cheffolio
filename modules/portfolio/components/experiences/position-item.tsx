@@ -41,7 +41,7 @@ export function ExperiencePositionItem({
       <CollapsibleTrigger
         className={cn(
           'group block w-full text-left',
-          'hover:before:bg-accent-muted active:before:bg-accent-muted relative before:absolute before:-top-1 before:-right-1 before:-bottom-1.5 before:left-7 before:-z-1 before:rounded-lg before:transition-[background-color] before:ease-out',
+          'hover:before:bg-accent-muted active:before:bg-accent-muted relative before:absolute before:-top-1 before:-right-1 before:-bottom-1.5 before:left-7 before:-z-1 before:mx-1 before:rounded-lg before:transition-[background-color] before:ease-out',
           'focus-visible:before:ring-ring/50 outline-none focus-visible:before:ring-2 focus-visible:before:ring-inset',
           'data-disabled:before:content-none'
         )}
@@ -51,7 +51,7 @@ export function ExperiencePositionItem({
             <ExperienceIcon className="size-4" icon={position.icon} />
           </IntroItemIcon>
 
-          <div className="flex min-w-0 flex-1 items-center gap-1">
+          <div className="mx-1 flex min-w-0 flex-1 items-center gap-1">
             <Label className="self-start text-base font-medium text-pretty">
               {position.title}
             </Label>
@@ -63,12 +63,12 @@ export function ExperiencePositionItem({
             )}
           </div>
 
-          <div className="text-muted-foreground ml-auto shrink-0 group-data-disabled:hidden [&_svg]:size-4">
+          <div className="text-muted-foreground mx-1 ml-auto shrink-0 group-data-disabled:hidden [&_svg]:size-4">
             <CollapsibleChevronsIcon duration={0.15} />
           </div>
         </div>
 
-        <div className="text-muted-foreground flex items-center gap-2 pl-9 text-sm">
+        <div className="text-muted-foreground mx-1 flex items-center gap-2 pl-9 text-sm">
           {position.employmentType && (
             <>
               <dl>
@@ -103,7 +103,7 @@ export function ExperiencePositionItem({
 
       <CollapsibleContent className="sm:data-[state=closed]:animate-collapsible-up sm:data-[state=open]:animate-collapsible-down overflow-hidden">
         {position.description && (
-          <ProseMono className="pt-2 pl-9">
+          <ProseMono className="pt-2 pl-9 text-pretty">
             <Markdown>{position.description}</Markdown>
           </ProseMono>
         )}
