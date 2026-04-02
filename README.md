@@ -2,7 +2,7 @@
 
 A minimal, shadcn/ui-inspired dev portfolio.
 
--> Official live site: [cheffolio.vercel.app](https://cheffolio.vercel.app)
+→ Official live site: [cheffolio.vercel.app](https://cheffolio.vercel.app)
 
 [![screenshot-dark](https://res.cloudinary.com/dpuqj2n2q/image/upload/cheffolio-dark.webp#gh-dark-mode-only)](https://cheffolio.vercel.app#gh-dark-mode-only)
 [![screenshot-light](https://res.cloudinary.com/dpuqj2n2q/image/upload/cheffolio-light.webp#gh-light-mode-only)](https://cheffolio.vercel.app#gh-light-mode-only)
