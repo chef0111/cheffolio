@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# [cheffolio](https://cheffolio.vercel.app)
 
-## Getting Started
+A minimal, shadcn/ui-inspired dev portfolio.
 
-First, run the development server:
+-> Official live site: [cheffolio.vercel.app](https://cheffolio.vercel.app)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+[![screenshot-dark](https://res.cloudinary.com/dpuqj2n2q/image/upload/cheffolio-dark.webp#gh-dark-mode-only)](https://cheffolio.vercel.app#gh-dark-mode-only)
+[![screenshot-light](https://res.cloudinary.com/dpuqj2n2q/image/upload/cheffolio-light.webp#gh-light-mode-only)](https://cheffolio.vercel.app#gh-light-mode-only)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Overview
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Cheffolio is a personal portfolio focused on minimalism (with some fancy touches), smooth interaction, and clean content customization.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+It includes:
 
-## Learn More
+- Sectioned portfolio layout (overview, about, tech stack, experience, projects, awards)
+- Keyboard-first command menu (`Ctrl/Cmd + K`) for navigation and quick actions
+- Theme system (light/dark/system) with persistent preference
+- Rich visual effects (scroll fades, animated text, electric borders, canvas reveal)
+- SEO support (Open Graph, Twitter metadata, JSON-LD, sitemap, robots)
 
-To learn more about Next.js, take a look at the following resources:
+## Tech Stack
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Next.js `16.2`
+- Tailwind CSS
+- shadcn/ui
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Stats
 
-## Deploy on Vercel
+![Stats](https://repobeats.axiom.co/api/embed/f5f65e9b9763db7fd386d2417b89d4e5c2fdc6c3.svg 'Repobeats analytics image')
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Licensed under the [MIT license](./LICENSE).
