@@ -20,6 +20,12 @@
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "any"
+    },
+    {
+      "src": "https://res.cloudinary.com/dpuqj2n2q/image/upload/mask-icon.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
     }
   ],
   "id": "/?utm_source=pwa",
