@@ -134,7 +134,7 @@ function CopyButton({
           exit={{ scale: 0, opacity: 0.4, filter: 'blur(4px)' }}
           transition={{ duration: 0.25 }}
         >
-          <Icon className="text-foreground" />
+          <Icon />
         </motion.span>
       </AnimatePresence>
     </Button>
