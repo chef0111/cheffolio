@@ -1,0 +1,61 @@
+{
+  "short_name": "chef0111",
+  "name": "Cheffolio",
+  "description": "A minimalist, shadcn/ui-inspired dev portfolio of @chef0111.",
+  "icons": [
+    {
+      "src": "https://res.cloudinary.com/dpuqj2n2q/image/upload/cheffolio.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any"
+    },
+    {
+      "src": "https://res.cloudinary.com/dpuqj2n2q/image/upload/cheffolio-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any"
+    },
+    {
+      "src": "https://res.cloudinary.com/dpuqj2n2q/image/upload/cheffolio-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any"
+    },
+    {
+      "src": "https://res.cloudinary.com/dpuqj2n2q/image/upload/cheffolio-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
+    }
+  ],
+  "id": "/?utm_source=pwa",
+  "start_url": "/?utm_source=pwa",
+  "display": "standalone",
+  "scope": "/",
+  "screenshots": [
+    {
+      "src": "https://res.cloudinary.com/dpuqj2n2q/image/upload/cheffolio-mobile-dark.webp",
+      "type": "image/webp",
+      "sizes": "480x987",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "https://res.cloudinary.com/dpuqj2n2q/image/upload/cheffolio-mobile-light.webp",
+      "type": "image/webp",
+      "sizes": "480x987",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "https://res.cloudinary.com/dpuqj2n2q/image/upload/cheffolio-dark.webp",
+      "type": "image/webp",
+      "sizes": "1907x1079",
+      "form_factor": "wide"
+    },
+    {
+      "src": "https://res.cloudinary.com/dpuqj2n2q/image/upload/cheffolio-light.webp",
+      "type": "image/webp",
+      "sizes": "1907x1079",
+      "form_factor": "wide"
+    }
+  ]
+}

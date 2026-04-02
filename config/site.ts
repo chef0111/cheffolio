@@ -12,7 +12,7 @@ export const SITE_INFO = {
   name: 'Cheffolio',
   url: process.env.NEXT_PUBLIC_SITE_URL || 'https://cheffolio.vercel.app',
   ogImage: USER.ogImage,
-  description: 'A minimalist, shadcn/ui inspired dev portfolio of @chef0111.',
+  description: 'A minimalist, shadcn/ui-inspired dev portfolio of @chef0111.',
   keywords: USER.keywords,
 };
 
