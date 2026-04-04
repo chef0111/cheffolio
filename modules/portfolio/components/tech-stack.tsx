@@ -32,7 +32,7 @@ export function TechStack() {
         <DecorIcon className="size-4" position="bottom-left" />
         <DecorIcon className="size-4" position="bottom-right" />
 
-        <ul className="flex flex-wrap gap-4 select-none">
+        <ul className="flex flex-wrap justify-center gap-4 select-none">
           {TECH_STACK.map((tech) => {
             return (
               <li key={tech.key} className="flex">
