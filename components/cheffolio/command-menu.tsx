@@ -7,16 +7,16 @@ import {
   AwardIcon,
   BoxIcon,
   BriefcaseBusinessIcon,
-  ContrastIcon,
   CornerDownLeftIcon,
   DownloadIcon,
   LayersIcon,
   MailIcon,
-  MoonIcon,
+  MonitorIcon,
+  MoonStarIcon,
   PhoneIcon,
   Search,
   ServerIcon,
-  SunIcon,
+  SunMediumIcon,
   TextInitial,
 } from 'lucide-react';
 import Image from 'next/image';
@@ -149,16 +149,16 @@ export function CommandMenu({
         <CommandMenuInput />
 
         <CommandList className="bg-background dark:bg-background/50 mx-1 min-h-80 rounded-xl border">
-          <ScrollFadeEffect className="no-scrollbar h-79 w-full">
-            <CommandEmpty>
-              <Empty className="gap-2">
-                <EmptyMedia variant="icon">
-                  <ServerIcon />
-                </EmptyMedia>
-                <EmptyTitle>No results found</EmptyTitle>
-              </Empty>
-            </CommandEmpty>
+          <CommandEmpty>
+            <Empty className="gap-2">
+              <EmptyMedia variant="icon">
+                <ServerIcon />
+              </EmptyMedia>
+              <EmptyTitle>No results found</EmptyTitle>
+            </Empty>
+          </CommandEmpty>
 
+          <ScrollFadeEffect className="no-scrollbar h-79 w-full">
             <CommandLinkGroup
               heading="Portfolio"
               links={PORTFOLIO_LINKS}
@@ -204,22 +204,22 @@ export function CommandMenu({
                 keywords={['theme']}
                 onSelect={() => handleSetTheme('light')}
               >
-                <SunIcon className="text-muted-foreground" />
+                <SunMediumIcon className="text-muted-foreground" />
                 Light
               </CommandItem>
               <CommandItem
                 keywords={['theme']}
                 onSelect={() => handleSetTheme('dark')}
               >
-                <MoonIcon className="text-muted-foreground" />
+                <MoonStarIcon className="text-muted-foreground" />
                 Dark
               </CommandItem>
               <CommandItem
                 keywords={['theme']}
                 onSelect={() => handleSetTheme('system')}
               >
-                <ContrastIcon className="text-muted-foreground" />
-                Auto
+                <MonitorIcon className="text-muted-foreground" />
+                System
               </CommandItem>
             </CommandGroup>
           </ScrollFadeEffect>
@@ -331,7 +331,7 @@ function buildCommandMetaMap() {
 
   commandMetaMap.set('Light', { commandType: 'command' });
   commandMetaMap.set('Dark', { commandType: 'command' });
-  commandMetaMap.set('Auto', { commandType: 'command' });
+  commandMetaMap.set('System', { commandType: 'command' });
 
   commandMetaMap.set('Download CV', {
     commandType: 'command',
