@@ -32,6 +32,9 @@ export function ProfileHeader() {
             />
           </div>
         </AvatarElectric>
+        <div className="bg-background ring-border ring-offset-background absolute right-3 bottom-3 flex size-5 items-center justify-center rounded-full border text-xs ring-1 ring-offset-2 select-none sm:right-3.5 sm:bottom-3.5 sm:size-6 sm:text-sm">
+          😴
+        </div>
       </div>
 
       <div className="flex flex-1 flex-col">
