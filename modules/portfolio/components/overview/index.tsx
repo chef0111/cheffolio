@@ -31,7 +31,9 @@ export function Overview() {
       <DecorIcon className="size-4" position="top-right" />
       <DecorIcon className="size-4" position="bottom-left" />
       <DecorIcon className="size-4" position="bottom-right" />
+
       <h2 className="sr-only">Profile overview</h2>
+
       <PanelContent className="space-y-2.5">
         <div className="grid gap-x-4 gap-y-2.5 sm:grid-cols-2">
           <div className="space-y-2.5">

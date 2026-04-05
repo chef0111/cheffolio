@@ -22,7 +22,7 @@ export function ProfileHeader() {
         <AvatarElectric>
           <div className="relative mx-0.5 my-0.75 size-32 sm:size-40">
             <Image
-              className="ring-border ring-offset-background rounded-full object-cover ring-1 ring-offset-2 select-none"
+              className="avatar-ring object-cover select-none"
               alt="Avatar"
               width={160}
               height={160}
@@ -32,6 +32,13 @@ export function ProfileHeader() {
             />
           </div>
         </AvatarElectric>
+        <div
+          className="avatar-ring bg-background absolute right-3 bottom-3 flex size-5 items-center justify-center text-xs select-none sm:right-3.5 sm:bottom-3.5 sm:size-6 sm:text-sm"
+          role="img"
+          aria-label="GitHub status"
+        >
+          😴
+        </div>
       </div>
 
       <div className="flex flex-1 flex-col">
