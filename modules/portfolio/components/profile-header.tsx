@@ -32,7 +32,11 @@ export function ProfileHeader() {
             />
           </div>
         </AvatarElectric>
-        <div className="avatar-ring bg-background absolute right-3 bottom-3 flex size-5 items-center justify-center text-xs select-none sm:right-3.5 sm:bottom-3.5 sm:size-6 sm:text-sm">
+        <div
+          className="avatar-ring bg-background absolute right-3 bottom-3 flex size-5 items-center justify-center text-xs select-none sm:right-3.5 sm:bottom-3.5 sm:size-6 sm:text-sm"
+          role="img"
+          aria-label="GitHub status"
+        >
           😴
         </div>
       </div>
