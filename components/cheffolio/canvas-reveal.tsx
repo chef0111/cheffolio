@@ -204,10 +204,20 @@ const ShaderMaterial = ({
     if (!ref.current) return;
     elapsedTimeRef.current += delta;
 
-    if (elapsedTimeRef.current - lastFrameTimeRef.current < 1 / maxFps) {
+    const frameInterval = maxFps > 0 ? 1 / maxFps : 0;
+    if (
+      frameInterval > 0 &&
+      elapsedTimeRef.current - lastFrameTimeRef.current < frameInterval
+    ) {
       return;
     }
-    lastFrameTimeRef.current = elapsedTimeRef.current;
+
+    if (frameInterval > 0) {
+      // Keep remainder to avoid frame pacing drift/quantization.
+      lastFrameTimeRef.current += frameInterval;
+    } else {
+      lastFrameTimeRef.current = elapsedTimeRef.current;
+    }
 
     const material: any = ref.current.material; // eslint-disable-line @typescript-eslint/no-explicit-any
     const timeLocation = material.uniforms.u_time;
