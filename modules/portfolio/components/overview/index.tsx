@@ -26,9 +26,9 @@ import { ResumeItem } from './resume-item';
 
 export function Overview() {
   return (
-    <Panel className="relative after:content-none">
-      <DecorIcon className="size-4" position="top-left" />
-      <DecorIcon className="size-4" position="top-right" />
+    <Panel className="relative mt-px after:content-none">
+      <DecorIcon className="mt-px size-4" position="top-left" />
+      <DecorIcon className="mt-px size-4" position="top-right" />
       <DecorIcon className="size-4" position="bottom-left" />
       <DecorIcon className="size-4" position="bottom-right" />
 

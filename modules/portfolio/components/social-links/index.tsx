@@ -7,8 +7,8 @@ import { SocialLinkItem } from './link-item';
 export function SocialLinks() {
   return (
     <Panel className="relative before:content-none after:content-none">
-      <DecorIcon className="size-4" position="bottom-left" />
-      <DecorIcon className="size-4" position="bottom-right" />
+      <DecorIcon className="mb-px size-4" position="bottom-left" />
+      <DecorIcon className="mb-px size-4" position="bottom-right" />
       <h2 className="sr-only">Social Links</h2>
       <div className="relative">
         <div className="pointer-events-none absolute inset-0 -z-1 grid grid-cols-2 gap-2 md:grid-cols-3">

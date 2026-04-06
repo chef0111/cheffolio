@@ -28,8 +28,8 @@ export function Awards() {
       </PanelHeader>
 
       <PanelContent className="relative p-0">
-        <DecorIcon className="size-4" position="bottom-left" />
-        <DecorIcon className="size-4" position="bottom-right" />
+        <DecorIcon className="mb-px size-4" position="bottom-left" />
+        <DecorIcon className="mb-px size-4" position="bottom-right" />
         <CollapsibleList
           items={SORTED_AWARDS}
           max={3}
