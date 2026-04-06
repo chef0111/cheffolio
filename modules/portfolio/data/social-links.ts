@@ -1,6 +1,6 @@
 import type { SocialLink } from '../types/social-links';
 
-const baseUrl = 'https://res.cloudinary.com/dpuqj2n2q/image/upload';
+const baseUrl = 'https://res.cloudinary.com/chef0111/image/upload';
 
 export const SOCIAL_LINKS: SocialLink[] = [
   {

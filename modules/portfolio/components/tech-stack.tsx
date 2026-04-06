@@ -18,7 +18,7 @@ import { addQueryParams } from '@/utils/url';
 import { TECH_STACK } from '../data/tech-stack';
 
 export function TechStack() {
-  const baseUrl = 'https://res.cloudinary.com/dpuqj2n2q/image/upload';
+  const baseUrl = 'https://res.cloudinary.com/chef0111/image/upload';
 
   return (
     <Panel id="stack">

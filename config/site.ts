@@ -71,5 +71,5 @@ export const GITHUB_USERNAME = 'chef0111';
 export const X_USERNAME = '@cheff0111';
 
 export const SOUNDS = {
-  toggle: 'https://res.cloudinary.com/dpuqj2n2q/video/upload/toggle.mp3',
+  toggle: 'https://res.cloudinary.com/chef0111/video/upload/toggle.mp3',
 };

@@ -1,6 +1,6 @@
 import type { Project } from '../types/projects';
 
-const baseUrl = 'https://res.cloudinary.com/dpuqj2n2q/image/upload';
+const baseUrl = 'https://res.cloudinary.com/chef0111/image/upload';
 
 export const PROJECTS: Project[] = [
   {

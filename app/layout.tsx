@@ -64,16 +64,16 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: 'https://res.cloudinary.com/dpuqj2n2q/image/upload/cheffolio.favicon.ico',
+        url: 'https://res.cloudinary.com/chef0111/image/upload/cheffolio.favicon.ico',
         sizes: 'any',
       },
       {
-        url: 'https://res.cloudinary.com/dpuqj2n2q/image/upload/cheffolio.svg',
+        url: 'https://res.cloudinary.com/chef0111/image/upload/cheffolio.svg',
         type: 'image/svg+xml',
       },
     ],
     apple: {
-      url: 'https://res.cloudinary.com/dpuqj2n2q/image/upload/apple-touch-icon.png',
+      url: 'https://res.cloudinary.com/chef0111/image/upload/apple-touch-icon.png',
       type: 'image/png',
       sizes: '180x180',
     },
