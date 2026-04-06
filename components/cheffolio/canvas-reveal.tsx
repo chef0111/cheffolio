@@ -1,7 +1,7 @@
 'use client';
 
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import React, { useMemo, useRef } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 
 import { cn } from '@/lib/utils';
@@ -197,22 +197,24 @@ const ShaderMaterial = ({
 }) => {
   const { size } = useThree();
   const ref = useRef<THREE.Mesh>(null);
-  let lastFrameTime = 0;
+  const elapsedTimeRef = useRef(0);
+  const lastFrameTimeRef = useRef(0);
 
-  useFrame(({ clock }) => {
+  useFrame((_, delta) => {
     if (!ref.current) return;
-    const timestamp = clock.getElapsedTime();
-    if (timestamp - lastFrameTime < 1 / maxFps) {
+    elapsedTimeRef.current += delta;
+
+    if (elapsedTimeRef.current - lastFrameTimeRef.current < 1 / maxFps) {
       return;
     }
-    lastFrameTime = timestamp;
+    lastFrameTimeRef.current = elapsedTimeRef.current;
 
     const material: any = ref.current.material; // eslint-disable-line @typescript-eslint/no-explicit-any
     const timeLocation = material.uniforms.u_time;
-    timeLocation.value = timestamp;
+    timeLocation.value = elapsedTimeRef.current;
   });
 
-  const getUniforms = () => {
+  const getUniforms = useCallback(() => {
     const preparedUniforms: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
 
     for (const uniformName in uniforms) {
@@ -256,7 +258,7 @@ const ShaderMaterial = ({
       value: new THREE.Vector2(size.width * 2, size.height * 2),
     }; // Initialize u_resolution
     return preparedUniforms;
-  };
+  }, [size.width, size.height, uniforms]);
 
   // Shader material
   const material = useMemo(() => {
@@ -283,7 +285,7 @@ const ShaderMaterial = ({
     });
 
     return materialObject;
-  }, [size.width, size.height, source]);
+  }, [getUniforms, source]);
 
   return (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
