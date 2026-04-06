@@ -10,7 +10,7 @@ import { AvatarElectric } from './avatar-eletric';
 
 export function ProfileHeader() {
   return (
-    <div className="border-line relative flex border-x">
+    <div className="border-line relative mt-px flex border-x">
       <DecorIcon className="size-4" position="top-left" />
       <DecorIcon className="size-4" position="top-right" />
       <DecorIcon className="size-4" position="bottom-left" />

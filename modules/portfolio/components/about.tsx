@@ -13,7 +13,10 @@ import { GitHubContributions } from './github-contributions';
 
 export function About() {
   return (
-    <Panel id="about">
+    <Panel id="about" className="relative">
+      <DecorIcon className="size-4" position="bottom-left" />
+      <DecorIcon className="size-4" position="bottom-right" />
+
       <PanelHeader className="relative">
         <PanelTitle>About</PanelTitle>
       </PanelHeader>
@@ -21,6 +24,8 @@ export function About() {
       <PanelContent className="relative">
         <DecorIcon className="size-4" position="top-left" />
         <DecorIcon className="size-4" position="top-right" />
+        <DecorIcon className="size-4" position="bottom-left" />
+        <DecorIcon className="size-4" position="bottom-right" />
         <ProseMono>
           <Markdown>{USER.about}</Markdown>
         </ProseMono>

@@ -44,7 +44,7 @@ function CanvasHover({ children }: { children: React.ReactNode }) {
           >
             <CanvasReveal
               animationSpeed={3}
-              containerClassName="cover-background hidden dark:block"
+              containerClassName="cover-background border-none! hidden dark:block"
               colors={[
                 [244, 244, 245],
                 [228, 228, 231],
@@ -52,7 +52,7 @@ function CanvasHover({ children }: { children: React.ReactNode }) {
             />
             <CanvasReveal
               animationSpeed={3}
-              containerClassName="cover-background dark:hidden"
+              containerClassName="cover-background border-none! dark:hidden"
               colors={[
                 [24, 24, 27],
                 [39, 39, 42],
