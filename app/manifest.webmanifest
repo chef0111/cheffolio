@@ -30,25 +30,25 @@
     {
       "src": "https://res.cloudinary.com/dpuqj2n2q/image/upload/screenshot-mobile-dark.webp",
       "type": "image/webp",
-      "sizes": "480x987",
+      "sizes": "480x984",
       "form_factor": "narrow"
     },
     {
       "src": "https://res.cloudinary.com/dpuqj2n2q/image/upload/screenshot-mobile-light.webp",
       "type": "image/webp",
-      "sizes": "480x985",
+      "sizes": "480x984",
       "form_factor": "narrow"
     },
     {
       "src": "https://res.cloudinary.com/dpuqj2n2q/image/upload/screenshot-desktop-dark.webp",
       "type": "image/webp",
-      "sizes": "1907x1079",
+      "sizes": "1700x1074",
       "form_factor": "wide"
     },
     {
       "src": "https://res.cloudinary.com/dpuqj2n2q/image/upload/screenshot-desktop-light.webp",
       "type": "image/webp",
-      "sizes": "1910x1076",
+      "sizes": "1700x1074",
       "form_factor": "wide"
     }
   ]
