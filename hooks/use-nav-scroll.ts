@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-/** Viewport offset from top (sticky header + small margin), px */
+/** Viewport offset from top */
 const DEFAULT_SCROLL_OFFSET = 88.5;
 
 /** Flag to skip replaceState for a short time after user-initiated navigation */

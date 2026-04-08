@@ -133,6 +133,7 @@
   }
   body {
     @apply bg-background text-foreground font-sans;
+    padding-bottom: env(safe-area-inset-bottom);
   }
   html {
     @apply font-sans;
