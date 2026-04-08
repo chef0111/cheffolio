@@ -138,6 +138,11 @@
   html {
     @apply font-sans;
   }
+  html,
+  body {
+    background-color: hsl(var(--background));
+    min-height: 100dvh;
+  }
   button,
   [role='button'] {
     cursor: pointer;
