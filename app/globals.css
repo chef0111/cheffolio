@@ -137,10 +137,7 @@
   }
   html {
     @apply font-sans;
-  }
-  html,
-  body {
-    background-color: hsl(var(--background));
+    background-color: var(--background);
     min-height: 100dvh;
   }
   button,
