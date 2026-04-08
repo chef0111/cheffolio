@@ -133,7 +133,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="bg-background flex min-h-full flex-col overflow-x-hidden">
+      <body className="bg-background flex min-h-dvh flex-col overflow-x-hidden">
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
