@@ -18,7 +18,7 @@ import { addQueryParams } from '@/utils/url';
 import { TECH_STACK } from '../data/tech-stack';
 
 export function TechStack() {
-  const baseUrl = 'https://res.cloudinary.com/chef0111/image/upload';
+  const baseUrl = 'https://res.cloudinary.com/chef0111/image/upload/v1';
 
   return (
     <Panel id="stack">
@@ -51,14 +51,14 @@ export function TechStack() {
                             alt={`${tech.title} light icon`}
                             width={32}
                             height={32}
-                            className="hidden size-8 object-cover [html.light_&]:block"
+                            className="hidden size-8 object-contain [html.light_&]:block"
                           />
                           <Image
                             src={`${baseUrl}/${tech.key}-dark.svg`}
                             alt={`${tech.title} dark icon`}
                             width={32}
                             height={32}
-                            className="hidden size-8 object-cover [html.dark_&]:block"
+                            className="hidden size-8 object-contain [html.dark_&]:block"
                           />
                         </>
                       ) : (
@@ -67,7 +67,7 @@ export function TechStack() {
                           alt={`${tech.title} icon`}
                           width={32}
                           height={32}
-                          className="size-8 object-cover"
+                          className="size-8 object-contain"
                         />
                       )}
                     </a>
