@@ -104,6 +104,13 @@ export const TECH_STACK: TechStack[] = [
     theme: true,
   },
   {
+    key: 'zustand',
+    title: 'Zustand',
+    href: 'https://zustand-demo.pmnd.rs/',
+    categories: ['Library', 'State Management'],
+    theme: true,
+  },
+  {
     key: 'git',
     title: 'Git',
     href: 'https://git-scm.com/',
@@ -120,6 +127,12 @@ export const TECH_STACK: TechStack[] = [
     title: 'GCP',
     href: 'https://cloud.google.com/',
     categories: ['Cloud Platform'],
+  },
+  {
+    key: 'orpc',
+    title: 'oRPC',
+    href: 'https://orpc.dev/',
+    categories: ['Library', 'RPC'],
   },
   {
     key: 'mysql',
