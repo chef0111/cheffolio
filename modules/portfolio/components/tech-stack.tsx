@@ -26,13 +26,13 @@ export function TechStack() {
         <PanelTitle>Tech Stack</PanelTitle>
       </PanelHeader>
 
-      <PanelContent className="relative">
+      <PanelContent className="relative mx-auto">
         <DecorIcon className="size-4" position="top-left" />
         <DecorIcon className="size-4" position="top-right" />
         <DecorIcon className="size-4" position="bottom-left" />
         <DecorIcon className="size-4" position="bottom-right" />
 
-        <ul className="flex flex-wrap justify-center gap-4 select-none">
+        <ul className="grid grid-cols-[repeat(auto-fit,minmax(32px,max-content))] justify-center gap-4 select-none">
           {TECH_STACK.map((tech) => {
             return (
               <li key={tech.key} className="flex">
