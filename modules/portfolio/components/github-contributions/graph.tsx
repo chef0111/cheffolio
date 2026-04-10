@@ -91,11 +91,11 @@ export function GitHubContributionGraph({
 
       <ContributionGraphFooter className="px-2">
         <ContributionGraphTotalCount>
-          {({ totalCount, year }) => (
+          {({ totalCount }) => (
             <div className="text-muted-foreground">
-              {totalCount.toLocaleString('en')} contributions in {year} on{' '}
+              {totalCount.toLocaleString('en')} contributions on{' '}
               <a
-                className="font-medium underline underline-offset-4"
+                className="hover:text-foreground active:text-foreground font-medium underline underline-offset-4"
                 href={addQueryParams(
                   `https://github.com/${GITHUB_USERNAME}`,
                   UTM_PARAMS
@@ -104,8 +104,8 @@ export function GitHubContributionGraph({
                 rel="noopener"
               >
                 GitHub
-              </a>
-              .
+              </a>{' '}
+              last year.
             </div>
           )}
         </ContributionGraphTotalCount>

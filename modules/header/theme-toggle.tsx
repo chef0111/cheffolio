@@ -33,7 +33,8 @@ export default function ThemeToggle() {
 
   const toggleTheme = useCallback(() => {
     playToggle(0.25);
-    switchTheme();
+    if (!document.startViewTransition) switchTheme();
+    else document.startViewTransition(switchTheme);
   }, [playToggle, switchTheme]);
 
   useHotkey('D', () => switchTheme());
