@@ -178,6 +178,13 @@ export const TECH_STACK: TechStack[] = [
     categories: ['Tools', 'AI'],
   },
   {
+    key: 'chatgpt',
+    title: 'Codex',
+    href: 'https://openai.com/codex/',
+    categories: ['Tools', 'AI'],
+    theme: true,
+  },
+  {
     key: 'cursor',
     title: 'Cursor',
     href: 'https://cursor.com/',
@@ -185,10 +192,9 @@ export const TECH_STACK: TechStack[] = [
     theme: true,
   },
   {
-    key: 'chatgpt',
-    title: 'Codex',
-    href: 'https://openai.com/codex/',
-    categories: ['Tools', 'AI'],
-    theme: true,
+    key: 'vscode',
+    title: 'VS Code',
+    href: 'https://code.visualstudio.com/',
+    categories: ['Tools', 'Code Editor'],
   },
 ];
