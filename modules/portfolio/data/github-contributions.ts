@@ -11,7 +11,10 @@ export const getGitHubContributions = async () => {
   'use cache';
 
   const res = await fetch(
-    `${process.env.GITHUB_CONTRIBUTIONS_API}/v4/${GITHUB_USERNAME}?y=last`
+    `${process.env.GITHUB_CONTRIBUTIONS_API}/v4/${GITHUB_USERNAME}?y=last`,
+    {
+      cache: 'no-cache',
+    }
   );
   const data = (await res.json()) as GitHubContributionsResponse;
 
