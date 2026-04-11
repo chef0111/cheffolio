@@ -240,7 +240,7 @@ function CommandMenuTrigger({ ...props }: React.ComponentProps<typeof Button>) {
       size="sm"
       {...props}
     >
-      <Search className="md:mr-1" />
+      <Search className="size-4.5 sm:size-4 md:mr-1" />
 
       <span className="font-sans text-sm/4 font-medium sm:hidden">Search…</span>
 
