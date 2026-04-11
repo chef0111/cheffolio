@@ -185,6 +185,13 @@ export const TECH_STACK: TechStack[] = [
     theme: true,
   },
   {
+    key: 'copilot',
+    title: 'GitHub Copilot',
+    href: 'https://github.com/copilot/',
+    categories: ['Tools', 'AI'],
+    theme: true,
+  },
+  {
     key: 'cursor',
     title: 'Cursor',
     href: 'https://cursor.com/',
