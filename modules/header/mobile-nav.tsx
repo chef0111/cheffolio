@@ -12,8 +12,8 @@ import { haptic } from '@/lib/haptic';
 import { cn } from '@/lib/utils';
 
 import type { NavItem } from './types/nav';
+import { buildNavPath } from './utils/mobile-nav-notch';
 import { isNavItemActive } from './utils/nav-active';
-import { buildNavPath } from './utils/nav-notch';
 
 export function MobileNav({
   items,
