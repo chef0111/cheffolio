@@ -3,7 +3,7 @@ import { Suspense } from 'react';
 import { Brand } from '@/components/cheffolio/brand';
 import { GithubIcon, LinkedinIcon, XIcon } from '@/components/icons';
 import { Button } from '@/components/ui/button';
-import { UTM_PARAMS } from '@/config/site';
+import { FOOTER_SLOGAN, UTM_PARAMS } from '@/config/site';
 import { addQueryParams } from '@/utils/url';
 
 import { FooterCopyright } from './copyright';
@@ -53,7 +53,7 @@ export function Footer() {
 
           <nav className="screen-line-top mx-auto">
             <ul className="text-muted-foreground flex items-center text-sm font-medium">
-              {slogan.map((word) => (
+              {FOOTER_SLOGAN.map((word) => (
                 <li
                   key={word.key}
                   className="hover:text-foreground border-line border-x first:border-l-2 last:border-r-2"
@@ -80,23 +80,6 @@ export function Footer() {
     </footer>
   );
 }
-
-const slogan = [
-  { key: 0, label: 'C' },
-  { key: 1, label: 'O' },
-  { key: 2, label: 'D' },
-  { key: 3, label: 'I' },
-  { key: 4, label: 'N' },
-  { key: 5, label: 'G' },
-  { key: 6, label: '•' },
-  { key: 7, label: 'A' },
-  { key: 8, label: 'S' },
-  { key: 9, label: '•' },
-  { key: 10, label: 'C' },
-  { key: 11, label: 'H' },
-  { key: 12, label: 'E' },
-  { key: 13, label: 'F' },
-];
 
 const socialLinks = [
   {
