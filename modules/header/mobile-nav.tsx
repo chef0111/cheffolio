@@ -235,7 +235,7 @@ function MobileNavItems({
               onClick={onLinkClick}
               data-slot="mobile-nav-link"
             >
-              {Icon ? <Icon /> : null}
+              {Icon ? <Icon className="size-5" /> : null}
             </Link>
           </Button>
         );
