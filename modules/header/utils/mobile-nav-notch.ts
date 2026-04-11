@@ -31,3 +31,19 @@ export function buildNavPath(W: number, H: number) {
     `Z`,
   ].join(' ');
 }
+
+export function splitItems<T>(
+  items: readonly T[],
+  hasCenter: boolean
+): { leading: T[]; trailing: T[] } {
+  if (!hasCenter) {
+    return { leading: [...items], trailing: [] };
+  }
+
+  const splitIndex = Math.ceil(items.length / 2);
+
+  return {
+    leading: items.slice(0, splitIndex),
+    trailing: items.slice(splitIndex),
+  };
+}

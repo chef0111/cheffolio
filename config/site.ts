@@ -73,3 +73,20 @@ export const X_USERNAME = '@cheff0111';
 export const SOUNDS = {
   toggle: 'https://res.cloudinary.com/chef0111/video/upload/toggle.mp3',
 };
+
+export const FOOTER_SLOGAN = [
+  { key: 0, label: 'C' },
+  { key: 1, label: 'O' },
+  { key: 2, label: 'D' },
+  { key: 3, label: 'I' },
+  { key: 4, label: 'N' },
+  { key: 5, label: 'G' },
+  { key: 6, label: '•' },
+  { key: 7, label: 'A' },
+  { key: 8, label: 'S' },
+  { key: 9, label: '•' },
+  { key: 10, label: 'C' },
+  { key: 11, label: 'H' },
+  { key: 12, label: 'E' },
+  { key: 13, label: 'F' },
+];

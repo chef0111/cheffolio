@@ -20,8 +20,8 @@ import { useSound } from '@/hooks/use-sound';
 export default function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
   const { setMetaColor } = useMetaColor();
-  const isMobile = useMediaQuery('(max-width: 640px)');
 
+  const isMobile = useMediaQuery('(max-width: 640px)');
   const playToggle = useSound(SOUNDS.toggle);
 
   const switchTheme = useCallback(() => {

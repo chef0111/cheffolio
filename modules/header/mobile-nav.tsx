@@ -12,16 +12,22 @@ import { haptic } from '@/lib/haptic';
 import { cn } from '@/lib/utils';
 
 import type { NavItem } from './types/nav';
+import { buildNavPath, splitItems } from './utils/mobile-nav-notch';
 import { isNavItemActive } from './utils/nav-active';
-import { buildNavPath } from './utils/nav-notch';
+
+type MobileNavProps = {
+  items: NavItem[];
+  center?: React.ReactNode;
+  className?: string;
+  onItemClick?: () => void;
+};
 
 export function MobileNav({
   items,
   center,
-}: {
-  items: NavItem[];
-  center?: React.ReactNode;
-}) {
+  className,
+  onItemClick,
+}: MobileNavProps) {
   const isDesktop = useMediaQuery('(min-width: 40rem)');
   const pathname = usePathname();
   const locationHash = useLocationHash();
@@ -35,18 +41,18 @@ export function MobileNav({
 
   const handleLinkClick = useCallback(() => {
     haptic();
-  }, []);
+    onItemClick?.();
+  }, [onItemClick]);
 
   if (isDesktop) return null;
 
-  const leftItems = items.slice(0, 2);
-  const rightItems = items.slice(2);
+  const { leading, trailing } = splitItems(items, Boolean(center));
 
   return (
-    <div className="relative">
+    <div className={cn('relative', className)} data-slot="mobile-nav-root">
       <MobileNavContent
-        leftItems={leftItems}
-        rightItems={rightItems}
+        leadingItems={leading}
+        trailingItems={trailing}
         pathname={pathname}
         effectiveHash={effectiveHash}
         onLinkClick={handleLinkClick}
@@ -56,35 +62,51 @@ export function MobileNav({
   );
 }
 
-function MobileNavContent({
-  leftItems,
-  rightItems,
-  pathname,
-  effectiveHash,
-  onLinkClick,
-  center,
-}: {
-  leftItems: NavItem[];
-  rightItems: NavItem[];
+interface MobileNavContentProps {
+  leadingItems: NavItem[];
+  trailingItems: NavItem[];
   pathname: string;
   effectiveHash: string;
   onLinkClick: () => void;
   center?: React.ReactNode;
-}) {
+}
+
+function MobileNavContent({
+  leadingItems,
+  trailingItems,
+  pathname,
+  effectiveHash,
+  onLinkClick,
+  center,
+}: MobileNavContentProps) {
+  const [navNode, setNavNode] = React.useState<HTMLElement | null>(null);
   const [size, setSize] = React.useState<{ w: number; h: number } | null>(null);
   const clipId = React.useId().replace(/:/g, '');
+  const hasCenter = Boolean(center);
 
-  const navRef = useCallback((node: HTMLDivElement | null) => {
-    if (!node) return;
-    const { width, height } = node.getBoundingClientRect();
-    setSize({ w: Math.round(width), h: Math.round(height) });
-  }, []);
+  React.useEffect(() => {
+    if (!navNode) return;
+
+    const updateSize = () => {
+      const { width, height } = navNode.getBoundingClientRect();
+      setSize({ w: Math.round(width), h: Math.round(height) });
+    };
+
+    updateSize();
+
+    const observer = new ResizeObserver(updateSize);
+    observer.observe(navNode);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [navNode]);
 
   const pathD = size ? buildNavPath(size.w, size.h) : null;
 
   return (
-    <div className="relative">
-      {pathD && (
+    <div className="relative" data-slot="mobile-nav-content">
+      {center && pathD && (
         <svg
           aria-hidden="true"
           style={{
@@ -103,27 +125,34 @@ function MobileNavContent({
         </svg>
       )}
 
-      <div
-        ref={navRef}
-        className="bg-popover relative flex items-center rounded-2xl p-1.5 shadow-md"
+      <nav
+        ref={setNavNode}
+        data-slot="mobile-nav-dock"
+        className={cn(
+          'bg-popover relative flex items-center rounded-2xl p-1.5 shadow-md',
+          !hasCenter && 'ring-ring/20 border ring-1'
+        )}
         style={{ clipPath: pathD ? `url(#${clipId})` : undefined }}
-        role="navigation"
         aria-label="Mobile section dock"
       >
         <MobileNavItems
-          items={leftItems}
+          items={leadingItems}
           pathname={pathname}
           effectiveHash={effectiveHash}
           onLinkClick={onLinkClick}
+          className={cn(hasCenter && 'flex-1 justify-end')}
         />
-        <div className="w-16 shrink-0" aria-hidden />
-        <MobileNavItems
-          items={rightItems}
-          pathname={pathname}
-          effectiveHash={effectiveHash}
-          onLinkClick={onLinkClick}
-        />
-      </div>
+        {hasCenter ? <div className="w-16 shrink-0" aria-hidden /> : null}
+        {hasCenter ? (
+          <MobileNavItems
+            items={trailingItems}
+            pathname={pathname}
+            effectiveHash={effectiveHash}
+            onLinkClick={onLinkClick}
+            className="flex-1 justify-start"
+          />
+        ) : null}
+      </nav>
 
       {pathD && size && (
         <svg
@@ -139,7 +168,7 @@ function MobileNavContent({
           viewBox={`0 0 ${size.w} ${size.h}`}
         >
           <path
-            d={pathD}
+            d={center ? pathD : undefined}
             fill="none"
             stroke="currentColor"
             strokeWidth="1"
@@ -165,19 +194,28 @@ function MobileNavContent({
   );
 }
 
+interface MobileNavItemsProps {
+  items: NavItem[];
+  pathname: string;
+  effectiveHash: string;
+  onLinkClick: () => void;
+  className?: string;
+}
+
 function MobileNavItems({
   items,
   pathname,
   effectiveHash,
   onLinkClick,
-}: {
-  items: NavItem[];
-  pathname: string;
-  effectiveHash: string;
-  onLinkClick: () => void;
-}) {
+  className,
+}: MobileNavItemsProps) {
+  if (items.length === 0) return null;
+
   return (
-    <div className="flex items-center gap-0.5">
+    <div
+      className={cn('flex items-center gap-0.5', className)}
+      data-slot="mobile-nav-group"
+    >
       {items.map((link) => {
         const active = isNavItemActive(link.href, pathname, effectiveHash);
         const Icon = link.icon;
@@ -195,8 +233,9 @@ function MobileNavItems({
               aria-label={link.title}
               title={link.title}
               onClick={onLinkClick}
+              data-slot="mobile-nav-link"
             >
-              {Icon ? <Icon className="size-5" /> : null}
+              {Icon ? <Icon /> : null}
             </Link>
           </Button>
         );
