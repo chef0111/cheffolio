@@ -13,12 +13,14 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { META_THEME_COLORS, SOUNDS } from '@/config/site';
+import { useMediaQuery } from '@/hooks/use-media-query';
 import { useMetaColor } from '@/hooks/use-meta-color';
 import { useSound } from '@/hooks/use-sound';
 
 export default function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
   const { setMetaColor } = useMetaColor();
+  const isMobile = useMediaQuery('(max-width: 640px)');
 
   const playToggle = useSound(SOUNDS.toggle);
 
@@ -33,9 +35,9 @@ export default function ThemeToggle() {
 
   const toggleTheme = useCallback(() => {
     playToggle(0.25);
-    if (!document.startViewTransition) switchTheme();
+    if (!document.startViewTransition || isMobile) switchTheme();
     else document.startViewTransition(switchTheme);
-  }, [playToggle, switchTheme]);
+  }, [playToggle, switchTheme, isMobile]);
 
   useHotkey('D', () => switchTheme());
 
