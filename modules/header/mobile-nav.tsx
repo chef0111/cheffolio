@@ -153,7 +153,7 @@ function MobileNavContent({
           <div
             className={cn(
               '**:data-[slot=command-menu-trigger]:border-border **:data-[slot=command-menu-trigger]:bg-primary **:data-[slot=command-menu-trigger]:text-primary-foreground **:data-[slot=command-menu-trigger]:ring-ring/50 **:data-[slot=command-menu-trigger]:ring-2',
-              'pointer-events-auto **:data-[slot=command-menu-trigger]:size-10 **:data-[slot=command-menu-trigger]:min-w-10 **:data-[slot=command-menu-trigger]:rounded-full **:data-[slot=command-menu-trigger]:p-0 **:data-[slot=command-menu-trigger]:shadow-md',
+              '**:data-[slot=command-menu-trigger]:extend-touch-target pointer-events-auto **:data-[slot=command-menu-trigger]:size-10 **:data-[slot=command-menu-trigger]:min-w-10 **:data-[slot=command-menu-trigger]:rounded-full **:data-[slot=command-menu-trigger]:p-0 **:data-[slot=command-menu-trigger]:shadow-md',
               '[&_[data-slot=command-menu-trigger]_[data-slot=kbd-group]]:hidden [&_[data-slot=command-menu-trigger]>span]:hidden'
             )}
           >
@@ -181,13 +181,14 @@ function MobileNavItems({
       {items.map((link) => {
         const active = isNavItemActive(link.href, pathname, effectiveHash);
         const Icon = link.icon;
+
         return (
           <Button
             key={link.href}
-            asChild
             variant={active ? 'secondary' : 'ghost'}
-            size="icon-sm"
-            className="rounded-xl"
+            size="icon"
+            className="extend-touch-target rounded-xl active:scale-100"
+            asChild
           >
             <Link
               href={link.href}
@@ -195,7 +196,7 @@ function MobileNavItems({
               title={link.title}
               onClick={onLinkClick}
             >
-              {Icon ? <Icon data-icon="inline-start" /> : null}
+              {Icon ? <Icon className="size-5" /> : null}
             </Link>
           </Button>
         );
