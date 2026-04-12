@@ -181,8 +181,8 @@ function MobileNavContent({
         <div className="pointer-events-none absolute inset-x-0 -top-4 flex justify-center">
           <div
             className={cn(
-              '**:data-[slot=command-menu-trigger]:border-border **:data-[slot=command-menu-trigger]:bg-primary **:data-[slot=command-menu-trigger]:hover:bg-foreground **:data-[slot=command-menu-trigger]:active:bg-foreground **:data-[slot=command-menu-trigger]:text-primary-foreground **:data-[slot=command-menu-trigger]:ring-ring/50 **:data-[slot=command-menu-trigger]:ring-2',
-              '**:data-[slot=command-menu-trigger]:extend-touch-target pointer-events-auto **:data-[slot=command-menu-trigger]:size-10 **:data-[slot=command-menu-trigger]:min-w-10 **:data-[slot=command-menu-trigger]:rounded-full **:data-[slot=command-menu-trigger]:p-0',
+              '**:data-[slot=command-menu-trigger]:border-border **:data-[slot=command-menu-trigger]:hover:bg-foreground **:data-[slot=command-menu-trigger]:active:bg-foreground **:data-[slot=command-menu-trigger]:text-primary-foreground **:data-[slot=command-menu-trigger]:ring-ring/50 **:data-[slot=command-menu-trigger]:bg-zinc-800 **:data-[slot=command-menu-trigger]:ring-2 **:dark:data-[slot=command-menu-trigger]:bg-zinc-200',
+              '**:data-[slot=command-menu-trigger]:extend-touch-target pointer-events-auto **:data-[slot=command-menu-trigger]:size-10 **:data-[slot=command-menu-trigger]:min-w-10 **:data-[slot=command-menu-trigger]:shrink-0 **:data-[slot=command-menu-trigger]:rounded-full **:data-[slot=command-menu-trigger]:p-0',
               '[&_[data-slot=command-menu-trigger]_[data-slot=kbd-group]]:hidden [&_[data-slot=command-menu-trigger]>span]:hidden'
             )}
           >
