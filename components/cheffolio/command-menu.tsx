@@ -64,22 +64,22 @@ const PORTFOLIO_LINKS: CommandLinkItem[] = [
   },
   {
     title: 'Tech Stack',
-    href: '/#stack',
+    href: '#stack',
     icon: LayersIcon,
   },
   {
     title: 'Experience',
-    href: '/#experience',
+    href: '#experience',
     icon: BriefcaseBusinessIcon,
   },
   {
     title: 'Projects',
-    href: '/#projects',
+    href: '#projects',
     icon: BoxIcon,
   },
   {
     title: 'Honors & Awards',
-    href: '/#awards',
+    href: '#awards',
     icon: AwardIcon,
   },
 ];
