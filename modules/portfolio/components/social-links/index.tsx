@@ -2,7 +2,7 @@ import { DecorIcon } from '@/components/cheffolio/decor-icon';
 import { Panel } from '@/components/cheffolio/panel';
 import { SOCIAL_LINKS } from '@/modules/portfolio/data/social-links';
 
-import { SocialLinkItem } from './link-item';
+import { SocialLinkItem } from './social-link-item';
 
 export function SocialLinks() {
   return (

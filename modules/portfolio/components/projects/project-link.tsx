@@ -13,7 +13,7 @@ export function ProjectLink({ href }: { href: string }) {
     <Tooltip>
       <TooltipTrigger asChild>
         <a
-          className="text-muted-foreground hover:text-foreground relative flex size-6 shrink-0 items-center justify-center after:absolute after:-inset-2"
+          className="text-muted-foreground hover:text-foreground relative z-1 flex size-6 shrink-0 items-center justify-center after:absolute after:-inset-2"
           href={href}
           target="_blank"
           rel="noopener"
