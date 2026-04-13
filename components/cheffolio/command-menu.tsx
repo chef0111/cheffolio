@@ -38,6 +38,7 @@ import { Empty, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
 import { Kbd, KbdGroup } from '@/components/ui/kbd';
 import { Separator } from '@/components/ui/separator';
 import { UTM_PARAMS } from '@/config/site';
+import { haptic } from '@/lib/haptic';
 import { SOCIAL_LINKS } from '@/modules/portfolio/data/social-links';
 import { USER } from '@/modules/portfolio/data/user';
 import { copyText } from '@/utils/copy';
@@ -109,9 +110,15 @@ export function CommandMenu({
     { enabled: enabledHotkeys, conflictBehavior: 'allow' }
   );
 
+  const handleOpen = useCallback(() => {
+    setOpen(true);
+    haptic();
+  }, []);
+
   const handleOpenLink = useCallback(
     (href: string, openInNewTab = false) => {
       setOpen(false);
+      haptic();
 
       if (openInNewTab) {
         window.open(href, '_blank', 'noopener');
@@ -124,6 +131,7 @@ export function CommandMenu({
 
   const handleCopy = useCallback((text: string, message: string) => {
     setOpen(false);
+    haptic();
     copyText(text);
     toast.success(message);
   }, []);
@@ -131,6 +139,7 @@ export function CommandMenu({
   const handleSetTheme = useCallback(
     (theme: 'light' | 'dark' | 'system') => {
       setOpen(false);
+      haptic();
       setTheme(theme);
     },
     [setTheme]
@@ -138,7 +147,7 @@ export function CommandMenu({
 
   return (
     <>
-      <CommandMenuTrigger onClick={() => setOpen(true)} />
+      <CommandMenuTrigger onClick={handleOpen} />
 
       <CommandDialog
         title="Command Menu"
