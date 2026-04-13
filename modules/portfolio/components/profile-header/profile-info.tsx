@@ -7,8 +7,9 @@ import { Label } from '@/components/ui/label';
 import { USER } from '@/modules/portfolio/data/user';
 
 import { AvatarElectric } from './avatar-eletric';
+import { ProfileStatus } from './profile-status';
 
-export function ProfileHeader() {
+export function ProfileInfo() {
   return (
     <div className="border-line relative mt-px flex border-x">
       <DecorIcon className="size-4" position="top-left" />
@@ -32,13 +33,7 @@ export function ProfileHeader() {
             />
           </div>
         </AvatarElectric>
-        <div
-          className="avatar-ring bg-background absolute right-3 bottom-3 flex size-5 items-center justify-center text-xs select-none sm:right-3.5 sm:bottom-3.5 sm:size-6 sm:text-sm"
-          role="img"
-          aria-label="GitHub status"
-        >
-          😴
-        </div>
+        <ProfileStatus />
       </div>
 
       <div className="flex flex-1 flex-col">

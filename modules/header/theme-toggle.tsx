@@ -16,6 +16,7 @@ import { META_THEME_COLORS, SOUNDS } from '@/config/site';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { useMetaColor } from '@/hooks/use-meta-color';
 import { useSound } from '@/hooks/use-sound';
+import { haptic } from '@/lib/haptic';
 
 export default function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
@@ -35,6 +36,8 @@ export default function ThemeToggle() {
 
   const toggleTheme = useCallback(() => {
     playToggle(0.25);
+    haptic();
+
     if (!document.startViewTransition || isMobile) switchTheme();
     else document.startViewTransition(switchTheme);
   }, [playToggle, switchTheme, isMobile]);
