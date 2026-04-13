@@ -8,7 +8,7 @@ import { USER } from '@/modules/portfolio/data/user';
 
 import { AvatarElectric } from './avatar-eletric';
 
-export function ProfileHeader() {
+export function ProfileInfo() {
   return (
     <div className="border-line relative mt-px flex border-x">
       <DecorIcon className="size-4" position="top-left" />
