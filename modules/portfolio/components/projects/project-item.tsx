@@ -57,7 +57,7 @@ export function ProjectItem({
 
         <div className="border-line relative flex-1 overflow-hidden border-dashed">
           <CollapsibleTrigger className="no-focus flex w-full items-center gap-2 p-4 pr-2 text-left">
-            <div className="flex-1">
+            <div className="z-1 flex-1">
               <h3 className="mb-1 leading-snug font-medium text-balance">
                 {project.title}
               </h3>
@@ -85,7 +85,7 @@ export function ProjectItem({
 
             <ProjectLink href={addQueryParams(project.link, UTM_PARAMS)} />
 
-            <div className="text-muted-foreground shrink-0 [&_svg]:size-4">
+            <div className="text-muted-foreground z-1 shrink-0 [&_svg]:size-4">
               <CollapsibleChevronsIcon duration={0.15} />
             </div>
           </CollapsibleTrigger>
