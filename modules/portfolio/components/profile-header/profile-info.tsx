@@ -20,6 +20,7 @@ export function ProfileInfo() {
       <div className="border-line relative shrink-0 border-r">
         <DecorIcon className="size-4" position="top-right" />
         <DecorIcon className="size-4" position="bottom-right" />
+
         <AvatarElectric>
           <div className="relative mx-0.5 my-0.75 size-32 sm:size-40">
             <Image
@@ -33,7 +34,11 @@ export function ProfileInfo() {
             />
           </div>
         </AvatarElectric>
-        <ProfileStatus />
+
+        <ProfileStatus
+          emoji="😴"
+          quote="Focusing, don't let the emoji fool you"
+        />
       </div>
 
       <div className="flex flex-1 flex-col">
