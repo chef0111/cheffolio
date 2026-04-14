@@ -33,12 +33,14 @@ export function ProfileStatus({ emoji, quote }: ProfileStatusProps) {
       type="button"
       className={cn(
         'avatar-ring bg-background group/status extend-touch-target absolute bottom-3 left-25 z-10 flex size-5 cursor-default items-center justify-center gap-1 text-xs select-none sm:bottom-3.5 sm:left-31.5 sm:size-6 sm:text-sm',
-        !isTouchDevice && quote && 'hover:w-fit hover:pr-1.5 hover:pl-[0.1rem]',
+        !isTouchDevice &&
+          quote &&
+          'hover:w-fit hover:pr-1.5 hover:pl-[0.1rem] focus-visible:pr-1.5 focus-visible:pl-[0.1rem]',
         isTouchDevice && isExpanded && quote && 'w-fit pr-1 pl-px'
       )}
       onClick={handleClick}
       onBlur={handleBlur}
-      aria-pressed={isTouchDevice && isExpanded}
+      aria-pressed={isTouchDevice ? isExpanded : undefined}
       aria-label="GitHub status"
     >
       <span aria-hidden="true">{emoji}</span>
@@ -46,7 +48,9 @@ export function ProfileStatus({ emoji, quote }: ProfileStatusProps) {
         <span
           className={cn(
             'text-foreground/80 hidden leading-none text-nowrap',
-            isTouchDevice ? isExpanded && 'block' : 'group-hover/status:block'
+            isTouchDevice
+              ? isExpanded && 'block'
+              : 'group-hover/status:block group-focus-visible/status:block'
           )}
           aria-label="Status quote"
         >
