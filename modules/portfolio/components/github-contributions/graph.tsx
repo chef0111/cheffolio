@@ -29,7 +29,10 @@ export function GitHubContributionGraph({
 }: {
   contributions: Promise<Activity[]>;
 }) {
-  const data = use(contributions);
+  const resolvedContributions = use(contributions);
+  const data = Array.isArray(resolvedContributions)
+    ? resolvedContributions
+    : [];
   const { xs, sm, md, lg, xl } = useBreakpoints(['xs', 'sm', 'md', 'lg', 'xl']);
   const mounted = useMounted();
 
