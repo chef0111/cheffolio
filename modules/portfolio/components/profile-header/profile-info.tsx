@@ -52,8 +52,8 @@ export function ProfileInfo() {
         </div>
 
         <div className="border-line border-t">
-          <div className="flex flex-wrap items-center gap-2 pl-4">
-            <div className="flex items-center gap-2 py-1">
+          <div className="flex flex-wrap items-center pl-4">
+            <div className="mr-2 flex items-center gap-2 py-1">
               <h1 className="-translate-y-px truncate text-3xl leading-none font-semibold tracking-tight">
                 {USER.displayName}
               </h1>
