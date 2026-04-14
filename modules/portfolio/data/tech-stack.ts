@@ -178,7 +178,7 @@ export const TECH_STACK: TechStack[] = [
     categories: ['Tools', 'AI'],
   },
   {
-    key: 'chatgpt',
+    key: 'codex',
     title: 'Codex',
     href: 'https://openai.com/codex/',
     categories: ['Tools', 'AI'],
