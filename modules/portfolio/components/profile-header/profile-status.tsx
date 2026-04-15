@@ -47,7 +47,7 @@ export function ProfileStatus({ emoji, quote }: ProfileStatusProps) {
       {quote && (
         <span
           className={cn(
-            'text-foreground/80 line-clamp-1 hidden leading-none text-nowrap',
+            'text-foreground/80 hidden leading-none text-nowrap',
             isTouchDevice
               ? isExpanded && 'block'
               : 'group-hover/status:block group-focus-visible/status:block'

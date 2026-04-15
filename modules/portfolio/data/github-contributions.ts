@@ -51,23 +51,37 @@ export const getGitHubContributions = async () => {
   }
 
   try {
-    const res = await fetch(
-      `${process.env.GITHUB_CONTRIBUTIONS_API}/v4/${GITHUB_USERNAME}?y=last`,
-      {
-        headers: {
-          'cache-control': 'no-cache',
-        },
-      }
-    );
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-    if (!res.ok) {
+    try {
+      const res = await fetch(
+        `${process.env.GITHUB_CONTRIBUTIONS_API}/v4/${GITHUB_USERNAME}?y=last`,
+        {
+          headers: {
+            'cache-control': 'no-cache',
+          },
+          signal: controller.signal,
+        }
+      );
+
+      clearTimeout(timeoutId);
+
+      if (!res.ok) {
+        return [];
+      }
+
+      const data = (await res.json()) as GitHubContributionsResponse | Activity[];
+
+      return normalizeContributions(data);
+    } finally {
+      clearTimeout(timeoutId);
+    }
+  } catch (error) {
+    if (error instanceof Error && error.name === 'AbortError') {
+      console.warn('GitHub contributions fetch timed out after 5000ms');
       return [];
     }
-
-    const data = (await res.json()) as GitHubContributionsResponse | Activity[];
-
-    return normalizeContributions(data);
-  } catch {
     return [];
   }
 };
