@@ -10,7 +10,7 @@ export const AWARDS: Award[] = [
     description:
       '- Organized in [Prague, Czech Republic](https://videobrowsershowdown.org/call-for-papers)\n- Field: Video Retrieval\n- System: Fusionista 2.0\n- Team: Fusionista',
     referenceLink:
-      'https://www.facebook.com/uittaekwondo/posts/pfbid0znk1hsiFbrU4eqEX6KaQffeNYcvMkssE7xUJFoYNXL7pXGUoMGfEXiTVBEpKQCZAl',
+      'https://drive.google.com/file/d/1yhIxFXDrW1DNB2Mq7UhuCuNwRkQXvOaX/view',
     isExpanded: true,
   },
   {
@@ -33,7 +33,7 @@ export const AWARDS: Award[] = [
     description:
       '- Organized in [Ho Chi Minh, Viet Nam](https://www.facebook.com/AICHCMC/posts/pfbid032C7F5hQViYkx5VySBnoipzjuFr7k2Y8CgB5Kq6XbD2d7VNB1C1TxNTF3mGxMQbd8l)\n- Field: Multimedia Event Retrieval\n- Team: TKU@Unicorn&Wheat\n- Ended in 5th place among 300+ teams',
     referenceLink:
-      'https://www.facebook.com/uittaekwondo/posts/pfbid0QMqR86PCN8nmDP6diMgXJbq1NRYHXQjFpdbdKJmnkgZKvL2QgQMY21HvsJLe7xW5l',
+      'https://drive.google.com/file/d/1hivni4-eUdWOio2I7nsSUO4vNu_-gwPE/view',
     isExpanded: true,
   },
 ];
