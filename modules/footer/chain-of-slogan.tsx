@@ -19,7 +19,7 @@ const chainItemVariants = cva('hover:text-foreground transition-colors', {
 });
 
 type ChainOfSloganProps = VariantProps<typeof chainItemVariants> & {
-  className: string;
+  className?: string;
   slogan: string;
 };
 
