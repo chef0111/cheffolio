@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { FOOTER_SLOGAN, UTM_PARAMS } from '@/config/site';
 import { addQueryParams } from '@/utils/url';
 
+import { ChainOfSlogan } from './chain-of-slogan';
 import { FooterCopyright } from './copyright';
 
 export function Footer() {
@@ -51,23 +52,13 @@ export function Footer() {
             </p>
           </div>
 
-          <nav className="screen-line-top mx-auto">
-            <ul className="text-muted-foreground flex items-center text-sm font-medium">
-              {FOOTER_SLOGAN.map((word) => (
-                <li
-                  key={word.key}
-                  className="hover:text-foreground border-line border-x first:border-l-2 last:border-r-2"
-                >
-                  <span className="flex h-6 items-center px-1.5 text-center font-mono select-none sm:h-8 sm:px-3 sm:font-semibold">
-                    {word.label}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </nav>
+          <ChainOfSlogan
+            className="screen-line-bottom screen-line-top"
+            slogan={FOOTER_SLOGAN}
+          />
         </div>
 
-        <div className="screen-line-bottom screen-line-top flex max-w-4xl flex-col justify-between gap-2 py-4">
+        <div className="screen-line-bottom flex max-w-4xl flex-col justify-between gap-2 py-4">
           <Suspense>
             <FooterCopyright />
           </Suspense>
