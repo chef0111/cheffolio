@@ -1,4 +1,4 @@
-# [cheffolio](https://cheffolio.vercel.app)
+# [cheffolio](https://cheffolio.vercel.app) • ![License](https://img.shields.io/badge/License-MIT-blue)
 
 A minimal, shadcn/ui-inspired dev portfolio.
 
@@ -11,13 +11,13 @@ A minimal, shadcn/ui-inspired dev portfolio.
 
 Cheffolio is a personal portfolio focused on minimalism (with some fancy touches), smooth interaction, and clean content customization.
 
-It includes:
+### Features
 
-- Sectioned portfolio layout (overview, about, tech stack, experience, projects, awards)
-- Keyboard-first command menu (`Ctrl/Cmd + K`) for navigation and quick actions
-- Theme system (light/dark/system) with persistent preference
-- Rich visual effects (scroll fades, animated text, electric borders, canvas reveal)
-- SEO support (Open Graph, Twitter metadata, JSON-LD, sitemap, robots)
+- Sectioned portfolio layout
+- Supports `Light` and `Dark` themes
+- Keyboard-first command menu (`Ctrl/Cmd + K`)
+- Installable as a PWA
+- SEO optimized (Open Graph, Twitter metadata, JSON-LD, sitemap, robots)
 
 ## Tech Stack
 
