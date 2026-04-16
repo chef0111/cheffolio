@@ -11,7 +11,7 @@ A minimal, shadcn/ui-inspired dev portfolio.
 
 Cheffolio is a personal portfolio focused on minimalism (with some fancy touches), smooth interaction, and clean content customization.
 
-**Features:**
+### Features
 
 - Sectioned portfolio layout
 - Supports `Light` and `Dark` themes
