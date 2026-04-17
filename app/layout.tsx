@@ -1,16 +1,16 @@
 import './globals.css';
 
-import { GeistPixelSquare } from 'geist/font/pixel';
 import type { Metadata, Viewport } from 'next';
-import { Geist, Geist_Mono as GeistMono } from 'next/font/google';
 import Script from 'next/script';
 import type { WebSite, WithContext } from 'schema-dts';
 
 import { ScrollToTop } from '@/components/cheffolio/scroll-to-top';
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { fontVariables } from '@/config/font';
 import { META_THEME_COLORS, SITE_INFO, X_USERNAME } from '@/config/site';
 import { ThemeProvider } from '@/context/theme-provider';
+import { cn } from '@/lib/utils';
 import { USER } from '@/modules/portfolio/data/user';
 
 function getWebSiteJsonLd(): WithContext<WebSite> {
@@ -102,18 +102,6 @@ export const viewport: Viewport = {
   themeColor: META_THEME_COLORS.light,
 };
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
-
-const geistMono = GeistMono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
-
-const geistPixelSquare = GeistPixelSquare;
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -122,7 +110,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${geistPixelSquare.variable} h-full antialiased`}
+      className={cn(fontVariables, 'h-full antialiased')}
       suppressHydrationWarning
     >
       <head>
