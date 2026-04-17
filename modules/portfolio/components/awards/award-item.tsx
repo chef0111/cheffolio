@@ -14,7 +14,7 @@ import {
   CollapsibleChevronsIcon,
 } from '@/components/ui/collapsible-animated';
 import { Separator } from '@/components/ui/separator';
-import { ProseMono } from '@/components/ui/typography';
+import { Prose } from '@/components/ui/typography';
 import { UTM_PARAMS } from '@/config/site';
 import type { Award } from '@/modules/portfolio/types/awards';
 import { addQueryParams } from '@/utils/url';
@@ -110,9 +110,9 @@ export function AwardItem({
 
       {canExpand && (
         <CollapsibleContent className="sm:data-[state=closed]:animate-collapsible-up sm:data-[state=open]:animate-collapsible-down overflow-hidden">
-          <ProseMono className="border-line border-t p-4">
+          <Prose className="border-line border-t p-4">
             <Markdown>{award.description}</Markdown>
-          </ProseMono>
+          </Prose>
         </CollapsibleContent>
       )}
 

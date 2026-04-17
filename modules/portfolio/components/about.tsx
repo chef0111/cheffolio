@@ -6,7 +6,7 @@ import {
   PanelHeader,
   PanelTitle,
 } from '@/components/cheffolio/panel';
-import { ProseMono } from '@/components/ui/typography';
+import { Prose } from '@/components/ui/typography';
 
 import { USER } from '../data/user';
 import { GitHubContributions } from './github-contributions';
@@ -26,9 +26,9 @@ export function About() {
         <DecorIcon className="size-4" position="top-right" />
         <DecorIcon className="size-4" position="bottom-left" />
         <DecorIcon className="size-4" position="bottom-right" />
-        <ProseMono>
+        <Prose>
           <Markdown>{USER.about}</Markdown>
-        </ProseMono>
+        </Prose>
       </PanelContent>
       <GitHubContributions />
     </Panel>

@@ -13,7 +13,7 @@ import {
   CollapsibleChevronsIcon,
 } from '@/components/ui/collapsible-animated';
 import { Tag } from '@/components/ui/tag';
-import { ProseMono } from '@/components/ui/typography';
+import { Prose } from '@/components/ui/typography';
 import { UTM_PARAMS } from '@/config/site';
 import type { Project } from '@/modules/portfolio/types/projects';
 import { addQueryParams } from '@/utils/url';
@@ -105,9 +105,9 @@ export function ProjectItem({
       <CollapsibleContent className="sm:data-[state=closed]:animate-collapsible-up sm:data-[state=open]:animate-collapsible-down overflow-hidden">
         <div className="border-line space-y-4 p-4 pt-2">
           {project.description && (
-            <ProseMono>
+            <Prose>
               <Markdown>{project.description}</Markdown>
-            </ProseMono>
+            </Prose>
           )}
 
           {project.skills.length > 0 && (

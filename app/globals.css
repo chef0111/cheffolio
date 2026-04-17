@@ -304,11 +304,9 @@
 
 @utility prose-chef {
   @apply prose-headings:tracking-tight prose-headings:text-balance prose-h2:font-semibold;
-  @apply prose-p:font-sans prose-p:text-base prose-p:text-foreground/80;
-  @apply prose-li:font-sans prose-li:text-base prose-li:text-foreground/80;
   @apply prose-a:font-normal prose-a:wrap-break-word prose-a:text-foreground prose-a:link-underline;
   @apply prose-code:rounded-md prose-code:border prose-code:bg-muted/50 prose-code:px-[0.3rem] prose-code:py-[0.2rem] prose-code:text-sm prose-code:font-normal prose-code:before:content-none prose-code:after:content-none;
-  @apply prose-strong:font-semibold;
+  @apply prose-strong:font-medium;
   @apply prose-hr:border-line;
   @apply prose-blockquote:border-s-2 prose-blockquote:font-normal prose-blockquote:text-muted-foreground prose-blockquote:not-italic prose-blockquote:[&_p:first-of-type]:before:content-none prose-blockquote:[&_p:last-of-type]:after:content-none;
 }
