@@ -28,25 +28,25 @@
   "scope": "/",
   "screenshots": [
     {
-      "src": "https://res.cloudinary.com/chef0111/image/upload/v2/screenshot-mobile-dark.webp",
+      "src": "https://res.cloudinary.com/chef0111/image/upload/v3/screenshot-mobile-dark.webp",
       "type": "image/webp",
       "sizes": "480x1002",
       "form_factor": "narrow"
     },
     {
-      "src": "https://res.cloudinary.com/chef0111/image/upload/v2/screenshot-mobile-light.webp",
+      "src": "https://res.cloudinary.com/chef0111/image/upload/v3/screenshot-mobile-light.webp",
       "type": "image/webp",
       "sizes": "480x1002",
       "form_factor": "narrow"
     },
     {
-      "src": "https://res.cloudinary.com/chef0111/image/upload/v2/screenshot-desktop-dark.webp",
+      "src": "https://res.cloudinary.com/chef0111/image/upload/v3/screenshot-desktop-dark.webp",
       "type": "image/webp",
       "sizes": "1140x720",
       "form_factor": "wide"
     },
     {
-      "src": "https://res.cloudinary.com/chef0111/image/upload/v2/screenshot-desktop-light.webp",
+      "src": "https://res.cloudinary.com/chef0111/image/upload/v3/screenshot-desktop-light.webp",
       "type": "image/webp",
       "sizes": "1140x720",
       "form_factor": "wide"
