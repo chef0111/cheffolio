@@ -9,7 +9,7 @@ export const PROJECTS: Project[] = [
     period: {
       start: '03.2025',
     },
-    link: 'https://tku-sparring.netlify.app',
+    link: 'https://github.com/chef0111/tku-sparring',
     skills: [
       'React',
       'TypeScript',
@@ -21,7 +21,7 @@ export const PROJECTS: Project[] = [
       'Scoring System',
       'CRM',
     ],
-    description: `A modern, user-friendly web application for managing Taekwondo sparring matches of UIT Taekwondo Tournament.
+    description: `A modern, user-friendly web application for managing Taekwondo sparring matches of UIT Taekwondo Tournament. Check out live site [here](https://tku-sparring.vercel.app).
 - Real-time match updates and score tracking
 - Configurable scoring system supporting various match types and rulesets
 - Successfully used in [Taekwondo UIT Tournament 2025](https://www.facebook.com/share/p/1P14qEWifg), receiving positive feedback from athletes
