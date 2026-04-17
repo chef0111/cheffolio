@@ -22,7 +22,7 @@
   "dependencies": {
     "@date-fns/tz": "^1.4.1",
     "@react-three/fiber": "^9.5.0",
-    "@tanstack/react-hotkeys": "^0.4.2",
+    "@tanstack/react-hotkeys": "^0.9.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
@@ -44,7 +44,7 @@
     "web-haptics": "^0.0.6"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
+    "@tailwindcss/postcss": "^4.2.2",
     "@tailwindcss/typography": "^0.5.19",
     "@toolwind/corner-shape": "^0.0.8-3",
     "@types/node": "^20",
@@ -63,7 +63,7 @@
     "remark-gfm": "^4.0.1",
     "remark-rehype": "^11.1.2",
     "shadcn": "^4.1.0",
-    "tailwindcss": "^4",
+    "tailwindcss": "^4.2.2",
     "typescript": "^5",
     "unist-builder": "3.0.0",
     "unist-util-visit": "^5.1.0"
