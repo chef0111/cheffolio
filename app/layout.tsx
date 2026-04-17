@@ -1,5 +1,6 @@
 import './globals.css';
 
+import { GeistPixelSquare } from 'geist/font/pixel';
 import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono as GeistMono } from 'next/font/google';
 import Script from 'next/script';
@@ -111,6 +112,8 @@ const geistMono = GeistMono({
   subsets: ['latin'],
 });
 
+const geistPixelSquare = GeistPixelSquare;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -119,7 +122,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${geistPixelSquare.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <head>
