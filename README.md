@@ -21,9 +21,10 @@ Cheffolio is a personal portfolio focused on minimalism (with some fancy touches
 
 ## Tech Stack
 
-- Next.js `16.2`
-- Tailwind CSS
+- Next.js 16
+- Tailwind CSS v4
 - shadcn/ui
+- Motion
 
 ## Stats
 
