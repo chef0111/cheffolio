@@ -75,7 +75,7 @@ function DesktopNavItem({
         if (onClick) onClick(e);
       }}
       className={cn(
-        'text-muted-foreground hover:text-foreground font-mono text-sm font-medium transition-[color]',
+        'text-muted-foreground hover:text-foreground text-sm font-medium transition-[color]',
         active && 'text-foreground',
         className
       )}
