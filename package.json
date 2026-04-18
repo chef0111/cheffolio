@@ -17,7 +17,8 @@
     "lint:fix": "eslint --fix",
     "check-types": "tsc --noEmit --pretty",
     "upgrade:next": "npm exec @next/codemod@latest upgrade latest",
-    "upgrade:tailwind": "npm exec @tailwindcss/upgrade@latest"
+    "upgrade:tailwind": "npm exec @tailwindcss/upgrade@latest",
+    "prepare": "husky"
   },
   "dependencies": {
     "@date-fns/tz": "^1.4.1",
@@ -45,6 +46,8 @@
     "web-haptics": "^0.0.6"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.5.0",
+    "@commitlint/config-conventional": "^20.5.0",
     "@tailwindcss/postcss": "^4.2.2",
     "@tailwindcss/typography": "^0.5.19",
     "@toolwind/corner-shape": "^0.0.8-3",
@@ -57,6 +60,8 @@
     "eslint-config-next": "16.2.4",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-simple-import-sort": "^12.1.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "rehype-external-links": "^3.0.0",
@@ -72,5 +77,19 @@
   "overrides": {
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": [
+      "eslint --max-warnings=0",
+      "prettier --write"
+    ],
+    "**/*.{html,json,css,scss,md,mdx}": [
+      "prettier --write"
+    ]
   }
 }
