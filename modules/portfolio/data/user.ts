@@ -26,9 +26,9 @@ export const USER: User = {
     },
   ],
   about: `
-- **Senior university student** focused on web development, building modern, reliable, and maintainable applications.
+- **Senior Student** passionate about web development, building modern, reliable, and maintainable applications.
 - Experienced with frameworks such as **Next.js** and **TanStack Start**, with a solid grasp of modern frontend architecture and best practices.
-- Passionate about high-performance, scalable, and user-centered applications, with attention to usability and clean design.
+- Focused on high-performance, scalable, and user-centered applications, with attention to usability and clean design.
 - Creator of [TKU Sparring System](https://tku-sparring.vercel.app/): User-friendly web application for managing Taekwondo sparring matches.
 `,
   avatar:
