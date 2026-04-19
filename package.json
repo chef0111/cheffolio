@@ -68,7 +68,7 @@
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.1",
     "remark-rehype": "^11.1.2",
-    "shadcn": "^4.1.0",
+    "shadcn": "^4.3.0",
     "tailwindcss": "^4.2.2",
     "typescript": "^5",
     "unist-builder": "3.0.0",
