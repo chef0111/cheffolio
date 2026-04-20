@@ -15,9 +15,9 @@ Cheffolio is a personal portfolio focused on minimalism (with some fancy touches
 
 - Sectioned portfolio layout
 - Supports `Light` and `Dark` themes
-- Keyboard-first command menu (`Ctrl/Cmd + K`)
-- Installable as a PWA
+- Keyboard-first command menu — `Ctrl + K` | `Cmd + K`
 - SEO optimized (Open Graph, Twitter metadata, JSON-LD, sitemap, robots)
+- Installable as a PWA
 
 ## Tech Stack
 
