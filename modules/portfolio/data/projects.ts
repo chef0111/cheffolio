@@ -22,9 +22,9 @@ export const PROJECTS: Project[] = [
       'CRM',
     ],
     description: `A modern, user-friendly web application for managing Taekwondo sparring matches of UIT Taekwondo Tournament. Check out live site [here](https://tku-sparring.vercel.app).
-- Real-time match updates and score tracking
-- Configurable scoring system supporting various match types and rulesets
-- Successfully used in [Taekwondo UIT Tournament 2025](https://www.facebook.com/share/p/1P14qEWifg), receiving positive feedback from athletes
+- Real-time match updates and score tracking.
+- Configurable scoring system supporting various match types and rulesets.
+- Successfully used in [Taekwondo UIT Tournament 2025](https://www.facebook.com/share/p/1P14qEWifg), receiving positive feedback from athletes.
 `,
     logo: `${baseUrl}/tku-sparring-app.ico`,
     isExpanded: true,
@@ -49,8 +49,8 @@ export const PROJECTS: Project[] = [
       'Teamwork',
     ],
     description: `A modern, user-friendly web application for multimedia event retrieval.
-- Competed in [VBS2026](https://videobrowsershowdown.org/call-for-papers) and achieved 1st place — [Best Video Browsing System Award](https://www.facebook.com/uittaekwondo/posts/pfbid0znk1hsiFbrU4eqEX6KaQffeNYcvMkssE7xUJFoYNXL7pXGUoMGfEXiTVBEpKQCZAl), demonstrating strong performance in retrieving relevant multimedia content based on user queries
-- Competed in [HCMC AI Challenge 2025](https://www.facebook.com/uittaekwondo/posts/pfbid0QMqR86PCN8nmDP6diMgXJbq1NRYHXQjFpdbdKJmnkgZKvL2QgQMY21HvsJLe7xW5l) and achieved 5th place, showcasing the system's effectiveness in handling complex multimedia retrieval tasks
+- Competed in [VBS2026](https://videobrowsershowdown.org/call-for-papers) and achieved 1st place — [Best Video Browsing System Award](https://www.facebook.com/uittaekwondo/posts/pfbid0znk1hsiFbrU4eqEX6KaQffeNYcvMkssE7xUJFoYNXL7pXGUoMGfEXiTVBEpKQCZAl), demonstrating strong performance in retrieving relevant multimedia content based on user queries.
+- Competed in [HCMC AI Challenge 2025](https://www.facebook.com/uittaekwondo/posts/pfbid0QMqR86PCN8nmDP6diMgXJbq1NRYHXQjFpdbdKJmnkgZKvL2QgQMY21HvsJLe7xW5l) and achieved 5th place, showcasing the system's effectiveness in handling complex multimedia retrieval tasks.
 `,
     isExpanded: true,
   },
@@ -76,9 +76,9 @@ export const PROJECTS: Project[] = [
       'K2Think V2',
     ],
     description: `An intuitive Learning Management System built with Next.js 16, powered by **K2 Think V2**.
-- AI-powered 3D illustration generation, allow users to create custom 3D models for Physics subjects
-- Agentic experience using K2 Think V2, provide users with an interactive learning environment
-- Competed in [Build with K2 Think V2](https://build.k2think.ai) hackathon, hosted by [MBZUAI](https://mbzuai.ac.ae)
+- AI-powered 3D illustration generation, allow users to create custom 3D models for Physics subjects.
+- Agentic experience using K2 Think V2, provide users with an interactive learning environment.
+- Competed in [Build with K2 Think V2](https://build.k2think.ai) hackathon, hosted by [MBZUAI](https://mbzuai.ac.ae).
 `,
     logo: `${baseUrl}/physthink.svg`,
   },
@@ -102,11 +102,11 @@ export const PROJECTS: Project[] = [
       'Q&A Platform',
       'AI-powered Answers',
     ],
-    description: `Community-driven platform for developers to ask questions, post answers, and get help from other developers. Live at [dev4room.pro](https://dev4room.pro)
-- Authentication system with email/password and OAuth providers
-- AI-powered answer generation using OpenAI's GPT-4.0, providing instant answers to user questions
-- Real-time semantic search support, allow users to find relevant questions and answers quickly
-- Responsive design ensuring a seamless experience across devices
+    description: `Community-driven platform for developers to ask questions, post answers, and get help from other developers. Live at [dev4room.pro](https://dev4room.pro).
+- Authentication system with email/password and OAuth providers.
+- AI-powered answer generation using OpenAI's GPT-4.0, providing instant answers to user questions.
+- Real-time semantic search support, allow users to find relevant questions and answers quickly.
+- Responsive design ensuring a seamless experience across devices.
 `,
     logo: `${baseUrl}/dev4room.svg`,
   },

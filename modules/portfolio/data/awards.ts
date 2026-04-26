@@ -8,7 +8,7 @@ export const AWARDS: Award[] = [
     date: '2026-01',
     grade: '3rd Year University',
     description:
-      '- Organized in [Prague, Czech Republic](https://videobrowsershowdown.org/call-for-papers)\n- Field: Video Retrieval\n- System: Fusionista 2.0\n- Team: Fusionista',
+      '- Organized in [Prague, Czech Republic](https://videobrowsershowdown.org/call-for-papers).\n- Field: Video Retrieval.\n- System: Fusionista 2.0.\n- Team: Fusionista.',
     referenceLink:
       'https://drive.google.com/file/d/1hivni4-eUdWOio2I7nsSUO4vNu_-gwPE/view',
     isExpanded: true,
@@ -20,7 +20,7 @@ export const AWARDS: Award[] = [
     date: '2025-11',
     grade: '3rd Year University',
     description:
-      '- Organized in [Prague, Czech Republic](https://mmm2026.cz)\n- Field: Multimedia Modeling\n- Paper: Fusionista2.0 — Efficiency Retrieval System for Large-Scale Datasets',
+      '- Organized in [Prague, Czech Republic](https://mmm2026.cz).\n- Field: Multimedia Modeling.\n- Paper: Fusionista2.0 — Efficiency Retrieval System for Large-Scale Datasets.',
     referenceLink: 'https://arxiv.org/abs/2511.12255',
     isExpanded: true,
   },
@@ -31,7 +31,7 @@ export const AWARDS: Award[] = [
     date: '2025-11',
     grade: '3rd Year University',
     description:
-      '- Organized in [Ho Chi Minh, Viet Nam](https://www.facebook.com/AICHCMC/posts/pfbid032C7F5hQViYkx5VySBnoipzjuFr7k2Y8CgB5Kq6XbD2d7VNB1C1TxNTF3mGxMQbd8l)\n- Field: Multimedia Event Retrieval\n- Team: TKU@Unicorn&Wheat\n- Ended in 5th place among 300+ teams',
+      '- Organized in [Ho Chi Minh, Viet Nam](https://www.facebook.com/AICHCMC/posts/pfbid032C7F5hQViYkx5VySBnoipzjuFr7k2Y8CgB5Kq6XbD2d7VNB1C1TxNTF3mGxMQbd8l).\n- Field: Multimedia Event Retrieval.\n- Team: TKU@Unicorn&Wheat.\n- Ended in 5th place among 300+ teams.',
     referenceLink:
       'https://drive.google.com/file/d/1yhIxFXDrW1DNB2Mq7UhuCuNwRkQXvOaX/view',
     isExpanded: true,
