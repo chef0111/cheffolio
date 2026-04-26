@@ -12,8 +12,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { UTM_PARAMS } from '@/config/site';
-import { addQueryParams } from '@/utils/url';
 
 import { TECH_STACK } from '../data/tech-stack';
 
@@ -39,7 +37,7 @@ export function TechStack() {
                 <Tooltip>
                   <TooltipTrigger>
                     <a
-                      href={addQueryParams(tech.href, UTM_PARAMS)}
+                      href={tech.href}
                       target="_blank"
                       rel="noopener"
                       aria-label={tech.title}

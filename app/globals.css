@@ -133,11 +133,11 @@
 }
 
 @utility link {
-  @apply decoration-1 underline-offset-4 hover:underline;
+  @apply decoration-1 underline-offset-4 hover:underline active:underline;
 }
 
 @utility link-underline {
-  @apply underline decoration-current/30 decoration-1 underline-offset-4 transition-colors hover:decoration-current;
+  @apply underline decoration-current/30 decoration-1 underline-offset-4 transition-colors hover:decoration-current active:decoration-current;
 }
 
 @utility screen-line-top {
