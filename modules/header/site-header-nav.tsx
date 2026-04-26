@@ -39,8 +39,8 @@ export function SiteHeaderNav({ children }: { children?: React.ReactNode }) {
       </header>
 
       {/* Mobile Nav */}
-      <div className="from-background pointer-events-none fixed inset-x-0 bottom-0 z-50 h-[calc(--spacing(20)+env(safe-area-inset-bottom,0px))] bg-linear-to-t from-[calc(env(safe-area-inset-bottom,0%))] to-transparent sm:hidden" />
-      <div className="fixed bottom-[calc(--spacing(4)+env(safe-area-inset-bottom,0px))] left-1/2 z-50 -translate-x-1/2 sm:hidden">
+      <div className="from-background pointer-events-none fixed inset-x-0 bottom-0 z-50 h-[calc(--spacing(20)+env(safe-area-inset-bottom,0))] bg-linear-to-t from-[calc(env(safe-area-inset-bottom,0%))] to-transparent sm:hidden" />
+      <div className="fixed bottom-[calc(--spacing(4)+env(safe-area-inset-bottom,0))] left-1/2 z-50 -translate-x-1/2 sm:hidden">
         <MobileNav items={MOBILE_NAV} center={<CommandMenu />} />
       </div>
     </>

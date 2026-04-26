@@ -49,7 +49,7 @@ function PanelTitleSup({ className, ...props }: React.ComponentProps<'sup'>) {
   return (
     <sup
       className={cn(
-        'text-muted-foreground -top-[0.75em] ml-1 text-sm font-medium tracking-normal',
+        'text-muted-foreground top-[-0.75em] ml-1 text-sm font-medium tracking-normal',
         className
       )}
       {...props}
