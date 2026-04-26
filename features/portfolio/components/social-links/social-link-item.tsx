@@ -3,8 +3,8 @@ import Image from 'next/image';
 
 import { GridPattern } from '@/components/cheffolio/grid-pattern';
 import { UTM_PARAMS } from '@/config/site';
+import type { SocialLink } from '@/features/portfolio/types/social-links';
 import { cn } from '@/lib/utils';
-import type { SocialLink } from '@/modules/portfolio/types/social-links';
 import { addQueryParams } from '@/utils/url';
 
 export function SocialLinkItem({ icon, title, href }: SocialLink) {

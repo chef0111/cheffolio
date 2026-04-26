@@ -16,7 +16,7 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { Prose } from '@/components/ui/typography';
 import { UTM_PARAMS } from '@/config/site';
-import type { Award } from '@/modules/portfolio/types/awards';
+import type { Award } from '@/features/portfolio/types/awards';
 import { addQueryParams } from '@/utils/url';
 
 import { AwardReference } from './awared-reference';

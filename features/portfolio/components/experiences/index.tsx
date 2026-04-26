@@ -1,6 +1,6 @@
 import { DecorIcon } from '@/components/cheffolio/decor-icon';
 import { Panel, PanelHeader, PanelTitle } from '@/components/cheffolio/panel';
-import { EXPERIENCES } from '@/modules/portfolio/data/experiences';
+import { EXPERIENCES } from '@/features/portfolio/data/experiences';
 
 import { ExperienceItem } from './experience-item';
 

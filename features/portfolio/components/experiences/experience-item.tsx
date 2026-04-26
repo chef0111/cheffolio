@@ -7,7 +7,7 @@ import {
   StatusLabel,
 } from '@/components/kibo-ui/status';
 import { UTM_PARAMS } from '@/config/site';
-import type { Experience } from '@/modules/portfolio/types/experiences';
+import type { Experience } from '@/features/portfolio/types/experiences';
 import { addQueryParams } from '@/utils/url';
 
 import { ExperiencePositionItem } from './position-item';

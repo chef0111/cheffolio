@@ -19,8 +19,8 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Tag } from '@/components/ui/tag';
 import { Prose } from '@/components/ui/typography';
+import type { ExperiencePosition } from '@/features/portfolio/types/experiences';
 import { cn } from '@/lib/utils';
-import type { ExperiencePosition } from '@/modules/portfolio/types/experiences';
 
 import { ExperienceIcon } from './position-icon';
 

@@ -7,7 +7,7 @@ import {
   PanelTitle,
   PanelTitleSup,
 } from '@/components/cheffolio/panel';
-import { PROJECTS } from '@/modules/portfolio/data/projects';
+import { PROJECTS } from '@/features/portfolio/data/projects';
 
 import { ProjectItem } from './project-item';
 
