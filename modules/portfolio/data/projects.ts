@@ -76,8 +76,8 @@ export const PROJECTS: Project[] = [
       'K2Think V2',
     ],
     description: `An intuitive Learning Management System built with Next.js 16, powered by **K2 Think V2**.
-- AI-powered 3D illustration generation, allow users to create custom 3D models for Physics subjects.
-- Agentic experience using K2 Think V2, provide users with an interactive learning environment.
+- AI-powered 3D illustration generation, allowing users to create custom 3D models for Physics subjects.
+- Agentic experience using K2 Think V2, providing users with an interactive learning environment.
 - Competed in [Build with K2 Think V2](https://build.k2think.ai) hackathon, hosted by [MBZUAI](https://mbzuai.ac.ae).
 `,
     logo: `${baseUrl}/physthink.svg`,
@@ -105,7 +105,7 @@ export const PROJECTS: Project[] = [
     description: `Community-driven platform for developers to ask questions, post answers, and get help from other developers. Live at [dev4room.pro](https://dev4room.pro).
 - Authentication system with email/password and OAuth providers.
 - AI-powered answer generation using OpenAI's GPT-4.0, providing instant answers to user questions.
-- Real-time semantic search support, allow users to find relevant questions and answers quickly.
+- Real-time semantic search support, allowing users to find relevant questions and answers quickly.
 - Responsive design ensuring a seamless experience across devices.
 `,
     logo: `${baseUrl}/dev4room.svg`,
