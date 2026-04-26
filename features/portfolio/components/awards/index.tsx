@@ -9,7 +9,7 @@ import {
   PanelTitle,
   PanelTitleSup,
 } from '@/components/cheffolio/panel';
-import { AWARDS } from '@/modules/portfolio/data/awards';
+import { AWARDS } from '@/features/portfolio/data/awards';
 
 import { AwardItem } from './award-item';
 

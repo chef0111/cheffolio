@@ -15,7 +15,7 @@ import {
 import { Tag } from '@/components/ui/tag';
 import { Prose } from '@/components/ui/typography';
 import { UTM_PARAMS } from '@/config/site';
-import type { Project } from '@/modules/portfolio/types/projects';
+import type { Project } from '@/features/portfolio/types/projects';
 import { addQueryParams } from '@/utils/url';
 
 import { ProjectLink } from './project-link';

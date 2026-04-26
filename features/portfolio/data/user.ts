@@ -1,4 +1,4 @@
-import type { User } from '@/modules/portfolio/types/user';
+import type { User } from '@/features/portfolio/types/user';
 
 export const USER: User = {
   firstName: 'Bảo',

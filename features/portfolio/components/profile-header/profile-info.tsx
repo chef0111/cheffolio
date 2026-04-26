@@ -4,7 +4,7 @@ import { DecorIcon } from '@/components/cheffolio/decor-icon';
 import { TextFlip } from '@/components/cheffolio/text-flip';
 import { VerifiedIcon } from '@/components/icons/verified-icon';
 import { Label } from '@/components/ui/label';
-import { USER } from '@/modules/portfolio/data/user';
+import { USER } from '@/features/portfolio/data/user';
 
 import { AvatarElectric } from './avatar-eletric';
 import { ProfileStatus } from './profile-status';

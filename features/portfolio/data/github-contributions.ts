@@ -71,7 +71,9 @@ export const getGitHubContributions = async () => {
         return [];
       }
 
-      const data = (await res.json()) as GitHubContributionsResponse | Activity[];
+      const data = (await res.json()) as
+        | GitHubContributionsResponse
+        | Activity[];
 
       return normalizeContributions(data);
     } finally {

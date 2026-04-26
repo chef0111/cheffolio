@@ -7,7 +7,7 @@ import {
   IntroItemLink,
 } from '@/components/cheffolio/intro-item';
 import { Button } from '@/components/ui/button';
-import { USER } from '@/modules/portfolio/data/user';
+import { USER } from '@/features/portfolio/data/user';
 
 export function ResumeItem() {
   return (

@@ -10,8 +10,8 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { fontVariables } from '@/config/font';
 import { META_THEME_COLORS, SITE_INFO, X_USERNAME } from '@/config/site';
 import { ThemeProvider } from '@/context/theme-provider';
+import { USER } from '@/features/portfolio/data/user';
 import { cn } from '@/lib/utils';
-import { USER } from '@/modules/portfolio/data/user';
 
 function getWebSiteJsonLd(): WithContext<WebSite> {
   return {

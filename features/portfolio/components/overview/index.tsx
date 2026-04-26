@@ -14,8 +14,8 @@ import {
   IntroItemLink,
 } from '@/components/cheffolio/intro-item';
 import { Panel, PanelContent } from '@/components/cheffolio/panel';
-import { USER } from '@/modules/portfolio/data/user';
-import type { User } from '@/modules/portfolio/types/user';
+import { USER } from '@/features/portfolio/data/user';
+import type { User } from '@/features/portfolio/types/user';
 import { urlToName } from '@/utils/url';
 
 import { EmailItem } from './email-item';

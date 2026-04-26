@@ -5,8 +5,8 @@ import {
   TextInitial,
 } from 'lucide-react';
 
-import type { NavItem } from '@/modules/header/types/nav';
-import { USER } from '@/modules/portfolio/data/user';
+import type { NavItem } from '@/components/layout/header/types/nav';
+import { USER } from '@/features/portfolio/data/user';
 
 export const SITE_INFO = {
   name: 'Cheffolio',
