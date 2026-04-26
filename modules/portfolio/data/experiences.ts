@@ -15,8 +15,8 @@ export const EXPERIENCES: Experience[] = [
         description: `- Currently studying for a Bachelor's degree in Information Systems (Advanced Program).
 - Language Proficiency: **IELTS 7.0** (British Council).
 - Achieved several awards, including:
-  - **Best Video Browsing System Award** — 32nd International Conference on Multimedia Modeling (MMM 2026)
-  - **Consolation Prize** — Finished 5th place at Ho Chi Minh City AI Challenge (AIC 2025)`,
+  - **Best Video Browsing System Award** — 32nd International Conference on Multimedia Modeling (MMM 2026).
+  - **Consolation Prize** — Finished 5th place at Ho Chi Minh City AI Challenge (AIC 2025).`,
         skills: [
           'C++',
           'Java',

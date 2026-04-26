@@ -7,6 +7,78 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+@custom-variant supports-corner-shape {
+  @supports (corner-shape: initial) {
+    @slot;
+  }
+}
+
+@custom-variant supports-timeline-scroll {
+  @supports (animation-timeline: scroll()) {
+    @slot;
+  }
+}
+
+@custom-variant data-open {
+  &:where([data-state='open']),
+  &:where([data-open]:not([data-open='false'])) {
+    @slot;
+  }
+}
+
+@custom-variant data-closed {
+  &:where([data-state='closed']),
+  &:where([data-closed]:not([data-closed='false'])) {
+    @slot;
+  }
+}
+
+@custom-variant data-checked {
+  &:where([data-state='checked']),
+  &:where([data-checked]:not([data-checked='false'])) {
+    @slot;
+  }
+}
+
+@custom-variant data-unchecked {
+  &:where([data-state='unchecked']),
+  &:where([data-unchecked]:not([data-unchecked='false'])) {
+    @slot;
+  }
+}
+
+@custom-variant data-selected {
+  &:where([data-selected='true']) {
+    @slot;
+  }
+}
+
+@custom-variant data-disabled {
+  &:where([data-disabled='true']),
+  &:where([data-disabled]:not([data-disabled='false'])) {
+    @slot;
+  }
+}
+
+@custom-variant data-active {
+  &:where([data-state='active']),
+  &:where([data-active]:not([data-active='false'])) {
+    @slot;
+  }
+}
+
+@custom-variant data-horizontal {
+  &:where([data-orientation='horizontal']) {
+    @slot;
+  }
+}
+
+@custom-variant data-vertical {
+  &:where([data-orientation='vertical']) {
+    @slot;
+  }
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -58,6 +130,139 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+}
+
+@utility link {
+  @apply decoration-1 underline-offset-4 hover:underline active:underline;
+}
+
+@utility link-underline {
+  @apply underline decoration-current/30 decoration-1 underline-offset-4 transition-colors hover:decoration-current active:decoration-current;
+}
+
+@utility screen-line-top {
+  @apply before:bg-line relative before:absolute before:top-0 before:left-[-100vw] before:-z-1 before:h-px before:w-[200vw];
+}
+
+@utility screen-line-bottom {
+  @apply after:bg-line relative after:absolute after:bottom-0 after:left-[-100vw] after:-z-1 after:h-px after:w-[200vw];
+}
+
+@utility cover-background {
+  @apply border-line flex aspect-video items-center justify-center border-x bg-black/0.75 bg-[radial-gradient(var(--pattern-foreground)_1px,transparent_0)] bg-size-[10px_10px] bg-center text-black select-none [--pattern-foreground:var(--color-zinc-950)]/5 before:-top-px after:-bottom-px sm:aspect-24/9 dark:bg-white/0.75 dark:text-white dark:[--pattern-foreground:var(--color-white)]/5;
+}
+
+@utility avatar-ring {
+  @apply ring-border ring-offset-background rounded-full border ring-1 ring-offset-2;
+}
+
+@utility no-focus {
+  @apply focus-visible:border-none! focus-visible:ring-0! focus-visible:ring-transparent! focus-visible:ring-offset-0! focus-visible:outline-none!;
+}
+
+@utility extend-touch-target {
+  @media (pointer: coarse) {
+    @apply relative touch-manipulation after:absolute after:-inset-2;
+  }
+}
+
+@utility prose-chef {
+  @apply prose-headings:tracking-tight prose-headings:text-balance prose-h2:font-semibold;
+  @apply prose-a:font-normal prose-a:wrap-break-word prose-a:text-foreground prose-a:link-underline;
+  @apply prose-code:rounded-md prose-code:border prose-code:bg-muted/50 prose-code:px-[0.3rem] prose-code:py-[0.2rem] prose-code:text-sm prose-code:font-normal prose-code:before:content-none prose-code:after:content-none;
+  @apply prose-strong:font-medium;
+  @apply prose-hr:border-line;
+  @apply prose-blockquote:border-s-2 prose-blockquote:font-normal prose-blockquote:text-muted-foreground prose-blockquote:not-italic prose-blockquote:[&_p:first-of-type]:before:content-none prose-blockquote:[&_p:last-of-type]:after:content-none;
+}
+
+@utility code-inline {
+  @apply bg-muted/50 rounded-md border px-1.5 py-0.5 font-mono text-[0.8125rem] whitespace-pre-wrap in-data-table-nowrap:whitespace-nowrap;
+}
+
+@utility prose-no-margin {
+  & > :first-child {
+    @apply mt-0;
+  }
+
+  & > :last-child {
+    @apply mb-0;
+  }
+
+  :where(p):not(:where([class~='not-prose'], [class~='not-prose'] *)),
+  :where([data-rehype-pretty-code-figure]) {
+    @apply mt-3 mb-3;
+  }
+}
+
+@utility no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility scroll-fade-effect-y {
+  --mask-height: 64px;
+  --mask-offset-top: 0px;
+  --mask-offset-bottom: 0px;
+  --scroll-buffer: 2rem;
+
+  /* Set up the mask layers */
+  mask-image:
+    linear-gradient(to top, transparent, black 90%),
+    linear-gradient(to bottom, transparent 0%, black 100%),
+    linear-gradient(black, black);
+
+  mask-size:
+    100% var(--top-mask-height),
+    100% var(--bottom-mask-height),
+    100% 100%;
+  mask-repeat: no-repeat, no-repeat, no-repeat;
+  mask-position:
+    0 var(--mask-offset-top),
+    0 calc(100% - var(--mask-offset-bottom)),
+    0 0;
+  /* Exclude the gradient areas from the solid mask */
+  mask-composite: exclude;
+
+  animation-name: show-top-mask, hide-bottom-mask;
+  animation-timeline: scroll(self), scroll(self);
+  animation-range:
+    0 var(--scroll-buffer),
+    calc(100% - var(--scroll-buffer)) 100%;
+  animation-fill-mode: both;
+}
+
+@utility scroll-fade-effect-x {
+  --mask-width: 64px;
+  --mask-offset-left: 0px;
+  --mask-offset-right: 0px;
+  --scroll-buffer: 2rem;
+
+  mask-image:
+    linear-gradient(to left, transparent, black 90%),
+    linear-gradient(to right, transparent 0%, black 100%),
+    linear-gradient(black, black);
+
+  mask-size:
+    var(--left-mask-width) 100%,
+    var(--right-mask-width) 100%,
+    100% 100%;
+  mask-repeat: no-repeat, no-repeat, no-repeat;
+  mask-position:
+    var(--mask-offset-left) 0,
+    calc(100% - var(--mask-offset-right)) 0,
+    0 0;
+  mask-composite: exclude;
+
+  animation-name: show-left-mask, hide-right-mask;
+  animation-timeline: scroll(self inline), scroll(self inline);
+  animation-range:
+    0 var(--scroll-buffer),
+    calc(100% - var(--scroll-buffer)) 100%;
+  animation-fill-mode: both;
 }
 
 :root {
@@ -256,149 +461,6 @@
   }
 }
 
-@utility link {
-  @apply decoration-1 underline-offset-3 hover:underline;
-}
-
-@utility link-underline {
-  @apply underline decoration-current/30 decoration-1 underline-offset-3 transition-colors hover:decoration-current;
-}
-
-@utility screen-line-top {
-  @apply before:bg-line relative before:absolute before:top-0 before:-left-[100vw] before:-z-1 before:h-px before:w-[200vw];
-}
-
-@utility screen-line-bottom {
-  @apply after:bg-line relative after:absolute after:bottom-0 after:-left-[100vw] after:-z-1 after:h-px after:w-[200vw];
-}
-
-@utility cover-background {
-  @apply border-line flex aspect-video items-center justify-center border-x bg-black/0.75 bg-[radial-gradient(var(--pattern-foreground)_1px,transparent_0)] bg-size-[10px_10px] bg-center text-black select-none [--pattern-foreground:var(--color-zinc-950)]/5 before:-top-px after:-bottom-px sm:aspect-24/9 dark:bg-white/0.75 dark:text-white dark:[--pattern-foreground:var(--color-white)]/5;
-}
-
-@utility avatar-ring {
-  @apply ring-border ring-offset-background rounded-full border ring-1 ring-offset-2;
-}
-
-@utility no-focus {
-  @apply focus-visible:border-none! focus-visible:ring-0! focus-visible:ring-transparent! focus-visible:ring-offset-0! focus-visible:outline-none!;
-}
-
-@utility extend-touch-target {
-  @media (pointer: coarse) {
-    @apply relative touch-manipulation after:absolute after:-inset-2;
-  }
-}
-
-@custom-variant supports-corner-shape {
-  @supports (corner-shape: initial) {
-    @slot;
-  }
-}
-
-@custom-variant supports-timeline-scroll {
-  @supports (animation-timeline: scroll()) {
-    @slot;
-  }
-}
-
-@utility prose-chef {
-  @apply prose-headings:tracking-tight prose-headings:text-balance prose-h2:font-semibold;
-  @apply prose-a:font-normal prose-a:wrap-break-word prose-a:text-foreground prose-a:link-underline;
-  @apply prose-code:rounded-md prose-code:border prose-code:bg-muted/50 prose-code:px-[0.3rem] prose-code:py-[0.2rem] prose-code:text-sm prose-code:font-normal prose-code:before:content-none prose-code:after:content-none;
-  @apply prose-strong:font-medium;
-  @apply prose-hr:border-line;
-  @apply prose-blockquote:border-s-2 prose-blockquote:font-normal prose-blockquote:text-muted-foreground prose-blockquote:not-italic prose-blockquote:[&_p:first-of-type]:before:content-none prose-blockquote:[&_p:last-of-type]:after:content-none;
-}
-
-@utility code-inline {
-  @apply bg-muted/50 rounded-md border px-1.5 py-0.5 font-mono text-[0.8125rem] whitespace-pre-wrap in-data-table-nowrap:whitespace-nowrap;
-}
-
-@utility prose-no-margin {
-  & > :first-child {
-    @apply mt-0;
-  }
-
-  & > :last-child {
-    @apply mb-0;
-  }
-
-  :where(p):not(:where([class~='not-prose'], [class~='not-prose'] *)),
-  :where([data-rehype-pretty-code-figure]) {
-    @apply mt-3 mb-3;
-  }
-}
-
-@custom-variant data-open {
-  &:where([data-state='open']),
-  &:where([data-open]:not([data-open='false'])) {
-    @slot;
-  }
-}
-
-@custom-variant data-closed {
-  &:where([data-state='closed']),
-  &:where([data-closed]:not([data-closed='false'])) {
-    @slot;
-  }
-}
-
-@custom-variant data-checked {
-  &:where([data-state='checked']),
-  &:where([data-checked]:not([data-checked='false'])) {
-    @slot;
-  }
-}
-
-@custom-variant data-unchecked {
-  &:where([data-state='unchecked']),
-  &:where([data-unchecked]:not([data-unchecked='false'])) {
-    @slot;
-  }
-}
-
-@custom-variant data-selected {
-  &:where([data-selected='true']) {
-    @slot;
-  }
-}
-
-@custom-variant data-disabled {
-  &:where([data-disabled='true']),
-  &:where([data-disabled]:not([data-disabled='false'])) {
-    @slot;
-  }
-}
-
-@custom-variant data-active {
-  &:where([data-state='active']),
-  &:where([data-active]:not([data-active='false'])) {
-    @slot;
-  }
-}
-
-@custom-variant data-horizontal {
-  &:where([data-orientation='horizontal']) {
-    @slot;
-  }
-}
-
-@custom-variant data-vertical {
-  &:where([data-orientation='vertical']) {
-    @slot;
-  }
-}
-
-@utility no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
 @property --top-mask-height {
   syntax: '<length>';
   inherits: true;
@@ -421,66 +483,4 @@
   syntax: '<length>';
   inherits: true;
   initial-value: 64px;
-}
-
-@utility scroll-fade-effect-y {
-  --mask-height: 64px;
-  --mask-offset-top: 0px;
-  --mask-offset-bottom: 0px;
-  --scroll-buffer: 2rem;
-
-  /* Set up the mask layers */
-  mask-image:
-    linear-gradient(to top, transparent, black 90%),
-    linear-gradient(to bottom, transparent 0%, black 100%),
-    linear-gradient(black, black);
-
-  mask-size:
-    100% var(--top-mask-height),
-    100% var(--bottom-mask-height),
-    100% 100%;
-  mask-repeat: no-repeat, no-repeat, no-repeat;
-  mask-position:
-    0 var(--mask-offset-top),
-    0 calc(100% - var(--mask-offset-bottom)),
-    0 0;
-  /* Exclude the gradient areas from the solid mask */
-  mask-composite: exclude;
-
-  animation-name: show-top-mask, hide-bottom-mask;
-  animation-timeline: scroll(self), scroll(self);
-  animation-range:
-    0 var(--scroll-buffer),
-    calc(100% - var(--scroll-buffer)) 100%;
-  animation-fill-mode: both;
-}
-
-@utility scroll-fade-effect-x {
-  --mask-width: 64px;
-  --mask-offset-left: 0px;
-  --mask-offset-right: 0px;
-  --scroll-buffer: 2rem;
-
-  mask-image:
-    linear-gradient(to left, transparent, black 90%),
-    linear-gradient(to right, transparent 0%, black 100%),
-    linear-gradient(black, black);
-
-  mask-size:
-    var(--left-mask-width) 100%,
-    var(--right-mask-width) 100%,
-    100% 100%;
-  mask-repeat: no-repeat, no-repeat, no-repeat;
-  mask-position:
-    var(--mask-offset-left) 0,
-    calc(100% - var(--mask-offset-right)) 0,
-    0 0;
-  mask-composite: exclude;
-
-  animation-name: show-left-mask, hide-right-mask;
-  animation-timeline: scroll(self inline), scroll(self inline);
-  animation-range:
-    0 var(--scroll-buffer),
-    calc(100% - var(--scroll-buffer)) 100%;
-  animation-fill-mode: both;
 }

@@ -12,8 +12,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { UTM_PARAMS } from '@/config/site';
-import { addQueryParams } from '@/utils/url';
 
 import { TECH_STACK } from '../data/tech-stack';
 
@@ -29,8 +27,8 @@ export function TechStack() {
       <PanelContent className="relative mx-auto">
         <DecorIcon className="size-4" position="top-left" />
         <DecorIcon className="size-4" position="top-right" />
-        <DecorIcon className="size-4" position="bottom-left" />
-        <DecorIcon className="size-4" position="bottom-right" />
+        <DecorIcon className="mb-px size-4" position="bottom-left" />
+        <DecorIcon className="mb-px size-4" position="bottom-right" />
 
         <ul className="grid grid-cols-[repeat(auto-fit,minmax(32px,max-content))] justify-center gap-4 select-none">
           {TECH_STACK.map((tech) => {
@@ -39,7 +37,7 @@ export function TechStack() {
                 <Tooltip>
                   <TooltipTrigger>
                     <a
-                      href={addQueryParams(tech.href, UTM_PARAMS)}
+                      href={tech.href}
                       target="_blank"
                       rel="noopener"
                       aria-label={tech.title}

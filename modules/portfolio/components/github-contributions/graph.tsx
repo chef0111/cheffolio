@@ -98,7 +98,7 @@ export function GitHubContributionGraph({
             <div className="text-muted-foreground">
               {totalCount.toLocaleString('en')} contributions on{' '}
               <a
-                className="hover:text-foreground active:text-foreground font-medium underline underline-offset-4"
+                className="link-underline text-foreground font-medium"
                 href={addQueryParams(
                   `https://github.com/${GITHUB_USERNAME}`,
                   UTM_PARAMS
