@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import { useLocationHash } from '@/hooks/use-location-hash';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { useNavScroll } from '@/hooks/use-nav-scroll';
-import { haptic } from '@/lib/haptic';
 import { cn } from '@/lib/utils';
 
 import type { NavItem } from './types/nav';
@@ -40,7 +39,6 @@ export function MobileNav({
     : locationHash;
 
   const handleLinkClick = useCallback(() => {
-    haptic();
     onItemClick?.();
   }, [onItemClick]);
 
