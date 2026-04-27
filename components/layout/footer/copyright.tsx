@@ -11,7 +11,7 @@ export function FooterCopyright() {
         href={addQueryParams('https://github.com/chef0111', UTM_PARAMS)}
         target="_blank"
         rel="noopener noreferrer"
-        className="link-underline hover:text-foreground transition-colors"
+        className="link-underline hover:text-foreground"
       >
         chef0111
       </a>
