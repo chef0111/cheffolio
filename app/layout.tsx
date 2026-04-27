@@ -65,12 +65,20 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: 'https://res.cloudinary.com/chef0111/image/upload/cheffolio.favicon.ico',
-        sizes: 'any',
+        url: 'https://res.cloudinary.com/chef0111/image/upload/favicon.ico',
+        sizes: '32x32',
       },
       {
-        url: 'https://res.cloudinary.com/chef0111/image/upload/cheffolio.svg',
+        url: 'https://res.cloudinary.com/chef0111/image/upload/favicon-light.svg',
+        sizes: 'any',
         type: 'image/svg+xml',
+        media: '(prefers-color-scheme: light)',
+      },
+      {
+        url: 'https://res.cloudinary.com/chef0111/image/upload/favicon-dark.svg',
+        sizes: 'any',
+        type: 'image/svg+xml',
+        media: '(prefers-color-scheme: dark)',
       },
     ],
     apple: {
