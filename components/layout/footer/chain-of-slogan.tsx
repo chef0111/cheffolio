@@ -20,11 +20,13 @@ const chainItemVariants = cva('hover:text-foreground transition-colors', {
 
 type ChainOfSloganProps = VariantProps<typeof chainItemVariants> & {
   className?: string;
+  itemClassName?: string;
   slogan: string;
 };
 
 export const ChainOfSlogan = ({
   className,
+  itemClassName,
   slogan,
   variant,
 }: ChainOfSloganProps) => {
@@ -42,7 +44,12 @@ export const ChainOfSlogan = ({
           key={`${character}-${index}`}
           className={chainItemVariants({ variant })}
         >
-          <span className="flex h-6 items-center px-1.5 text-center font-mono uppercase select-none sm:h-8 sm:px-3 sm:font-semibold">
+          <span
+            className={cn(
+              'flex h-6 items-center px-1.5 text-center font-mono uppercase select-none sm:h-8 sm:px-3 sm:font-semibold',
+              itemClassName
+            )}
+          >
             {character === ' ' ? '•' : character}
           </span>
         </li>

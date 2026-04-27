@@ -45,7 +45,7 @@ export function Footer() {
                 )}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-foreground underline underline-offset-4"
+                className="link-underline text-foreground font-medium"
               >
                 GitHub
               </a>
@@ -54,6 +54,7 @@ export function Footer() {
 
           <ChainOfSlogan
             className="screen-line-bottom screen-line-top"
+            itemClassName="font-pixel"
             slogan={FOOTER_SLOGAN}
           />
         </div>

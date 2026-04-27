@@ -114,6 +114,7 @@
 
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-pixel: var(--font-pixel);
   --font-pixel-square: var(--font-geist-pixel-square);
 
   --color-sidebar: var(--sidebar);

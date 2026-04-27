@@ -5,13 +5,13 @@ import { addQueryParams } from '@/utils/url';
 
 export function FooterCopyright() {
   return (
-    <p className="text-muted-foreground text-center font-mono text-sm">
+    <p className="text-muted-foreground font-pixel-square text-center text-sm">
       &copy; {new Date().getFullYear()} cheffolio, built by{' '}
       <a
         href={addQueryParams('https://github.com/chef0111', UTM_PARAMS)}
         target="_blank"
         rel="noopener noreferrer"
-        className="hover:text-foreground transition-color underline underline-offset-4"
+        className="link-underline hover:text-foreground"
       >
         chef0111
       </a>
