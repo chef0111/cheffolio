@@ -54,6 +54,7 @@ export function Footer() {
 
           <ChainOfSlogan
             className="screen-line-bottom screen-line-top"
+            itemClassName="font-pixel"
             slogan={FOOTER_SLOGAN}
           />
         </div>
