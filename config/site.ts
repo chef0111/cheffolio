@@ -9,8 +9,8 @@ import type { NavItem } from '@/components/layout/header/types/nav';
 import { USER } from '@/features/portfolio/data/user';
 
 export const SITE_INFO = {
-  name: 'Cheffolio',
-  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://cheffolio.vercel.app',
+  name: 'Gia Bảo – dev portfolio',
+  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://giabao.dev',
   ogImage: USER.ogImage,
   description: 'A minimalist, shadcn/ui-inspired dev portfolio of @chef0111.',
   keywords: USER.keywords,
@@ -64,7 +64,7 @@ export const MOBILE_NAV: NavItem[] = [
 ];
 
 export const UTM_PARAMS = {
-  utm_source: 'cheffolio.vercel.app',
+  utm_source: 'giabao.dev',
 };
 
 export const GITHUB_USERNAME = 'chef0111';

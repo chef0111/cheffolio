@@ -1,15 +1,15 @@
-# [cheffolio](https://cheffolio.vercel.app) • ![License](https://img.shields.io/badge/License-MIT-blue)
+# [giabao.dev](https://giabao.dev) • ![License](https://img.shields.io/badge/License-MIT-blue)
 
 A minimal, shadcn/ui-inspired dev portfolio.
 
-→ Official live site: [cheffolio.vercel.app](https://cheffolio.vercel.app)
+→ Official live site: [giabao.dev](https://giabao.dev)
 
-[![screenshot-dark](https://res.cloudinary.com/chef0111/image/upload/v3/screenshot-desktop-dark.webp#gh-dark-mode-only)](https://cheffolio.vercel.app#gh-dark-mode-only)
-[![screenshot-light](https://res.cloudinary.com/chef0111/image/upload/v3/screenshot-desktop-light.webp#gh-light-mode-only)](https://cheffolio.vercel.app#gh-light-mode-only)
+[![screenshot-dark](https://res.cloudinary.com/chef0111/image/upload/v3/screenshot-desktop-dark.webp#gh-dark-mode-only)](https://giabao.dev#gh-dark-mode-only)
+[![screenshot-light](https://res.cloudinary.com/chef0111/image/upload/v3/screenshot-desktop-light.webp#gh-light-mode-only)](https://giabao.dev#gh-light-mode-only)
 
 ## Overview
 
-Cheffolio is a personal portfolio focused on minimalism (with some fancy touches), smooth interaction, and clean content customization.
+giabao.dev is a personal portfolio focused on minimalism (with some fancy touches), smooth interaction, and clean content customization.
 
 ### Features
 

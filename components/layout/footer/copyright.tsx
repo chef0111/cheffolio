@@ -6,7 +6,7 @@ import { addQueryParams } from '@/utils/url';
 export function FooterCopyright() {
   return (
     <p className="text-muted-foreground font-pixel-square text-center text-sm">
-      &copy; {new Date().getFullYear()} cheffolio, built by{' '}
+      &copy; {new Date().getFullYear()} giabao.dev, built by{' '}
       <a
         href={addQueryParams('https://github.com/chef0111', UTM_PARAMS)}
         target="_blank"
