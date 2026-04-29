@@ -23,6 +23,7 @@ const eslintConfig = defineConfig([
       '@typescript-eslint/no-import-type-side-effects': 'error',
       'react-hooks/immutability': 'warn',
       'react-hooks/set-state-in-effect': 'warn',
+      "@next/next/no-img-element": "off",
     },
   },
   {

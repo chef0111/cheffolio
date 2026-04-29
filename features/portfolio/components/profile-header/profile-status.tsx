@@ -2,13 +2,14 @@
 
 import * as React from 'react';
 
+import { Twemoji } from '@/components/ui/twemoji';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { haptic } from '@/lib/haptic';
 import { cn } from '@/lib/utils';
 
 interface ProfileStatusProps {
-  emoji?: React.ReactNode;
-  quote?: React.ReactNode;
+  emoji?: string;
+  quote?: string;
 }
 
 export function ProfileStatus({ emoji, quote }: ProfileStatusProps) {
@@ -43,7 +44,7 @@ export function ProfileStatus({ emoji, quote }: ProfileStatusProps) {
       aria-pressed={isTouchDevice ? isExpanded : undefined}
       aria-label="GitHub status"
     >
-      <span aria-hidden="true">{emoji}</span>
+      <Twemoji>{emoji}</Twemoji>
       {quote && (
         <span
           className={cn(
