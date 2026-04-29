@@ -36,15 +36,15 @@ export function ProfileStatus({ emoji, quote }: ProfileStatusProps) {
         'avatar-ring bg-background group/status extend-touch-target absolute bottom-3 left-25 z-10 flex size-5 cursor-default items-center justify-center gap-1 text-xs select-none sm:bottom-3.5 sm:left-31.5 sm:size-6 sm:text-sm',
         !isTouchDevice &&
           quote &&
-          'hover:w-fit hover:pr-1.5 hover:pl-[0.1rem] focus-visible:pr-1.5 focus-visible:pl-[0.1rem]',
-        isTouchDevice && isExpanded && quote && 'w-fit pr-1 pl-px'
+          'hover:w-fit hover:pr-3 hover:pl-2.5 focus-visible:pr-3 focus-visible:pl-2.5',
+        isTouchDevice && isExpanded && quote && 'w-fit pr-2.5 pl-2'
       )}
       onClick={handleClick}
       onBlur={handleBlur}
       aria-pressed={isTouchDevice ? isExpanded : undefined}
       aria-label="GitHub status"
     >
-      <Twemoji>{emoji}</Twemoji>
+      <Twemoji aria-hidden="true">{emoji}</Twemoji>
       {quote && (
         <span
           className={cn(

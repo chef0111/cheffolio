@@ -111,8 +111,8 @@ export const PROJECTS: Project[] = [
     logo: `${baseUrl}/dev4room.svg`,
   },
   {
-    id: 'cheffolio',
-    title: 'Cheffolio',
+    id: 'giabaodotdev',
+    title: 'giabao.dev',
     period: {
       start: '03.2026',
     },

@@ -16,7 +16,7 @@ export const USER: User = {
   address: 'Hue City, Viet Nam',
   phoneNumber: 'Kzg0IDg2NSA2NzUgOTA4', // E.164 format, base64 encoded (https://t.io.vn/base64-string-converter)
   email: 'bGV0cmFuZ2lhYmFvMTRAZ21haWwuY29t', // base64 encoded
-  website: 'https://cheffolio.vercel.app',
+  website: 'https://giabao.dev',
   jobTitle: 'Senior Student',
   jobs: [
     {
