@@ -24,6 +24,7 @@
     "@date-fns/tz": "^1.4.1",
     "@react-three/fiber": "^9.6.0",
     "@tanstack/react-hotkeys": "^0.10.0",
+    "@vercel/speed-insights": "^2.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",

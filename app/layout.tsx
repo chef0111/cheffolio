@@ -1,5 +1,6 @@
 import './globals.css';
 
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
 import type { WebSite, WithContext } from 'schema-dts';
@@ -145,6 +146,7 @@ export default function RootLayout({
           </TooltipProvider>
           <Toaster closeButton position="bottom-center" />
         </ThemeProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
