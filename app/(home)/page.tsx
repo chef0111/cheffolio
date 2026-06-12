@@ -11,6 +11,7 @@ import { Projects } from '@/features/portfolio/components/projects';
 import { SocialLinks } from '@/features/portfolio/components/social-links';
 import { TechStack } from '@/features/portfolio/components/tech-stack';
 import { USER } from '@/features/portfolio/data/user';
+import { JsonLdScript } from '@/lib/json-ld';
 
 export const metadata: Metadata = {
   alternates: {
@@ -21,13 +22,9 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(getPageJsonLd()).replace(/</g, '\\u003c'),
-        }}
-      />
-      <main
+      <JsonLdScript data={getPageJsonLd()} />
+
+      <div
         className="mx-auto md:max-w-4xl *:[[id]]:scroll-mt-22"
         aria-label="Portfolio"
       >
@@ -52,7 +49,7 @@ export default function Page() {
 
         <Awards />
         <TailwindSeparator />
-      </main>
+      </div>
     </>
   );
 }

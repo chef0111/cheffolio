@@ -12,10 +12,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="group/layout">
       <SiteHeader />
-      <main className="max-w-full overflow-x-hidden px-2">{children}</main>
+      <main className="max-w-screen overflow-x-hidden px-2">{children}</main>
       <SiteFooter />
       <div
-        className="scroll-fade-effect-bottom pointer-events-none fixed inset-x-0 bottom-0 z-50"
+        className="scroll-fade-effect-bottom pointer-events-none fixed inset-x-0 -bottom-0.5 z-50"
         aria-hidden
       >
         <div className="to-background h-(--fade-bottom-height) bg-linear-to-b from-transparent mask-linear-[to_top,var(--background)_25%,transparent] backdrop-blur-[1px]" />

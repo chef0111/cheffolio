@@ -279,7 +279,7 @@
 }
 
 @utility scroll-fade-effect-bottom {
-  --scroll-buffer: 2rem;
+  --scroll-buffer: 1.75rem;
 
   @supports (animation-timeline: scroll()) {
     animation-name: hide-bottom-fade;
