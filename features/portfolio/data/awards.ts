@@ -15,7 +15,7 @@ export const AWARDS: Award[] = [
   },
   {
     id: 'mmm-2026',
-    prize: 'Accepted Rank B Paper',
+    prize: 'Accepted B-Rank Paper',
     title: '32nd International Conference on Multimedia Modeling',
     date: '2025-11',
     grade: '3rd Year University',
