@@ -17,6 +17,13 @@ const eslintConfig = defineConfig([
     'next-env.d.ts',
   ]),
   {
+    // ESLint 10 removed context.getFilename(); eslint-plugin-react still uses it
+    // for React version auto-detection. Pinning the version skips that path.
+    settings: {
+      react: { version: '19' },
+    },
+  },
+  {
     files: ['**/*.{ts,tsx}'],
     rules: {
       '@typescript-eslint/consistent-type-imports': 'error',

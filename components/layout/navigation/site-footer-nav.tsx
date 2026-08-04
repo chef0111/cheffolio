@@ -1,14 +1,9 @@
 'use client';
 
-import dynamic from 'next/dynamic';
-
+import { CommandMenu } from '@/components/cheffolio/command-menu';
 import { MOBILE_NAV } from '@/config/site';
 
 import { MobileNav } from './mobile-nav';
-
-const CommandMenu = dynamic(() =>
-  import('@/components/cheffolio/command-menu').then((mod) => mod.CommandMenu)
-);
 
 export function SiteFooterNav() {
   return (

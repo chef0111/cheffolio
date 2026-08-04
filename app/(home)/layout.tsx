@@ -1,13 +1,7 @@
-import dynamic from 'next/dynamic';
-
 import { SiteFooter } from '@/components/layout/footer';
 import { SiteHeader } from '@/components/layout/header';
 import { SiteFooterNav } from '@/components/layout/navigation/site-footer-nav';
 import { cn } from '@/lib/utils';
-
-const ScrollToTop = dynamic(() =>
-  import('@/components/cheffolio/scroll-to-top').then((mod) => mod.ScrollToTop)
-);
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -18,7 +12,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <ScrollFadeOverlay align="top" />
       <ScrollFadeOverlay align="bottom" />
       <SiteFooterNav />
-      <ScrollToTop />
     </div>
   );
 }

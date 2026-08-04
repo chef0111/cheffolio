@@ -16,7 +16,9 @@ export const EXPERIENCES: Experience[] = [
 - Language Proficiency: **IELTS 7.0** (British Council).
 - Achieved several awards, including:
   - **Best Video Browsing System Award** — 32nd International Conference on Multimedia Modeling (MMM 2026).
-  - **Consolation Prize** — Finished 5th place at Ho Chi Minh City AI Challenge (AIC 2025).`,
+  - **Consolation Prize** — Finished 5th place at Ho Chi Minh City AI Challenge (AIC 2025).
+  - **Accepted B-Rank Paper** — Fusionista2.0: Efficiency Retrieval System for Large-Scale Datasets.
+  `,
         skills: [
           'C++',
           'Java',
