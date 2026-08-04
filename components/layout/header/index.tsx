@@ -1,6 +1,6 @@
-import dynamic from 'next/dynamic';
 import Link from 'next/link';
 
+import { CommandMenu } from '@/components/cheffolio/command-menu';
 import { GitHubIcon } from '@/components/icons';
 import { DesktopNav } from '@/components/layout/navigation/desktop-nav';
 import { SiteHeaderNav } from '@/components/layout/navigation/site-header-nav';
@@ -10,10 +10,6 @@ import { addQueryParams } from '@/utils/url';
 
 import { SiteHeaderLogo } from './site-header-logo';
 import ThemeToggle from './theme-toggle';
-
-const CommandMenu = dynamic(() =>
-  import('@/components/cheffolio/command-menu').then((mod) => mod.CommandMenu)
-);
 
 export function SiteHeader() {
   return (

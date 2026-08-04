@@ -38,10 +38,10 @@
     "libphonenumber-js": "^1.12.42",
     "lucide-react": "^1.16.0",
     "motion": "^12.38.0",
-    "next": "16.2.10",
+    "next": "16.3.0",
     "next-themes": "^0.4.6",
-    "react": "19.2.7",
-    "react-dom": "19.2.7",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
     "react-markdown": "^10.1.0",
     "schema-dts": "^2.0.0",
     "sonner": "^2.0.7",
@@ -57,12 +57,12 @@
     "@tailwindcss/typography": "^0.5.19",
     "@toolwind/corner-shape": "^0.0.8-3",
     "@types/node": "^25.6.0",
-    "@types/react": "19.2.17",
-    "@types/react-dom": "19.2.3",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.4",
     "@types/three": "^0.184.0",
     "babel-plugin-react-compiler": "^1.0.0",
-    "eslint": "^9",
-    "eslint-config-next": "16.2.10",
+    "eslint": "10.8.0",
+    "eslint-config-next": "16.3.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-simple-import-sort": "^13.0.0",
     "husky": "^9.1.7",
@@ -80,7 +80,7 @@
     "unist-util-visit": "^5.1.0"
   },
   "resolutions": {
-    "@types/react": "19.2.17",
-    "@types/react-dom": "19.2.3"
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.4"
   }
 }
