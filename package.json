@@ -1,5 +1,6 @@
 {
   "name": "cheffolio",
+  "portless": "cheffolio",
   "version": "0.1.0",
   "description": "A minimal, shadcn/ui-inspired dev portfolio.",
   "homepage": "https://giabao.dev",
@@ -9,10 +10,10 @@
     "url": "git+https://github.com/chef0111/cheffolio.git"
   },
   "scripts": {
-    "dev": "portless cheffolio next dev",
+    "dev": "portless run next dev",
     "build": "next build",
-    "start": "portless cheffolio next start",
-    "next": "next build && portless cheffolio next start",
+    "start": "portless run next start",
+    "next": "next build && portless run next start",
     "lint": "eslint . --cache --cache-location .eslintcache",
     "lint:fix": "eslint --fix . --cache --cache-location .eslintcache",
     "format:check": "prettier --check \"**/*.{ts,tsx,md,mdx}\" --cache",
