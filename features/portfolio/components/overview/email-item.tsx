@@ -58,7 +58,7 @@ export function EmailItem({ email }: EmailItemProps) {
         </IntroItemLink>
       </IntroItemContent>
 
-      <div className="-translate-x-3 translate-y-px opacity-0 transition-opacity ease-out group-hover:opacity-100">
+      <div className="ease-out-cubic -translate-x-3 translate-y-px opacity-0 transition-opacity group-hover:opacity-100">
         <CopyButton
           className="text-muted-foreground bg-transparent"
           variant="ghost"

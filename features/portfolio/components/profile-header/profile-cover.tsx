@@ -12,12 +12,12 @@ export function ProfileCover() {
   return (
     <CanvasHover>
       <div className="z-20">
-        <div className="flex flex-col items-center gap-3">
+        <div className="flex flex-col items-center gap-4">
           <BrandLogo
             id="js-cover-mark"
-            className="h-auto w-28 translate-y-5 transition duration-300 group-hover/canvas:translate-y-0 group-data-[expanded=true]/canvas:translate-y-0 sm:w-32"
+            className="ease-out-cubic h-auto w-28 translate-y-5.5 transition duration-500 group-hover/canvas:translate-y-0 group-data-[expanded=true]/canvas:translate-y-0 sm:w-32"
           />
-          <Label className="font-pixel text-lg opacity-0 transition duration-300 group-hover/canvas:opacity-100 group-data-[expanded=true]/canvas:opacity-100 sm:text-xl">
+          <Label className="ease-out-cubic font-pixel text-lg opacity-0 transition duration-500 group-hover/canvas:opacity-100 group-data-[expanded=true]/canvas:opacity-100 sm:text-xl">
             giabao.dev
           </Label>
         </div>

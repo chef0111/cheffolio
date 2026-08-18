@@ -50,7 +50,7 @@ export function ProfileStatus({ emoji, quote }: ProfileStatusProps) {
         <span
           className={cn(
             'block max-w-0 overflow-hidden leading-none text-nowrap opacity-0',
-            'transition-[max-width,opacity,translate] duration-200 ease-in-out',
+            'ease-out-cubic transition-[max-width,opacity,translate] duration-200',
             isTouchDevice
               ? isExpanded && 'max-w-xs opacity-100'
               : 'group-hover/status:max-w-xs group-hover/status:translate-x-px group-hover/status:opacity-100',

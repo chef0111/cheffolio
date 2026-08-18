@@ -221,6 +221,10 @@
   }
 }
 
+@utility ease-out-cubic {
+  @apply ease-[cubic-bezier(0.32,0.72,0,1)];
+}
+
 @utility scroll-fade-effect-top {
   --scroll-buffer: 1.75rem;
 

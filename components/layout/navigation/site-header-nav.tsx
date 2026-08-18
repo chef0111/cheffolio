@@ -20,7 +20,7 @@ export function SiteHeaderNav({ children }: { children?: React.ReactNode }) {
     >
       <nav
         className={cn(
-          'mx-auto flex h-12 w-full items-center justify-between px-2 md:transition-all md:ease-out',
+          'md:ease-out-cubic mx-auto flex h-12 w-full items-center justify-between px-2 md:transition-all',
           {
             'md:px-2': scrolled,
           }
