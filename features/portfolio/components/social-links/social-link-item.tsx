@@ -20,7 +20,7 @@ export function SocialLinkItem({
   return (
     <a
       className={cn(
-        'group hover:bg-accent-muted active:bg-accent-muted relative flex items-center gap-4 p-4 pr-2 transition-[background-color] ease-out',
+        'group hover:bg-accent-muted active:bg-accent-muted ease-out-cubic relative flex items-center gap-4 p-4 pr-2 transition-[background-color]',
         className
       )}
       href={addQueryParams(href, UTM_PARAMS)}
@@ -53,7 +53,7 @@ export function SocialLinkItem({
         </div>
       </div>
 
-      <ArrowUpRightIcon className="text-muted-foreground size-4 transition-[rotate] duration-300 group-hover:rotate-45 group-active:rotate-45" />
+      <ArrowUpRightIcon className="ease-out-cubic text-muted-foreground size-4 transition-[rotate] duration-300 group-hover:rotate-45 group-active:rotate-45" />
     </a>
   );
 }

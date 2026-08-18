@@ -15,7 +15,7 @@ export function SiteHeader() {
   return (
     <SiteHeaderNav>
       <Link
-        className="transition-[scale] ease-out active:scale-98 has-data-[visible=false]:pointer-events-none [&_svg]:h-8"
+        className="ease-out-cubic transition-[scale] active:scale-98 has-data-[visible=false]:pointer-events-none [&_svg]:h-8"
         href="/"
         aria-label="Home"
       >

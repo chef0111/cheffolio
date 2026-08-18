@@ -45,10 +45,10 @@ function BrandMotion() {
       <BrandLogo
         fillOpacity={0}
         aria-hidden="true"
-        className="stroke-foreground no-focus absolute top-0 left-0 opacity-100 transition-opacity duration-300 select-none group-data-[visible=true]/motion:opacity-0"
+        className="ease-out-cubic stroke-foreground no-focus absolute top-0 left-0 opacity-100 transition-opacity duration-300 select-none group-data-[visible=true]/motion:opacity-0"
         tabIndex={-1}
       />
-      <Brand className="no-focus translate-y-2 opacity-0 transition-[opacity,translate] duration-300 group-data-[visible=true]/motion:translate-y-0 group-data-[visible=true]/motion:opacity-100" />
+      <Brand className="ease-out-cubic no-focus translate-y-2 opacity-0 transition-[opacity,translate] duration-300 group-data-[visible=true]/motion:translate-y-0 group-data-[visible=true]/motion:opacity-100" />
     </div>
   );
 }

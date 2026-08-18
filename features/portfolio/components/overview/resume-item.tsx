@@ -29,7 +29,7 @@ export function ResumeItem() {
         </IntroItemLink>
       </IntroItemContent>
 
-      <div className="-translate-x-3 opacity-0 transition-opacity ease-out group-hover:opacity-100">
+      <div className="ease-out-cubic -translate-x-3 opacity-0 transition-opacity group-hover:opacity-100">
         <Button
           variant="ghost"
           size="icon-xs"
