@@ -60,7 +60,7 @@ export function TechStack() {
                           href={item.href}
                           target="_blank"
                           rel="noopener"
-                          className="text-foreground inset-ring-border [&_svg]:text-muted-foreground/80 flex h-(--badge-height) items-center justify-center gap-1 rounded-full bg-zinc-50/80 px-2 font-mono text-xs inset-ring-1 dark:bg-zinc-900/80 [&_svg]:pointer-events-none [&_svg]:size-3.5 [&_svg]:shrink-0"
+                          className="text-foreground inset-ring-border [&_svg]:text-muted-foreground/80 flex h-(--badge-height) items-center justify-center gap-1 rounded-full bg-zinc-50/80 px-2 font-mono text-xs inset-ring-1 dark:bg-zinc-900/80 [&_svg]:pointer-events-none [&_svg]:h-3.5 [&_svg]:w-4 [&_svg]:shrink-0"
                         >
                           {item.icon}
                           {item.title}
