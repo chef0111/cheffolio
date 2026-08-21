@@ -50,6 +50,11 @@
     &:where(p) {
       margin-block-start: var(--typeset-flow);
       margin-block-end: 0;
+      @apply text-zinc-800 dark:text-zinc-200;
+    }
+
+    &:where(:not(p)) {
+      @apply text-foreground;
     }
 
     /* Headings. */
@@ -110,7 +115,7 @@
 
     /* Links. */
     &:where(a) {
-      @apply link-underline;
+      @apply link-underline font-medium;
     }
     &:where(a:focus-visible) {
       outline: 2px solid var(--color-ring, currentColor);
