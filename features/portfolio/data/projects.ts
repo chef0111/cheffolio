@@ -43,7 +43,7 @@ export const PROJECTS: Project[] = [
       'Scoring System',
       'CRM',
     ],
-    description: `A modern, user-friendly web application for managing Taekwondo sparring matches, designed for training and competing. Check out live site at [kyorbit.tku.io.vn](https://kyorbit.tku.io.vn).
+    description: `A modern, user-friendly web application for managing Taekwondo sparring matches, designed for training sessions and competitions. Check out live site at [kyorbit.tku.io.vn](https://kyorbit.tku.io.vn).
 - Real-time match updates and score tracking.
 - Configurable scoring system supporting various match types and rulesets.
 - Built a deterministic single-elimination bracket engine with a drag and drop interface, supporting bracket shuffling,
