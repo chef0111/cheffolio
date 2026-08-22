@@ -41,7 +41,7 @@ export const USER: User = {
 - Final-year student with a strong passion for web development.
 - Hands-on experience with SSR-driven frameworks such as **Next.js** and **TanStack Start**.
 - Focused on high-performance and user-centric applications, with attention to scalability and clean design.
-- Creator of [Kyorbit](https://kyorbit.tku.io.vn): Taekwondo tournament-management platform, designed to support training sessions and competitions.
+- Creator of [Kyorbit](https://kyorbit.tku.io.vn): Taekwondo tournament-management platform, designed to support training and competing.
 `,
   avatar:
     'https://res.cloudinary.com/chef0111/image/upload/chef0111-avatar.webp',
