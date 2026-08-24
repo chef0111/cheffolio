@@ -7,7 +7,6 @@ export * from './linkedin';
 export * from './mongodb';
 export * from './moon';
 export * from './openai';
-export * from './orpc';
 export * from './postgres';
 export * from './react-query';
 export * from './shadcn';
