@@ -222,7 +222,8 @@
 }
 
 @utility ease-out-cubic {
-  @apply ease-[cubic-bezier(0.32,0.72,0,1)];
+  --tw-ease: cubic-bezier(0.32, 0.72, 0, 1);
+  transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 @utility scroll-fade-effect-top {
