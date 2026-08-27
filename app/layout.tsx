@@ -6,12 +6,14 @@ import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
 import type { WebSite, WithContext } from 'schema-dts';
 
+import { CommandMenuDialog } from '@/components/cheffolio/command-menu';
 import { ScrollToTop } from '@/components/cheffolio/scroll-to-top';
 import { JsonLdScript } from '@/components/json-ld';
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { fontVariables } from '@/config/font';
 import { META_THEME_COLORS, SITE_INFO, X_USERNAME } from '@/config/site';
+import { CommandMenuProvider } from '@/context/command-menu-provider';
 import { ThemeProvider } from '@/context/theme-provider';
 import { USER } from '@/features/portfolio/data/user';
 import { cn } from '@/lib/utils';
@@ -144,11 +146,14 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <TooltipProvider>
-            {children}
-            <ScrollToTop />
-          </TooltipProvider>
-          <Toaster closeButton position="bottom-center" />
+          <CommandMenuProvider>
+            <TooltipProvider>
+              {children}
+              <ScrollToTop />
+            </TooltipProvider>
+            <CommandMenuDialog />
+            <Toaster closeButton position="bottom-center" />
+          </CommandMenuProvider>
         </ThemeProvider>
         <Analytics />
         <SpeedInsights />

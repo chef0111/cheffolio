@@ -1,8 +1,8 @@
 'use client';
 
-import { useHotkey } from '@tanstack/react-hotkeys';
 import { PhoneIcon } from 'lucide-react';
 import { useId } from 'react';
+import { useHotkeys } from 'react-hotkeys-hook';
 import { toast } from 'sonner';
 import { useWebHaptics } from 'web-haptics/react';
 
@@ -29,13 +29,14 @@ export function PhoneItem({ phoneNumber }: PhoneItemProps) {
   const phoneNumberDecoded = decodePhoneNumber(phoneNumber);
   const phoneNumberFormatted = formatPhoneNumber(phoneNumberDecoded);
 
-  useHotkey('Shift+P', async () => {
-    const success = await copyText(phoneNumberDecoded);
-    if (success) {
-      toast.success('Phone number copied to clipboard');
-    } else {
-      toast.error('Failed to copy phone number');
-    }
+  useHotkeys('shift+p', () => {
+    void copyText(phoneNumberDecoded).then((success) => {
+      if (success) {
+        toast.success('Phone number copied to clipboard');
+      } else {
+        toast.error('Failed to copy phone number');
+      }
+    });
   });
 
   const { trigger } = useWebHaptics({ debug: true });

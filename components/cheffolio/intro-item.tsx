@@ -39,6 +39,7 @@ export function IntroItemContent({
 
 export function IntroItemLink({
   className,
+  children,
   ...props
 }: React.ComponentProps<'a'>) {
   return (
@@ -46,7 +47,10 @@ export function IntroItemLink({
       className={cn('underline-offset-4 hover:underline', className)}
       target="_blank"
       rel="noopener"
+      title="Open link"
       {...props}
-    />
+    >
+      {children}
+    </a>
   );
 }

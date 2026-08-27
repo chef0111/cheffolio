@@ -26,18 +26,20 @@ export function SiteFooter() {
                   key={label}
                   size="icon-sm"
                   variant="ghost"
+                  aria-label={label}
                   className="text-muted-foreground hover:text-foreground"
                   render={
                     <a
-                      aria-label={label}
                       href={href}
                       target="_blank"
                       rel="noopener noreferrer"
+                      aria-label={label}
                     />
                   }
                   nativeButton={false}
                 >
                   {icon}
+                  <span className="sr-only">{label}</span>
                 </Button>
               ))}
             </div>
@@ -62,7 +64,13 @@ export function SiteFooter() {
         </div>
 
         <div className="screen-line-bottom flex max-w-4xl flex-col justify-between gap-2 py-4">
-          <Suspense>
+          <Suspense
+            fallback={
+              <p className="text-muted-foreground font-pixel-square text-center text-sm">
+                &copy; giabao.dev
+              </p>
+            }
+          >
             <FooterCopyright />
           </Suspense>
         </div>

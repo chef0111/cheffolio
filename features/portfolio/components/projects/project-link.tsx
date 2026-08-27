@@ -18,6 +18,7 @@ export function ProjectLink({ href }: { href: string }) {
             href={href}
             target="_blank"
             rel="noopener"
+            aria-label="Open project link"
             onClick={(e) => e.stopPropagation()}
           />
         }

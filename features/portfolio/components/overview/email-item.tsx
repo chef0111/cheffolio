@@ -1,8 +1,8 @@
 'use client';
 
-import { useHotkey } from '@tanstack/react-hotkeys';
 import { MailIcon } from 'lucide-react';
 import { useId } from 'react';
+import { useHotkeys } from 'react-hotkeys-hook';
 import { toast } from 'sonner';
 import { useWebHaptics } from 'web-haptics/react';
 
@@ -28,13 +28,14 @@ export function EmailItem({ email }: EmailItemProps) {
   const isClient = useIsClient();
   const emailDecoded = decodeEmail(email);
 
-  useHotkey('Shift+E', async () => {
-    const success = await copyText(emailDecoded);
-    if (success) {
-      toast.success('Email address copied to clipboard');
-    } else {
-      toast.error('Failed to copy email');
-    }
+  useHotkeys('shift+e', () => {
+    void copyText(emailDecoded).then((success) => {
+      if (success) {
+        toast.success('Email address copied to clipboard');
+      } else {
+        toast.error('Failed to copy email');
+      }
+    });
   });
 
   const { trigger } = useWebHaptics({ debug: true });

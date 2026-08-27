@@ -1,6 +1,5 @@
 'use client';
 
-import { useHotkey } from '@tanstack/react-hotkeys';
 import { useCommandState } from 'cmdk';
 import type { LucideProps } from 'lucide-react';
 import {
@@ -23,7 +22,8 @@ import {
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useTheme } from 'next-themes';
-import React, { useCallback, useState } from 'react';
+import React from 'react';
+import { useHotkeys } from 'react-hotkeys-hook';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
@@ -39,6 +39,7 @@ import { Empty, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
 import { Kbd, KbdGroup } from '@/components/ui/kbd';
 import { Separator } from '@/components/ui/separator';
 import { UTM_PARAMS } from '@/config/site';
+import { useCommandMenu } from '@/context/command-menu-provider';
 import { SOCIAL_LINKS } from '@/features/portfolio/data/social-links';
 import { USER } from '@/features/portfolio/data/user';
 import { haptic } from '@/lib/haptic';
@@ -92,30 +93,31 @@ const SOCIAL_LINK_ITEMS: CommandLinkItem[] = SOCIAL_LINKS.map((item) => ({
   openInNewTab: true,
 }));
 
-export function CommandMenu({
-  enabledHotkeys = false,
-}: {
-  enabledHotkeys?: boolean;
-}) {
-  const router = useRouter();
-  const { setTheme } = useTheme();
-  const [open, setOpen] = useState(false);
+export function CommandMenu() {
+  const { setOpen } = useCommandMenu();
 
-  useHotkey(
-    'Mod+K',
-    (e) => {
-      e.preventDefault();
-      setOpen((open) => !open);
-    },
-    { enabled: enabledHotkeys, conflictBehavior: 'allow' }
-  );
-
-  const handleOpen = useCallback(() => {
+  const handleOpen = React.useCallback(() => {
     setOpen(true);
     haptic();
-  }, []);
+  }, [setOpen]);
 
-  const handleOpenLink = useCallback(
+  return <CommandMenuTrigger onClick={handleOpen} />;
+}
+
+export function CommandMenuDialog() {
+  const { open, setOpen } = useCommandMenu();
+  const router = useRouter();
+  const { setTheme } = useTheme();
+
+  useHotkeys(
+    'mod+k',
+    () => {
+      setOpen((current) => !current);
+    },
+    { preventDefault: true, enableOnFormTags: true }
+  );
+
+  const handleOpenLink = React.useCallback(
     (href: string, openInNewTab = false) => {
       setOpen(false);
       haptic();
@@ -126,129 +128,131 @@ export function CommandMenu({
         router.push(href);
       }
     },
-    [router]
+    [setOpen, router]
   );
 
-  const handleCopy = useCallback((text: string, message: string) => {
-    setOpen(false);
-    haptic();
-    copyText(text);
-    toast.success(message);
-  }, []);
+  const handleCopy = React.useCallback(
+    (text: string, message: string) => {
+      setOpen(false);
+      haptic();
+      copyText(text);
+      toast.success(message);
+    },
+    [setOpen]
+  );
 
-  const handleDownload = useCallback((link: string) => {
-    setOpen(false);
-    haptic();
-    window.open(link, '_self', 'noopener noreferrer');
-  }, []);
+  const handleDownload = React.useCallback(
+    (link: string) => {
+      setOpen(false);
+      haptic();
+      window.open(link, '_self', 'noopener noreferrer');
+    },
+    [setOpen]
+  );
 
-  const handleSetTheme = useCallback(
+  const handleSetTheme = React.useCallback(
     (theme: 'light' | 'dark' | 'system') => {
       setOpen(false);
       haptic();
       setTheme(theme);
     },
-    [setTheme]
+    [setOpen, setTheme]
   );
 
   return (
-    <>
-      <CommandMenuTrigger onClick={handleOpen} />
+    <CommandDialog
+      title="Command Menu"
+      open={open}
+      onOpenChange={setOpen}
+      modal={false}
+    >
+      <CommandMenuInput />
 
-      <CommandDialog
-        title="Command Menu"
-        open={open}
-        onOpenChange={setOpen}
-        modal={false}
-      >
-        <CommandMenuInput />
+      <div className="bg-background ring-border mx-1 rounded-xl ring-1">
+        <CommandList className="bg-background dark:bg-background/50 scroll-fade min-h-80 rounded-xl">
+          <CommandEmpty>
+            <Empty className="gap-2">
+              <EmptyMedia variant="icon">
+                <ServerIcon />
+              </EmptyMedia>
+              <EmptyTitle>No results found</EmptyTitle>
+            </Empty>
+          </CommandEmpty>
 
-        <div className="bg-background ring-border mx-1 rounded-xl ring-1">
-          <CommandList className="bg-background dark:bg-background/50 scroll-fade min-h-80 rounded-xl">
-            <CommandEmpty>
-              <Empty className="gap-2">
-                <EmptyMedia variant="icon">
-                  <ServerIcon />
-                </EmptyMedia>
-                <EmptyTitle>No results found</EmptyTitle>
-              </Empty>
-            </CommandEmpty>
+          <CommandLinkGroup
+            heading="Portfolio"
+            links={PORTFOLIO_LINKS}
+            onLinkSelect={handleOpenLink}
+          />
+          <CommandLinkGroup
+            heading="Social Links"
+            links={SOCIAL_LINK_ITEMS}
+            onLinkSelect={handleOpenLink}
+          />
 
-            <CommandLinkGroup
-              heading="Portfolio"
-              links={PORTFOLIO_LINKS}
-              onLinkSelect={handleOpenLink}
-            />
-            <CommandLinkGroup
-              heading="Social Links"
-              links={SOCIAL_LINK_ITEMS}
-              onLinkSelect={handleOpenLink}
-            />
+          <CommandGroup heading="Personal Info">
+            <CommandItem onSelect={() => handleOpenLink(USER.resume!, true)}>
+              <FileUser className="text-muted-foreground" />
+              Personal Resume
+            </CommandItem>
+            <CommandItem
+              onSelect={() => handleDownload(USER.resumeDownloadUrl!)}
+            >
+              <DownloadIcon className="text-muted-foreground" />
+              Download Resume
+            </CommandItem>
+            <CommandItem
+              onSelect={() => {
+                handleCopy(
+                  decodeEmail(USER.email),
+                  'Email address copied to clipboard'
+                );
+              }}
+            >
+              <MailIcon className="text-muted-foreground" />
+              Copy Email Address
+            </CommandItem>
+            <CommandItem
+              onSelect={() => {
+                handleCopy(
+                  decodePhoneNumber(USER.phoneNumber),
+                  'Phone number copied to clipboard'
+                );
+              }}
+            >
+              <PhoneIcon className="text-muted-foreground" />
+              Copy Phone Number
+            </CommandItem>
+          </CommandGroup>
 
-            <CommandGroup heading="Personal Info">
-              <CommandItem onSelect={() => handleOpenLink(USER.resume!, true)}>
-                <FileUser className="text-muted-foreground" />
-                Personal Resume
-              </CommandItem>
-              <CommandItem
-                onSelect={() => handleDownload(USER.resumeDownloadUrl!)}
-              >
-                <DownloadIcon className="text-muted-foreground" />
-                Download Resume
-              </CommandItem>
-              <CommandItem
-                onSelect={() => {
-                  handleCopy(
-                    decodeEmail(USER.email),
-                    'Email address copied to clipboard'
-                  );
-                }}
-              >
-                <MailIcon className="text-muted-foreground" />
-                Copy Email Address
-              </CommandItem>
-              <CommandItem
-                onSelect={() => {
-                  handleCopy(
-                    decodePhoneNumber(USER.phoneNumber),
-                    'Phone number copied to clipboard'
-                  );
-                }}
-              >
-                <PhoneIcon className="text-muted-foreground" />
-                Copy Phone Number
-              </CommandItem>
-            </CommandGroup>
+          <CommandGroup heading="Theme">
+            <CommandItem
+              keywords={['theme']}
+              onSelect={() => handleSetTheme('light')}
+            >
+              <SunMediumIcon className="text-muted-foreground" />
+              Light
+            </CommandItem>
+            <CommandItem
+              keywords={['theme']}
+              onSelect={() => handleSetTheme('dark')}
+            >
+              <MoonStarIcon className="text-muted-foreground" />
+              Dark
+            </CommandItem>
+            <CommandItem
+              keywords={['theme']}
+              onSelect={() => handleSetTheme('system')}
+            >
+              <MonitorIcon className="text-muted-foreground" />
+              System
+            </CommandItem>
+          </CommandGroup>
+        </CommandList>
+      </div>
 
-            <CommandGroup heading="Theme">
-              <CommandItem
-                keywords={['theme']}
-                onSelect={() => handleSetTheme('light')}
-              >
-                <SunMediumIcon className="text-muted-foreground" />
-                Light
-              </CommandItem>
-              <CommandItem
-                keywords={['theme']}
-                onSelect={() => handleSetTheme('dark')}
-              >
-                <MoonStarIcon className="text-muted-foreground" />
-                Dark
-              </CommandItem>
-              <CommandItem
-                keywords={['theme']}
-                onSelect={() => handleSetTheme('system')}
-              >
-                <MonitorIcon className="text-muted-foreground" />
-                System
-              </CommandItem>
-            </CommandGroup>
-          </CommandList>
-        </div>
-
-        <CommandMenuFooter />
-      </CommandDialog>
-    </>
+      <CommandMenuFooter />
+    </CommandDialog>
   );
 }
 
@@ -256,30 +260,31 @@ function CommandMenuTrigger({ ...props }: React.ComponentProps<typeof Button>) {
   return (
     <Button
       data-slot="command-menu-trigger"
-      className="text-muted-foreground hover:bg-background hover:text-muted-foreground dark:hover:bg-input/30 gap-1.5 rounded-full shadow-none select-none"
+      aria-label="Open command menu"
+      className="group text-muted-foreground hover:bg-background hover:text-muted-foreground dark:hover:bg-input/30 rounded-full shadow-none select-none active:scale-100"
       variant="outline"
       size="sm"
       {...props}
     >
-      <Search className="size-5 sm:size-4 md:mr-1" />
+      <Search data-icon="inline-start" className="size-5 sm:size-4 md:mr-1" />
 
       <span className="font-sans text-sm/4 font-medium sm:hidden">Search…</span>
 
       <KbdGroup className="hidden sm:in-[.os-macos_&]:flex">
-        <Kbd className="w-5 min-w-5">⌘</Kbd>
-        <Kbd className="w-5 min-w-5">K</Kbd>
+        <Kbd className="group-active:text-foreground w-5 min-w-5">⌘</Kbd>
+        <Kbd className="group-active:text-foreground w-5 min-w-5">K</Kbd>
       </KbdGroup>
 
       <KbdGroup className="hidden sm:not-[.os-macos_&]:flex">
-        <Kbd>Ctrl</Kbd>
-        <Kbd className="w-5 min-w-5">K</Kbd>
+        <Kbd className="group-active:text-foreground min-w-5">Ctrl</Kbd>
+        <Kbd className="group-active:text-foreground w-5 min-w-5">K</Kbd>
       </KbdGroup>
     </Button>
   );
 }
 
 function CommandMenuInput() {
-  const [searchValue, setSearchValue] = useState('');
+  const [searchValue, setSearchValue] = React.useState('');
 
   return (
     <CommandInput

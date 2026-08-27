@@ -34,10 +34,18 @@ export function ResumeItem() {
           variant="ghost"
           size="icon-xs"
           className="text-muted-foreground hover:text-foreground"
-          render={<a href={USER.resumeDownloadUrl} rel="noopener noreferrer" />}
+          aria-label="Download resume"
+          render={
+            <a
+              href={USER.resumeDownloadUrl}
+              rel="noopener noreferrer"
+              aria-label="Download resume"
+            />
+          }
           nativeButton={false}
         >
           <DownloadIcon />
+          <span className="sr-only">Download resume</span>
         </Button>
       </div>
     </IntroItem>

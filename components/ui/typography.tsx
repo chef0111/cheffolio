@@ -71,7 +71,11 @@ function Heading<T extends HeadingTypes = 'h1'>({
       className={cn('flex flex-row items-center gap-2', className)}
       {...props}
     >
-      <a href={`#${props.id}`} className="peer not-prose">
+      <a
+        href={`#${props.id}`}
+        className="peer not-prose"
+        title="Link to section"
+      >
         {props.children}
       </a>
 

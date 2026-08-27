@@ -20,9 +20,9 @@ export const USER: User = {
   website: 'https://giabao.dev',
   jobTitle: 'Senior Student',
   resume:
-    'https://drive.google.com/file/d/1bvHjow-2ejrvvzK8hkEOuYexJ5q4gigv/view',
+    'https://drive.google.com/file/d/1xsDkTup_tUPN1PdSMPp8znP_-9aZ_1UF/view',
   resumeDownloadUrl:
-    'https://drive.usercontent.google.com/u/1/uc?id=1bvHjow-2ejrvvzK8hkEOuYexJ5q4gigv&export=download',
+    'https://drive.usercontent.google.com/u/1/uc?id=1xsDkTup_tUPN1PdSMPp8znP_-9aZ_1UF&export=download',
   jobs: [
     {
       title: 'Senior Student',
