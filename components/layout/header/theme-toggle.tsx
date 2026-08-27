@@ -1,8 +1,8 @@
 'use client';
 
-import { useHotkey } from '@tanstack/react-hotkeys';
 import { useTheme } from 'next-themes';
 import { useCallback } from 'react';
+import { useHotkeys } from 'react-hotkeys-hook';
 
 import { MoonIcon, SunIcon } from '@/components/icons';
 import { Button } from '@/components/ui/button';
@@ -42,12 +42,19 @@ export default function ThemeToggle() {
     else document.startViewTransition(switchTheme);
   }, [playToggle, switchTheme, isMobile]);
 
-  const toggleThemeHotkey = useCallback(() => {
-    playToggle(0.25);
-    switchTheme();
-  }, [playToggle, switchTheme]);
-
-  useHotkey('D', () => toggleThemeHotkey());
+  useHotkeys(
+    'd',
+    () => {
+      playToggle(0.25);
+      setTheme(resolvedTheme === 'light' ? 'dark' : 'light');
+      setMetaColor(
+        resolvedTheme === 'dark'
+          ? META_THEME_COLORS.light
+          : META_THEME_COLORS.dark
+      );
+    },
+    { preventDefault: true }
+  );
 
   return (
     <Tooltip>

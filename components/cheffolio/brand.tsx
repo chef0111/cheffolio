@@ -34,7 +34,7 @@ export function Brand({
   if (!href) return content;
 
   return (
-    <Link href={href} className="flex-center">
+    <Link href={href} className="flex-center" aria-label="Home">
       {content}
     </Link>
   );

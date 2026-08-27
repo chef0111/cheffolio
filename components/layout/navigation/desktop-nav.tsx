@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import type { ComponentProps } from 'react';
 
 import { useLocationHash } from '@/hooks/use-location-hash';
 import { markUserNavigation, useNavScroll } from '@/hooks/use-nav-scroll';
@@ -33,53 +32,30 @@ export function DesktopNav({ items }: { items: NavItem[] }) {
         const active = isNavItemActive(href, pathname, effectiveHash);
 
         return (
-          <DesktopNavItem
+          <Link
             key={href}
-            className={className}
             href={href}
-            active={active}
+            onClick={(event) => {
+              if (!href.startsWith('#')) return;
+              event.preventDefault();
+              const el = document.getElementById(href.slice(1));
+              if (el) {
+                el.scrollIntoView({ behavior: 'smooth' });
+                markUserNavigation();
+                window.history.pushState(null, '', href);
+                window.dispatchEvent(new Event('hashchange'));
+              }
+            }}
+            className={cn(
+              'text-muted-foreground hover:text-foreground text-sm font-medium transition-[color]',
+              active && 'text-foreground',
+              className
+            )}
           >
             {title}
-          </DesktopNavItem>
+          </Link>
         );
       })}
     </nav>
-  );
-}
-
-function DesktopNavItem({
-  className,
-  active,
-  href,
-  onClick,
-  ...props
-}: ComponentProps<typeof Link> & {
-  active?: boolean;
-}) {
-  const hrefString = typeof href === 'string' ? href : (href.hash ?? '');
-
-  return (
-    <Link
-      href={href}
-      onClick={(e) => {
-        if (hrefString.startsWith('#')) {
-          e.preventDefault();
-          const el = document.getElementById(hrefString.slice(1));
-          if (el) {
-            el.scrollIntoView({ behavior: 'smooth' });
-            markUserNavigation();
-            window.history.pushState(null, '', hrefString);
-            window.dispatchEvent(new Event('hashchange'));
-          }
-        }
-        if (onClick) onClick(e);
-      }}
-      className={cn(
-        'text-muted-foreground hover:text-foreground text-sm font-medium transition-[color]',
-        active && 'text-foreground',
-        className
-      )}
-      {...props}
-    />
   );
 }

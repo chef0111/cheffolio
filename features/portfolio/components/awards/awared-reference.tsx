@@ -18,6 +18,7 @@ export function AwardReference({ href }: { href: string }) {
             href={href}
             target="_blank"
             rel="noopener"
+            aria-label="Open reference attachment"
             onClick={(e) => e.stopPropagation()}
           />
         }

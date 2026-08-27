@@ -126,30 +126,91 @@ function MobileNavContent({
       <nav
         ref={setNavNode}
         data-slot="mobile-nav-dock"
-        className={cn(
-          'bg-popover relative flex items-center rounded-2xl p-1.5 shadow-md',
-          !hasCenter && 'ring-ring/20 border ring-1'
-        )}
+        className="bg-popover relative flex grid-cols-4 items-center rounded-2xl p-1.5 shadow-md"
         style={{ clipPath: pathD ? `url(#${clipId})` : undefined }}
         aria-label="Mobile section dock"
       >
-        <MobileNavItems
-          items={leadingItems}
-          pathname={pathname}
-          effectiveHash={effectiveHash}
-          onLinkClick={onLinkClick}
-          className={cn(hasCenter && 'flex-1 justify-end')}
-        />
-        {hasCenter ? <div className="w-16 shrink-0" aria-hidden /> : null}
-        {hasCenter ? (
-          <MobileNavItems
-            items={trailingItems}
-            pathname={pathname}
-            effectiveHash={effectiveHash}
-            onLinkClick={onLinkClick}
-            className="flex-1 justify-start"
-          />
-        ) : null}
+        {leadingItems.length > 0 && (
+          <div
+            className={cn(
+              'flex items-center gap-0.5',
+              hasCenter && 'flex-1 justify-end'
+            )}
+            data-slot="mobile-nav-group"
+          >
+            {leadingItems.map((link) => {
+              const active = isNavItemActive(
+                link.href,
+                pathname,
+                effectiveHash
+              );
+              const Icon = link.icon;
+
+              return (
+                <Button
+                  key={link.href}
+                  variant={active ? 'secondary' : 'ghost'}
+                  size="icon"
+                  className="extend-touch-target rounded-xl active:scale-100"
+                  render={
+                    <Link
+                      href={link.href}
+                      aria-label={link.title}
+                      title={link.title}
+                      onClick={onLinkClick}
+                      data-slot="mobile-nav-link"
+                    />
+                  }
+                  nativeButton={false}
+                >
+                  {Icon ? <Icon className="size-5" /> : null}
+                </Button>
+              );
+            })}
+          </div>
+        )}
+
+        {hasCenter && (
+          <>
+            <div className="w-16 shrink-0" aria-hidden />
+            {trailingItems.length > 0 && (
+              <div
+                className="flex flex-1 items-center justify-start gap-0.5"
+                data-slot="mobile-nav-group"
+              >
+                {trailingItems.map((link) => {
+                  const active = isNavItemActive(
+                    link.href,
+                    pathname,
+                    effectiveHash
+                  );
+                  const Icon = link.icon;
+
+                  return (
+                    <Button
+                      key={link.href}
+                      variant={active ? 'secondary' : 'ghost'}
+                      size="icon"
+                      className="extend-touch-target rounded-xl active:scale-100"
+                      render={
+                        <Link
+                          href={link.href}
+                          aria-label={link.title}
+                          title={link.title}
+                          onClick={onLinkClick}
+                          data-slot="mobile-nav-link"
+                        />
+                      }
+                      nativeButton={false}
+                    >
+                      {Icon ? <Icon className="size-5" /> : null}
+                    </Button>
+                  );
+                })}
+              </div>
+            )}
+          </>
+        )}
       </nav>
 
       {pathD && size && (
@@ -175,7 +236,7 @@ function MobileNavContent({
         </svg>
       )}
 
-      {center ? (
+      {center && (
         <div className="pointer-events-none absolute inset-x-0 -top-4 flex justify-center">
           <div
             className={cn(
@@ -187,58 +248,7 @@ function MobileNavContent({
             {center}
           </div>
         </div>
-      ) : null}
-    </div>
-  );
-}
-
-interface MobileNavItemsProps {
-  items: NavItem[];
-  pathname: string;
-  effectiveHash: string;
-  onLinkClick: () => void;
-  className?: string;
-}
-
-function MobileNavItems({
-  items,
-  pathname,
-  effectiveHash,
-  onLinkClick,
-  className,
-}: MobileNavItemsProps) {
-  if (items.length === 0) return null;
-
-  return (
-    <div
-      className={cn('flex items-center gap-0.5', className)}
-      data-slot="mobile-nav-group"
-    >
-      {items.map((link) => {
-        const active = isNavItemActive(link.href, pathname, effectiveHash);
-        const Icon = link.icon;
-
-        return (
-          <Button
-            key={link.href}
-            variant={active ? 'secondary' : 'ghost'}
-            size="icon"
-            className="extend-touch-target rounded-xl active:scale-100"
-            render={
-              <Link
-                href={link.href}
-                aria-label={link.title}
-                title={link.title}
-                onClick={onLinkClick}
-                data-slot="mobile-nav-link"
-              />
-            }
-            nativeButton={false}
-          >
-            {Icon ? <Icon className="size-5" /> : null}
-          </Button>
-        );
-      })}
+      )}
     </div>
   );
 }
