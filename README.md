@@ -1,15 +1,18 @@
-# [giabao.dev](https://giabao.dev) • ![License](https://img.shields.io/badge/License-MIT-blue)
-
-A minimal, shadcn/ui-inspired dev portfolio.
-
-→ Official live site: [giabao.dev](https://giabao.dev)
-
 [![screenshot-dark](https://res.cloudinary.com/chef0111/image/upload/v3/screenshot-desktop-dark.webp#gh-dark-mode-only)](https://giabao.dev#gh-dark-mode-only)
 [![screenshot-light](https://res.cloudinary.com/chef0111/image/upload/v3/screenshot-desktop-light.webp#gh-light-mode-only)](https://giabao.dev#gh-light-mode-only)
 
+<p align="center">
+  <a href="https://nextjs.org"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/Next.js.svg?size=xs&amp;logo=nextdotjs" /><img alt="Next.js" src="https://shieldcn.dev/badge/Next.js.svg?size=xs&amp;mode=light&amp;logo=nextdotjs" /></picture></a>
+  <a href="https://tailwindcss.com"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/Tailwind_CSS.svg?variant=branded&amp;size=xs&amp;logo=tailwindcss" /><img alt="Tailwind CSS" src="https://shieldcn.dev/badge/Tailwind_CSS.svg?variant=branded&amp;size=xs&amp;mode=light&amp;logo=tailwindcss" /></picture></a>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/shadcn/ui.svg?size=xs&amp;logo=shadcnui" /><img alt="shadcn/ui" src="https://shieldcn.dev/badge/shadcn/ui.svg?size=xs&amp;mode=light&amp;logo=shadcnui" /></picture>
+  <a href="https://github.com/chef0111/cheffolio"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/github/chef0111/cheffolio/license.svg?variant=secondary&amp;size=xs" /><img alt="License" src="https://shieldcn.dev/github/chef0111/cheffolio/license.svg?variant=secondary&amp;size=xs&amp;mode=light" /></picture></a>
+</p>
+
 ## Overview
 
-giabao.dev is a personal portfolio focused on minimalism (with some fancy touches), smooth interaction, and clean content customization.
+**giabao.dev** is a personal portfolio focused on minimalism (with some fancy touches), smooth interaction, and clean content customization.
+
+→ Official live site: [giabao.dev](https://giabao.dev)
 
 ### Features
 
@@ -18,13 +21,6 @@ giabao.dev is a personal portfolio focused on minimalism (with some fancy touche
 - Keyboard-first command menu — `Ctrl + K` | `⌘ + K`
 - SEO optimized (Open Graph, Twitter metadata, JSON-LD, sitemap, robots)
 - Installable as a PWA
-
-## Tech Stack
-
-- Next.js 16
-- Tailwind CSS v4
-- shadcn/ui
-- Motion
 
 ## Stats
 
