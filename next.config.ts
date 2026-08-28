@@ -16,6 +16,11 @@ const nextConfig: NextConfig = {
         hostname: 'images.unsplash.com',
         port: '',
       },
+      {
+        protocol: 'https',
+        hostname: 'assets.giabao.dev',
+        port: '',
+      },
     ],
     qualities: [100, 75],
   },
