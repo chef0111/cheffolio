@@ -1,7 +1,7 @@
 import type { SocialLink } from '../types/social-links';
 import { USER } from './user';
 
-const baseUrl = 'https://res.cloudinary.com/chef0111/image/upload/v1';
+const baseUrl = 'https://assets.giabao.dev/socials';
 
 export const SOCIAL_LINKS: SocialLink[] = [
   {
@@ -9,35 +9,41 @@ export const SOCIAL_LINKS: SocialLink[] = [
     title: 'X',
     subtitle: '@cheff0111',
     href: USER.socialLinks.x,
+    sameAs: true,
   },
   {
     icon: `${baseUrl}/github.webp`,
     title: 'GitHub',
     subtitle: 'chef0111',
     href: USER.socialLinks.github,
+    sameAs: true,
   },
   {
     icon: `${baseUrl}/linkedin.webp`,
     title: 'LinkedIn',
     subtitle: 'chef0111',
     href: USER.socialLinks.linkedin,
+    sameAs: true,
   },
   {
     icon: `${baseUrl}/discord.webp`,
     title: 'Discord',
     subtitle: 'chef.0111',
     href: USER.socialLinks.discord,
+    sameAs: true,
   },
   {
     icon: `${baseUrl}/facebook.webp`,
     title: 'Facebook',
     subtitle: 'giabao.67.05',
     href: USER.socialLinks.facebook,
+    sameAs: true,
   },
   {
     icon: `${baseUrl}/instagram.webp`,
     title: 'Instagram',
     subtitle: '@chef.0111',
     href: USER.socialLinks.instagram,
+    sameAs: true,
   },
 ];

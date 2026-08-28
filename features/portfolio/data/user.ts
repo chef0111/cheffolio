@@ -5,7 +5,7 @@ export const USER: User = {
   lastName: 'Lê',
   displayName: 'Gia Bảo',
   username: 'chef0111',
-  alternateName: ['Lê Trần Gia Bảo', 'chef0111', 'giabao', 'baoltg'],
+  alternateName: ['Lê Trần Gia Bảo', 'chef0111', 'giabao', 'baoltg', 'gbaolt'],
   gender: 'male',
   pronouns: 'he/him',
   bio: 'Love coding catchy things :>',
@@ -18,11 +18,7 @@ export const USER: User = {
   phoneNumber: 'Kzg0IDg2NSA2NzUgOTA4', // E.164 format, base64 encoded (https://t.io.vn/base64-string-converter)
   email: 'bGV0cmFuZ2lhYmFvMTRAZ21haWwuY29t', // base64 encoded
   website: 'https://giabao.dev',
-  jobTitle: 'Senior Student',
-  resume:
-    'https://drive.google.com/file/d/1xsDkTup_tUPN1PdSMPp8znP_-9aZ_1UF/view',
-  resumeDownloadUrl:
-    'https://drive.usercontent.google.com/u/1/uc?id=1xsDkTup_tUPN1PdSMPp8znP_-9aZ_1UF&export=download',
+  jobTitle: 'Software Engineer',
   jobs: [
     {
       title: 'Senior Student',
@@ -30,6 +26,9 @@ export const USER: User = {
       website: 'https://uit.edu.vn',
     },
   ],
+  resume: 'https://assets.giabao.dev/LeTranGiaBao-CV.pdf',
+  resumeDownloadUrl:
+    'https://drive.usercontent.google.com/u/1/uc?id=1xsDkTup_tUPN1PdSMPp8znP_-9aZ_1UF&export=download',
   skills: [
     'React',
     'Next.js',
@@ -43,8 +42,7 @@ export const USER: User = {
 - Focused on high-performance and user-centric applications, with attention to scalability and clean design.
 - Creator of [Kyorbit](https://kyorbit.tku.io.vn): Taekwondo tournament-management platform, designed to support training and competing.
 `,
-  avatar:
-    'https://res.cloudinary.com/chef0111/image/upload/chef0111-avatar.webp',
+  avatar: 'https://assets.giabao.dev/chef0111-avatar.webp',
   socialLinks: {
     x: 'https://x.com/cheff0111',
     github: 'https://github.com/chef0111',
@@ -53,7 +51,7 @@ export const USER: User = {
     facebook: 'https://facebook.com/giabao.67.05',
     instagram: 'https://www.instagram.com/chef.0111',
   },
-  ogImage: 'https://res.cloudinary.com/chef0111/image/upload/ogImage.png',
+  ogImage: 'https://assets.giabao.dev/ogImage.png',
   timeZone: 'Asia/Ho_Chi_Minh',
   keywords: [
     'Gia Bảo',
@@ -86,4 +84,5 @@ export const USER: User = {
     'cheffolio',
   ],
   dateCreated: '2026-03-22',
+  dateModified: '2026-08-28',
 };

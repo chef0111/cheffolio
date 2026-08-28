@@ -74,7 +74,7 @@ export const GITHUB_USERNAME = 'chef0111';
 export const X_USERNAME = '@cheff0111';
 
 export const SOUNDS = {
-  toggle: 'https://res.cloudinary.com/chef0111/video/upload/toggle.mp3',
+  toggle: 'https://assets.giabao.dev/sounds/toggle.mp3',
 };
 
 export const FOOTER_SLOGAN = 'Coding as Chef';

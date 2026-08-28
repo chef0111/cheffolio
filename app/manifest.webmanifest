@@ -4,19 +4,19 @@
   "description": "A minimalist, shadcn/ui-inspired dev portfolio of @chef0111.",
   "icons": [
     {
-      "src": "https://res.cloudinary.com/chef0111/image/upload/cheffolio.svg",
+      "src": "https://assets.giabao.dev/favicon-light.svg",
       "type": "image/svg+xml",
       "sizes": "any",
       "purpose": "any"
     },
     {
-      "src": "https://res.cloudinary.com/chef0111/image/upload/icon-192x192.png",
+      "src": "https://assets.giabao.dev/icon-192x192.png",
       "type": "image/png",
       "sizes": "192x192",
       "purpose": "any"
     },
     {
-      "src": "https://res.cloudinary.com/chef0111/image/upload/icon-512x512.png",
+      "src": "https://assets.giabao.dev/icon-512x512.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "any"
@@ -28,25 +28,25 @@
   "scope": "/",
   "screenshots": [
     {
-      "src": "https://res.cloudinary.com/chef0111/image/upload/v3/screenshot-mobile-dark.webp",
+      "src": "https://assets.giabao.dev/screenshot-mobile-dark.webp",
       "type": "image/webp",
       "sizes": "480x1002",
       "form_factor": "narrow"
     },
     {
-      "src": "https://res.cloudinary.com/chef0111/image/upload/v3/screenshot-mobile-light.webp",
+      "src": "https://assets.giabao.dev/screenshot-mobile-light.webp",
       "type": "image/webp",
       "sizes": "480x1002",
       "form_factor": "narrow"
     },
     {
-      "src": "https://res.cloudinary.com/chef0111/image/upload/v3/screenshot-desktop-dark.webp",
+      "src": "https://assets.giabao.dev/screenshot-desktop-dark.webp",
       "type": "image/webp",
       "sizes": "1140x720",
       "form_factor": "wide"
     },
     {
-      "src": "https://res.cloudinary.com/chef0111/image/upload/v3/screenshot-desktop-light.webp",
+      "src": "https://assets.giabao.dev/screenshot-desktop-light.webp",
       "type": "image/webp",
       "sizes": "1140x720",
       "form_factor": "wide"

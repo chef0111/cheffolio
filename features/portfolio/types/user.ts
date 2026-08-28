@@ -43,4 +43,5 @@ export type User = {
   /** Time zone in IANA format (e.g., "Asia/Ho_Chi_Minh") */
   timeZone: string;
   dateCreated: string;
+  dateModified: string;
 };

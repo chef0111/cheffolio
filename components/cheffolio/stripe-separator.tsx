@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils';
 
 import { FullWidthDivider } from './full-width-divider';
 
-export function TailwindSeparator({ className }: { className?: string }) {
+export function StripeSeparator({ className }: { className?: string }) {
   return (
     <>
       <FullWidthDivider />

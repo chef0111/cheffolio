@@ -8,12 +8,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'res.cloudinary.com',
-        port: '',
-      },
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
+        hostname: 'assets.giabao.dev',
         port: '',
       },
     ],

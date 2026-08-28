@@ -9,7 +9,7 @@ const fontSans = GeistSans;
 const fontMono = GeistMono;
 const fontPixelSquare = GeistPixelSquare;
 
-const fontPixel = localFont({
+export const fontPixel = localFont({
   src: '../assets/fonts/DepartureMono-Regular.woff2',
   weight: '400',
   fallback: ['monospace'],
