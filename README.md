@@ -26,6 +26,10 @@
 
 ![Stats](https://repobeats.axiom.co/api/embed/f5f65e9b9763db7fd386d2417b89d4e5c2fdc6c3.svg 'Repobeats analytics image')
 
+## Development
+
+Please visit the [Development Guide](./DEVELOPMENT.md) for full local environment setup.
+
 ## License
 
 Licensed under the [MIT license](./LICENSE).
