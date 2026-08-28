@@ -12,6 +12,7 @@ import { JsonLdScript } from '@/components/json-ld';
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { fontVariables } from '@/config/font';
+import { JSON_LD_ID, personJsonLd } from '@/config/json-ld';
 import { META_THEME_COLORS, SITE_INFO, X_USERNAME } from '@/config/site';
 import { CommandMenuProvider } from '@/context/command-menu-provider';
 import { ThemeProvider } from '@/context/theme-provider';
@@ -22,8 +23,10 @@ function getWebSiteJsonLd(): WithContext<WebSite> {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
+    '@id': JSON_LD_ID.website,
     name: SITE_INFO.name,
     url: SITE_INFO.url,
+    author: personJsonLd,
     alternateName: [USER.username],
   };
 }
@@ -31,8 +34,8 @@ function getWebSiteJsonLd(): WithContext<WebSite> {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_INFO.url),
   title: {
-    template: `%s – ${SITE_INFO.name}`,
-    default: `${SITE_INFO.name}`,
+    template: `%s | ${SITE_INFO.name}`,
+    default: `${SITE_INFO.name} – ${USER.jobTitle}`,
   },
   description: SITE_INFO.description,
   keywords: SITE_INFO.keywords,

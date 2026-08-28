@@ -18,10 +18,7 @@ export const USER: User = {
   phoneNumber: 'Kzg0IDg2NSA2NzUgOTA4', // E.164 format, base64 encoded (https://t.io.vn/base64-string-converter)
   email: 'bGV0cmFuZ2lhYmFvMTRAZ21haWwuY29t', // base64 encoded
   website: 'https://giabao.dev',
-  jobTitle: 'Senior Student',
-  resume: 'https://assets.giabao.dev/LeTranGiaBao-CV.pdf',
-  resumeDownloadUrl:
-    'https://drive.usercontent.google.com/u/1/uc?id=1xsDkTup_tUPN1PdSMPp8znP_-9aZ_1UF&export=download',
+  jobTitle: 'Software Engineer',
   jobs: [
     {
       title: 'Senior Student',
@@ -29,6 +26,9 @@ export const USER: User = {
       website: 'https://uit.edu.vn',
     },
   ],
+  resume: 'https://assets.giabao.dev/LeTranGiaBao-CV.pdf',
+  resumeDownloadUrl:
+    'https://drive.usercontent.google.com/u/1/uc?id=1xsDkTup_tUPN1PdSMPp8znP_-9aZ_1UF&export=download',
   skills: [
     'React',
     'Next.js',
@@ -84,4 +84,5 @@ export const USER: User = {
     'cheffolio',
   ],
   dateCreated: '2026-03-22',
+  dateModified: '2026-08-28',
 };

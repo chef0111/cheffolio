@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 import type { ProfilePage, WithContext } from 'schema-dts';
 
-import { TailwindSeparator } from '@/components/cheffolio/tailwind-separator';
+import { StripeSeparator } from '@/components/cheffolio/stripe-separator';
 import { JsonLdScript } from '@/components/json-ld';
+import { JSON_LD_ID } from '@/config/json-ld';
 import { About } from '@/features/portfolio/components/about';
 import { Awards } from '@/features/portfolio/components/awards';
 import { Experiences } from '@/features/portfolio/components/experiences';
@@ -29,26 +30,26 @@ export default function Page() {
         aria-label="Portfolio"
       >
         <ProfileHeader />
-        <TailwindSeparator />
+        <StripeSeparator />
 
         <Overview />
         <SocialLinks />
-        <TailwindSeparator />
+        <StripeSeparator />
 
         <About />
-        <TailwindSeparator />
+        <StripeSeparator />
 
         <TechStack />
-        <TailwindSeparator />
+        <StripeSeparator />
 
         <Experiences />
-        <TailwindSeparator />
+        <StripeSeparator />
 
         <Projects />
-        <TailwindSeparator />
+        <StripeSeparator />
 
         <Awards />
-        <TailwindSeparator />
+        <StripeSeparator />
       </div>
     </>
   );
@@ -59,16 +60,7 @@ function getPageJsonLd(): WithContext<ProfilePage> {
     '@context': 'https://schema.org',
     '@type': 'ProfilePage',
     dateCreated: new Date(USER.dateCreated).toISOString(),
-    mainEntity: {
-      '@type': 'Person',
-      name: USER.displayName,
-      identifier: USER.username,
-      image: USER.avatar,
-      alternateName: USER.alternateName,
-      description: USER.bio,
-      jobTitle: USER.jobTitle,
-      sameAs: Object.values(USER.socialLinks),
-      knowsAbout: USER.skills,
-    },
+    dateModified: new Date(USER.dateModified).toISOString(),
+    mainEntity: { '@id': JSON_LD_ID.person },
   };
 }

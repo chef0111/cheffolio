@@ -3,4 +3,5 @@ export type SocialLink = {
   title: string;
   subtitle?: string;
   href: string;
+  sameAs: boolean;
 };
