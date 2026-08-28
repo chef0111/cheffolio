@@ -5,6 +5,8 @@ import {
   PADDLE_HEIGHT,
   PADDLE_SPEED,
   PADDLE_WIDTH,
+  paddleMaxX,
+  paddleMinX,
   uncheckedClamp,
 } from './constants';
 import type { GameState } from './types';
@@ -30,24 +32,34 @@ export class Paddle {
     this.y = p.height - this.height;
 
     state.canvas!.mouseMoved((e: MouseEvent) => {
+      if (window.matchMedia('(max-width: 767px)').matches) {
+        return false;
+      }
+
       const canvas = state.canvas!.elt as HTMLCanvasElement;
       this.x = uncheckedClamp(
-        PADDLE_HEIGHT / 2,
-        p.width - this.width - PADDLE_HEIGHT / 2,
+        paddleMinX(),
+        paddleMaxX(p.width),
         clientXToCanvasX(canvas, e.clientX, p.width) - PADDLE_WIDTH / 2
       );
+      this.state.paddleX.current = null;
       return false;
     });
 
     state.canvas!.touchMoved((e: TouchEvent) => {
+      if (window.matchMedia('(max-width: 767px)').matches) {
+        return false;
+      }
+
       const canvas = state.canvas!.elt as HTMLCanvasElement;
       const touch = e.touches[0];
 
       this.x = uncheckedClamp(
-        PADDLE_HEIGHT / 2,
-        p.width - this.width - PADDLE_HEIGHT / 2,
+        paddleMinX(),
+        paddleMaxX(p.width),
         clientXToCanvasX(canvas, touch.clientX, p.width) - PADDLE_WIDTH / 2
       );
+      this.state.paddleX.current = null;
 
       return false;
     });
@@ -62,26 +74,25 @@ export class Paddle {
   }
 
   move() {
-    if (this.p.keyIsDown(this.p.LEFT_ARROW) && this.x > PADDLE_HEIGHT / 2) {
+    const sliderX = this.state.paddleX.current;
+    if (sliderX != null) {
+      this.x = sliderX;
+    } else if (this.p.keyIsDown(this.p.LEFT_ARROW) && this.x > paddleMinX()) {
       this.x -= PADDLE_SPEED;
     } else if (
       this.p.keyIsDown(this.p.RIGHT_ARROW) &&
-      this.x < this.p.width - this.width - PADDLE_HEIGHT / 2
+      this.x < paddleMaxX(this.p.width)
     ) {
       this.x += PADDLE_SPEED;
     }
 
-    this.x = uncheckedClamp(
-      PADDLE_HEIGHT / 2,
-      this.p.width - this.width - PADDLE_HEIGHT / 2,
-      this.x
-    );
+    this.x = uncheckedClamp(paddleMinX(), paddleMaxX(this.p.width), this.x);
   }
 
   automove(ball: { x: number }) {
     this.x = uncheckedClamp(
-      PADDLE_HEIGHT / 2,
-      this.p.width - this.width - PADDLE_HEIGHT / 2,
+      paddleMinX(),
+      paddleMaxX(this.p.width),
       ball.x - this.width / 2
     );
   }

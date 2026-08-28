@@ -7,6 +7,7 @@ import {
   BRICK_SCORE,
   uncheckedClamp,
 } from './constants';
+import { playSound } from './sounds';
 import type { GameState } from './types';
 
 export class Ball {
@@ -123,12 +124,4 @@ export class Ball {
 
     if (collision) this.ySpeed *= -1;
   }
-}
-
-function playSound(sound: HTMLAudioElement | null) {
-  if (!sound) return;
-
-  sound.currentTime = 0;
-  sound.volume = 0.3;
-  sound.play().catch(() => {});
 }

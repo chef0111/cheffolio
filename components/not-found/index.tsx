@@ -25,6 +25,8 @@ import {
 } from './constants';
 import { getLogoIndex } from './logos';
 import { Paddle } from './paddle';
+import { PaddleSlider } from './paddle-slider';
+import { loadSound, unlockSounds } from './sounds';
 import type { GameState } from './types';
 import { UI } from './ui';
 
@@ -64,12 +66,6 @@ function GameLoadingStatus() {
   );
 }
 
-function loadSound(url: string) {
-  const audio = new Audio(url);
-  audio.preload = 'auto';
-  return audio;
-}
-
 function loadSprite(p: p5, url: string) {
   return new Promise<p5.Image | null>((resolve) => {
     const img = new Image();
@@ -91,6 +87,12 @@ function loadSprite(p: p5, url: string) {
   });
 }
 
+function startGame(state: GameState) {
+  state.enableGame = true;
+  if (!state.enableSounds) return;
+  unlockSounds([state.soundBounce, state.soundBreak, state.soundGameOver]);
+}
+
 export function NotFound({
   className,
   defaultLogo,
@@ -99,6 +101,8 @@ export function NotFound({
   defaultLogo?: string;
 }) {
   const hostRef = useRef<HTMLDivElement>(null);
+  const paddleXRef = useRef<number | null>(null);
+  const gameRef = useRef<GameState | null>(null);
   const shouldReduceMotion = useReducedMotion();
   const { resolvedTheme } = useTheme();
   const [ready, setReady] = useState(false);
@@ -130,7 +134,9 @@ export function NotFound({
         soundGameOver: null,
         ballImage: null,
         paddleImage: null,
+        paddleX: paddleXRef,
       };
+      gameRef.current = state;
 
       let sketch: p5;
       let paddle: Paddle;
@@ -180,13 +186,13 @@ export function NotFound({
           resetGame(p, state);
 
           state.canvas.mouseClicked(() => {
-            state.enableGame = true;
+            startGame(state);
             ball.reset();
             return false;
           });
 
           state.canvas.touchStarted(() => {
-            state.enableGame = true;
+            startGame(state);
             return false;
           });
         };
@@ -240,7 +246,7 @@ export function NotFound({
           return;
         }
 
-        state.enableGame = true;
+        startGame(state);
         ball.reset();
       };
 
@@ -250,6 +256,8 @@ export function NotFound({
     return () => {
       cancelled = true;
       setReady(false);
+      gameRef.current = null;
+      paddleXRef.current = null;
       if (handleKeyPress) {
         window.removeEventListener('keypress', handleKeyPress);
       }
@@ -258,19 +266,36 @@ export function NotFound({
   }, [shouldReduceMotion, resolvedTheme, defaultLogo]);
 
   return (
-    <div
-      className={cn(
-        'ring-border relative mx-auto w-full max-w-200 min-w-0 ring-2',
-        className
-      )}
-      aria-busy={!ready}
-      {...props}
-    >
+    <>
       <div
-        ref={hostRef}
-        className="aspect-4/3 w-full touch-none overflow-hidden select-none"
+        className={cn(
+          'ring-border relative mx-auto w-full max-w-200 min-w-0 ring-2',
+          className
+        )}
+        aria-busy={!ready}
+        {...props}
+      >
+        <div
+          ref={hostRef}
+          className="aspect-4/3 w-full touch-none overflow-hidden select-none"
+        />
+        {ready ? null : <GameLoadingStatus />}
+      </div>
+      <div
+        className="h-[calc(4.75rem+env(safe-area-inset-bottom,0px))] md:hidden"
+        aria-hidden
       />
-      {ready ? null : <GameLoadingStatus />}
-    </div>
+      <PaddleSlider
+        disabled={!ready}
+        onPaddleX={(x) => {
+          paddleXRef.current = x;
+        }}
+        onEngage={() => {
+          const game = gameRef.current;
+          if (!game) return;
+          startGame(game);
+        }}
+      />
+    </>
   );
 }

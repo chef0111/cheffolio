@@ -40,7 +40,7 @@ export default function NotFoundPage() {
             render={<Link href="/" aria-label="Go to Home" />}
           >
             Go to Home
-            <ArrowRightIcon />
+            <ArrowRightIcon data-icon="inline-end" />
           </Button>
         </EmptyContent>
       </Empty>

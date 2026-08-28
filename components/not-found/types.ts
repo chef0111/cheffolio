@@ -17,4 +17,5 @@ export interface GameState {
   soundGameOver: HTMLAudioElement | null;
   ballImage: p5.Image | null;
   paddleImage: p5.Image | null;
+  paddleX: { current: number | null };
 }

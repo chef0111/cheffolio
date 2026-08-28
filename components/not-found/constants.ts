@@ -32,6 +32,14 @@ export function uncheckedClamp(
   return Math.min(Math.max(value, min), max);
 }
 
+export function paddleMinX(): number {
+  return PADDLE_HEIGHT / 2;
+}
+
+export function paddleMaxX(canvasWidth: number): number {
+  return canvasWidth - PADDLE_WIDTH - PADDLE_HEIGHT / 2;
+}
+
 export function clientXToCanvasX(
   canvas: HTMLCanvasElement,
   clientX: number,
