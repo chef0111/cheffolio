@@ -12,7 +12,7 @@ import {
   ContributionGraphLegend,
   ContributionGraphTotalCount,
 } from '@/components/kibo-ui/contribution-graph';
-import { Loader } from '@/components/ui/loader';
+import { Spinner } from '@/components/ui/spinner';
 import {
   Tooltip,
   TooltipContent,
@@ -132,7 +132,7 @@ export function GitHubContributionGraph({
 export function GitHubContributionFallback() {
   return (
     <div className="flex h-44 w-full flex-col items-center justify-center gap-2">
-      <Loader />
+      <Spinner className="size-4" />
       <span className="text-muted-foreground">Loading contributions...</span>
     </div>
   );

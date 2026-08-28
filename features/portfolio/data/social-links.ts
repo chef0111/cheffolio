@@ -1,7 +1,7 @@
 import type { SocialLink } from '../types/social-links';
 import { USER } from './user';
 
-const baseUrl = 'https://res.cloudinary.com/chef0111/image/upload/v1';
+const baseUrl = 'https://assets.giabao.dev/socials';
 
 export const SOCIAL_LINKS: SocialLink[] = [
   {

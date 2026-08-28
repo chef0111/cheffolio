@@ -71,24 +71,24 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: 'https://res.cloudinary.com/chef0111/image/upload/favicon.ico',
+        url: 'https://assets.giabao.dev/favicon.ico',
         sizes: '256x256',
       },
       {
-        url: 'https://res.cloudinary.com/chef0111/image/upload/favicon-light.svg',
+        url: 'https://assets.giabao.dev/favicon-light.svg',
         sizes: 'any',
         type: 'image/svg+xml',
         media: '(prefers-color-scheme: light)',
       },
       {
-        url: 'https://res.cloudinary.com/chef0111/image/upload/favicon-dark.svg',
+        url: 'https://assets.giabao.dev/favicon-dark.svg',
         sizes: 'any',
         type: 'image/svg+xml',
         media: '(prefers-color-scheme: dark)',
       },
     ],
     apple: {
-      url: 'https://res.cloudinary.com/chef0111/image/upload/apple-touch-icon.png',
+      url: 'https://assets.giabao.dev/apple-touch-icon.png',
       type: 'image/png',
       sizes: '180x180',
     },

@@ -37,7 +37,8 @@ export function ResumeItem() {
           aria-label="Download resume"
           render={
             <a
-              href={USER.resumeDownloadUrl}
+              href={USER.resume}
+              download={USER.resumeDownloadUrl}
               rel="noopener noreferrer"
               aria-label="Download resume"
             />
