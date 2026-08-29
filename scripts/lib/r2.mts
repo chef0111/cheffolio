@@ -1,6 +1,7 @@
 import { existsSync } from 'node:fs';
 import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
+
 import { S3Client } from 'bun';
 
 const CONTENT_TYPES: Record<string, string> = {

@@ -1,16 +1,16 @@
 import fs from 'node:fs';
 import path from 'node:path';
+
 import type { Browser, Page } from 'puppeteer';
 import puppeteer from 'puppeteer';
 
 const DEFAULT_ORIGIN = 'https://cheffolio.localhost';
 const outputDir = path.join(process.cwd(), '.cheffolio/screenshots');
-const SETTLE_MS = 1000;
 
 const SIZE = {
   desktop: {
-    width: 1512,
-    height: 982,
+    width: 1600,
+    height: 900,
   },
   mobile: {
     width: 440,
@@ -42,7 +42,7 @@ const JOBS = [
     size: 'desktop',
     themes: ['light', 'dark'],
     type: 'webp',
-    readySelector: '[aria-label="Portfolio"]',
+    readySelector: '[aria-label="GitHub contributions"]',
   },
   {
     name: 'screenshot',
@@ -50,7 +50,7 @@ const JOBS = [
     size: 'mobile',
     themes: ['light', 'dark'],
     type: 'webp',
-    readySelector: '[aria-label="Portfolio"]',
+    readySelector: '[aria-label="GitHub contributions"]',
   },
   {
     name: 'screenshot',
@@ -76,9 +76,16 @@ async function applyTheme(page: Page, theme: Theme) {
 }
 
 async function waitUntilReady(page: Page, job: CaptureJob) {
-  if (!job.readySelector) return;
-  await page.waitForSelector(job.readySelector);
-  await new Promise((resolve) => setTimeout(resolve, SETTLE_MS));
+  if (job.readySelector) {
+    await page.waitForSelector(job.readySelector);
+  }
+  await page.evaluate(() => document.fonts.ready);
+  await page.evaluate(
+    () =>
+      new Promise<void>((resolve) => {
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+      })
+  );
 }
 
 async function assertTheme(page: Page, theme: Theme) {
@@ -88,6 +95,12 @@ async function assertTheme(page: Page, theme: Theme) {
   if (resolved !== theme) {
     throw new Error(`Theme mismatch: wanted ${theme}, got ${resolved}`);
   }
+}
+
+async function hideNextjsPortal(page: Page) {
+  await page.evaluate(() => {
+    document.querySelectorAll('nextjs-portal').forEach((el) => el.remove());
+  });
 }
 
 async function captureScreenshot({
@@ -120,9 +133,7 @@ async function captureScreenshot({
     await page.reload({ waitUntil: 'networkidle0' });
     await waitUntilReady(page, job);
     await assertTheme(page, theme);
-    await page.evaluate(() => {
-      document.querySelectorAll('nextjs-portal').forEach((el) => el.remove());
-    });
+    await hideNextjsPortal(page);
 
     await page.screenshot({
       path: filePath,
@@ -143,6 +154,9 @@ async function main() {
   await fs.promises.mkdir(outputDir, { recursive: true });
 
   const browser = await puppeteer.launch({
+    args: ['--ignore-certificate-errors'],
+    acceptInsecureCerts: true,
+  });
 
   try {
     for (const job of JOBS) {

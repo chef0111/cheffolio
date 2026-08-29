@@ -80,4 +80,4 @@ bun run capture       # Capture screenshots into .cheffolio/screenshots
 bun run capture:sync  # Upload the folder to Cloudflare R2
 ```
 
-`bun run capture:sync` requires the `R2_*` variables from `.env.example`. It mirrors the local folder into the bucket root (skipping dotfiles), overwriting existing files but never deleting remote ones.
+Set the `R2_*` credentials from `.env.example` before running `capture:sync`. The command uploads `.cheffolio/screenshots` to the bucket root, skips dotfiles, replaces keys that already exist, and leaves other remote objects untouched.

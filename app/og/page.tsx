@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import { BrandLogo } from '@/components/cheffolio/brand';
+import { BrandMark } from '@/components/cheffolio/brand';
 
 export const metadata: Metadata = {
   robots: {
@@ -11,8 +11,8 @@ export const metadata: Metadata = {
 export default function OgPage() {
   return (
     <div className="flex h-dvh w-full flex-col items-center justify-center gap-6">
-      <BrandLogo className="h-24 w-auto" />
-      <span className="font-mono text-2xl tracking-tight">giabao.dev</span>
+      <BrandMark className="h-24 w-auto" />
+      <span className="font-pixel text-2xl tracking-tight">giabao.dev</span>
     </div>
   );
 }

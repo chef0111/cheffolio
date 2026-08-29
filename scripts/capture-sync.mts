@@ -22,7 +22,15 @@ async function main() {
     console.log(`Uploaded: ${key}`);
   }
 
-  console.log(`Synced ${keys.length} screenshot(s) to R2.`);
+  function getSyncedMessage(screenshotCount: number) {
+    if (screenshotCount === 1) {
+      return 'Synced 1 screenshot.';
+    }
+
+    return `Synced ${screenshotCount} screenshots.`;
+  }
+
+  console.log(getSyncedMessage(keys.length));
 }
 
 main().catch((error) => {
