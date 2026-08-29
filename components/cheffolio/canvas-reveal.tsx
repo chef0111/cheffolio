@@ -6,6 +6,17 @@ import * as THREE from 'three';
 
 import { cn } from '@/lib/utils';
 
+// @react-three/fiber 9 still constructs THREE.Clock per Canvas. Drop the r183 deprecation until fiber 10.
+THREE.setConsoleFunction((type, message, ...params) => {
+  if (
+    type === 'warn' &&
+    message.includes('Clock: This module has been deprecated')
+  ) {
+    return;
+  }
+  console[type](message, ...params);
+});
+
 export const CanvasReveal = ({
   animationSpeed = 0.4,
   opacities = [0.3, 0.3, 0.3, 0.5, 0.5, 0.5, 0.8, 0.8, 0.8, 1],
