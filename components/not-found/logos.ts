@@ -13,8 +13,8 @@ export interface LogoDef {
   rowOffset?: number;
 }
 
-const cheffolio: LogoDef = {
-  name: 'Cheffolio',
+const giabao: LogoDef = {
+  name: 'giabao.dev',
   brickWidth: 50,
   rowScale: 2,
   colOffset: 1,
@@ -23,7 +23,7 @@ const cheffolio: LogoDef = {
   pattern: ['.XXX.XXX.', 'X....X..X', 'X.XX.XXX.', 'X..X.X..X', '.XX..XXX.'],
 };
 
-export const LOGOS: LogoDef[] = [cheffolio];
+export const LOGOS: LogoDef[] = [giabao];
 
 export function getLogoIndex(name?: string | null): number {
   if (!name) return 0;
