@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 
-import { BrandLogo } from '@/components/cheffolio/brand';
+import { BrandMark } from '@/components/cheffolio/brand';
 import { CanvasReveal } from '@/components/cheffolio/canvas-reveal';
 import { Label } from '@/components/ui/label';
 import { useMediaQuery } from '@/hooks/use-media-query';
@@ -13,7 +13,7 @@ export function ProfileCover() {
     <CanvasHover>
       <div className="z-20">
         <div className="flex flex-col items-center gap-4">
-          <BrandLogo
+          <BrandMark
             id="js-cover-mark"
             className="ease-out-cubic h-auto w-28 translate-y-5.5 transition duration-500 group-hover/canvas:translate-y-0 group-data-[expanded=true]/canvas:translate-y-0 sm:w-32"
           />

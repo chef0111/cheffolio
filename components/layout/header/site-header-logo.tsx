@@ -4,7 +4,7 @@ import { useMotionValueEvent, useScroll } from 'motion/react';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
-import { Brand, BrandLogo } from '@/components/cheffolio/brand';
+import { Brand, BrandMark } from '@/components/cheffolio/brand';
 import { useMediaQuery } from '@/hooks/use-media-query';
 
 const calcDistance = (el: HTMLElement, mobile: boolean) => {
@@ -42,7 +42,7 @@ function BrandMotion() {
 
   return (
     <div data-visible={visible} className="group/motion relative">
-      <BrandLogo
+      <BrandMark
         fillOpacity={0}
         aria-hidden="true"
         className="ease-out-cubic stroke-foreground no-focus absolute top-0 left-0 opacity-100 transition-opacity duration-300 select-none group-data-[visible=true]/motion:opacity-0"
