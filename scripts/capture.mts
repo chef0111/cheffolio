@@ -9,8 +9,8 @@ const outputDir = path.join(process.cwd(), '.cheffolio/screenshots');
 
 const SIZE = {
   desktop: {
-    width: 1600,
-    height: 900,
+    width: 1280,
+    height: 720,
   },
   mobile: {
     width: 440,
@@ -32,6 +32,7 @@ type CaptureJob = {
   size: Size;
   themes: readonly Theme[];
   type: ScreenshotType;
+  deviceScaleFactor?: number;
   readySelector?: string;
 };
 
@@ -42,6 +43,7 @@ const JOBS = [
     size: 'desktop',
     themes: ['light', 'dark'],
     type: 'webp',
+    deviceScaleFactor: 2,
     readySelector: '[aria-label="GitHub contributions"]',
   },
   {
@@ -50,6 +52,7 @@ const JOBS = [
     size: 'mobile',
     themes: ['light', 'dark'],
     type: 'webp',
+    deviceScaleFactor: 2,
     readySelector: '[aria-label="GitHub contributions"]',
   },
   {
@@ -116,7 +119,11 @@ async function captureScreenshot({
 }) {
   const page = await browser.newPage();
   const { width, height } = SIZE[job.size];
-  await page.setViewport({ width, height });
+  await page.setViewport({
+    width,
+    height,
+    deviceScaleFactor: job.deviceScaleFactor ?? 1,
+  });
 
   const href = new URL(job.path, origin).href;
   await page.goto(href, { waitUntil: 'networkidle0' });
