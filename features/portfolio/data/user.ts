@@ -51,7 +51,7 @@ export const USER: User = {
     facebook: 'https://facebook.com/giabao.67.05',
     instagram: 'https://www.instagram.com/chef.0111',
   },
-  ogImage: 'https://assets.giabao.dev/ogImage.png',
+  ogImage: 'https://assets.giabao.dev/screenshot-og-image-dark.png',
   timeZone: 'Asia/Ho_Chi_Minh',
   keywords: [
     'Gia Bảo',

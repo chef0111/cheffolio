@@ -19,6 +19,8 @@
     "format": "prettier --write \"**/*.{ts,tsx,md,mdx}\" --cache",
     "format:check": "prettier --check \"**/*.{ts,tsx,md,mdx}\" --cache",
     "typecheck": "node ./node_modules/typescript-7/bin/tsc --skipLibCheck --extendedDiagnostics --pretty",
+    "capture": "bun run ./scripts/capture.mts",
+    "capture:sync": "bun run ./scripts/capture-sync.mts",
     "upgrade:next": "npm exec @next/codemod@latest upgrade latest",
     "upgrade:tailwind": "npm exec @tailwindcss/upgrade@latest",
     "prepare": "husky"
@@ -72,6 +74,7 @@
     "lint-staged": "^16.4.0",
     "prettier": "^3.8.3",
     "prettier-plugin-tailwindcss": "^0.8.1",
+    "puppeteer": "^25.9.0",
     "rehype-external-links": "^3.0.0",
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.1",

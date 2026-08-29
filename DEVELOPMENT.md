@@ -62,3 +62,22 @@ After building, start the application with:
 ```bash
 NODE_ENV=production bun run start
 ```
+
+## Screenshots
+
+The site screenshots are captured locally, then published to Cloudflare R2.
+
+Start the app first:
+
+```bash
+bun run dev
+```
+
+The app is at https://cheffolio.localhost. Then:
+
+```bash
+bun run capture       # Capture screenshots into .cheffolio/screenshots
+bun run capture:sync  # Upload the folder to Cloudflare R2
+```
+
+`bun run capture:sync` requires the `R2_*` variables from `.env.example`. It mirrors the local folder into the bucket root (skipping dotfiles), overwriting existing files but never deleting remote ones.
