@@ -36,6 +36,9 @@ type CaptureJob = {
   readySelector?: string;
 };
 
+// Set desktop and mobile screenshots to 1.4x DPR to
+// prevent brand mark from dropping subpixel strokes.
+// It just works, don't ask why.
 const JOBS = [
   {
     name: 'screenshot',
@@ -43,7 +46,7 @@ const JOBS = [
     size: 'desktop',
     themes: ['light', 'dark'],
     type: 'webp',
-    deviceScaleFactor: 2,
+    deviceScaleFactor: 1.4,
     readySelector: '[aria-label="GitHub contributions"]',
   },
   {
@@ -52,7 +55,7 @@ const JOBS = [
     size: 'mobile',
     themes: ['light', 'dark'],
     type: 'webp',
-    deviceScaleFactor: 2,
+    deviceScaleFactor: 1.4,
     readySelector: '[aria-label="GitHub contributions"]',
   },
   {

@@ -18,9 +18,9 @@ export function FlipSentences({
   return (
     <div ref={ref} aria-label="Flip sentences" {...props}>
       <TextFlip
-        className="font-pixel-square shimmer shimmer-once shimmer-duration-1500 not-dark:shimmer-color-foreground text-muted-foreground text-sm text-balance"
-        play={isPageInView && isInView}
+        className="font-pixel-square shimmer shimmer-once shimmer-duration-2000 not-dark:shimmer-color-foreground text-muted-foreground text-sm text-balance"
         interval={3}
+        play={isPageInView && isInView}
       >
         {children}
       </TextFlip>
