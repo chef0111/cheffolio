@@ -1,6 +1,7 @@
 import type p5 from 'p5';
 
 import type { Brick } from './brick';
+import type { GameSound } from './sounds';
 
 export interface GameState {
   canvas: p5.Renderer | null;
@@ -12,9 +13,9 @@ export interface GameState {
   bricks: Brick[];
   logoIndex: number;
 
-  soundBounce: HTMLAudioElement | null;
-  soundBreak: HTMLAudioElement | null;
-  soundGameOver: HTMLAudioElement | null;
+  soundBounce: GameSound | null;
+  soundBreak: GameSound | null;
+  soundGameOver: GameSound | null;
   ballImage: p5.Image | null;
   paddleImage: p5.Image | null;
   paddleX: { current: number | null };

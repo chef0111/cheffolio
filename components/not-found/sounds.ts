@@ -1,39 +1,37 @@
-export function loadSound(url: string) {
-  const audio = new Audio(url);
-  audio.preload = 'auto';
-  audio.load();
-  return audio;
+'use client';
+
+import {
+  getAudioContext,
+  loadAudioBuffer,
+  playAudioBuffer,
+  unlockAudioContext,
+} from '@/lib/web-audio';
+
+export type GameSound = {
+  buffer: AudioBuffer | null;
+};
+
+export function loadSound(url: string): GameSound {
+  const sound: GameSound = { buffer: null };
+
+  void loadAudioBuffer(url)
+    .then((buffer) => {
+      sound.buffer = buffer;
+    })
+    .catch(() => {});
+
+  return sound;
 }
 
-export function unlockSounds(sounds: Array<HTMLAudioElement | null>) {
-  for (const sound of sounds) {
-    if (!sound || sound.dataset.unlocked === '1') continue;
-
-    sound.muted = true;
-    void sound
-      .play()
-      .then(() => {
-        sound.dataset.unlocked = '1';
-        if (sound.dataset.playing === '1') {
-          sound.muted = false;
-          return;
-        }
-        sound.pause();
-        sound.currentTime = 0;
-        sound.muted = false;
-      })
-      .catch(() => {
-        sound.muted = false;
-      });
-  }
+export function unlockSounds() {
+  unlockAudioContext(getAudioContext());
 }
 
-export function playSound(sound: HTMLAudioElement | null) {
-  if (!sound) return;
+export function playSound(sound: GameSound | null, ctx?: AudioContext | null) {
+  if (!sound?.buffer) return;
 
-  sound.dataset.playing = '1';
-  sound.muted = false;
-  sound.currentTime = 0;
-  sound.volume = 0.3;
-  void sound.play().catch(() => {});
+  const audioCtx = ctx ?? getAudioContext();
+  if (!audioCtx) return;
+
+  playAudioBuffer(audioCtx, sound.buffer, 0.3);
 }

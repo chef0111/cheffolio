@@ -2,6 +2,7 @@
 
 import { Slider as SliderPrimitive } from '@base-ui/react/slider';
 import { Settings2Icon } from 'lucide-react';
+import { useEffect, useRef } from 'react';
 
 import {
   CANVAS_WIDTH,
@@ -25,8 +26,36 @@ export function PaddleSlider({
   disabled?: boolean;
   className?: string;
 }) {
+  const footerRef = useRef<HTMLElement>(null);
+  const onEngageRef = useRef(onEngage);
+  const disabledRef = useRef(disabled);
+
+  useEffect(() => {
+    onEngageRef.current = onEngage;
+    disabledRef.current = disabled;
+  }, [onEngage, disabled]);
+
+  useEffect(() => {
+    const el = footerRef.current;
+    if (!el) return;
+
+    const engage = () => {
+      if (disabledRef.current) return;
+      onEngageRef.current?.();
+    };
+
+    el.addEventListener('touchstart', engage, { capture: true, passive: true });
+    el.addEventListener('pointerdown', engage, { capture: true });
+
+    return () => {
+      el.removeEventListener('touchstart', engage, true);
+      el.removeEventListener('pointerdown', engage, true);
+    };
+  }, []);
+
   return (
     <footer
+      ref={footerRef}
       aria-label="Paddle control"
       className={cn(
         'bg-background fixed inset-x-4 bottom-4 z-40 md:hidden',
@@ -44,13 +73,12 @@ export function PaddleSlider({
           defaultValue={PADDLE_CENTER_X}
           disabled={disabled}
           thumbAlignment="edge"
-          onPointerDown={onEngage}
           onValueChange={(value, details) => {
             if (details.reason === 'none') return;
             if (typeof value !== 'number') return;
             onPaddleX(value);
           }}
-          className="bg-muted inset-ring-foreground/10 w-full rounded-xl p-1 shadow-inner inset-ring-1 data-disabled:opacity-50"
+          className="bg-muted inset-ring-foreground/10 w-full rounded-xl p-1 shadow-inner inset-ring-1 data-disabled:opacity-50 [&_input]:pointer-events-none"
         >
           <SliderPrimitive.Control className="relative flex h-10 w-full touch-none items-center overflow-visible select-none">
             <SliderPrimitive.Track

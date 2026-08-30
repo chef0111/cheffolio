@@ -90,7 +90,7 @@ function loadSprite(p: p5, url: string) {
 function startGame(state: GameState) {
   state.enableGame = true;
   if (!state.enableSounds) return;
-  unlockSounds([state.soundBounce, state.soundBreak, state.soundGameOver]);
+  unlockSounds();
 }
 
 export function NotFound({
