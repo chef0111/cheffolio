@@ -36,6 +36,6 @@ Please visit the [Development Guide](./DEVELOPMENT.md) for full local environmen
 
 ## License
 
-Licensed under the [MIT license](./LICENSE). The names and the logo are not. See the [Trademark and Brand Use Policy](./TRADEMARK.md).
+Licensed under the [MIT license](./LICENSE). The names and the logo are not, see the [Trademark and Brand Use Policy](./TRADEMARK.md).
 
 Fork the code. Replace the branding and personal details before you publish a site from this repo.
