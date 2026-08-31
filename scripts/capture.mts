@@ -3,6 +3,7 @@ import path from 'node:path';
 
 import type { Browser, Page } from 'puppeteer';
 import puppeteer from 'puppeteer';
+import sharp from 'sharp';
 
 const DEFAULT_ORIGIN = 'https://cheffolio.localhost';
 const outputDir = path.join(process.cwd(), '.cheffolio/screenshots');
@@ -16,7 +17,7 @@ const SIZE = {
     width: 440,
     height: 956,
   },
-  'og-image': {
+  ogImage: {
     width: 1200,
     height: 630,
   },
@@ -55,20 +56,23 @@ const JOBS = [
     size: 'mobile',
     themes: ['light', 'dark'],
     type: 'webp',
-    deviceScaleFactor: 1.4,
+    deviceScaleFactor: 1.6,
     readySelector: '[aria-label="GitHub contributions"]',
   },
   {
     name: 'screenshot',
     path: '/og',
-    size: 'og-image',
-    themes: ['light', 'dark'],
+    size: 'ogImage',
+    themes: ['dark'],
     type: 'png',
   },
 ] as const satisfies readonly CaptureJob[];
 
 function screenshotPath(job: CaptureJob, theme: Theme) {
-  const fileName = `${job.name}-${job.size}-${theme}.${job.type}`;
+  const fileName =
+    job.themes.length === 1
+      ? `${job.name}-${job.size}.${job.type}`
+      : `${job.name}-${job.size}-${theme}.${job.type}`;
   return path.join(outputDir, fileName) as `${string}.webp` | `${string}.png`;
 }
 
@@ -109,6 +113,39 @@ async function hideNextjsPortal(page: Page) {
   });
 }
 
+async function downscaleToDefinedSize(
+  filePath: string,
+  { width, height }: { width: number; height: number },
+  type: ScreenshotType
+) {
+  sharp.cache(false);
+  const metadata = await sharp(filePath).metadata();
+  if (metadata.width === width && metadata.height === height) {
+    return;
+  }
+
+  const pipeline = sharp(filePath).resize(width, height, {
+    fit: 'fill',
+    kernel: 'lanczos3',
+  });
+
+  let buffer: Buffer;
+  switch (type) {
+    case 'png':
+      buffer = await pipeline.png().toBuffer();
+      break;
+    case 'webp':
+      buffer = await pipeline.webp({ quality: 95 }).toBuffer();
+      break;
+    default: {
+      const _exhaustive: never = type;
+      throw new Error(`Unhandled screenshot type: ${_exhaustive}`);
+    }
+  }
+
+  await fs.promises.writeFile(filePath, buffer);
+}
+
 async function captureScreenshot({
   browser,
   origin,
@@ -131,6 +168,8 @@ async function captureScreenshot({
   const href = new URL(job.path, origin).href;
   await page.goto(href, { waitUntil: 'networkidle0' });
 
+  const DPR = job.deviceScaleFactor ?? 1;
+
   for (const theme of job.themes) {
     const filePath = screenshotPath(job, theme);
 
@@ -150,6 +189,10 @@ async function captureScreenshot({
       type: job.type,
       quality: job.type !== 'png' ? 90 : undefined,
     });
+
+    if (DPR > 1) {
+      await downscaleToDefinedSize(filePath, SIZE[job.size], job.type);
+    }
 
     console.log('Screenshot saved:', filePath);
   }

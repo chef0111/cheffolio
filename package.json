@@ -19,8 +19,8 @@
     "format": "prettier --write \"**/*.{ts,tsx,md,mdx}\" --cache",
     "format:check": "prettier --check \"**/*.{ts,tsx,md,mdx}\" --cache",
     "typecheck": "node ./node_modules/typescript-7/bin/tsc --skipLibCheck --extendedDiagnostics --pretty",
-    "capture": "bun run ./scripts/capture.mts",
-    "capture:sync": "bun run ./scripts/capture-sync.mts",
+    "capture": "bun run --bun ./scripts/capture.mts",
+    "capture:sync": "bun run --bun ./scripts/capture-sync.mts",
     "upgrade:next": "npm exec @next/codemod@latest upgrade latest",
     "upgrade:tailwind": "npm exec @tailwindcss/upgrade@latest",
     "prepare": "husky"
@@ -81,6 +81,7 @@
     "remark-gfm": "^4.0.1",
     "remark-rehype": "^11.1.2",
     "shadcn": "4.13.0",
+    "sharp": "^0.35.4",
     "tailwindcss": "^4.3.3",
     "typescript": "npm:typescript@6.0.3",
     "typescript-7": "npm:typescript@^7",
