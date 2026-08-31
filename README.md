@@ -1,5 +1,9 @@
-[![screenshot-dark](https://assets.giabao.dev/screenshot-desktop-dark.webp#gh-dark-mode-only)](https://giabao.dev#gh-dark-mode-only)
-[![screenshot-light](https://assets.giabao.dev/screenshot-desktop-light.webp#gh-light-mode-only)](https://giabao.dev#gh-light-mode-only)
+<a href="https://giabao.dev">
+  <picture width="100%">
+    <source media="(prefers-color-scheme: dark)" srcset="https://assets.giabao.dev/screenshot-desktop-dark.webp" />
+    <img src="https://assets.giabao.dev/screenshot-desktop-light.webp" alt="Banner image" />
+  </picture>
+</a>
 
 <p align="center">
   <a href="https://nextjs.org"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/Next.js.svg?size=xs&amp;logo=nextdotjs" /><img alt="Next.js" src="https://shieldcn.dev/badge/Next.js.svg?size=xs&amp;mode=light&amp;logo=nextdotjs" /></picture></a>

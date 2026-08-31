@@ -51,7 +51,7 @@ export const USER: User = {
     facebook: 'https://facebook.com/giabao.67.05',
     instagram: 'https://www.instagram.com/chef.0111',
   },
-  ogImage: 'https://assets.giabao.dev/screenshot-og-image-dark.png',
+  ogImage: 'https://assets.giabao.dev/screenshot-ogImage.png',
   timeZone: 'Asia/Ho_Chi_Minh',
   keywords: [
     'Gia Bảo',
@@ -90,5 +90,5 @@ export const USER: User = {
     'cheffolio',
   ],
   dateCreated: '2026-03-22',
-  dateModified: '2026-08-28',
+  dateModified: '2026-08-31',
 };
