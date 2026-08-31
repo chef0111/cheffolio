@@ -6,7 +6,6 @@ import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
 import type { WebSite, WithContext } from 'schema-dts';
 
-import { simpleOgImageUrl } from '@/app/og/params';
 import { CommandMenuDialog } from '@/components/cheffolio/command-menu';
 import { ScrollToTop } from '@/components/cheffolio/scroll-to-top';
 import { JsonLdScript } from '@/components/json-ld';
@@ -19,11 +18,6 @@ import { CommandMenuProvider } from '@/context/command-menu-provider';
 import { ThemeProvider } from '@/context/theme-provider';
 import { USER } from '@/features/portfolio/data/user';
 import { cn } from '@/lib/utils';
-
-const ogImage = simpleOgImageUrl(
-  `${SITE_INFO.name} – ${USER.jobTitle}`,
-  SITE_INFO.description
-);
 
 function getWebSiteJsonLd(): WithContext<WebSite> {
   return {
@@ -64,7 +58,7 @@ export const metadata: Metadata = {
     gender: USER.gender,
     images: [
       {
-        url: ogImage,
+        url: SITE_INFO.ogImage,
         width: 1200,
         height: 630,
         alt: SITE_INFO.name,
@@ -75,7 +69,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     site: X_USERNAME,
     creator: X_USERNAME,
-    images: [ogImage],
+    images: [SITE_INFO.ogImage],
   },
   icons: {
     icon: [
