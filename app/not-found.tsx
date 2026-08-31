@@ -2,6 +2,7 @@ import { ArrowRightIcon, SearchXIcon } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
+import { simpleOgImageUrl } from '@/app/og/params';
 import { NotFound } from '@/components/not-found';
 import { Button } from '@/components/ui/button';
 import {
@@ -13,8 +14,25 @@ import {
   EmptyTitle,
 } from '@/components/ui/empty';
 
+const title = 'Page not found';
+const description =
+  'The page you are looking for does not exist or has been moved.';
+const ogImage = simpleOgImageUrl(title, description);
+
 export const metadata: Metadata = {
-  title: 'Page not found',
+  title,
+  openGraph: {
+    images: {
+      url: ogImage,
+      width: 1200,
+      height: 630,
+      alt: title,
+    },
+  },
+  twitter: {
+    card: 'summary_large_image',
+    images: [ogImage],
+  },
 };
 
 export default function NotFoundPage() {
@@ -26,11 +44,9 @@ export default function NotFoundPage() {
             <SearchXIcon />
           </EmptyMedia>
 
-          <EmptyTitle className="text-base">Page not found</EmptyTitle>
+          <EmptyTitle className="text-base">{title}</EmptyTitle>
 
-          <EmptyDescription>
-            The page you are looking for does not exist or has been moved.
-          </EmptyDescription>
+          <EmptyDescription>{description}</EmptyDescription>
         </EmptyHeader>
 
         <EmptyContent>

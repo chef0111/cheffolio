@@ -62,10 +62,7 @@ export function GitHubContributionGraph({
       blockRadius={blockRadius}
     >
       <TooltipProvider delay={300}>
-        <ContributionGraphCalendar
-          className="no-scrollbar px-2"
-          aria-label="GitHub contributions"
-        >
+        <ContributionGraphCalendar className="no-scrollbar px-2">
           {({ activity, dayIndex, weekIndex }) => (
             <Tooltip>
               <TooltipTrigger render={<g />}>
@@ -133,7 +130,7 @@ export function GitHubContributionFallback() {
   return (
     <div className="flex h-44 w-full flex-col items-center justify-center gap-2">
       <Spinner className="size-4" />
-      <span className="text-muted-foreground">Loading contributions...</span>
+      <span className="text-muted-foreground">Loading contributions…</span>
     </div>
   );
 }
