@@ -80,4 +80,4 @@ bun run capture       # Capture screenshots into .cheffolio/screenshots
 bun run capture:sync  # Upload the folder to Cloudflare R2
 ```
 
-Set the `R2_*` credentials from `.env.example` before running `capture:sync`. The command uploads `.cheffolio/screenshots` to the bucket root, skips dotfiles, replaces keys that already exist, and leaves other remote objects untouched.
+Set the `R2_*` credentials from `.env.example` before running `capture:sync`. The command uploads `.cheffolio/screenshots` to the bucket root (skips dotfiles), replaces keys that already exist, and leaves other remote objects untouched.

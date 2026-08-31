@@ -30,25 +30,25 @@
     {
       "src": "https://assets.giabao.dev/screenshot-mobile-dark.webp",
       "type": "image/webp",
-      "sizes": "480x1002",
+      "sizes": "440x956",
       "form_factor": "narrow"
     },
     {
       "src": "https://assets.giabao.dev/screenshot-mobile-light.webp",
       "type": "image/webp",
-      "sizes": "480x1002",
+      "sizes": "440x956",
       "form_factor": "narrow"
     },
     {
       "src": "https://assets.giabao.dev/screenshot-desktop-dark.webp",
       "type": "image/webp",
-      "sizes": "1140x720",
+      "sizes": "1280x720",
       "form_factor": "wide"
     },
     {
       "src": "https://assets.giabao.dev/screenshot-desktop-light.webp",
       "type": "image/webp",
-      "sizes": "1140x720",
+      "sizes": "1280x720",
       "form_factor": "wide"
     }
   ]

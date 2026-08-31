@@ -1,12 +1,12 @@
 import Image from 'next/image';
 
 import { DecorIcon } from '@/components/cheffolio/decor-icon';
-import { TextFlip } from '@/components/cheffolio/text-flip';
 import { VerifiedIcon } from '@/components/icons/verified-icon';
 import { Label } from '@/components/ui/label';
 import { USER } from '@/features/portfolio/data/user';
 
 import { AvatarElectric } from './avatar-eletric';
+import { FlipSentences } from './flip-sentences';
 import { ProfileStatus } from './profile-status';
 
 export function ProfileInfo() {
@@ -69,22 +69,9 @@ export function ProfileInfo() {
             </Label>
           </div>
 
-          <div
-            className="border-line border-t py-1 pl-4"
-            aria-label="Flip sentences"
-          >
-            <TextFlip
-              className="font-pixel-square shimmer text-muted-foreground text-sm text-balance"
-              variants={{
-                initial: { y: -10, opacity: 0 },
-                animate: { y: -1, opacity: 1 },
-                exit: { y: 10, opacity: 0 },
-              }}
-              interval={2.4}
-            >
-              {USER.flipSentences}
-            </TextFlip>
-          </div>
+          <FlipSentences className="border-line border-t py-1 pl-4">
+            {USER.flipSentences}
+          </FlipSentences>
         </div>
       </div>
     </div>
