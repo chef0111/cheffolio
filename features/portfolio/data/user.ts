@@ -10,9 +10,9 @@ export const USER: User = {
   pronouns: 'he/him',
   bio: 'Love coding catchy things :>',
   flipSentences: [
-    'Senior Student',
-    'Next.js Enthusiast',
     'Fullstack Developer',
+    'Next.js Enthusiast',
+    'Senior Student',
   ],
   address: 'Hue City, Viet Nam',
   phoneNumber: 'Kzg0IDg2NSA2NzUgOTA4', // E.164 format, base64 encoded (https://t.io.vn/base64-string-converter)
@@ -51,7 +51,7 @@ export const USER: User = {
     facebook: 'https://facebook.com/giabao.67.05',
     instagram: 'https://www.instagram.com/chef.0111',
   },
-  ogImage: 'https://assets.giabao.dev/screenshot-ogImage.png?t=1788194880',
+  ogImage: 'https://assets.giabao.dev/screenshot-ogImage.png?t=1788283995',
   timeZone: 'Asia/Ho_Chi_Minh',
   keywords: [
     'Gia Bảo',

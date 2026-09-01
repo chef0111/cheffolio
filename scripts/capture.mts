@@ -48,7 +48,6 @@ const JOBS = [
     themes: ['light', 'dark'],
     type: 'webp',
     deviceScaleFactor: 1.4,
-    readySelector: '[aria-label="GitHub contributions"]',
   },
   {
     name: 'screenshot',
@@ -57,7 +56,6 @@ const JOBS = [
     themes: ['light', 'dark'],
     type: 'webp',
     deviceScaleFactor: 1.6,
-    readySelector: '[aria-label="GitHub contributions"]',
   },
   {
     name: 'screenshot',
