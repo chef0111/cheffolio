@@ -11,8 +11,8 @@ import { ProfileStatus } from './profile-status';
 
 export function ProfileInfo() {
   return (
-    <PanelContent className="border-border decor-t flex border-x p-0">
-      <PanelContent className="border-border decor-r shrink-0 border-r p-0 **:data-[position=bottom-right]:-mb-px">
+    <PanelContent className="border-border decor-all flex border-x p-0">
+      <PanelContent className="border-border shrink-0 border-r p-0">
         <AvatarElectric>
           <div className="relative mx-0.5 my-0.75 size-32 sm:size-40">
             <Image

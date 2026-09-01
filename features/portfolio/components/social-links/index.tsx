@@ -19,7 +19,7 @@ export function SocialLinks() {
           {SOCIAL_LINKS.map((link, index) => (
             <SocialLinkItem
               key={link.href}
-              className={getSocialLinkGridLines(index)}
+              className={getSocialLinkGridLines(index, SOCIAL_LINKS.length)}
               {...link}
             />
           ))}

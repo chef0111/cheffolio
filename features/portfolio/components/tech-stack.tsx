@@ -12,7 +12,10 @@ const ID = 'stack';
 
 export function TechStack() {
   return (
-    <Panel id={ID} className="screen-line-bottom-none screen-line-top-none">
+    <Panel
+      id={ID}
+      className="screen-line-bottom-none screen-line-top-none -mb-px"
+    >
       <PanelHeader>
         <PanelTitle>Tech Stack</PanelTitle>
       </PanelHeader>
