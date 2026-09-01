@@ -12,18 +12,19 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { META_THEME_COLORS, SOUNDS } from '@/config/site';
+import { META_THEME_COLORS } from '@/config/site';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { useMetaColor } from '@/hooks/use-meta-color';
 import { useSound } from '@/hooks/use-sound';
 import { haptic } from '@/lib/haptic';
+import { clickSoftSound } from '@/lib/soundcn/click-soft';
 
 export default function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
   const { setMetaColor } = useMetaColor();
 
   const isMobile = useMediaQuery('(max-width: 640px)');
-  const playToggle = useSound(SOUNDS.toggle);
+  const [playToggle] = useSound(clickSoftSound, { volume: 0.3 });
 
   const switchTheme = useCallback(() => {
     setTheme(resolvedTheme === 'light' ? 'dark' : 'light');
@@ -35,7 +36,7 @@ export default function ThemeToggle() {
   }, [resolvedTheme, setTheme, setMetaColor]);
 
   const toggleTheme = useCallback(() => {
-    playToggle(0.25);
+    playToggle();
     haptic();
 
     if (!document.startViewTransition || isMobile) switchTheme();
@@ -45,7 +46,7 @@ export default function ThemeToggle() {
   useHotkeys(
     'd',
     () => {
-      playToggle(0.25);
+      playToggle();
       setTheme(resolvedTheme === 'light' ? 'dark' : 'light');
       setMetaColor(
         resolvedTheme === 'dark'
