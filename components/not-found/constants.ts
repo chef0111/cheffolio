@@ -14,10 +14,6 @@ export const BRICK_SCORE = 10;
 
 const ASSETS_ORIGIN = 'https://assets.giabao.dev';
 
-export const SOUND_BOUNCE_URL = `${ASSETS_ORIGIN}/not-found/bounce.mp3`;
-export const SOUND_BREAK_URL = `${ASSETS_ORIGIN}/not-found/break.mp3`;
-export const SOUND_GAME_OVER_URL = `${ASSETS_ORIGIN}/not-found/game-over.mp3`;
-
 export const BALL_LIGHT_URL = `${ASSETS_ORIGIN}/not-found/ball-light.png`;
 export const BALL_DARK_URL = `${ASSETS_ORIGIN}/not-found/ball-dark.png`;
 
