@@ -5,7 +5,6 @@ import {
   Panel,
   PanelContent,
   PanelHeader,
-  PanelPlus,
   PanelTitle,
 } from '@/components/cheffolio/panel';
 import { EXPERIENCES } from '@/features/portfolio/data/experiences';
@@ -22,9 +21,7 @@ export function Experiences() {
         <PanelTitle>Experience</PanelTitle>
       </PanelHeader>
 
-      <PanelContent className="relative p-0">
-        <PanelPlus position="top-left" />
-        <PanelPlus position="top-right" />
+      <PanelContent className="decor-t p-0">
         <div>
           {EXPERIENCES.map((experience, index) => (
             <React.Fragment key={experience.id}>

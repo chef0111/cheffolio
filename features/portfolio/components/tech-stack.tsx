@@ -1,7 +1,7 @@
 import {
   Panel,
+  PanelContent,
   PanelHeader,
-  PanelPlus,
   PanelTitle,
 } from '@/components/cheffolio/panel';
 
@@ -12,17 +12,12 @@ const ID = 'stack';
 
 export function TechStack() {
   return (
-    <Panel id={ID} className="screen-line-bottom-none">
+    <Panel id={ID} className="screen-line-bottom-none screen-line-top-none">
       <PanelHeader>
         <PanelTitle>Tech Stack</PanelTitle>
       </PanelHeader>
 
-      <div className="relative [--badge-height:--spacing(6)] [--col-left-width:--spacing(48)]">
-        <PanelPlus position="top-left" />
-        <PanelPlus position="top-right" />
-        <PanelPlus position="bottom-left" />
-        <PanelPlus position="bottom-right" />
-
+      <PanelContent className="decor-all p-0 [--badge-height:--spacing(6)] [--col-left-width:--spacing(48)]">
         <div
           className="pointer-events-none absolute inset-y-0 left-(--col-left-width) -z-1 w-px bg-[linear-gradient(to_bottom,var(--line)_4px,transparent_2px)] bg-size-[1px_6px] bg-repeat-y max-sm:hidden"
           aria-hidden
@@ -77,7 +72,7 @@ export function TechStack() {
             );
           }
         )}
-      </div>
+      </PanelContent>
     </Panel>
   );
 }

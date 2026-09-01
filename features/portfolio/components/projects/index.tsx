@@ -3,7 +3,6 @@ import {
   Panel,
   PanelContent,
   PanelHeader,
-  PanelPlus,
   PanelTitle,
   PanelTitleSup,
 } from '@/components/cheffolio/panel';
@@ -24,9 +23,7 @@ export function Projects() {
         </PanelTitle>
       </PanelHeader>
 
-      <PanelContent className="relative flow-root p-0">
-        <PanelPlus position="top-left" />
-        <PanelPlus position="top-right" />
+      <PanelContent className="decor-t flow-root p-0">
         <CollapsibleList
           items={PROJECTS}
           max={3}

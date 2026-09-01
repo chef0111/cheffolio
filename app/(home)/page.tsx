@@ -26,12 +26,10 @@ export default function Page() {
       <JsonLdScript data={getPageJsonLd()} />
 
       <div
-        className="mx-auto md:max-w-4xl *:[[id]]:scroll-mt-22"
+        className="mx-auto **:data-[slot=panel]:scroll-mt-22 md:max-w-4xl"
         aria-label="Portfolio"
       >
         <ProfileHeader />
-        <StripeSeparator />
-
         <Overview />
         <SocialLinks />
         <StripeSeparator />

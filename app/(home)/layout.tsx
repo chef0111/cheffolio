@@ -5,9 +5,9 @@ import { SiteFooterNav } from '@/components/layout/navigation/site-footer-nav';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="group/layout">
+    <div className="group/layout relative isolate overflow-hidden">
       <SiteHeader />
-      <main className="max-w-screen overflow-x-hidden px-2">{children}</main>
+      <main className="max-w-screen overflow-x-clip px-2">{children}</main>
       <SiteFooter />
       <ScrollFadeOverlay align="top" fadeOut={false} />
       <ScrollFadeOverlay align="bottom" />

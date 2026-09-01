@@ -12,7 +12,7 @@ import {
   IntroItemIcon,
   IntroItemLink,
 } from '@/components/cheffolio/intro-item';
-import { Panel, PanelContent, PanelPlus } from '@/components/cheffolio/panel';
+import { Panel, PanelContent } from '@/components/cheffolio/panel';
 import { USER } from '@/features/portfolio/data/user';
 import type { User } from '@/features/portfolio/types/user';
 import { urlToName } from '@/utils/url';
@@ -25,10 +25,7 @@ import { ResumeItem } from './resume-item';
 
 export function Overview() {
   return (
-    <Panel className="screen-line-bottom-none screen-line-top-none mt-px">
-      <PanelPlus position="bottom-left" />
-      <PanelPlus position="bottom-right" />
-
+    <Panel className="decor-all screen-line-bottom-none">
       <h2 className="sr-only">Profile overview</h2>
 
       <PanelContent className="space-y-2.5">

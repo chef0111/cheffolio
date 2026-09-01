@@ -1,26 +1,22 @@
 import { cn } from '@/lib/utils';
 
 import { FullWidthDivider } from './full-width-divider';
-import { PanelPlus } from './panel';
+import { PanelContent } from './panel';
 
 export function StripeSeparator({ className }: { className?: string }) {
   return (
-    <>
-      <FullWidthDivider />
-      <div
-        className={cn(
-          'border-border relative flex h-8 w-full border-x',
-          'before:absolute before:left-[-100vw] before:-z-1 before:h-8 before:w-[200vw]',
-          'before:bg-[repeating-linear-gradient(315deg,var(--pattern-foreground)_0,var(--pattern-foreground)_1px,transparent_0,transparent_50%)] before:bg-size-[10px_10px] before:[--pattern-foreground:var(--color-border)]/56',
-          className
-        )}
-      >
-        <PanelPlus position="top-left" />
-        <PanelPlus position="top-right" />
-        <PanelPlus position="bottom-left" />
-        <PanelPlus position="bottom-right" />
-      </div>
-      <FullWidthDivider />
-    </>
+    <PanelContent
+      data-slot="stripe-separator"
+      className={cn(
+        'border-border relative flex h-8 w-full border-x p-0',
+        'decor-all',
+        'before:absolute before:inset-y-px before:left-[-100vw] before:-z-1 before:w-[200vw]',
+        'before:bg-[repeating-linear-gradient(315deg,var(--pattern-foreground)_0,var(--pattern-foreground)_1px,transparent_0,transparent_50%)] before:bg-size-[10px_10px] before:[--pattern-foreground:var(--color-border)]/56',
+        className
+      )}
+    >
+      <FullWidthDivider position="top" />
+      <FullWidthDivider position="bottom" />
+    </PanelContent>
   );
 }

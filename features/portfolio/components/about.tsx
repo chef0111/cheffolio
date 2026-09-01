@@ -3,7 +3,6 @@ import {
   Panel,
   PanelContent,
   PanelHeader,
-  PanelPlus,
   PanelTitle,
 } from '@/components/cheffolio/panel';
 
@@ -12,17 +11,13 @@ import { GitHubContributions } from './github-contributions';
 
 export function About() {
   return (
-    <Panel id="about" className="screen-line-bottom-none">
-      <PanelHeader className="relative">
+    <Panel id="about" className="screen-line-bottom-none screen-line-top-none">
+      <PanelHeader>
         <PanelTitle>About</PanelTitle>
       </PanelHeader>
 
-      <PanelContent className="typeset typeset-description relative py-(--typeset-flow)">
+      <PanelContent className="typeset typeset-description decor-all py-(--typeset-flow)">
         <Markdown>{USER.about}</Markdown>
-        <PanelPlus position="top-left" />
-        <PanelPlus position="top-right" />
-        <PanelPlus position="bottom-left" />
-        <PanelPlus position="bottom-right" />
       </PanelContent>
       <GitHubContributions />
     </Panel>

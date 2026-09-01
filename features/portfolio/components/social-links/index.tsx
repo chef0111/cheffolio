@@ -6,7 +6,7 @@ import { SocialLinkItem } from './social-link-item';
 
 export function SocialLinks() {
   return (
-    <Panel className="screen-line-bottom-none">
+    <Panel className="screen-line-bottom-none screen-line-top-none">
       <h2 className="sr-only">Social Links</h2>
       <div className="relative">
         <div className="pointer-events-none absolute inset-0 -z-1 grid grid-cols-2 gap-2 md:grid-cols-3">
@@ -19,7 +19,7 @@ export function SocialLinks() {
           {SOCIAL_LINKS.map((link, index) => (
             <SocialLinkItem
               key={link.href}
-              className={getSocialLinkGridLines(index, SOCIAL_LINKS.length)}
+              className={getSocialLinkGridLines(index)}
               {...link}
             />
           ))}

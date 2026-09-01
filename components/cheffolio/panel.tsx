@@ -5,8 +5,17 @@ import React from 'react';
 
 import { cn } from '@/lib/utils';
 
-const panelPlusVariants = cva(
-  'bg-background pointer-events-none absolute z-1 size-4 shrink-0 text-border',
+const PANEL_DECOR_POSITIONS = [
+  'top-left',
+  'top-right',
+  'bottom-left',
+  'bottom-right',
+] as const;
+
+type PanelDecorPosition = (typeof PANEL_DECOR_POSITIONS)[number];
+
+const panelDecorVariants = cva(
+  'bg-background pointer-events-none absolute z-1 rotate-45 flex size-4 shrink-0 items-center justify-center text-border',
   {
     variants: {
       position: {
@@ -15,9 +24,9 @@ const panelPlusVariants = cva(
         'top-right':
           'top-0 right-0 translate-x-[calc(50%+0.5px)] -translate-y-[calc(50%+0.5px)]',
         'bottom-right':
-          'right-0 bottom-0 translate-x-[calc(50%+0.5px)] translate-y-[calc(50%+0.5px)]',
+          'right-0 bottom-0 translate-x-[calc(50%+0.5px)] translate-y-[calc(50%-0.5px)]',
         'bottom-left':
-          'bottom-0 left-0 -translate-x-[calc(50%+0.5px)] translate-y-[calc(50%+0.5px)]',
+          'bottom-0 left-0 -translate-x-[calc(50%+0.5px)] translate-y-[calc(50%-0.5px)]',
       },
     },
     defaultVariants: {
@@ -26,7 +35,71 @@ const panelPlusVariants = cva(
   }
 );
 
-function Panel({ className, ...props }: React.ComponentProps<'section'>) {
+const PANEL_DECOR_CLASSES: Record<string, readonly PanelDecorPosition[]> = {
+  'decor-all': PANEL_DECOR_POSITIONS,
+  'decor-t': ['top-left', 'top-right'],
+  'decor-b': ['bottom-left', 'bottom-right'],
+  'decor-l': ['top-left', 'bottom-left'],
+  'decor-r': ['top-right', 'bottom-right'],
+  'decor-tr': ['top-right'],
+  'decor-tl': ['top-left'],
+  'decor-br': ['bottom-right'],
+  'decor-bl': ['bottom-left'],
+  'decor-dl': ['top-left', 'bottom-right'],
+  'decor-dr': ['top-right', 'bottom-left'],
+};
+
+function getPanelDecorPositions(
+  className: string | undefined
+): PanelDecorPosition[] {
+  if (!className) return [];
+  const positions = new Set<PanelDecorPosition>();
+  for (const token of className.split(/\s+/)) {
+    const corners = PANEL_DECOR_CLASSES[token];
+    if (!corners) continue;
+    for (const corner of corners) positions.add(corner);
+  }
+  return PANEL_DECOR_POSITIONS.filter((position) => positions.has(position));
+}
+
+function PanelDecor({
+  className,
+  position,
+  ...props
+}: React.ComponentProps<'span'> & VariantProps<typeof panelDecorVariants>) {
+  return (
+    <span
+      data-slot="panel-plus"
+      data-position={position}
+      aria-hidden="true"
+      className={cn(panelDecorVariants({ position }), className)}
+      {...props}
+    >
+      <svg
+        className="stroke-muted-foreground/30 size-3 -rotate-45 stroke-1"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 16 16"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path d="M0 8h16" />
+        <path d="M8 0v16" />
+      </svg>
+    </span>
+  );
+}
+
+function PanelDecores({ className }: { className?: string }) {
+  return getPanelDecorPositions(className).map((position) => (
+    <PanelDecor key={position} position={position} />
+  ));
+}
+
+function Panel({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<'section'>) {
   return (
     <section
       data-slot="panel"
@@ -35,11 +108,18 @@ function Panel({ className, ...props }: React.ComponentProps<'section'>) {
         className
       )}
       {...props}
-    />
+    >
+      <PanelDecores className={className} />
+      {children}
+    </section>
   );
 }
 
-function PanelHeader({ className, ...props }: React.ComponentProps<'header'>) {
+function PanelHeader({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<'header'>) {
   return (
     <header
       data-slot="panel-header"
@@ -48,7 +128,10 @@ function PanelHeader({ className, ...props }: React.ComponentProps<'header'>) {
         className
       )}
       {...props}
-    />
+    >
+      <PanelDecores className={className} />
+      {children}
+    </header>
   );
 }
 
@@ -86,49 +169,43 @@ function PanelTitleSup({ className, ...props }: React.ComponentProps<'sup'>) {
 
 function PanelDescription({
   className,
+  children,
   ...props
 }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="panel-description"
       className={cn(
-        'text-muted-foreground py-4 font-mono text-sm text-balance',
+        'text-muted-foreground relative py-4 font-mono text-sm text-balance',
+        getPanelDecorPositions(className).length > 0 && 'relative',
         className
       )}
       {...props}
-    />
+    >
+      <PanelDecores className={className} />
+      {children}
+    </div>
   );
 }
 
-function PanelContent({ className, ...props }: React.ComponentProps<'div'>) {
-  return (
-    <div data-slot="panel-body" className={cn('p-4', className)} {...props} />
-  );
-}
-
-function PanelPlus({
+function PanelContent({
   className,
-  position,
+  children,
   ...props
-}: React.ComponentProps<'span'> & VariantProps<typeof panelPlusVariants>) {
+}: React.ComponentProps<'div'>) {
   return (
-    <span
-      data-slot="panel-plus"
-      aria-hidden="true"
-      className={cn(panelPlusVariants({ position }), className)}
+    <div
+      data-slot="panel-body"
+      className={cn(
+        'p-4',
+        getPanelDecorPositions(className).length > 0 && 'relative',
+        className
+      )}
       {...props}
     >
-      <svg
-        className="size-full stroke-1"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path d="M8 12h8" />
-        <path d="M12 8v8" />
-      </svg>
-    </span>
+      <PanelDecores className={className} />
+      {children}
+    </div>
   );
 }
 
@@ -137,7 +214,6 @@ export {
   PanelContent,
   PanelDescription,
   PanelHeader,
-  PanelPlus,
   PanelTitle,
   PanelTitleSup,
 };

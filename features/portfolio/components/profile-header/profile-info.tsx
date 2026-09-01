@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import { PanelPlus } from '@/components/cheffolio/panel';
+import { PanelContent } from '@/components/cheffolio/panel';
 import { VerifiedIcon } from '@/components/icons/verified-icon';
 import { Label } from '@/components/ui/label';
 import { USER } from '@/features/portfolio/data/user';
@@ -11,14 +11,8 @@ import { ProfileStatus } from './profile-status';
 
 export function ProfileInfo() {
   return (
-    <div className="border-border relative mt-px flex border-x">
-      <PanelPlus position="top-left" />
-      <PanelPlus position="top-right" />
-
-      <div className="border-border relative shrink-0 border-r">
-        <PanelPlus position="top-right" />
-        <PanelPlus position="bottom-right" />
-
+    <PanelContent className="border-border decor-t flex border-x p-0">
+      <PanelContent className="border-border decor-r shrink-0 border-r p-0 **:data-[position=bottom-right]:-mb-px">
         <AvatarElectric>
           <div className="relative mx-0.5 my-0.75 size-32 sm:size-40">
             <Image
@@ -37,7 +31,7 @@ export function ProfileInfo() {
           emoji="😴"
           quote="Focusing, don't let the emoji fool you"
         />
-      </div>
+      </PanelContent>
 
       <div className="flex flex-1 flex-col">
         <div className="flex grow items-end pb-1 pl-4">
@@ -72,6 +66,6 @@ export function ProfileInfo() {
           </FlipSentences>
         </div>
       </div>
-    </div>
+    </PanelContent>
   );
 }

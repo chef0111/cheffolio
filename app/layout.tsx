@@ -142,7 +142,7 @@ export default function RootLayout({
         </Script>
         <JsonLdScript data={getWebSiteJsonLd()} />
       </head>
-      <body className="bg-background flex min-h-dvh flex-col overflow-x-hidden">
+      <body>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

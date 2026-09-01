@@ -5,7 +5,6 @@ import {
   Panel,
   PanelContent,
   PanelHeader,
-  PanelPlus,
   PanelTitle,
   PanelTitleSup,
 } from '@/components/cheffolio/panel';
@@ -27,9 +26,7 @@ export function Awards() {
         </PanelTitle>
       </PanelHeader>
 
-      <PanelContent className="relative p-0">
-        <PanelPlus position="top-left" />
-        <PanelPlus position="top-right" />
+      <PanelContent className="decor-t p-0">
         <CollapsibleList
           items={SORTED_AWARDS}
           max={3}
