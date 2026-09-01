@@ -1,15 +1,37 @@
 import { mergeProps } from '@base-ui/react/merge-props';
 import { useRender } from '@base-ui/react/use-render';
+import { cva, type VariantProps } from 'class-variance-authority';
 import React from 'react';
 
 import { cn } from '@/lib/utils';
+
+const panelPlusVariants = cva(
+  'bg-background pointer-events-none absolute z-1 size-4 shrink-0 text-border',
+  {
+    variants: {
+      position: {
+        'top-left':
+          'top-0 left-0 -translate-x-[calc(50%+0.5px)] -translate-y-[calc(50%+0.5px)]',
+        'top-right':
+          'top-0 right-0 translate-x-[calc(50%+0.5px)] -translate-y-[calc(50%+0.5px)]',
+        'bottom-right':
+          'right-0 bottom-0 translate-x-[calc(50%+0.5px)] translate-y-[calc(50%+0.5px)]',
+        'bottom-left':
+          'bottom-0 left-0 -translate-x-[calc(50%+0.5px)] translate-y-[calc(50%+0.5px)]',
+      },
+    },
+    defaultVariants: {
+      position: 'top-left',
+    },
+  }
+);
 
 function Panel({ className, ...props }: React.ComponentProps<'section'>) {
   return (
     <section
       data-slot="panel"
       className={cn(
-        'screen-line-top screen-line-bottom border-border border-x',
+        'screen-line-top screen-line-bottom border-border relative border-x',
         className
       )}
       {...props}
@@ -84,11 +106,38 @@ function PanelContent({ className, ...props }: React.ComponentProps<'div'>) {
   );
 }
 
+function PanelPlus({
+  className,
+  position,
+  ...props
+}: React.ComponentProps<'span'> & VariantProps<typeof panelPlusVariants>) {
+  return (
+    <span
+      data-slot="panel-plus"
+      aria-hidden="true"
+      className={cn(panelPlusVariants({ position }), className)}
+      {...props}
+    >
+      <svg
+        className="size-full stroke-1"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path d="M8 12h8" />
+        <path d="M12 8v8" />
+      </svg>
+    </span>
+  );
+}
+
 export {
   Panel,
   PanelContent,
   PanelDescription,
   PanelHeader,
+  PanelPlus,
   PanelTitle,
   PanelTitleSup,
 };
