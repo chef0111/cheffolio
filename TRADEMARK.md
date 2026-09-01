@@ -7,7 +7,7 @@ The [MIT license](./LICENSE) covers the source code in this repository. It does 
 These are not part of the MIT grant, including where the files live in this repository:
 
 - **giabao.dev**
-- **chef0111**, **cheff0111**
+- **chef0111**
 - **Coding as Chef**
 - The logo defined by `Brand` and `BrandMark` in [`components/cheffolio/brand.tsx`](./components/cheffolio/brand.tsx), including copies used as favicons, app icons, and screenshots
 
