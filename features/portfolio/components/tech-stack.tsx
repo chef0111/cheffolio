@@ -1,5 +1,9 @@
-import { DecorIcon } from '@/components/cheffolio/decor-icon';
-import { Panel, PanelHeader, PanelTitle } from '@/components/cheffolio/panel';
+import {
+  Panel,
+  PanelHeader,
+  PanelPlus,
+  PanelTitle,
+} from '@/components/cheffolio/panel';
 
 import { TECH_STACK } from '../data/tech-stack';
 import type { TechStack as TechStackType } from '../types/tech-stack';
@@ -14,10 +18,10 @@ export function TechStack() {
       </PanelHeader>
 
       <div className="relative [--badge-height:--spacing(6)] [--col-left-width:--spacing(48)]">
-        <DecorIcon className="size-4" position="top-left" />
-        <DecorIcon className="size-4" position="top-right" />
-        <DecorIcon className="size-4" position="bottom-left" />
-        <DecorIcon className="size-4" position="bottom-right" />
+        <PanelPlus position="top-left" />
+        <PanelPlus position="top-right" />
+        <PanelPlus position="bottom-left" />
+        <PanelPlus position="bottom-right" />
 
         <div
           className="pointer-events-none absolute inset-y-0 left-(--col-left-width) -z-1 w-px bg-[linear-gradient(to_bottom,var(--line)_4px,transparent_2px)] bg-size-[1px_6px] bg-repeat-y max-sm:hidden"

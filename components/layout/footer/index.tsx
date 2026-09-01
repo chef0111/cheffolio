@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 
 import { Brand } from '@/components/cheffolio/brand';
+import { PanelPlus } from '@/components/cheffolio/panel';
 import { GitHubIcon, LinkedinIcon, XIcon } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import { FOOTER_SLOGAN, GITHUB_REPO_URL, UTM_PARAMS } from '@/config/site';
@@ -56,11 +57,17 @@ export function SiteFooter() {
             </p>
           </div>
 
-          <ChainOfSlogan
-            className="screen-line-bottom screen-line-top"
-            itemClassName="font-pixel"
-            slogan={FOOTER_SLOGAN}
-          />
+          <div className="relative -mx-4">
+            <PanelPlus position="top-left" />
+            <PanelPlus position="top-right" />
+            <PanelPlus position="bottom-left" />
+            <PanelPlus position="bottom-right" />
+            <ChainOfSlogan
+              className="screen-line-bottom screen-line-top"
+              itemClassName="font-pixel"
+              slogan={FOOTER_SLOGAN}
+            />
+          </div>
         </div>
 
         <div className="screen-line-bottom flex max-w-4xl flex-col justify-between gap-2 py-4">

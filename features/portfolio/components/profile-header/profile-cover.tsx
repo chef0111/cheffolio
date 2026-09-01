@@ -5,12 +5,15 @@ import { useState } from 'react';
 
 import { BrandMark } from '@/components/cheffolio/brand';
 import { CanvasReveal } from '@/components/cheffolio/canvas-reveal';
+import { PanelPlus } from '@/components/cheffolio/panel';
 import { Label } from '@/components/ui/label';
 import { useMediaQuery } from '@/hooks/use-media-query';
 
 export function ProfileCover() {
   return (
     <CanvasHover>
+      <PanelPlus position="top-left" />
+      <PanelPlus position="top-right" />
       <div className="z-20">
         <div className="flex flex-col items-center gap-4">
           <BrandMark

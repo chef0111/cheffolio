@@ -1,11 +1,11 @@
 import { compareDesc } from 'date-fns';
 
 import { CollapsibleList } from '@/components/cheffolio/collapsible-list';
-import { DecorIcon } from '@/components/cheffolio/decor-icon';
 import {
   Panel,
   PanelContent,
   PanelHeader,
+  PanelPlus,
   PanelTitle,
   PanelTitleSup,
 } from '@/components/cheffolio/panel';
@@ -28,17 +28,14 @@ export function Awards() {
       </PanelHeader>
 
       <PanelContent className="relative p-0">
-        <DecorIcon className="size-4" position="bottom-left" />
-        <DecorIcon className="size-4" position="bottom-right" />
+        <PanelPlus position="top-left" />
+        <PanelPlus position="top-right" />
         <CollapsibleList
           items={SORTED_AWARDS}
           max={3}
           keyExtractor={(item) => item.id}
           renderItem={(item) => (
-            <AwardItem
-              className="border-border relative border-t"
-              award={item}
-            />
+            <AwardItem className="border-border border-t" award={item} />
           )}
         />
       </PanelContent>

@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import { DecorIcon } from '@/components/cheffolio/decor-icon';
+import { PanelPlus } from '@/components/cheffolio/panel';
 import { VerifiedIcon } from '@/components/icons/verified-icon';
 import { Label } from '@/components/ui/label';
 import { USER } from '@/features/portfolio/data/user';
@@ -12,14 +12,12 @@ import { ProfileStatus } from './profile-status';
 export function ProfileInfo() {
   return (
     <div className="border-border relative mt-px flex border-x">
-      <DecorIcon className="size-4" position="top-left" />
-      <DecorIcon className="size-4" position="top-right" />
-      <DecorIcon className="size-4" position="bottom-left" />
-      <DecorIcon className="size-4" position="bottom-right" />
+      <PanelPlus position="top-left" />
+      <PanelPlus position="top-right" />
 
       <div className="border-border relative shrink-0 border-r">
-        <DecorIcon className="size-4" position="top-right" />
-        <DecorIcon className="size-4" position="bottom-right" />
+        <PanelPlus position="top-right" />
+        <PanelPlus position="bottom-right" />
 
         <AvatarElectric>
           <div className="relative mx-0.5 my-0.75 size-32 sm:size-40">

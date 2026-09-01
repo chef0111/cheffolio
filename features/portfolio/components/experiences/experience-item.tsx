@@ -1,6 +1,5 @@
 import Image from 'next/image';
 
-import { DecorIcon } from '@/components/cheffolio/decor-icon';
 import {
   Status,
   StatusIndicator,
@@ -16,11 +15,8 @@ export function ExperienceItem({ experience }: { experience: Experience }) {
   return (
     <div
       id={`experience-${experience.id}`}
-      className="relative scroll-mt-14 space-y-4 py-4 pr-2 pl-4"
+      className="scroll-mt-14 space-y-4 py-4 pr-2 pl-4"
     >
-      <DecorIcon className="size-4" position="top-left" />
-      <DecorIcon className="size-4" position="top-right" />
-
       <div className="flex items-center gap-3">
         <div className="flex size-6 shrink-0 items-center justify-center select-none">
           {experience.companyLogo ? (

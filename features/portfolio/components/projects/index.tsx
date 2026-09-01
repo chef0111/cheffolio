@@ -1,9 +1,9 @@
 import { CollapsibleList } from '@/components/cheffolio/collapsible-list';
-import { DecorIcon } from '@/components/cheffolio/decor-icon';
 import {
   Panel,
   PanelContent,
   PanelHeader,
+  PanelPlus,
   PanelTitle,
   PanelTitleSup,
 } from '@/components/cheffolio/panel';
@@ -25,10 +25,8 @@ export function Projects() {
       </PanelHeader>
 
       <PanelContent className="relative flow-root p-0">
-        <DecorIcon className="size-4" position="top-left" />
-        <DecorIcon className="size-4" position="top-right" />
-        <DecorIcon className="size-4" position="bottom-left" />
-        <DecorIcon className="size-4" position="bottom-right" />
+        <PanelPlus position="top-left" />
+        <PanelPlus position="top-right" />
         <CollapsibleList
           items={PROJECTS}
           max={3}

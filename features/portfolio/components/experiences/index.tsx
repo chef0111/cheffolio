@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { DecorIcon } from '@/components/cheffolio/decor-icon';
 import { FullWidthDivider } from '@/components/cheffolio/full-width-divider';
 import {
   Panel,
   PanelContent,
   PanelHeader,
+  PanelPlus,
   PanelTitle,
 } from '@/components/cheffolio/panel';
 import { EXPERIENCES } from '@/features/portfolio/data/experiences';
@@ -16,16 +16,15 @@ export function Experiences() {
   return (
     <Panel
       id="experience"
-      className="screen-line-bottom-none screen-line-top-none relative"
+      className="screen-line-bottom-none screen-line-top-none"
     >
-      <DecorIcon className="size-4" position="bottom-left" />
-      <DecorIcon className="size-4" position="bottom-right" />
-
       <PanelHeader>
         <PanelTitle>Experience</PanelTitle>
       </PanelHeader>
 
-      <PanelContent className="p-0">
+      <PanelContent className="relative p-0">
+        <PanelPlus position="top-left" />
+        <PanelPlus position="top-right" />
         <div>
           {EXPERIENCES.map((experience, index) => (
             <React.Fragment key={experience.id}>

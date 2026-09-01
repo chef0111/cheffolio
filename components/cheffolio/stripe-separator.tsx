@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils';
 
 import { FullWidthDivider } from './full-width-divider';
+import { PanelPlus } from './panel';
 
 export function StripeSeparator({ className }: { className?: string }) {
   return (
@@ -13,7 +14,12 @@ export function StripeSeparator({ className }: { className?: string }) {
           'before:bg-[repeating-linear-gradient(315deg,var(--pattern-foreground)_0,var(--pattern-foreground)_1px,transparent_0,transparent_50%)] before:bg-size-[10px_10px] before:[--pattern-foreground:var(--color-border)]/56',
           className
         )}
-      />
+      >
+        <PanelPlus position="top-left" />
+        <PanelPlus position="top-right" />
+        <PanelPlus position="bottom-left" />
+        <PanelPlus position="bottom-right" />
+      </div>
       <FullWidthDivider />
     </>
   );

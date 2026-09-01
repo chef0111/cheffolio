@@ -1,7 +1,6 @@
 import { format } from 'date-fns';
 import { AwardIcon } from 'lucide-react';
 
-import { DecorIcon } from '@/components/cheffolio/decor-icon';
 import { GridPattern } from '@/components/cheffolio/grid-pattern';
 import { IntroItemIcon } from '@/components/cheffolio/intro-item';
 import { Markdown } from '@/components/cheffolio/markdown';
@@ -35,9 +34,6 @@ export function AwardItem({
       disabled={!canExpand}
       defaultOpen={award.isExpanded}
     >
-      <DecorIcon className="size-4" position="top-left" />
-      <DecorIcon className="size-4" position="top-right" />
-
       <div className="hover:bg-accent-muted active:bg-accent-muted my-auto flex items-center transition-colors">
         <IntroItemIcon className="mx-4 sm:size-7">
           <AwardIcon className="text-muted-foreground pointer-events-none size-4 sm:size-4.5" />
