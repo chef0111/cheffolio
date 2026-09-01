@@ -39,12 +39,9 @@ export function PaddleSlider({
   return (
     <footer
       aria-label={showPlay ? 'Start game' : 'Paddle control'}
-      className={cn(
-        'bg-background fixed inset-x-4 bottom-4 z-40 md:hidden',
-        className
-      )}
+      className={cn('fixed inset-x-8 bottom-8 z-40 md:hidden', className)}
     >
-      <div className="mx-auto w-full max-w-200 px-3 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:px-1">
+      <div className="mx-auto w-full max-w-200 pb-[env(safe-area-inset-bottom)]">
         {showPlay ? (
           <Button
             type="button"
