@@ -6,7 +6,6 @@ import {
   VenusIcon,
 } from 'lucide-react';
 
-import { DecorIcon } from '@/components/cheffolio/decor-icon';
 import {
   IntroItem,
   IntroItemContent,
@@ -26,12 +25,7 @@ import { ResumeItem } from './resume-item';
 
 export function Overview() {
   return (
-    <Panel className="screen-line-bottom-none screen-line-top-none relative mt-px">
-      <DecorIcon className="size-4" position="top-left" />
-      <DecorIcon className="size-4" position="top-right" />
-      <DecorIcon className="size-4" position="bottom-left" />
-      <DecorIcon className="size-4" position="bottom-right" />
-
+    <Panel className="decor-all screen-line-bottom-none">
       <h2 className="sr-only">Profile overview</h2>
 
       <PanelContent className="space-y-2.5">

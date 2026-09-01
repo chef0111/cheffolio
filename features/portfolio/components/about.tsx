@@ -1,4 +1,3 @@
-import { DecorIcon } from '@/components/cheffolio/decor-icon';
 import { Markdown } from '@/components/cheffolio/markdown';
 import {
   Panel,
@@ -12,20 +11,13 @@ import { GitHubContributions } from './github-contributions';
 
 export function About() {
   return (
-    <Panel id="about" className="screen-line-bottom-none relative">
-      <DecorIcon className="size-4" position="bottom-left" />
-      <DecorIcon className="size-4" position="bottom-right" />
-
-      <PanelHeader className="relative">
+    <Panel id="about" className="screen-line-bottom-none screen-line-top-none">
+      <PanelHeader>
         <PanelTitle>About</PanelTitle>
       </PanelHeader>
 
-      <PanelContent className="typeset typeset-description relative py-(--typeset-flow)">
+      <PanelContent className="typeset typeset-description decor-all py-(--typeset-flow)">
         <Markdown>{USER.about}</Markdown>
-        <DecorIcon className="size-4" position="top-left" />
-        <DecorIcon className="size-4" position="top-right" />
-        <DecorIcon className="size-4" position="bottom-left" />
-        <DecorIcon className="size-4" position="bottom-right" />
       </PanelContent>
       <GitHubContributions />
     </Panel>

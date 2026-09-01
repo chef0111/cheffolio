@@ -5,6 +5,7 @@ import { useState } from 'react';
 
 import { BrandMark } from '@/components/cheffolio/brand';
 import { CanvasReveal } from '@/components/cheffolio/canvas-reveal';
+import { PanelContent } from '@/components/cheffolio/panel';
 import { Label } from '@/components/ui/label';
 import { useMediaQuery } from '@/hooks/use-media-query';
 
@@ -32,7 +33,7 @@ function CanvasHover({ children }: { children: React.ReactNode }) {
   const isExpanded = isTouchDevice && isActive;
 
   return (
-    <div
+    <PanelContent
       onMouseEnter={() => {
         setIsActive(true);
       }}
@@ -40,7 +41,7 @@ function CanvasHover({ children }: { children: React.ReactNode }) {
         setIsActive(false);
       }}
       data-expanded={isExpanded ? 'true' : 'false'}
-      className="group/canvas cover-background relative flex flex-col"
+      className="group/canvas cover-background decor-t flex flex-col p-0"
     >
       <div className="h-12 w-full" />
       <AnimatePresence>
@@ -71,6 +72,6 @@ function CanvasHover({ children }: { children: React.ReactNode }) {
         )}
       </AnimatePresence>
       {children}
-    </div>
+    </PanelContent>
   );
 }

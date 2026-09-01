@@ -1,5 +1,9 @@
-import { DecorIcon } from '@/components/cheffolio/decor-icon';
-import { Panel, PanelHeader, PanelTitle } from '@/components/cheffolio/panel';
+import {
+  Panel,
+  PanelContent,
+  PanelHeader,
+  PanelTitle,
+} from '@/components/cheffolio/panel';
 
 import { TECH_STACK } from '../data/tech-stack';
 import type { TechStack as TechStackType } from '../types/tech-stack';
@@ -8,17 +12,15 @@ const ID = 'stack';
 
 export function TechStack() {
   return (
-    <Panel id={ID} className="screen-line-bottom-none">
+    <Panel
+      id={ID}
+      className="screen-line-bottom-none screen-line-top-none -mb-px"
+    >
       <PanelHeader>
         <PanelTitle>Tech Stack</PanelTitle>
       </PanelHeader>
 
-      <div className="relative [--badge-height:--spacing(6)] [--col-left-width:--spacing(48)]">
-        <DecorIcon className="size-4" position="top-left" />
-        <DecorIcon className="size-4" position="top-right" />
-        <DecorIcon className="size-4" position="bottom-left" />
-        <DecorIcon className="size-4" position="bottom-right" />
-
+      <PanelContent className="decor-all p-0 [--badge-height:--spacing(6)] [--col-left-width:--spacing(48)]">
         <div
           className="pointer-events-none absolute inset-y-0 left-(--col-left-width) -z-1 w-px bg-[linear-gradient(to_bottom,var(--line)_4px,transparent_2px)] bg-size-[1px_6px] bg-repeat-y max-sm:hidden"
           aria-hidden
@@ -73,7 +75,7 @@ export function TechStack() {
             );
           }
         )}
-      </div>
+      </PanelContent>
     </Panel>
   );
 }

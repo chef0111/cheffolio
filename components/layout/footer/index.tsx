@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 
 import { Brand } from '@/components/cheffolio/brand';
+import { PanelContent } from '@/components/cheffolio/panel';
 import { GitHubIcon, LinkedinIcon, XIcon } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import { FOOTER_SLOGAN, GITHUB_REPO_URL, UTM_PARAMS } from '@/config/site';
@@ -12,11 +13,8 @@ import { FooterCopyright } from './copyright';
 
 export function SiteFooter() {
   return (
-    <footer
-      className="relative max-w-screen overflow-x-hidden px-2"
-      aria-label="Site footer"
-    >
-      <div className="border-border mx-auto border-x px-4 group-has-data-[slot=layout-wide]/layout:container md:max-w-4xl">
+    <footer className="relative w-full min-w-0 px-2" aria-label="Site footer">
+      <div className="border-border screen-line-bottom mx-auto border-x group-has-data-[slot=layout-wide]/layout:container md:max-w-4xl">
         <div className="flex flex-col gap-4 pt-4">
           <div className="flex flex-col items-center justify-center">
             <div className="flex items-center gap-2">
@@ -56,18 +54,20 @@ export function SiteFooter() {
             </p>
           </div>
 
-          <ChainOfSlogan
-            className="screen-line-bottom screen-line-top"
-            itemClassName="font-pixel"
-            slogan={FOOTER_SLOGAN}
-          />
+          <PanelContent className="screen-line-bottom screen-line-top decor-all flex w-full justify-center p-0">
+            <ChainOfSlogan
+              className="mx-auto"
+              itemClassName="font-pixel"
+              slogan={FOOTER_SLOGAN}
+            />
+          </PanelContent>
         </div>
 
-        <div className="screen-line-bottom flex max-w-4xl flex-col justify-between gap-2 py-4">
+        <div className="flex max-w-4xl flex-col justify-between gap-2 py-4">
           <Suspense
             fallback={
               <p className="text-muted-foreground font-pixel-square text-center text-sm">
-                &copy; giabao.dev
+                &copy; 2026 giabao.dev, built by chef0111
               </p>
             }
           >

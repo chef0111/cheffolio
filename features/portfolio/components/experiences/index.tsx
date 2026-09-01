@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { DecorIcon } from '@/components/cheffolio/decor-icon';
 import { FullWidthDivider } from '@/components/cheffolio/full-width-divider';
 import {
   Panel,
@@ -16,16 +15,13 @@ export function Experiences() {
   return (
     <Panel
       id="experience"
-      className="screen-line-bottom-none screen-line-top-none relative"
+      className="screen-line-bottom-none screen-line-top-none"
     >
-      <DecorIcon className="size-4" position="bottom-left" />
-      <DecorIcon className="size-4" position="bottom-right" />
-
-      <PanelHeader>
+      <PanelHeader className="-mt-px">
         <PanelTitle>Experience</PanelTitle>
       </PanelHeader>
 
-      <PanelContent className="p-0">
+      <PanelContent className="decor-t -mb-px p-0">
         <div>
           {EXPERIENCES.map((experience, index) => (
             <React.Fragment key={experience.id}>

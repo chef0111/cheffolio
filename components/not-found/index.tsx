@@ -343,7 +343,7 @@ export function NotFound({
           ref={hostRef}
           className="aspect-4/3 w-full touch-none overflow-hidden select-none"
         />
-        {ready ? null : <GameLoadingStatus />}
+        {!ready && <GameLoadingStatus />}
       </div>
       <div
         className="h-[calc(4.75rem+env(safe-area-inset-bottom,0px))] md:hidden"

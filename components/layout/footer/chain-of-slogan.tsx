@@ -46,7 +46,7 @@ export const ChainOfSlogan = ({
         >
           <span
             className={cn(
-              'flex h-6 items-center px-1.5 text-center font-mono uppercase select-none sm:h-8 sm:px-3 sm:font-semibold',
+              'flex h-6 items-center px-1.5 text-center font-mono uppercase select-none! sm:h-8 sm:px-3 sm:font-semibold',
               itemClassName
             )}
           >
