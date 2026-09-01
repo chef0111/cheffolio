@@ -106,7 +106,6 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-border: var(--border);
-  --color-line: var(--line);
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-selection: var(--selection);
@@ -169,11 +168,11 @@
 }
 
 @utility screen-line-top {
-  @apply before:bg-line relative before:absolute before:top-0 before:left-[-100vw] before:-z-1 before:h-px before:w-[200vw];
+  @apply before:bg-border relative before:absolute before:top-0 before:left-[-100vw] before:-z-1 before:h-px before:w-[200vw];
 }
 
 @utility screen-line-bottom {
-  @apply after:bg-line relative after:absolute after:bottom-0 after:left-[-100vw] after:-z-1 after:h-px after:w-[200vw];
+  @apply after:bg-border relative after:absolute after:bottom-0 after:left-[-100vw] after:-z-1 after:h-px after:w-[200vw];
 }
 
 @utility screen-line-top-none {
@@ -185,7 +184,7 @@
 }
 
 @utility cover-background {
-  @apply border-line flex aspect-video items-center justify-center border-x bg-black/0.75 bg-[radial-gradient(var(--pattern-foreground)_1px,transparent_0)] bg-size-[10px_10px] bg-center text-black select-none [--pattern-foreground:var(--color-zinc-950)]/5 before:-top-px after:-bottom-px sm:aspect-24/9 dark:bg-white/0.75 dark:text-white dark:[--pattern-foreground:var(--color-white)]/5;
+  @apply border-border flex aspect-video items-center justify-center border-x bg-black/0.75 bg-[radial-gradient(var(--pattern-foreground)_1px,transparent_0)] bg-size-[10px_10px] bg-center text-black select-none [--pattern-foreground:var(--color-zinc-950)]/5 before:-top-px after:-bottom-px sm:aspect-24/9 dark:bg-white/0.75 dark:text-white dark:[--pattern-foreground:var(--color-white)]/5;
 }
 
 @utility avatar-ring {
@@ -207,7 +206,7 @@
   @apply prose-a:font-normal prose-a:wrap-break-word prose-a:text-foreground prose-a:link-underline;
   @apply prose-code:rounded-md prose-code:border prose-code:bg-muted/50 prose-code:px-[0.3rem] prose-code:py-[0.2rem] prose-code:text-sm prose-code:font-normal prose-code:before:content-none prose-code:after:content-none;
   @apply prose-strong:font-medium;
-  @apply prose-hr:border-line;
+  @apply prose-hr:border-border;
   @apply prose-blockquote:border-s-2 prose-blockquote:font-normal prose-blockquote:text-muted-foreground prose-blockquote:not-italic prose-blockquote:[&_p:first-of-type]:before:content-none prose-blockquote:[&_p:last-of-type]:after:content-none;
 }
 
@@ -300,7 +299,6 @@
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.922 0 0);
-  --line: color-mix(in oklab, var(--border) 64%, var(--background));
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
   --selection: oklch(0.141 0.005 285.823);

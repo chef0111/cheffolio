@@ -31,7 +31,7 @@ export function Experiences() {
             <React.Fragment key={experience.id}>
               <ExperienceItem experience={experience} />
               {index !== EXPERIENCES.length - 1 && (
-                <FullWidthDivider className="bg-line" />
+                <FullWidthDivider className="bg-border" />
               )}
             </React.Fragment>
           ))}
