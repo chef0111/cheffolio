@@ -1,39 +1,49 @@
-export function loadSound(url: string) {
-  const audio = new Audio(url);
-  audio.preload = 'auto';
-  audio.load();
-  return audio;
+import { coinCollectSound } from '@/lib/soundcn/coin-collect';
+import { jump8bitSound } from '@/lib/soundcn/jump-8bit';
+import {
+  decodeAudioData,
+  getAudioContext,
+  playSound as playSoundDataUri,
+} from '@/lib/soundcn/sound-engine';
+import type { SoundAsset } from '@/lib/soundcn/sound-types';
+import { threeTone1Sound } from '@/lib/soundcn/three-tone-1';
+
+export const GAME_SOUNDS = {
+  bounce: jump8bitSound,
+  break: coinCollectSound,
+  gameOver: threeTone1Sound,
+} as const;
+
+const DEFAULT_VOLUME = 0.3;
+
+export function preloadSounds() {
+  return Promise.all(
+    Object.values(GAME_SOUNDS).map((sound) => decodeAudioData(sound.dataUri))
+  );
 }
 
-export function unlockSounds(sounds: Array<HTMLAudioElement | null>) {
-  for (const sound of sounds) {
-    if (!sound || sound.dataset.unlocked === '1') continue;
-
-    sound.muted = true;
-    void sound
-      .play()
-      .then(() => {
-        sound.dataset.unlocked = '1';
-        if (sound.dataset.playing === '1') {
-          sound.muted = false;
-          return;
-        }
-        sound.pause();
-        sound.currentTime = 0;
-        sound.muted = false;
-      })
-      .catch(() => {
-        sound.muted = false;
-      });
+/**
+ * Resume AudioContext and prime a silent buffer source inside the user gesture.
+ * Required on iOS/Android: pointerdown-only (slider drag) is not enough.
+ */
+export async function unlockAudio() {
+  const ctx = getAudioContext();
+  if (ctx.state === 'suspended') {
+    await ctx.resume();
   }
+
+  await preloadSounds();
+
+  const source = ctx.createBufferSource();
+  const gain = ctx.createGain();
+  const silent = ctx.createBuffer(1, 1, ctx.sampleRate);
+  source.buffer = silent;
+  gain.gain.value = 0;
+  source.connect(gain);
+  gain.connect(ctx.destination);
+  source.start(0);
 }
 
-export function playSound(sound: HTMLAudioElement | null) {
-  if (!sound) return;
-
-  sound.dataset.playing = '1';
-  sound.muted = false;
-  sound.currentTime = 0;
-  sound.volume = 0.3;
-  void sound.play().catch(() => {});
+export function playSound(sound: SoundAsset, volume = DEFAULT_VOLUME) {
+  void playSoundDataUri(sound.dataUri, { volume });
 }

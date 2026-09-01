@@ -7,7 +7,7 @@ import {
   BRICK_SCORE,
   uncheckedClamp,
 } from './constants';
-import { playSound } from './sounds';
+import { GAME_SOUNDS, playSound } from './sounds';
 import type { GameState } from './types';
 
 export class Ball {
@@ -48,7 +48,7 @@ export class Ball {
       this.xSpeed *= -1;
 
       if (this.state.enableSounds) {
-        playSound(this.state.soundBounce);
+        playSound(GAME_SOUNDS.bounce);
       }
     }
 
@@ -57,7 +57,7 @@ export class Ball {
       this.ySpeed *= -1;
 
       if (this.state.enableSounds) {
-        playSound(this.state.soundBounce);
+        playSound(GAME_SOUNDS.bounce);
       }
     }
 
@@ -65,7 +65,7 @@ export class Ball {
       this.state.enableGame = false;
 
       if (this.state.enableSounds) {
-        playSound(this.state.soundGameOver);
+        playSound(GAME_SOUNDS.gameOver);
       }
 
       this.reset();
@@ -82,7 +82,7 @@ export class Ball {
       this.y = paddle.y - this.radius;
 
       if (this.state.enableSounds) {
-        playSound(this.state.soundBounce);
+        playSound(GAME_SOUNDS.bounce);
       }
     }
   }
@@ -117,7 +117,7 @@ export class Ball {
         bricks.splice(i, 1);
 
         if (this.state.enableSounds) {
-          playSound(this.state.soundBreak);
+          playSound(GAME_SOUNDS.break);
         }
       }
     }

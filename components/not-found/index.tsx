@@ -3,7 +3,7 @@
 import { useReducedMotion } from 'motion/react';
 import { useTheme } from 'next-themes';
 import type p5 from 'p5';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { Spinner } from '@/components/ui/spinner';
 import { fontPixel } from '@/config/font';
@@ -19,14 +19,11 @@ import {
   CANVAS_WIDTH,
   PADDLE_DARK_URL,
   PADDLE_LIGHT_URL,
-  SOUND_BOUNCE_URL,
-  SOUND_BREAK_URL,
-  SOUND_GAME_OVER_URL,
 } from './constants';
 import { getLogoIndex } from './logos';
 import { Paddle } from './paddle';
 import { PaddleSlider } from './paddle-slider';
-import { loadSound, unlockSounds } from './sounds';
+import { preloadSounds, unlockAudio } from './sounds';
 import type { GameState } from './types';
 import { UI } from './ui';
 
@@ -87,12 +84,6 @@ function loadSprite(p: p5, url: string) {
   });
 }
 
-function startGame(state: GameState) {
-  state.enableGame = true;
-  if (!state.enableSounds) return;
-  unlockSounds([state.soundBounce, state.soundBreak, state.soundGameOver]);
-}
-
 export function NotFound({
   className,
   defaultLogo,
@@ -103,9 +94,35 @@ export function NotFound({
   const hostRef = useRef<HTMLDivElement>(null);
   const paddleXRef = useRef<number | null>(null);
   const gameRef = useRef<GameState | null>(null);
+  const controlsRef = useRef<{
+    arm: () => void;
+    startMotion: () => void;
+    launchNow: () => void;
+  } | null>(null);
   const shouldReduceMotion = useReducedMotion();
   const { resolvedTheme } = useTheme();
   const [ready, setReady] = useState(false);
+  const [hasLaunched, setHasLaunched] = useState(false);
+
+  const handlePlay = useCallback(() => {
+    void (async () => {
+      const game = gameRef.current;
+      if (!game || !ready) return;
+
+      if (game.enableSounds) {
+        await unlockAudio();
+      }
+
+      // Mobile: reveal slider and wait for drag before the ball moves.
+      controlsRef.current?.arm();
+    })();
+  }, [ready]);
+
+  const handleStartMotion = useCallback(() => {
+    const game = gameRef.current;
+    if (!game?.hasLaunched || game.bricks.length === 0) return;
+    controlsRef.current?.startMotion();
+  }, []);
 
   useEffect(() => {
     if (!resolvedTheme) return;
@@ -126,12 +143,14 @@ export function NotFound({
         canvas: null,
         enableGame: false,
         enableSounds: !shouldReduceMotion,
+        hasLaunched: false,
+        setHasLaunched: (next) => {
+          state.hasLaunched = next;
+          if (!cancelled) setHasLaunched(next);
+        },
         score: 0,
         bricks: [],
         logoIndex: getLogoIndex(defaultLogo),
-        soundBounce: null,
-        soundBreak: null,
-        soundGameOver: null,
         ballImage: null,
         paddleImage: null,
         paddleX: paddleXRef,
@@ -143,13 +162,37 @@ export function NotFound({
       let ball: Ball;
       let ui: UI;
 
+      /** Unlock controls + place ball. Ball stays still until startMotion. */
+      const armRound = () => {
+        state.setHasLaunched(true);
+        state.enableGame = false;
+        ball.reset();
+      };
+
+      /** Begin ball movement. Does not reset position. */
+      const startMotion = () => {
+        if (!state.hasLaunched || state.bricks.length === 0) return;
+        state.enableGame = true;
+      };
+
+      /** Desktop / keyboard: arm and go in one gesture. */
+      const launchNow = () => {
+        state.setHasLaunched(true);
+        state.enableGame = true;
+        ball.reset();
+      };
+
+      controlsRef.current = {
+        arm: armRound,
+        startMotion,
+        launchNow,
+      };
+
       instance = new P5((p: p5) => {
         sketch = p;
 
         p.preload = () => {
-          state.soundBounce = loadSound(SOUND_BOUNCE_URL);
-          state.soundBreak = loadSound(SOUND_BREAK_URL);
-          state.soundGameOver = loadSound(SOUND_GAME_OVER_URL);
+          void preloadSounds();
 
           void Promise.all([
             loadSprite(
@@ -185,14 +228,27 @@ export function NotFound({
 
           resetGame(p, state);
 
+          // Desktop: canvas click starts immediately.
           state.canvas.mouseClicked(() => {
-            startGame(state);
-            ball.reset();
+            if (window.matchMedia('(max-width: 767px)').matches) {
+              // Mobile/tablet: tap resets; ball waits for slider.
+              if (!state.hasLaunched) return false;
+              armRound();
+              return false;
+            }
+            void (async () => {
+              if (state.enableSounds && !state.hasLaunched) {
+                await unlockAudio();
+              }
+              launchNow();
+            })();
             return false;
           });
 
+          // Mobile/tablet: tap canvas to reset anytime after Play. Slider starts motion.
           state.canvas.touchStarted(() => {
-            startGame(state);
+            if (!state.hasLaunched || state.bricks.length === 0) return false;
+            armRound();
             return false;
           });
         };
@@ -246,8 +302,12 @@ export function NotFound({
           return;
         }
 
-        startGame(state);
-        ball.reset();
+        void (async () => {
+          if (state.enableSounds && !state.hasLaunched) {
+            await unlockAudio();
+          }
+          launchNow();
+        })();
       };
 
       window.addEventListener('keypress', handleKeyPress);
@@ -256,7 +316,9 @@ export function NotFound({
     return () => {
       cancelled = true;
       setReady(false);
+      setHasLaunched(false);
       gameRef.current = null;
+      controlsRef.current = null;
       paddleXRef.current = null;
       if (handleKeyPress) {
         window.removeEventListener('keypress', handleKeyPress);
@@ -264,6 +326,8 @@ export function NotFound({
       instance?.remove();
     };
   }, [shouldReduceMotion, resolvedTheme, defaultLogo]);
+
+  const showPlay = ready && !hasLaunched;
 
   return (
     <>
@@ -283,17 +347,15 @@ export function NotFound({
       </div>
       <div
         className="h-[calc(4.75rem+env(safe-area-inset-bottom,0px))] md:hidden"
-        aria-hidden
+        aria-hidden="true"
       />
       <PaddleSlider
+        showPlay={showPlay}
         disabled={!ready}
+        onPlay={handlePlay}
+        onStartMotion={handleStartMotion}
         onPaddleX={(x) => {
           paddleXRef.current = x;
-        }}
-        onEngage={() => {
-          const game = gameRef.current;
-          if (!game) return;
-          startGame(game);
         }}
       />
     </>

@@ -58,7 +58,7 @@ export function ProjectItem({
           </div>
         )}
 
-        <div className="border-line relative flex-1 overflow-hidden border-dashed">
+        <div className="border-border relative flex-1 overflow-hidden border-dashed">
           <CollapsibleTrigger className="no-focus flex w-full items-center gap-2 p-4 pr-2 text-left">
             <div className="z-1 flex-1">
               <h3 className="mb-1 leading-snug font-medium text-balance">

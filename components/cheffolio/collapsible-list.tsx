@@ -60,7 +60,7 @@ export function CollapsibleList<T>({
       {items.length > max && (
         <div
           className={cn(
-            'border-line flex h-12 items-center justify-center border-t pb-px',
+            'border-border flex h-12 items-center justify-center border-t pb-px',
             triggerClassName
           )}
         >

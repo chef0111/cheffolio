@@ -35,7 +35,10 @@ export function Awards() {
           max={3}
           keyExtractor={(item) => item.id}
           renderItem={(item) => (
-            <AwardItem className="border-line relative border-t" award={item} />
+            <AwardItem
+              className="border-border relative border-t"
+              award={item}
+            />
           )}
         />
       </PanelContent>

@@ -34,7 +34,7 @@ export function TechStack() {
             return (
               <div
                 key={category}
-                className="border-line grid items-start gap-y-2 border-b py-4 last:border-none sm:grid-cols-[var(--col-left-width)_1fr]"
+                className="border-border grid items-start gap-y-2 border-b py-4 last:border-none sm:grid-cols-[var(--col-left-width)_1fr]"
               >
                 <div
                   id={categoryId}

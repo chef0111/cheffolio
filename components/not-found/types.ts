@@ -7,14 +7,14 @@ export interface GameState {
 
   enableGame: boolean;
   enableSounds: boolean;
+  /** True after the first Play / canvas start. Used to allow touch restarts. */
+  hasLaunched: boolean;
+  setHasLaunched: (hasLaunched: boolean) => void;
 
   score: number;
   bricks: Brick[];
   logoIndex: number;
 
-  soundBounce: HTMLAudioElement | null;
-  soundBreak: HTMLAudioElement | null;
-  soundGameOver: HTMLAudioElement | null;
   ballImage: p5.Image | null;
   paddleImage: p5.Image | null;
   paddleX: { current: number | null };

@@ -13,9 +13,9 @@ export function SocialLinks() {
       <h2 className="sr-only">Social Links</h2>
       <div className="relative">
         <div className="pointer-events-none absolute inset-0 -z-1 grid grid-cols-2 gap-2 md:grid-cols-3">
-          <div className="border-line border-r" />
-          <div className="border-line border-l md:border-x" />
-          <div className="border-line border-l max-md:hidden" />
+          <div className="border-border border-r" />
+          <div className="border-border border-l md:border-x" />
+          <div className="border-border border-l max-md:hidden" />
         </div>
 
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 md:grid-cols-3">

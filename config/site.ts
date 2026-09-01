@@ -73,8 +73,4 @@ export const GITHUB_REPO_URL = 'https://github.com/chef0111/cheffolio';
 export const GITHUB_USERNAME = 'chef0111';
 export const X_USERNAME = '@cheff0111';
 
-export const SOUNDS = {
-  toggle: 'https://assets.giabao.dev/sounds/toggle.mp3',
-};
-
 export const FOOTER_SLOGAN = 'Coding as Chef';

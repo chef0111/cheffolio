@@ -16,7 +16,7 @@ export function SiteFooter() {
       className="relative max-w-screen overflow-x-hidden px-2"
       aria-label="Site footer"
     >
-      <div className="border-line mx-auto border-x px-4 group-has-data-[slot=layout-wide]/layout:container md:max-w-4xl">
+      <div className="border-border mx-auto border-x px-4 group-has-data-[slot=layout-wide]/layout:container md:max-w-4xl">
         <div className="flex flex-col gap-4 pt-4">
           <div className="flex flex-col items-center justify-center">
             <div className="flex items-center gap-2">

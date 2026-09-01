@@ -11,13 +11,13 @@ import { ProfileStatus } from './profile-status';
 
 export function ProfileInfo() {
   return (
-    <div className="border-line relative mt-px flex border-x">
+    <div className="border-border relative mt-px flex border-x">
       <DecorIcon className="size-4" position="top-left" />
       <DecorIcon className="size-4" position="top-right" />
       <DecorIcon className="size-4" position="bottom-left" />
       <DecorIcon className="size-4" position="bottom-right" />
 
-      <div className="border-line relative shrink-0 border-r">
+      <div className="border-border relative shrink-0 border-r">
         <DecorIcon className="size-4" position="top-right" />
         <DecorIcon className="size-4" position="bottom-right" />
 
@@ -51,7 +51,7 @@ export function ProfileInfo() {
           </div>
         </div>
 
-        <div className="border-line border-t">
+        <div className="border-border border-t">
           <div className="flex flex-wrap items-center pl-4">
             <div className="mr-2 flex items-center gap-2 py-1">
               <h1 className="-translate-y-px truncate text-3xl leading-none font-semibold tracking-tight">
@@ -69,7 +69,7 @@ export function ProfileInfo() {
             </Label>
           </div>
 
-          <FlipSentences className="border-line border-t py-1 pl-4">
+          <FlipSentences className="border-border border-t py-1 pl-4">
             {USER.flipSentences}
           </FlipSentences>
         </div>

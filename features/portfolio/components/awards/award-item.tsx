@@ -43,7 +43,7 @@ export function AwardItem({
           <AwardIcon className="text-muted-foreground pointer-events-none size-4 sm:size-4.5" />
         </IntroItemIcon>
 
-        <div className="border-line relative flex-1 overflow-hidden border-l border-dashed">
+        <div className="border-border relative flex-1 overflow-hidden border-l border-dashed">
           <CollapsibleTrigger className="flex w-full items-center gap-2 p-4 pr-2 text-left">
             <div className="z-1 flex-1">
               <h3 className="mb-1 leading-snug font-medium text-balance">
@@ -109,7 +109,7 @@ export function AwardItem({
 
       {canExpand && (
         <CollapsibleContent>
-          <div className="typeset typeset-description border-line border-t p-4">
+          <div className="typeset typeset-description border-border border-t p-4">
             <Markdown>{award.description}</Markdown>
           </div>
         </CollapsibleContent>
