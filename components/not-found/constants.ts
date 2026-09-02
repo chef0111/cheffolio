@@ -47,3 +47,12 @@ export function clientXToCanvasX(
   if (width === 0) return 0;
   return ((clientX - left) / width) * logicalWidth;
 }
+
+const MOBILE_MEDIA_QUERY = '(max-width: 767px)';
+
+let mobileMql: MediaQueryList | undefined;
+
+export function isMobileViewport(): boolean {
+  mobileMql ??= window.matchMedia(MOBILE_MEDIA_QUERY);
+  return mobileMql.matches;
+}

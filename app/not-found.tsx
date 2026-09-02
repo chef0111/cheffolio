@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 
 import { simpleOgImageUrl } from '@/app/og/params';
 import { NotFound } from '@/components/not-found';
+import { ClearedOverlay } from '@/components/not-found/cleared-overlay';
 
 const title = 'Page not found';
 const description =
@@ -32,7 +33,9 @@ export default function NotFoundPage() {
       </div>
 
       <section className="w-full min-w-0 px-3 pb-6 sm:px-1">
-        <NotFound emptyTitle={title} emptyDescription={description} />
+        <NotFound>
+          <ClearedOverlay title={title} description={description} />
+        </NotFound>
       </section>
     </div>
   );

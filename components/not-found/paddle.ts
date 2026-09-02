@@ -2,6 +2,7 @@ import type p5 from 'p5';
 
 import {
   clientXToCanvasX,
+  isMobileViewport,
   PADDLE_HEIGHT,
   PADDLE_SPEED,
   PADDLE_WIDTH,
@@ -32,7 +33,7 @@ export class Paddle {
     this.y = p.height - this.height;
 
     state.canvas!.mouseMoved((e: MouseEvent) => {
-      if (window.matchMedia('(max-width: 767px)').matches) {
+      if (isMobileViewport()) {
         return false;
       }
 
@@ -47,7 +48,7 @@ export class Paddle {
     });
 
     state.canvas!.touchMoved((e: TouchEvent) => {
-      if (window.matchMedia('(max-width: 767px)').matches) {
+      if (isMobileViewport()) {
         return false;
       }
 
