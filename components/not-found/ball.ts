@@ -2,6 +2,7 @@ import type p5 from 'p5';
 
 import type { Brick } from './brick';
 import {
+  BALL_LAUNCH_ANGLE,
   BALL_SIZE,
   BALL_SPEED,
   BRICK_SCORE,
@@ -91,13 +92,11 @@ export class Ball {
     this.x = this.p.width * 0.5;
     this.y = this.p.height * 0.6;
 
-    const vector = this.p
-      .createVector(Math.random() * 2 - 1, Math.random())
-      .normalize()
-      .mult(BALL_SPEED);
+    const max = Math.PI - BALL_LAUNCH_ANGLE;
+    const angle = BALL_LAUNCH_ANGLE + Math.random() * (max - BALL_LAUNCH_ANGLE);
 
-    this.xSpeed = vector.x;
-    this.ySpeed = vector.y;
+    this.xSpeed = Math.cos(angle) * BALL_SPEED;
+    this.ySpeed = Math.sin(angle) * BALL_SPEED;
   }
 
   checkBricks(bricks: Brick[]) {

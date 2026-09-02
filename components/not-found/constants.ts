@@ -3,6 +3,8 @@ export const CANVAS_HEIGHT = 600;
 
 export const BALL_SIZE = 21;
 export const BALL_SPEED = 10;
+/** Smallest angle from +X. 45° so a serve is never flatter than a diagonal. */
+export const BALL_LAUNCH_ANGLE = Math.PI / 4;
 
 export const PADDLE_WIDTH = 96;
 export const PADDLE_HEIGHT = 24;
@@ -44,4 +46,13 @@ export function clientXToCanvasX(
   const { left, width } = canvas.getBoundingClientRect();
   if (width === 0) return 0;
   return ((clientX - left) / width) * logicalWidth;
+}
+
+const MOBILE_MEDIA_QUERY = '(max-width: 767px)';
+
+let mobileMql: MediaQueryList | undefined;
+
+export function isMobileViewport(): boolean {
+  mobileMql ??= window.matchMedia(MOBILE_MEDIA_QUERY);
+  return mobileMql.matches;
 }
