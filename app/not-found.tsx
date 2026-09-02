@@ -1,18 +1,7 @@
-import { ArrowRightIcon, SearchXIcon } from 'lucide-react';
 import type { Metadata } from 'next';
-import Link from 'next/link';
 
 import { simpleOgImageUrl } from '@/app/og/params';
 import { NotFound } from '@/components/not-found';
-import { Button } from '@/components/ui/button';
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from '@/components/ui/empty';
 
 const title = 'Page not found';
 const description =
@@ -37,32 +26,13 @@ export const metadata: Metadata = {
 
 export default function NotFoundPage() {
   return (
-    <div>
-      <Empty className="py-8 sm:py-12">
-        <EmptyHeader>
-          <EmptyMedia variant="icon">
-            <SearchXIcon />
-          </EmptyMedia>
-
-          <EmptyTitle className="text-base">{title}</EmptyTitle>
-
-          <EmptyDescription>{description}</EmptyDescription>
-        </EmptyHeader>
-
-        <EmptyContent>
-          <Button
-            variant="outline"
-            nativeButton={false}
-            render={<Link href="/" aria-label="Go to Home" />}
-          >
-            Go to Home
-            <ArrowRightIcon data-icon="inline-end" />
-          </Button>
-        </EmptyContent>
-      </Empty>
+    <div className="flex min-h-screen flex-col items-center gap-8 max-md:pt-10 md:justify-center">
+      <div className="mask-b-from-20% mask-b-to-100% text-7xl font-extrabold select-none!">
+        404
+      </div>
 
       <section className="w-full min-w-0 px-3 pb-6 sm:px-1">
-        <NotFound />
+        <NotFound emptyTitle={title} emptyDescription={description} />
       </section>
     </div>
   );

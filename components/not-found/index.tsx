@@ -1,10 +1,21 @@
 'use client';
 
+import { HomeIcon, RotateCwIcon, SearchXIcon } from 'lucide-react';
 import { useReducedMotion } from 'motion/react';
+import Link from 'next/link';
 import { useTheme } from 'next-themes';
 import type p5 from 'p5';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { Button } from '@/components/ui/button';
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from '@/components/ui/empty';
 import { Spinner } from '@/components/ui/spinner';
 import { fontPixel } from '@/config/font';
 import { cn } from '@/lib/utils';
@@ -47,6 +58,44 @@ function fitCanvas(canvas: p5.Renderer) {
   elt.style.imageRendering = 'pixelated';
 }
 
+interface EmptyNotFoundProps {
+  emptyTitle: string;
+  emptyDescription: string;
+}
+
+function ClearedOverlay({
+  emptyTitle,
+  emptyDescription,
+  onRestart,
+}: EmptyNotFoundProps & { onRestart: () => void }) {
+  return (
+    <div className="absolute inset-0 z-50 grid place-items-center">
+      <Empty className="pointer-events-auto py-8 sm:py-12 sm:pb-8">
+        <EmptyMedia variant="icon">
+          <SearchXIcon />
+        </EmptyMedia>
+        <EmptyHeader>
+          <EmptyTitle className="text-base">{emptyTitle}</EmptyTitle>
+          <EmptyDescription>{emptyDescription}</EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent className="flex-row justify-center gap-2">
+          <Button type="button" variant="outline" onClick={onRestart}>
+            <RotateCwIcon data-icon="inline-start" />
+            Restart Game
+          </Button>
+          <Button
+            nativeButton={false}
+            render={<Link href="/" aria-label="Go to Home" />}
+          >
+            <HomeIcon data-icon="inline-start" />
+            Go Home
+          </Button>
+        </EmptyContent>
+      </Empty>
+    </div>
+  );
+}
+
 function GameLoadingStatus() {
   return (
     <div
@@ -85,12 +134,15 @@ function loadSprite(p: p5, url: string) {
 }
 
 export function NotFound({
+  emptyTitle,
+  emptyDescription,
   className,
   defaultLogo,
   ...props
-}: Omit<React.ComponentPropsWithRef<'div'>, 'children'> & {
-  defaultLogo?: string;
-}) {
+}: Omit<React.ComponentPropsWithRef<'div'>, 'children'> &
+  EmptyNotFoundProps & {
+    defaultLogo?: string;
+  }) {
   const hostRef = useRef<HTMLDivElement>(null);
   const paddleXRef = useRef<number | null>(null);
   const gameRef = useRef<GameState | null>(null);
@@ -98,11 +150,13 @@ export function NotFound({
     arm: () => void;
     startMotion: () => void;
     launchNow: () => void;
+    restart: () => void;
   } | null>(null);
   const shouldReduceMotion = useReducedMotion();
   const { resolvedTheme } = useTheme();
   const [ready, setReady] = useState(false);
   const [hasLaunched, setHasLaunched] = useState(false);
+  const [cleared, setCleared] = useState(false);
 
   const handlePlay = useCallback(() => {
     void (async () => {
@@ -122,6 +176,10 @@ export function NotFound({
     const game = gameRef.current;
     if (!game?.hasLaunched || game.bricks.length === 0) return;
     controlsRef.current?.startMotion();
+  }, []);
+
+  const handleRestart = useCallback(() => {
+    controlsRef.current?.restart();
   }, []);
 
   useEffect(() => {
@@ -161,6 +219,7 @@ export function NotFound({
       let paddle: Paddle;
       let ball: Ball;
       let ui: UI;
+      let lastCleared = false;
 
       /** Unlock controls + place ball. Ball stays still until startMotion. */
       const armRound = () => {
@@ -182,10 +241,20 @@ export function NotFound({
         ball.reset();
       };
 
+      const restartRound = () => {
+        if (!sketch || !ball) return;
+        state.enableGame = false;
+        ball.reset();
+        resetGame(sketch, state);
+        lastCleared = false;
+        if (!cancelled) setCleared(false);
+      };
+
       controlsRef.current = {
         arm: armRound,
         startMotion,
         launchNow,
+        restart: restartRound,
       };
 
       instance = new P5((p: p5) => {
@@ -258,11 +327,13 @@ export function NotFound({
 
           p.background(Colors.background);
 
-          if (state.bricks.length === 0) {
-            p.fill(Colors.foreground);
-            p.textAlign(p.CENTER, p.CENTER);
-            p.textSize(80);
-            p.text('404', p.width / 2, p.height / 2 - 11);
+          const nextCleared = state.bricks.length === 0;
+          if (nextCleared !== lastCleared) {
+            lastCleared = nextCleared;
+            if (!cancelled) setCleared(nextCleared);
+          }
+
+          if (nextCleared) {
             return;
           }
 
@@ -296,9 +367,7 @@ export function NotFound({
         if (e.key !== ' ') return;
 
         if (state.bricks.length === 0) {
-          state.enableGame = false;
-          ball.reset();
-          resetGame(sketch, state);
+          restartRound();
           return;
         }
 
@@ -317,6 +386,7 @@ export function NotFound({
       cancelled = true;
       setReady(false);
       setHasLaunched(false);
+      setCleared(false);
       gameRef.current = null;
       controlsRef.current = null;
       paddleXRef.current = null;
@@ -327,7 +397,7 @@ export function NotFound({
     };
   }, [shouldReduceMotion, resolvedTheme, defaultLogo]);
 
-  const showPlay = ready && !hasLaunched;
+  const showPlay = ready && !hasLaunched && !cleared;
 
   return (
     <>
@@ -344,20 +414,31 @@ export function NotFound({
           className="aspect-4/3 w-full touch-none overflow-hidden select-none"
         />
         {!ready && <GameLoadingStatus />}
+        {cleared && (
+          <ClearedOverlay
+            emptyTitle={emptyTitle}
+            emptyDescription={emptyDescription}
+            onRestart={handleRestart}
+          />
+        )}
       </div>
-      <div
-        className="h-[calc(4.75rem+env(safe-area-inset-bottom,0px))] md:hidden"
-        aria-hidden="true"
-      />
-      <PaddleSlider
-        showPlay={showPlay}
-        disabled={!ready}
-        onPlay={handlePlay}
-        onStartMotion={handleStartMotion}
-        onPaddleX={(x) => {
-          paddleXRef.current = x;
-        }}
-      />
+      {!cleared && (
+        <>
+          <div
+            className="h-[calc(4.75rem+env(safe-area-inset-bottom,0px))] md:hidden"
+            aria-hidden="true"
+          />
+          <PaddleSlider
+            showPlay={showPlay}
+            disabled={!ready}
+            onPlay={handlePlay}
+            onStartMotion={handleStartMotion}
+            onPaddleX={(x) => {
+              paddleXRef.current = x;
+            }}
+          />
+        </>
+      )}
     </>
   );
 }
