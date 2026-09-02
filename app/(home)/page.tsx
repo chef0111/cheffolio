@@ -13,6 +13,7 @@ import { Projects } from '@/features/portfolio/components/projects';
 import { SocialLinks } from '@/features/portfolio/components/social-links';
 import { TechStack } from '@/features/portfolio/components/tech-stack';
 import { USER } from '@/features/portfolio/data/user';
+import { absoluteUrl } from '@/lib/utils';
 
 export const metadata: Metadata = {
   alternates: {
@@ -57,6 +58,7 @@ function getPageJsonLd(): WithContext<ProfilePage> {
   return {
     '@context': 'https://schema.org',
     '@type': 'ProfilePage',
+    '@id': absoluteUrl('/'),
     dateCreated: new Date(USER.dateCreated).toISOString(),
     dateModified: new Date(USER.dateModified).toISOString(),
     mainEntity: { '@id': JSON_LD_ID.person },
