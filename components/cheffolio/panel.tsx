@@ -203,8 +203,8 @@ function PanelContent({
       )}
       {...props}
     >
-      <PanelDecores className={className} />
       {children}
+      <PanelDecores className={className} />
     </div>
   );
 }

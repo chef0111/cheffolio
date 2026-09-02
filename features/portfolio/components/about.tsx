@@ -16,7 +16,7 @@ export function About() {
         <PanelTitle>About</PanelTitle>
       </PanelHeader>
 
-      <PanelContent className="typeset typeset-description decor-all py-(--typeset-flow)">
+      <PanelContent className="typeset typeset-description decor-all -mt-px py-(--typeset-flow)">
         <Markdown>{USER.about}</Markdown>
       </PanelContent>
       <GitHubContributions />
