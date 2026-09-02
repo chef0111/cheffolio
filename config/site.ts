@@ -12,8 +12,7 @@ export const SITE_INFO = {
   name: USER.displayName,
   url: process.env.NEXT_PUBLIC_SITE_URL || 'https://giabao.dev',
   ogImage: USER.ogImage,
-  description:
-    'Gia Bảo · Student Software Engineer from Vietnam. Love coding catchy things.',
+  description: `${USER.displayName} – ${USER.jobTitle} from Viet Nam. ${USER.bio}`,
   keywords: USER.keywords,
 };
 
