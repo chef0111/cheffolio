@@ -5,7 +5,6 @@ import { VerifiedIcon } from '@/components/icons/verified-icon';
 import { Label } from '@/components/ui/label';
 import { USER } from '@/features/portfolio/data/user';
 
-import { AvatarElectric } from './avatar-eletric';
 import { FlipSentences } from './flip-sentences';
 import { ProfileStatus } from './profile-status';
 
@@ -13,19 +12,17 @@ export function ProfileInfo() {
   return (
     <PanelContent className="border-border decor-all flex border-x p-0">
       <PanelContent className="border-border shrink-0 border-r p-0">
-        <AvatarElectric>
-          <div className="relative mx-0.5 my-0.75 size-32 sm:size-40">
-            <Image
-              className="avatar-ring object-cover select-none"
-              alt="Avatar"
-              width={160}
-              height={160}
-              src={USER.avatar}
-              loading="eager"
-              fetchPriority="high"
-            />
-          </div>
-        </AvatarElectric>
+        <div className="relative mx-0.5 my-0.75 size-32 sm:size-40">
+          <Image
+            className="avatar-ring object-cover select-none"
+            alt="Avatar"
+            width={160}
+            height={160}
+            src={USER.avatar}
+            loading="eager"
+            fetchPriority="high"
+          />
+        </div>
 
         <ProfileStatus
           emoji="😴"
@@ -35,12 +32,18 @@ export function ProfileInfo() {
 
       <div className="flex flex-1 flex-col">
         <div className="flex grow items-end pb-1 pl-4">
-          <div
-            className="line-clamp-1 font-mono text-xs text-zinc-400 select-none dark:text-zinc-600"
-            aria-label="User bio"
+          <p
+            className="font-pixel line-clamp-1 text-xs text-zinc-400 select-none dark:hidden"
+            aria-hidden
           >
-            {USER.bio}
-          </div>
+            text-zinc-400 font-pixel
+          </p>
+          <p
+            className="font-pixel line-clamp-1 hidden text-xs text-zinc-600 select-none dark:block"
+            aria-hidden
+          >
+            text-zinc-600 font-pixel
+          </p>
         </div>
 
         <div className="border-border border-t">

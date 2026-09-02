@@ -1,18 +1,19 @@
 import type { User } from '@/features/portfolio/types/user';
 
 export const USER: User = {
-  firstName: 'Bảo',
-  lastName: 'Lê',
+  firstName: 'Gia Bảo',
+  lastName: 'Lê Trần',
   displayName: 'Gia Bảo',
   username: 'chef0111',
   alternateName: ['Lê Trần Gia Bảo', 'chef0111', 'giabao', 'baoltg', 'gbaolt'],
   gender: 'male',
   pronouns: 'he/him',
-  bio: 'Love coding catchy things :>',
+  bio: 'Love coding catchy things.',
   flipSentences: [
-    'Fullstack Developer',
+    'Software Engineer',
     'Next.js Enthusiast',
     'Senior Student',
+    'Love coding catchy things.',
   ],
   address: 'Hue City, Viet Nam',
   phoneNumber: 'Kzg0IDg2NSA2NzUgOTA4', // E.164 format, base64 encoded (https://t.io.vn/base64-string-converter)
@@ -37,7 +38,7 @@ export const USER: User = {
     'Fullstack Development',
   ],
   about: `
-- Final-year student with a strong passion for web development.
+- I'm Gia Bảo – a Software Engineer and final-year student with a strong passion for web development.
 - Hands-on experience with SSR-driven frameworks such as **Next.js** and **TanStack Start**.
 - Focused on high-performance and user-centric applications, with attention to scalability and clean design.
 - Creator of [Kyorbit](https://kyorbit.tku.io.vn): Taekwondo tournament-management platform, designed to support training and competing.

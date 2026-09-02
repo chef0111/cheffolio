@@ -27,7 +27,7 @@ function getWebSiteJsonLd(): WithContext<WebSite> {
     name: SITE_INFO.name,
     url: SITE_INFO.url,
     author: personJsonLd,
-    alternateName: [USER.username],
+    alternateName: USER.alternateName,
   };
 }
 
