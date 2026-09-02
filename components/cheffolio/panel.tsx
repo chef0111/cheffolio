@@ -144,7 +144,7 @@ function PanelTitle({
     defaultTagName: 'h2',
     props: mergeProps<'h2'>(
       {
-        className: cn('text-3xl font-semibold tracking-tight', className),
+        className: cn('text-3xl font-semibold tracking-tight py-1', className),
       },
       props
     ),
@@ -203,8 +203,8 @@ function PanelContent({
       )}
       {...props}
     >
-      <PanelDecores className={className} />
       {children}
+      <PanelDecores className={className} />
     </div>
   );
 }
