@@ -2,13 +2,13 @@ import Link from 'next/link';
 
 import { CommandMenu } from '@/components/cheffolio/command-menu';
 import { GitHubIcon } from '@/components/icons';
-import { DesktopNav } from '@/components/layout/navigation/desktop-nav';
+import { NavDesktop } from '@/components/layout/navigation/nav-desktop';
 import { SiteHeaderNav } from '@/components/layout/navigation/site-header-nav';
 import { Button } from '@/components/ui/button';
 import { GITHUB_REPO_URL, MAIN_NAV, UTM_PARAMS } from '@/config/site';
 import { addQueryParams } from '@/utils/url';
 
-import { SiteHeaderLogo } from './site-header-logo';
+import { SiteHeaderMark } from './site-header-mark';
 import ThemeToggle from './theme-toggle';
 
 export function SiteHeader() {
@@ -19,10 +19,10 @@ export function SiteHeader() {
         href="/"
         aria-label="Home"
       >
-        <SiteHeaderLogo />
+        <SiteHeaderMark />
       </Link>
       <div className="flex items-center gap-2 *:first:mr-2 max-sm:*:data-[slot=command-menu-trigger]:hidden">
-        <DesktopNav items={MAIN_NAV} />
+        <NavDesktop items={MAIN_NAV} />
         <CommandMenu />
         <Button
           size="icon"

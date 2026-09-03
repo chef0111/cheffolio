@@ -10,8 +10,8 @@ const outputDir = path.join(process.cwd(), '.cheffolio/screenshots');
 
 const SIZE = {
   desktop: {
-    width: 1280,
-    height: 720,
+    width: 1366,
+    height: 768,
   },
   mobile: {
     width: 440,

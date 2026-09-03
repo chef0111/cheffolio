@@ -1,12 +1,7 @@
-import {
-  AwardIcon,
-  BoxIcon,
-  BriefcaseBusiness,
-  TextInitial,
-} from 'lucide-react';
+import { BoxIcon, FileUserIcon, HomeIcon, NewspaperIcon } from 'lucide-react';
 
-import type { NavItem } from '@/components/layout/navigation/types/nav';
 import { USER } from '@/features/portfolio/data/user';
+import type { NavItem } from '@/types/nav';
 
 export const SITE_INFO = {
   name: USER.displayName,
@@ -23,43 +18,39 @@ export const META_THEME_COLORS = {
 
 export const MAIN_NAV: NavItem[] = [
   {
-    title: 'About',
-    href: '#about',
-  },
-  {
-    title: 'Experience',
-    href: '#experience',
+    title: 'Blog',
+    href: '/blog',
   },
   {
     title: 'Projects',
-    href: '#projects',
+    href: '/projects',
   },
   {
-    title: 'Awards',
-    href: '#awards',
+    title: 'Resume',
+    href: '/resume',
   },
 ];
 
 export const MOBILE_NAV: NavItem[] = [
   {
-    title: 'About',
-    href: '#about',
-    icon: TextInitial,
+    title: 'Home',
+    href: '/',
+    icon: HomeIcon,
   },
   {
-    title: 'Experience',
-    href: '#experience',
-    icon: BriefcaseBusiness,
+    title: 'Blog',
+    href: '/blog',
+    icon: NewspaperIcon,
   },
   {
     title: 'Projects',
-    href: '#projects',
+    href: '/projects',
     icon: BoxIcon,
   },
   {
-    title: 'Awards',
-    href: '#awards',
-    icon: AwardIcon,
+    title: 'Resume',
+    href: '/resume',
+    icon: FileUserIcon,
   },
 ];
 

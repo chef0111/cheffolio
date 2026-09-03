@@ -55,8 +55,7 @@ function CommandDialog({
       <DialogContent
         modal={modal}
         className={cn(
-          'bg-popover top-1/2 max-w-lg -translate-y-1/2 overflow-hidden rounded-xl! p-0 max-sm:top-16 max-sm:translate-y-0 sm:max-w-lg',
-          'data-modal=false:ring-0',
+          'bg-popover top-1/2 max-w-[95vw] -translate-y-1/2 overflow-hidden rounded-xl! p-0 max-sm:top-16 max-sm:translate-y-0 sm:max-w-lg',
           className
         )}
         showCloseButton={showCloseButton}

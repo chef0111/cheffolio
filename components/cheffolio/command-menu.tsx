@@ -168,8 +168,8 @@ export function CommandMenuDialog() {
     >
       <CommandMenuInput />
 
-      <div className="bg-background ring-border mx-1 rounded-xl ring-1">
-        <CommandList className="bg-background dark:bg-background/50 scroll-fade min-h-80 rounded-xl">
+      <div className="bg-background ring-border mx-1 rounded-lg ring-1">
+        <CommandList className="bg-background dark:bg-background/50 scroll-fade min-h-80 rounded-lg">
           <CommandEmpty>
             <Empty className="gap-2">
               <EmptyMedia variant="icon">
