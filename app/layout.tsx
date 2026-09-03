@@ -13,7 +13,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { fontVariables } from '@/config/font';
 import { JSON_LD_ID, personJsonLd } from '@/config/json-ld';
-import { META_THEME_COLORS, SITE_INFO, X_USERNAME } from '@/config/site';
+import { META_THEME_COLORS, SITE_INFO, X_PROFILE } from '@/config/site';
 import { CommandMenuProvider } from '@/context/command-menu-provider';
 import { ThemeProvider } from '@/context/theme-provider';
 import { USER } from '@/features/portfolio/data/user';
@@ -67,8 +67,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    site: X_USERNAME,
-    creator: X_USERNAME,
+    site: X_PROFILE,
+    creator: X_PROFILE,
     images: [SITE_INFO.ogImage],
   },
   icons: {
