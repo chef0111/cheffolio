@@ -19,7 +19,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { GITHUB_USERNAME, UTM_PARAMS } from '@/config/site';
+import { GITHUB_PROFILE, UTM_PARAMS } from '@/config/site';
 import { useBreakpoints } from '@/hooks/use-breakpoint';
 import { useMounted } from '@/hooks/use-mounted';
 import { cn } from '@/lib/utils';
@@ -99,7 +99,7 @@ export function GitHubContributionGraph({
               <a
                 className="link-underline text-foreground font-medium"
                 href={addQueryParams(
-                  `https://github.com/${GITHUB_USERNAME}`,
+                  `https://github.com/${GITHUB_PROFILE}`,
                   UTM_PARAMS
                 )}
                 target="_blank"

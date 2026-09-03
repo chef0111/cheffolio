@@ -1,7 +1,7 @@
 import { cacheLife, cacheTag } from 'next/cache';
 
 import type { Activity } from '@/components/kibo-ui/contribution-graph';
-import { GITHUB_USERNAME } from '@/config/site';
+import { GITHUB_PROFILE } from '@/config/site';
 
 type GitHubContributionsResponse = {
   contributions: Activity[];
@@ -56,7 +56,7 @@ export const getGitHubContributions = async () => {
 
     try {
       const res = await fetch(
-        `${process.env.GITHUB_CONTRIBUTIONS_API}/v4/${GITHUB_USERNAME}?y=last`,
+        `${process.env.GITHUB_CONTRIBUTIONS_API}/v4/${GITHUB_PROFILE}?y=last`,
         {
           headers: {
             'cache-control': 'no-cache',
@@ -72,8 +72,7 @@ export const getGitHubContributions = async () => {
       }
 
       const data = (await res.json()) as
-        | GitHubContributionsResponse
-        | Activity[];
+        GitHubContributionsResponse | Activity[];
 
       return normalizeContributions(data);
     } finally {

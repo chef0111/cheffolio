@@ -1,6 +1,6 @@
 import { FullWidthDivider } from '@/components/cheffolio/full-width-divider';
 import { Panel } from '@/components/cheffolio/panel';
-import { SOCIAL_LINKS } from '@/features/portfolio/data/social-links';
+import { SOCIAL, SOCIAL_LINKS } from '@/features/portfolio/data/social-links';
 import { cn } from '@/lib/utils';
 
 import { SocialLinkItem } from './social-link-item';
@@ -38,13 +38,16 @@ export function SocialLinks() {
         <GridDivider className="hidden max-md:grid" rows={mobile} />
 
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 md:grid-cols-3">
-          {SOCIAL_LINKS.map((link, index) => (
-            <SocialLinkItem
-              key={link.href}
-              className={getGridLines(index)}
-              {...link}
-            />
-          ))}
+          {SOCIAL_LINKS.map((item, index) => {
+            const social = SOCIAL[item.name];
+            return (
+              <SocialLinkItem
+                key={item.name}
+                className={getGridLines(index)}
+                {...social}
+              />
+            );
+          })}
         </div>
       </div>
     </Panel>

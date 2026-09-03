@@ -1,7 +1,7 @@
-export type SocialLink = {
+export type SocialProfile = {
   icon: string;
   title: string;
-  subtitle?: string;
+  profile?: string;
   href: string;
   sameAs: boolean;
 };
