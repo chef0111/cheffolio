@@ -3,10 +3,5 @@ export default function BlogsLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <>
-      <div className="mx-auto h-12 border-x md:max-w-4xl" />
-      {children}
-    </>
-  );
+  return <div className="mx-auto border-x pt-24 md:max-w-4xl">{children}</div>;
 }

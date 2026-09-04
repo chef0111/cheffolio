@@ -2,10 +2,16 @@ import type { Metadata } from 'next';
 import type { Blog, WithContext } from 'schema-dts';
 
 import { simpleOgImageUrl } from '@/app/og/params';
+import {
+  PageHeading,
+  PageHeadingTagline,
+  PageHeadingTitle,
+} from '@/components/cheffolio/page-heading';
+import { StripeSeparator } from '@/components/cheffolio/stripe-separator';
 import { jsonLdBreadcrumbList, JsonLdScript } from '@/components/json-ld';
 import { JSON_LD_ID } from '@/config/json-ld';
 import { X_PROFILE } from '@/config/site';
-import { getAllBlogs } from '@/features/blog/lib/blogs';
+import { getAllBlogs } from '@/features/blog/lib/data';
 import { absoluteUrl } from '@/lib/utils';
 
 const title = 'Blog';
@@ -78,6 +84,17 @@ export default function BlogsPage() {
           },
         ])}
       />
+
+      <PageHeading>
+        <PageHeadingTagline>{title}</PageHeadingTagline>
+        <PageHeadingTitle className="decor-all screen-line-bottom-none">
+          {description}
+        </PageHeadingTitle>
+      </PageHeading>
+
+      <StripeSeparator />
+
+      <div className="p-2"></div>
     </>
   );
 }
