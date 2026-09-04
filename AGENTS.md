@@ -1,9 +1,60 @@
-<!-- BEGIN:nextjs-agent-rules -->
+# AI agent guidelines for cheffolio (giabao.dev)
 
-# This is NOT the Next.js you know
+Next.js 16 (App Router) portfolio, blog, and shadcn registry website.
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+**Stack**: TypeScript, React 19, Tailwind CSS v4, MDX, Bun, Vercel
 
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+## Project structure
 
-<!-- END:nextjs-agent-rules -->
+| Directory                              | Purpose                                                    |
+| -------------------------------------- | ---------------------------------------------------------- |
+| `src/app/`                             | App Router pages, layouts, API routes                      |
+| `src/components/cheffolio/`            | Shared UI components                                       |
+| `src/features/`                        | Feature modules: `blog`, `portfolio`, `projects`, `resume` |
+| `src/config/`                          | Site (`site.ts`), JSON-LD config                           |
+| `src/scripts/`                         | Build scripts (capture) run with Bun                       |
+| `src/hooks/`, `src/lib/`, `src/utils/` | Hooks, libraries, utilities                                |
+
+## Content system
+
+All content lives in `src/features/blog/content/` as MDX files.
+
+- **Data layer**: `src/features/blog/lib/data.ts` (`getAllBlogs`, `getBlogBySlug`)
+- **Blog UI**: `src/features/blog/components/`
+- **Portfolio UI**: `src/features/portfolio/components/`
+- **Projects UI**: `src/features/projects/components/`
+- **Resume UI**: `src/features/resume/components/`
+
+## Coding guidelines
+
+- TypeScript strict mode; explicit types when necessary
+- kebab-case file naming
+- Descriptive names; comments only for "why", not "what"
+- No emojis in code, comments, or commit messages
+- Tailwind CSS v4 syntax; support dark/light modes
+- Follow SOLID principles
+- Headings in sentence-case (capitalize only the first word and proper nouns), applies to Markdown/MDX docs and prose
+
+### Writting React components
+
+- Leverage shadcn/ui components for the baseline UI
+- Use the combo /vercel-react-best-practices + /vercel-composition-patterns to guide the development of React components
+
+## Commands
+
+```bash
+bun run dev                 # Dev server
+bun run build               # Production build
+bun run lint                # ESLint
+bun run lint:fix            # ESLint with --fix
+bun run format              # Prettier
+bun run typecheck           # Type checking (tsc --noEmit)
+bun run upgrade:next        # Upgrade Next.js
+bun run upgrade:tailwind    # Upgrade Tailwind CSS
+bun run capture             # Capture screenshots of components
+bun run capture:sync        # Capture screenshots of components and sync to R2
+```
+
+### Local dev URL
+
+A dev server is usually already running behind `https://cheffolio.localhost` (see `allowedDevOrigins` in `next.config.ts` and `NEXT_PUBLIC_APP_URL` in `.env.local`). Use that origin to test pages and routes, never `http://localhost:3000` or a raw port. It also makes generated absolute URLs match what the code produces.
