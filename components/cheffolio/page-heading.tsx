@@ -1,5 +1,7 @@
 import { cn } from '@/lib/utils';
 
+import { PanelDecores } from './panel';
+
 export function PageHeading({
   children,
   className,
@@ -38,18 +40,22 @@ export function PageHeadingTagline({
 
 export function PageHeadingTitle({
   className,
+  children,
   ...props
 }: React.ComponentProps<'h1'>) {
   return (
     <h1
       data-slot="page-heading-title"
       className={cn(
-        'screen-line-top screen-line-bottom px-4',
+        'screen-line-top screen-line-bottom px-4 py-1',
         'font-heading text-4xl font-medium tracking-tight text-balance',
         className
       )}
       {...props}
-    />
+    >
+      <PanelDecores className={className} />
+      {children}
+    </h1>
   );
 }
 

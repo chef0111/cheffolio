@@ -49,7 +49,7 @@ const PANEL_DECOR_CLASSES: Record<string, readonly PanelDecorPosition[]> = {
   'decor-dr': ['top-right', 'bottom-left'],
 };
 
-function getPanelDecorPositions(
+export function getPanelDecorPositions(
   className: string | undefined
 ): PanelDecorPosition[] {
   if (!className) return [];
@@ -212,6 +212,7 @@ function PanelContent({
 export {
   Panel,
   PanelContent,
+  PanelDecores,
   PanelDescription,
   PanelHeader,
   PanelTitle,
