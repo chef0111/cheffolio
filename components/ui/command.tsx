@@ -22,7 +22,7 @@ function Command({
     <CommandPrimitive
       data-slot="command"
       className={cn(
-        'bg-popover text-popover-foreground flex size-full flex-col overflow-hidden rounded-xl! p-1',
+        'bg-popover text-popover-foreground flex size-full flex-col overflow-hidden p-1',
         className
       )}
       {...props}
@@ -35,15 +35,11 @@ function CommandDialog({
   description = 'Search for a command to run...',
   children,
   className,
-  showCloseButton = false,
-  modal = true,
   ...props
 }: Omit<React.ComponentProps<typeof Dialog>, 'children'> & {
   title?: string;
   description?: string;
   className?: string;
-  showCloseButton?: boolean;
-  modal?: boolean;
   children: React.ReactNode;
 }) {
   return (
@@ -53,12 +49,12 @@ function CommandDialog({
         <DialogDescription>{description}</DialogDescription>
       </DialogHeader>
       <DialogContent
-        modal={modal}
         className={cn(
           'bg-popover top-1/2 max-w-[95vw] -translate-y-1/2 overflow-hidden rounded-xl! p-0 max-sm:top-16 max-sm:translate-y-0 sm:max-w-lg',
           className
         )}
-        showCloseButton={showCloseButton}
+        showOverlay={false}
+        showCloseButton={false}
       >
         <Command
           className={cn(
