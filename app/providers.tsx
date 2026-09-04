@@ -1,5 +1,6 @@
 'use client';
 
+import { ProgressProvider } from '@bprogress/next/app';
 import { ThemeProvider } from 'next-themes';
 
 import { CommandMenuDialog } from '@/components/cheffolio/command-menu';
@@ -17,10 +18,17 @@ export function Providers({ children }: { children: React.ReactNode }) {
       defaultTheme="system"
       attribute="class"
     >
-      <CommandMenuProvider>
-        <TooltipProvider>{children}</TooltipProvider>
-        <CommandMenuDialog />
-      </CommandMenuProvider>
+      <ProgressProvider
+        color="var(--foreground)"
+        height="2px"
+        delay={500}
+        options={{ showSpinner: false }}
+      >
+        <CommandMenuProvider>
+          <TooltipProvider>{children}</TooltipProvider>
+          <CommandMenuDialog />
+        </CommandMenuProvider>
+      </ProgressProvider>
       <Toaster position="bottom-center" closeButton />
     </ThemeProvider>
   );
