@@ -344,6 +344,7 @@
   --header-height: --spacing(14);
   --fade-top-height: --spacing(24);
   --fade-bottom-height: --spacing(24);
+  --separator-height: --spacing(8);
   --dk-background: #ffffff;
   --dk-foreground: #09090b;
   --dk-muted-foreground: #a1a1aa;
