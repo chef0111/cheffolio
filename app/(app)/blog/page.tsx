@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import type { Blog, WithContext } from 'schema-dts';
 
 import { simpleOgImageUrl } from '@/app/og/params';
@@ -11,6 +12,10 @@ import { StripeSeparator } from '@/components/cheffolio/stripe-separator';
 import { jsonLdBreadcrumbList, JsonLdScript } from '@/components/json-ld';
 import { JSON_LD_ID } from '@/config/json-ld';
 import { X_PROFILE } from '@/config/site';
+import {
+  BlogSearchInput,
+  SearchInput,
+} from '@/features/blog/components/blog-search-input';
 import { getAllBlogs } from '@/features/blog/lib/data';
 import { absoluteUrl } from '@/lib/utils';
 
@@ -94,7 +99,11 @@ export default function BlogsPage() {
 
       <StripeSeparator />
 
-      <div className="p-2"></div>
+      <div className="p-2">
+        <Suspense fallback={<SearchInput />}>
+          <BlogSearchInput />
+        </Suspense>
+      </div>
     </>
   );
 }

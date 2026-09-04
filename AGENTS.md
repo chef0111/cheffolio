@@ -37,8 +37,8 @@ All content lives in `src/features/blog/content/` as MDX files.
 
 ### Writting React components
 
-- Leverage shadcn/ui components for the baseline UI
-- Use the combo /vercel-react-best-practices + /vercel-composition-patterns to guide the development of React components
+- Leverage shadcn/ui components and composition rules for the baseline UI
+- Use the combo /vercel-react-best-practices + /vercel-composition-patterns to write new or refactor existing React components
 
 ## Commands
 
