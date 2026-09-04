@@ -10,7 +10,7 @@ export function PageHeading({
   return (
     <div
       data-slot="page-heading"
-      className={cn('group/page-heading', className)}
+      className={cn('group/page-heading border-x', className)}
       {...props}
     >
       {children}

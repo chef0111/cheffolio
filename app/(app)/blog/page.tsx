@@ -12,6 +12,8 @@ import { StripeSeparator } from '@/components/cheffolio/stripe-separator';
 import { jsonLdBreadcrumbList, JsonLdScript } from '@/components/json-ld';
 import { JSON_LD_ID } from '@/config/json-ld';
 import { X_PROFILE } from '@/config/site';
+import { BlogList } from '@/features/blog/components/blog-list';
+import { BlogListFiltered } from '@/features/blog/components/blog-list-filtered';
 import {
   BlogSearchInput,
   SearchInput,
@@ -90,20 +92,27 @@ export default function BlogsPage() {
         ])}
       />
 
-      <PageHeading>
-        <PageHeadingTagline>{title}</PageHeadingTagline>
-        <PageHeadingTitle className="decor-all screen-line-bottom-none">
-          {description}
-        </PageHeadingTitle>
-      </PageHeading>
+      <div className="flex flex-1 flex-col">
+        <PageHeading className="pt-24">
+          <PageHeadingTagline>{title}</PageHeadingTagline>
+          <PageHeadingTitle className="decor-all screen-line-bottom-none">
+            {description}
+          </PageHeadingTitle>
+        </PageHeading>
 
-      <StripeSeparator />
+        <StripeSeparator />
 
-      <div className="p-2">
-        <Suspense fallback={<SearchInput />}>
-          <BlogSearchInput />
+        <div className="border-x p-2">
+          <Suspense fallback={<SearchInput />}>
+            <BlogSearchInput />
+          </Suspense>
+        </div>
+
+        <Suspense fallback={<BlogList blogs={blogPosts} />}>
+          <BlogListFiltered blogs={blogPosts} />
         </Suspense>
       </div>
+      <StripeSeparator />
     </>
   );
 }
