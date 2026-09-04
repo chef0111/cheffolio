@@ -36,7 +36,7 @@ function getMDXData(dir: string): Blog[] {
 }
 
 export const getAllBlogs = cache(() => {
-  return getMDXData(path.join(process.cwd(), 'src/features/blog/content')).sort(
+  return getMDXData(path.join(process.cwd(), 'features/blog/content')).sort(
     (a, b) => {
       if (a.metadata.pinned && !b.metadata.pinned) return -1;
       if (!a.metadata.pinned && b.metadata.pinned) return 1;
