@@ -112,6 +112,7 @@ export default function BlogsPage() {
           <BlogListFiltered blogs={blogPosts} />
         </Suspense>
       </div>
+
       <StripeSeparator />
     </>
   );

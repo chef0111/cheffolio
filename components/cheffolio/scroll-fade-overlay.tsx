@@ -1,3 +1,6 @@
+'use client';
+
+import { useOverflows } from '@/hooks/use-overflows';
 import { cn } from '@/lib/utils';
 
 export function ScrollFadeOverlay({
@@ -8,6 +11,13 @@ export function ScrollFadeOverlay({
   fadeOut?: boolean;
 }) {
   const isTop = align === 'top';
+  const pageOverflows = useOverflows(fadeOut);
+
+  // Scroll timelines stay at 0% when the page does not overflow, so the fade
+  // never runs and a short page would keep a stuck overlay.
+  if (fadeOut && !pageOverflows) {
+    return null;
+  }
 
   return (
     <div
