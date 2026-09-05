@@ -4,18 +4,14 @@ import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import type { WebSite, WithContext } from 'schema-dts';
 
-import { CommandMenuDialog } from '@/components/cheffolio/command-menu';
-import { ScrollToTop } from '@/components/cheffolio/scroll-to-top';
+import { Providers } from '@/app/providers';
 import { JsonLdScript } from '@/components/json-ld';
-import { Toaster } from '@/components/ui/sonner';
-import { TooltipProvider } from '@/components/ui/tooltip';
 import { fontVariables } from '@/config/font';
 import { JSON_LD_ID, personJsonLd } from '@/config/json-ld';
-import { META_THEME_COLORS, SITE_INFO, X_USERNAME } from '@/config/site';
-import { CommandMenuProvider } from '@/context/command-menu-provider';
-import { ThemeProvider } from '@/context/theme-provider';
+import { META_THEME_COLORS, SITE_INFO, X_PROFILE } from '@/config/site';
 import { USER } from '@/features/portfolio/data/user';
 import { cn } from '@/lib/utils';
 
@@ -67,8 +63,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    site: X_USERNAME,
-    creator: X_USERNAME,
+    site: X_PROFILE,
+    creator: X_PROFILE,
     images: [SITE_INFO.ogImage],
   },
   icons: {
@@ -143,21 +139,9 @@ export default function RootLayout({
         <JsonLdScript data={getWebSiteJsonLd()} />
       </head>
       <body>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <CommandMenuProvider>
-            <TooltipProvider>
-              {children}
-              <ScrollToTop />
-            </TooltipProvider>
-            <CommandMenuDialog />
-            <Toaster closeButton position="bottom-center" />
-          </CommandMenuProvider>
-        </ThemeProvider>
+        <Providers>
+          <NuqsAdapter>{children}</NuqsAdapter>
+        </Providers>
         <Analytics />
         <SpeedInsights />
       </body>

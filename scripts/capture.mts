@@ -47,7 +47,7 @@ const JOBS = [
     size: 'desktop',
     themes: ['light', 'dark'],
     type: 'webp',
-    deviceScaleFactor: 1.4,
+    deviceScaleFactor: 2,
   },
   {
     name: 'screenshot',
@@ -55,7 +55,7 @@ const JOBS = [
     size: 'mobile',
     themes: ['light', 'dark'],
     type: 'webp',
-    deviceScaleFactor: 1.6,
+    deviceScaleFactor: 2,
   },
   {
     name: 'screenshot',

@@ -1,0 +1,76 @@
+import { cn } from '@/lib/utils';
+
+import { PanelDecores } from './panel';
+
+export function PageHeading({
+  children,
+  className,
+  ...props
+}: React.ComponentProps<'div'>) {
+  return (
+    <div
+      data-slot="page-heading"
+      className={cn('group/page-heading border-x', className)}
+      {...props}
+    >
+      {children}
+      <div
+        data-slot="page-heading-description-line"
+        className="screen-line-bottom hidden h-px group-has-data-[slot=page-heading-description]/page-heading:flex"
+      />
+    </div>
+  );
+}
+
+export function PageHeadingTagline({
+  className,
+  ...props
+}: React.ComponentProps<'div'>) {
+  return (
+    <div
+      data-slot="page-heading-tagline"
+      className={cn(
+        'font-heading text-muted-foreground px-4 pb-2 text-sm/none font-medium tracking-wider',
+        className
+      )}
+      {...props}
+    />
+  );
+}
+
+export function PageHeadingTitle({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<'h1'>) {
+  return (
+    <h1
+      data-slot="page-heading-title"
+      className={cn(
+        'screen-line-top screen-line-bottom px-4 py-1',
+        'font-heading text-4xl font-medium tracking-tight text-balance',
+        className
+      )}
+      {...props}
+    >
+      <PanelDecores className={className} />
+      {children}
+    </h1>
+  );
+}
+
+export function PageHeadingDescription({
+  className,
+  ...props
+}: React.ComponentProps<'p'>) {
+  return (
+    <p
+      data-slot="page-heading-description"
+      className={cn(
+        'text-muted-foreground p-4 text-base text-balance',
+        className
+      )}
+      {...props}
+    />
+  );
+}

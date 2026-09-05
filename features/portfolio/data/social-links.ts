@@ -1,49 +1,57 @@
-import type { SocialLink } from '../types/social-links';
+import type { SocialProfile } from '../types/social-links';
 import { USER } from './user';
 
 const baseUrl = 'https://assets.giabao.dev/socials';
 
-export const SOCIAL_LINKS: SocialLink[] = [
-  {
+export const SOCIAL = {
+  x: {
     icon: `${baseUrl}/x.webp`,
     title: 'X',
-    subtitle: '@cheff0111',
+    profile: '@cheff0111',
     href: USER.socialLinks.x,
     sameAs: true,
   },
-  {
+  github: {
     icon: `${baseUrl}/github.webp`,
     title: 'GitHub',
-    subtitle: 'chef0111',
+    profile: 'chef0111',
     href: USER.socialLinks.github,
     sameAs: true,
   },
-  {
+  linkedin: {
     icon: `${baseUrl}/linkedin.webp`,
     title: 'LinkedIn',
-    subtitle: 'chef0111',
+    profile: 'chef0111',
     href: USER.socialLinks.linkedin,
     sameAs: true,
   },
-  {
+  discord: {
     icon: `${baseUrl}/discord.webp`,
     title: 'Discord',
-    subtitle: 'chef.0111',
+    profile: 'chef.0111',
     href: USER.socialLinks.discord,
     sameAs: true,
   },
-  {
+  facebook: {
     icon: `${baseUrl}/facebook.webp`,
     title: 'Facebook',
-    subtitle: 'giabao.67.05',
+    profile: 'giabao.67.05',
     href: USER.socialLinks.facebook,
     sameAs: true,
   },
-  {
+  instagram: {
     icon: `${baseUrl}/instagram.webp`,
     title: 'Instagram',
-    subtitle: '@chef.0111',
+    profile: '@chef.0111',
     href: USER.socialLinks.instagram,
     sameAs: true,
   },
-];
+} satisfies Record<string, SocialProfile>;
+
+type SocialName = keyof typeof SOCIAL;
+
+type SocialLink = SocialProfile & { name: SocialName };
+
+export const SOCIAL_LINKS: SocialLink[] = (
+  Object.entries(SOCIAL) as [SocialName, SocialProfile][]
+).map(([name, profile]) => ({ name, ...profile }));

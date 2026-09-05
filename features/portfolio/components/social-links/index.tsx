@@ -1,19 +1,8 @@
-import { FullWidthDivider } from '@/components/cheffolio/full-width-divider';
+import { getRowCounts, GridDivider } from '@/components/cheffolio/grid-divider';
 import { Panel } from '@/components/cheffolio/panel';
-import { SOCIAL_LINKS } from '@/features/portfolio/data/social-links';
-import { cn } from '@/lib/utils';
+import { SOCIAL, SOCIAL_LINKS } from '@/features/portfolio/data/social-links';
 
 import { SocialLinkItem } from './social-link-item';
-
-const MOBILE_COLS = 2;
-const DESKTOP_COLS = 3;
-
-function getRowCounts(total: number) {
-  return {
-    mobile: Math.ceil(total / MOBILE_COLS),
-    desktop: Math.ceil(total / DESKTOP_COLS),
-  } as const;
-}
 
 function getGridLines(index: number) {
   if (index !== 0) return;
@@ -22,7 +11,7 @@ function getGridLines(index: number) {
 }
 
 export function SocialLinks() {
-  const { mobile, desktop } = getRowCounts(SOCIAL_LINKS.length);
+  const { mobile, desktop } = getRowCounts(SOCIAL_LINKS.length, 2, 3);
 
   return (
     <Panel className="screen-line-bottom-none screen-line-top-none">
@@ -34,47 +23,22 @@ export function SocialLinks() {
           <div className="border-border border-l max-md:hidden" />
         </div>
 
-        <GridDivider className="max-md:hidden" rows={desktop} />
-        <GridDivider className="hidden max-md:grid" rows={mobile} />
+        <GridDivider className="gap-2 max-md:hidden" rows={desktop} />
+        <GridDivider className="hidden gap-2 max-md:grid" rows={mobile} />
 
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 md:grid-cols-3">
-          {SOCIAL_LINKS.map((link, index) => (
-            <SocialLinkItem
-              key={link.href}
-              className={getGridLines(index)}
-              {...link}
-            />
-          ))}
+          {SOCIAL_LINKS.map((item, index) => {
+            const social = SOCIAL[item.name];
+            return (
+              <SocialLinkItem
+                key={item.name}
+                className={getGridLines(index)}
+                {...social}
+              />
+            );
+          })}
         </div>
       </div>
     </Panel>
-  );
-}
-
-function GridDivider({
-  rows,
-  className,
-}: {
-  rows: number;
-  className?: string;
-}) {
-  return (
-    <div
-      aria-hidden
-      className={cn(
-        'pointer-events-none absolute inset-0 -z-1 grid gap-2',
-        className
-      )}
-      style={{ gridTemplateRows: `repeat(${rows}, minmax(0, 1fr))` }}
-    >
-      {Array.from({ length: rows }, (_, row) => (
-        <div key={row} className="relative">
-          {row > 0 && <FullWidthDivider contained className="top-0" />}
-          {row < rows - 1 && (
-            <FullWidthDivider contained className="bottom-0" />
-          )}
-        </div>
-      ))}
-    </div>
   );
 }

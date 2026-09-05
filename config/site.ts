@@ -1,5 +1,6 @@
 import { BoxIcon, FileUserIcon, HomeIcon, NewspaperIcon } from 'lucide-react';
 
+import { SOCIAL } from '@/features/portfolio/data/social-links';
 import { USER } from '@/features/portfolio/data/user';
 import type { NavItem } from '@/types/nav';
 
@@ -58,9 +59,9 @@ export const UTM_PARAMS = {
   utm_source: 'giabao.dev',
 };
 
-export const GITHUB_REPO_URL = 'https://github.com/chef0111/cheffolio';
+export const X_PROFILE = SOCIAL.x.profile;
+export const GITHUB_PROFILE = SOCIAL.github.profile;
 
-export const GITHUB_USERNAME = 'chef0111';
-export const X_USERNAME = '@cheff0111';
+export const GITHUB_REPO_URL = 'https://github.com/chef0111/cheffolio';
 
 export const FOOTER_SLOGAN = 'Coding as Chef';

@@ -4,9 +4,8 @@ export default function BlogsLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
-      <div className="mx-auto h-12 border-x md:max-w-4xl" />
+    <div className="mx-auto flex w-full flex-1 flex-col md:max-w-4xl">
       {children}
-    </>
+    </div>
   );
 }

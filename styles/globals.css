@@ -312,7 +312,7 @@
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
-  --radius: 0.5rem;
+  --radius: 0.625rem;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
@@ -344,6 +344,7 @@
   --header-height: --spacing(14);
   --fade-top-height: --spacing(24);
   --fade-bottom-height: --spacing(24);
+  --separator-height: --spacing(8);
   --dk-background: #ffffff;
   --dk-foreground: #09090b;
   --dk-muted-foreground: #a1a1aa;
@@ -411,7 +412,7 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply bg-background text-foreground border-border font-sans antialiased;
     font-synthesis-weight: none;
     text-rendering: optimizeLegibility;
     padding-bottom: env(safe-area-inset-bottom);

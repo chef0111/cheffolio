@@ -49,9 +49,12 @@ import { addQueryParams } from '@/utils/url';
 
 import { Brand } from './brand';
 
+type CommandType = 'command' | 'page' | 'link';
+
 type CommandLinkItem = {
   title: string;
   href: string;
+  type: CommandType;
   icon?: React.ComponentType<LucideProps>;
   iconImage?: string;
   keywords?: string[];
@@ -61,27 +64,32 @@ type CommandLinkItem = {
 const PORTFOLIO_LINKS: CommandLinkItem[] = [
   {
     title: 'About',
-    href: '#about',
+    href: '/#about',
+    type: 'page',
     icon: TextInitial,
   },
   {
     title: 'Tech Stack',
-    href: '#stack',
+    href: '/#stack',
+    type: 'page',
     icon: LayersIcon,
   },
   {
     title: 'Experience',
-    href: '#experience',
+    href: '/#experience',
+    type: 'page',
     icon: BriefcaseBusinessIcon,
   },
   {
     title: 'Projects',
-    href: '#projects',
+    href: '/#projects',
+    type: 'page',
     icon: BoxIcon,
   },
   {
     title: 'Honors & Awards',
-    href: '#awards',
+    href: '/#awards',
+    type: 'page',
     icon: AwardIcon,
   },
 ];
@@ -89,6 +97,7 @@ const PORTFOLIO_LINKS: CommandLinkItem[] = [
 const SOCIAL_LINK_ITEMS: CommandLinkItem[] = SOCIAL_LINKS.map((item) => ({
   title: item.title,
   href: addQueryParams(item.href, UTM_PARAMS),
+  type: 'link',
   iconImage: item.icon,
   openInNewTab: true,
 }));
@@ -164,11 +173,11 @@ export function CommandMenuDialog() {
       title="Command Menu"
       open={open}
       onOpenChange={setOpen}
-      modal={false}
+      modal="trap-focus"
     >
       <CommandMenuInput />
 
-      <div className="bg-background ring-border mx-1 rounded-lg ring-1">
+      <div className="bg-background ring-border mx-1 rounded-md ring-1">
         <CommandList className="bg-background dark:bg-background/50 scroll-fade min-h-80 rounded-lg">
           <CommandEmpty>
             <Empty className="gap-2">
@@ -336,8 +345,6 @@ function CommandLinkGroup({
     </CommandGroup>
   );
 }
-
-type CommandType = 'command' | 'page' | 'link';
 
 const ENTER_ACTION_LABELS: Record<CommandType, string> = {
   command: 'Run Command',
