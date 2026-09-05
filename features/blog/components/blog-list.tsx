@@ -1,4 +1,4 @@
-import { SearchXIcon } from 'lucide-react';
+import { FileTextIcon, SearchXIcon } from 'lucide-react';
 
 import { getRowCounts, GridDivider } from '@/components/cheffolio/grid-divider';
 import { Panel, PanelContent } from '@/components/cheffolio/panel';
@@ -14,18 +14,11 @@ import { cn } from '@/lib/utils';
 import type { Blog } from '../types/blog';
 import { BlogItem } from './blog-item';
 
-function Divider({
-  className,
-  position,
-}: {
-  className?: string;
-  position: 'top' | 'bottom';
-}) {
+function ColumnDivider({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        'pointer-events-none absolute right-0 left-0 -z-1 grid h-4 grid-cols-1 gap-4 max-sm:hidden sm:grid-cols-2',
-        position === 'top' ? 'top-0' : 'bottom-0',
+        'pointer-events-none absolute inset-0 -z-1 hidden grid-cols-2 gap-4 sm:grid',
         className
       )}
     >
@@ -35,32 +28,68 @@ function Divider({
   );
 }
 
-export function BlogList({ blogs }: { blogs: Blog[] }) {
+function BlogListEmptyState({
+  icon,
+  title,
+  description,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+}) {
+  return (
+    <Empty className="py-26.5">
+      <EmptyHeader>
+        <EmptyMedia variant="icon">{icon}</EmptyMedia>
+        <EmptyTitle>{title}</EmptyTitle>
+        <EmptyDescription>{description}</EmptyDescription>
+      </EmptyHeader>
+    </Empty>
+  );
+}
+
+export function BlogListEmpty() {
+  return (
+    <BlogListEmptyState
+      icon={<FileTextIcon />}
+      title="No posts yet."
+      description="Nothing has been published here."
+    />
+  );
+}
+
+export function BlogListNoResults() {
+  return (
+    <BlogListEmptyState
+      icon={<SearchXIcon />}
+      title="No posts found."
+      description="Try a different search, or clear the query."
+    />
+  );
+}
+
+const defaultEmpty = <BlogListEmpty />;
+
+export function BlogList({
+  blogs,
+  empty = defaultEmpty,
+}: {
+  blogs: Blog[];
+  empty?: React.ReactNode;
+}) {
   const { mobile, desktop } = getRowCounts(blogs.length, 1, 2);
   const isEmpty = blogs.length === 0;
 
   return (
     <Panel className="screen-line-bottom-none decor-t flex-1 py-4">
-      <Divider position="top" />
-      <PanelContent className="relative flex flex-1 flex-col border-y p-0">
+      <ColumnDivider className="relative -mt-4 h-4" />
+
+      <PanelContent className="bg-background relative border-y p-0">
         {isEmpty ? (
-          <Empty className="absolute top-4">
-            <EmptyHeader>
-              <EmptyMedia variant="icon">
-                <SearchXIcon />
-              </EmptyMedia>
-              <EmptyTitle>No posts found.</EmptyTitle>
-              <EmptyDescription>
-                Post list is either empty or not match.
-              </EmptyDescription>
-            </EmptyHeader>
-          </Empty>
+          empty
         ) : (
           <>
-            <div className="pointer-events-none absolute inset-0 -z-1 hidden grid-cols-2 gap-4 sm:grid">
-              <div className="border-r" />
-              <div className="border-l" />
-            </div>
+            <ColumnDivider className="z-1" />
 
             <GridDivider className="gap-4 max-sm:hidden" rows={desktop} />
             <GridDivider className="hidden gap-4 max-sm:grid" rows={mobile} />
@@ -79,7 +108,7 @@ export function BlogList({ blogs }: { blogs: Blog[] }) {
         )}
       </PanelContent>
 
-      {blogs.length > 2 && <Divider position="bottom" />}
+      <ColumnDivider />
     </Panel>
   );
 }
