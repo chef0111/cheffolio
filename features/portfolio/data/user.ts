@@ -8,12 +8,12 @@ export const USER: User = {
   alternateName: ['Lê Trần Gia Bảo', 'chef0111', 'giabao', 'baoltg', 'gbaolt'],
   gender: 'male',
   pronouns: 'he/him',
-  bio: 'Love coding catchy things.',
+  bio: 'Love building catchy things.',
   flipSentences: [
     'Software Engineer',
     'Next.js Enthusiast',
     'Senior Student',
-    'Love coding catchy things.',
+    'Love building catchy things.',
   ],
   address: 'Hue City, Viet Nam',
   phoneNumber: 'Kzg0IDg2NSA2NzUgOTA4', // E.164 format, base64 encoded (https://t.io.vn/base64-string-converter)
