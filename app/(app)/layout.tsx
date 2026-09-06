@@ -13,7 +13,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="group/layout relative isolate flex min-h-dvh flex-col overflow-hidden">
       <SiteHeader />
-      <main className="flex max-w-screen flex-1 flex-col overflow-x-clip px-2">
+      <main className="flex w-full max-w-screen flex-1 flex-col overflow-x-clip px-2">
         {children}
       </main>
       <SiteFooter />

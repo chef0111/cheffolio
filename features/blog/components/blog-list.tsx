@@ -1,6 +1,6 @@
 import { FileTextIcon, SearchXIcon } from 'lucide-react';
 
-import { getRowCounts, GridDivider } from '@/components/cheffolio/grid-divider';
+import { GridDivider } from '@/components/cheffolio/grid-divider';
 import { Panel, PanelContent } from '@/components/cheffolio/panel';
 import {
   Empty,
@@ -14,17 +14,63 @@ import { cn } from '@/lib/utils';
 import type { Blog } from '../types/blog';
 import { BlogItem } from './blog-item';
 
-function ColumnDivider({ className }: { className?: string }) {
+export function BlogListEmpty() {
   return (
-    <div
-      className={cn(
-        'pointer-events-none absolute inset-0 -z-1 hidden grid-cols-2 gap-4 sm:grid',
-        className
-      )}
-    >
-      <div className="border-r" />
-      <div className="border-l" />
-    </div>
+    <BlogListEmptyState
+      icon={<FileTextIcon />}
+      title="No posts yet."
+      description="Nothing has been published here."
+    />
+  );
+}
+
+export function BlogListNoResults() {
+  return (
+    <BlogListEmptyState
+      icon={<SearchXIcon />}
+      title="No posts found."
+      description="Try a different search, or clear the query."
+    />
+  );
+}
+
+export function BlogList({
+  blogs,
+  empty = <BlogListEmpty />,
+}: {
+  blogs: Blog[];
+  empty?: React.ReactNode;
+}) {
+  const isEmpty = blogs.length === 0;
+
+  return (
+    <Panel className="screen-line-bottom-none decor-t flex-1 py-4">
+      <ColumnDivider className="relative -mt-4 h-4" />
+
+      <PanelContent className="bg-background relative border-y p-0">
+        {isEmpty ? (
+          empty
+        ) : (
+          <>
+            <ColumnDivider className="z-1" />
+            <GridDivider className="gap-4 max-sm:hidden" rows={2} />
+            <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {blogs.map((blog, index) => (
+                <li key={blog.slug} className="group">
+                  <BlogItem
+                    blog={blog}
+                    loading={index <= 3 ? 'eager' : 'lazy'}
+                  />
+                  <div className="border-border h-4 w-full border-y group-last:hidden sm:hidden" />
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+      </PanelContent>
+
+      <ColumnDivider />
+    </Panel>
   );
 }
 
@@ -48,67 +94,16 @@ function BlogListEmptyState({
   );
 }
 
-export function BlogListEmpty() {
+function ColumnDivider({ className }: { className?: string }) {
   return (
-    <BlogListEmptyState
-      icon={<FileTextIcon />}
-      title="No posts yet."
-      description="Nothing has been published here."
-    />
-  );
-}
-
-export function BlogListNoResults() {
-  return (
-    <BlogListEmptyState
-      icon={<SearchXIcon />}
-      title="No posts found."
-      description="Try a different search, or clear the query."
-    />
-  );
-}
-
-const defaultEmpty = <BlogListEmpty />;
-
-export function BlogList({
-  blogs,
-  empty = defaultEmpty,
-}: {
-  blogs: Blog[];
-  empty?: React.ReactNode;
-}) {
-  const { mobile, desktop } = getRowCounts(blogs.length, 1, 2);
-  const isEmpty = blogs.length === 0;
-
-  return (
-    <Panel className="screen-line-bottom-none decor-t flex-1 py-4">
-      <ColumnDivider className="relative -mt-4 h-4" />
-
-      <PanelContent className="bg-background relative border-y p-0">
-        {isEmpty ? (
-          empty
-        ) : (
-          <>
-            <ColumnDivider className="z-1" />
-
-            <GridDivider className="gap-4 max-sm:hidden" rows={desktop} />
-            <GridDivider className="hidden gap-4 max-sm:grid" rows={mobile} />
-
-            <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              {blogs.map((blog, index) => (
-                <li key={blog.slug}>
-                  <BlogItem
-                    blog={blog}
-                    loading={index <= 3 ? 'eager' : 'lazy'}
-                  />
-                </li>
-              ))}
-            </ul>
-          </>
-        )}
-      </PanelContent>
-
-      <ColumnDivider />
-    </Panel>
+    <div
+      className={cn(
+        'pointer-events-none absolute inset-0 -z-1 hidden grid-cols-2 gap-4 sm:grid',
+        className
+      )}
+    >
+      <div className="border-r" />
+      <div className="border-l" />
+    </div>
   );
 }

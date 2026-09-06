@@ -5,7 +5,7 @@ import { GitHubIcon } from '@/components/icons';
 import { NavDesktop } from '@/components/layout/navigation/nav-desktop';
 import { SiteHeaderNav } from '@/components/layout/navigation/site-header-nav';
 import { Button } from '@/components/ui/button';
-import { GITHUB_REPO_URL, MAIN_NAV, UTM_PARAMS } from '@/config/site';
+import { DESKTOP_NAV, GITHUB_REPO_URL, UTM_PARAMS } from '@/config/site';
 import { addQueryParams } from '@/utils/url';
 
 import { SiteHeaderMark } from './site-header-mark';
@@ -22,7 +22,7 @@ export function SiteHeader() {
         <SiteHeaderMark />
       </Link>
       <div className="flex items-center gap-2 *:first:mr-2 max-sm:*:data-[slot=command-menu-trigger]:hidden">
-        <NavDesktop items={MAIN_NAV} />
+        <NavDesktop items={DESKTOP_NAV} />
         <CommandMenu />
         <Button
           size="icon"

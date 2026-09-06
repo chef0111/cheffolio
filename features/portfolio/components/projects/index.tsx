@@ -23,7 +23,7 @@ export function Projects() {
         </PanelTitle>
       </PanelHeader>
 
-      <PanelContent className="decor-t -mb-px flow-root p-0">
+      <PanelContent className="decor-t flow-root p-0">
         <CollapsibleList
           items={PROJECTS}
           max={3}

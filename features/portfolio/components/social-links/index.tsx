@@ -1,8 +1,18 @@
-import { getRowCounts, GridDivider } from '@/components/cheffolio/grid-divider';
+import { GridDivider } from '@/components/cheffolio/grid-divider';
 import { Panel } from '@/components/cheffolio/panel';
 import { SOCIAL, SOCIAL_LINKS } from '@/features/portfolio/data/social-links';
 
 import { SocialLinkItem } from './social-link-item';
+
+const MOBILE_COLS = 2;
+const DESKTOP_COLS = 3;
+
+function getRowCounts(total: number) {
+  return {
+    mobile: Math.ceil(total / MOBILE_COLS),
+    desktop: Math.ceil(total / DESKTOP_COLS),
+  } as const;
+}
 
 function getGridLines(index: number) {
   if (index !== 0) return;
@@ -11,7 +21,7 @@ function getGridLines(index: number) {
 }
 
 export function SocialLinks() {
-  const { mobile, desktop } = getRowCounts(SOCIAL_LINKS.length, 2, 3);
+  const { mobile, desktop } = getRowCounts(SOCIAL_LINKS.length);
 
   return (
     <Panel className="screen-line-bottom-none screen-line-top-none">
@@ -24,9 +34,9 @@ export function SocialLinks() {
         </div>
 
         <GridDivider className="gap-2 max-md:hidden" rows={desktop} />
-        <GridDivider className="hidden gap-2 max-md:grid" rows={mobile} />
+        <GridDivider className="grid gap-2 md:hidden" rows={mobile} />
 
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 md:grid-cols-3">
+        <div className="grid grid-cols-2 gap-2 md:grid-cols-3">
           {SOCIAL_LINKS.map((item, index) => {
             const social = SOCIAL[item.name];
             return (

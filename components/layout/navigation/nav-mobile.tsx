@@ -145,7 +145,7 @@ function NavMobileItem({ item }: { item: NavItem }) {
     <Button
       variant={active ? 'secondary' : 'ghost'}
       size="icon"
-      className="extend-touch-target rounded-xl active:scale-100"
+      className="extend-touch-target rounded-lg active:scale-100"
       render={
         <Link
           href={item.href}
