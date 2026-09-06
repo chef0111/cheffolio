@@ -6,6 +6,7 @@ import { JsonLdScript } from '@/components/json-ld';
 import { JSON_LD_ID } from '@/config/json-ld';
 import { About } from '@/features/portfolio/components/about';
 import { Awards } from '@/features/portfolio/components/awards';
+import { Blog } from '@/features/portfolio/components/blog';
 import { Experiences } from '@/features/portfolio/components/experiences';
 import { Overview } from '@/features/portfolio/components/overview';
 import { ProfileHeader } from '@/features/portfolio/components/profile-header';
@@ -27,7 +28,7 @@ export default function Page() {
       <JsonLdScript data={getPageJsonLd()} />
 
       <div
-        className="mx-auto **:data-[slot=panel]:scroll-mt-22 md:max-w-4xl"
+        className="mx-auto w-full **:data-[slot=panel]:scroll-mt-[calc(var(--header-height)+var(--separator-height))] md:max-w-4xl"
         aria-label="Portfolio"
       >
         <ProfileHeader />
@@ -36,6 +37,9 @@ export default function Page() {
         <StripeSeparator />
 
         <About />
+        <StripeSeparator />
+
+        <Blog />
         <StripeSeparator />
 
         <TechStack />

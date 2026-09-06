@@ -20,13 +20,13 @@ const panelDecorVariants = cva(
     variants: {
       position: {
         'top-left':
-          'top-0 left-0 -translate-x-[calc(50%+0.5px)] -translate-y-[calc(50%+0.5px)]',
+          'top-0 left-0 -translate-x-[calc(50%+0.5px)] -translate-y-1/2',
         'top-right':
-          'top-0 right-0 translate-x-[calc(50%+0.5px)] -translate-y-[calc(50%+0.5px)]',
+          'top-0 right-0 translate-x-[calc(50%+0.5px)] -translate-y-1/2',
         'bottom-right':
-          'right-0 bottom-0 translate-x-[calc(50%+0.5px)] translate-y-[calc(50%-0.5px)]',
+          'right-0 bottom-0 translate-x-[calc(50%+0.5px)] translate-y-1/2',
         'bottom-left':
-          'bottom-0 left-0 -translate-x-[calc(50%+0.5px)] translate-y-[calc(50%-0.5px)]',
+          'bottom-0 left-0 -translate-x-[calc(50%+0.5px)] translate-y-1/2',
       },
     },
     defaultVariants: {

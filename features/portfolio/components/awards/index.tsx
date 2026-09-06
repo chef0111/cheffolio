@@ -26,7 +26,7 @@ export function Awards() {
         </PanelTitle>
       </PanelHeader>
 
-      <PanelContent className="decor-t -mb-px p-0">
+      <PanelContent className="decor-t p-0">
         <CollapsibleList
           items={SORTED_AWARDS}
           max={3}

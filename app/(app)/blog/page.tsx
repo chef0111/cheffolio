@@ -14,10 +14,8 @@ import { JSON_LD_ID } from '@/config/json-ld';
 import { X_PROFILE } from '@/config/site';
 import { BlogList } from '@/features/blog/components/blog-list';
 import { BlogListFiltered } from '@/features/blog/components/blog-list-filtered';
-import {
-  BlogSearchInput,
-  SearchInput,
-} from '@/features/blog/components/blog-search-input';
+import { BlogSearchInput } from '@/features/blog/components/blog-search-input';
+import { SearchInput } from '@/features/blog/components/search-input';
 import { getAllBlogs } from '@/features/blog/lib/data';
 import { absoluteUrl } from '@/lib/utils';
 

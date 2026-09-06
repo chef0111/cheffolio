@@ -65,7 +65,13 @@ export function CollapsibleList<T>({
           )}
         >
           <CollapsibleTrigger
-            render={<Button className="gap-2 pr-2.5 pl-3" size="sm" />}
+            render={
+              <Button
+                size="sm"
+                variant="secondary"
+                className="shadow-foreground/20 gap-2 pr-2.5 pl-3 shadow-[inset_0_0_1px]"
+              />
+            }
           >
             <span className="hidden group-data-closed/collapsible:block">
               Show More

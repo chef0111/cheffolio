@@ -4,11 +4,14 @@ import {
   PanelHeader,
   PanelTitle,
 } from '@/components/cheffolio/panel';
+import { cn } from '@/lib/utils';
 
 import { TECH_STACK } from '../data/tech-stack';
 import type { TechStack as TechStackType } from '../types/tech-stack';
 
 const ID = 'stack';
+
+const categories = Object.entries(groupByCategory(TECH_STACK));
 
 export function TechStack() {
   return (
@@ -17,23 +20,25 @@ export function TechStack() {
         <PanelTitle>Tech Stack</PanelTitle>
       </PanelHeader>
 
-      <PanelContent className="decor-all -mb-px p-0 [--badge-height:--spacing(6)] [--col-left-width:--spacing(48)]">
-        <div
-          className="pointer-events-none absolute inset-y-0 left-(--col-left-width) -z-1 w-px bg-[linear-gradient(to_bottom,var(--line)_4px,transparent_2px)] bg-size-[1px_6px] bg-repeat-y max-sm:hidden"
-          aria-hidden
-        />
+      <PanelContent className="decor-all p-0 [--badge-height:--spacing(6)] [--col-left-width:--spacing(48)]">
+        <ul>
+          <div
+            className="pointer-events-none absolute inset-y-0 left-(--col-left-width) -z-1 w-px bg-[linear-gradient(to_bottom,var(--line)_4px,transparent_2px)] bg-size-[1px_6px] bg-repeat-y max-sm:hidden"
+            aria-hidden
+          />
 
-        {Object.entries(groupByCategory(TECH_STACK)).map(
-          ([category, items], index) => {
+          {categories.map(([category, items], index) => {
             const categoryId = `${ID}-${category
               .toLowerCase()
               .replace(/[^a-z0-9]+/g, '-')
               .replace(/(^-|-$)/g, '')}`;
 
             return (
-              <div
+              <li
                 key={category}
-                className="border-border grid items-start gap-y-2 border-b py-4 last:border-none sm:grid-cols-[var(--col-left-width)_1fr]"
+                className={cn(
+                  'border-border grid items-start gap-y-2 border-b py-4 last:border-b-0 last:border-none sm:grid-cols-[var(--col-left-width)_1fr]'
+                )}
               >
                 <div
                   id={categoryId}
@@ -68,10 +73,10 @@ export function TechStack() {
                     );
                   })}
                 </ul>
-              </div>
+              </li>
             );
-          }
-        )}
+          })}
+        </ul>
       </PanelContent>
     </Panel>
   );

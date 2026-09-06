@@ -1,6 +1,5 @@
 'use client';
 
-import { useTheme } from 'next-themes';
 import { useCallback } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 
@@ -13,6 +12,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { META_THEME_COLORS } from '@/config/site';
+import { useTheme } from '@/context/theme-provider';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { useMetaColor } from '@/hooks/use-meta-color';
 import { useSound } from '@/hooks/use-sound';

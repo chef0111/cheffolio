@@ -5,25 +5,25 @@ import Link from 'next/link';
 
 import type { Blog } from '../types/blog';
 
-type HeadingTypes = 'h2' | 'h3' | 'h4';
+type Heading = 'h2' | 'h3' | 'h4';
 
 export function BlogItem({
   blog,
-  headingAs,
+  heading,
   loading = 'lazy',
 }: {
   blog: Blog;
-  headingAs?: HeadingTypes;
+  heading?: Heading;
   loading?: ImageProps['loading'];
 }) {
-  const Heading = headingAs ?? 'h2';
+  const Heading = heading ?? 'h2';
 
   return (
-    <div className="group/post hover:bg-accent-muted relative flex h-full flex-col gap-2 p-2 transition-[background-color] ease-out">
+    <div className="group/post hover:bg-accent-muted active:bg-accent-muted relative flex h-full flex-col gap-2 p-2 transition-[background-color] ease-out">
       {blog.metadata.image && (
         <div className="relative select-none [--image-radius:var(--radius-xl)]">
           <Image
-            className="aspect-1200/630 rounded-(--image-radius) grayscale transition-[filter] duration-300 ease-[cubic-bezier(0.42,0,0.58,1)] group-hover/post:grayscale-0"
+            className="ease-out-cubic aspect-1200/630 rounded-(--image-radius) grayscale transition-[filter] duration-300 group-hover/post:grayscale-0"
             src={blog.metadata.image}
             alt={blog.metadata.title}
             width={1200}
