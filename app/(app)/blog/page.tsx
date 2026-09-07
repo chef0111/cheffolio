@@ -91,9 +91,9 @@ export default function BlogsPage() {
       />
 
       <div className="flex flex-1 flex-col">
-        <PageHeading className="pt-24">
+        <PageHeading className="-mt-px pt-24">
           <PageHeadingTagline>{title}</PageHeadingTagline>
-          <PageHeadingTitle className="decor-all screen-line-bottom-none">
+          <PageHeadingTitle className="decor-all screen-line-bottom-none -my-px">
             {description}
           </PageHeadingTitle>
         </PageHeading>
