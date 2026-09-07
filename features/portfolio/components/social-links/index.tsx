@@ -4,15 +4,8 @@ import { SOCIAL, SOCIAL_LINKS } from '@/features/portfolio/data/social-links';
 
 import { SocialLinkItem } from './social-link-item';
 
-const MOBILE_COLS = 2;
-const DESKTOP_COLS = 3;
-
-function getRowCounts(total: number) {
-  return {
-    mobile: Math.ceil(total / MOBILE_COLS),
-    desktop: Math.ceil(total / DESKTOP_COLS),
-  } as const;
-}
+const DESKTOP_ROWS = 2;
+const MOBILE_ROWS = 3;
 
 function getGridLines(index: number) {
   if (index !== 0) return;
@@ -21,8 +14,6 @@ function getGridLines(index: number) {
 }
 
 export function SocialLinks() {
-  const { mobile, desktop } = getRowCounts(SOCIAL_LINKS.length);
-
   return (
     <Panel className="screen-line-bottom-none screen-line-top-none">
       <h2 className="sr-only">Social Links</h2>
@@ -33,8 +24,8 @@ export function SocialLinks() {
           <div className="border-border border-l max-md:hidden" />
         </div>
 
-        <GridDivider className="gap-2 max-md:hidden" rows={desktop} />
-        <GridDivider className="grid gap-2 md:hidden" rows={mobile} />
+        <GridDivider className="gap-2 max-md:hidden" rows={DESKTOP_ROWS} />
+        <GridDivider className="grid gap-2 md:hidden" rows={MOBILE_ROWS} />
 
         <div className="grid grid-cols-2 gap-2 md:grid-cols-3">
           {SOCIAL_LINKS.map((item, index) => {

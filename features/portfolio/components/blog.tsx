@@ -12,9 +12,11 @@ import {
 import { Button } from '@/components/ui/button';
 import { BlogItem } from '@/features/blog/components/blog-item';
 import { getAllBlogs } from '@/features/blog/lib/data';
+import { getRowCounts } from '@/utils/grid';
 
 export function Blog() {
   const blogPosts = getAllBlogs();
+  const rows = getRowCounts(blogPosts.length, 2);
 
   return (
     <Panel id="blog" className="screen-line-bottom-none screen-line-top-none">
@@ -28,10 +30,10 @@ export function Blog() {
       <PanelContent className="decor-t px-0">
         <div className="pointer-events-none absolute inset-0 -z-1 grid grid-cols-1 gap-4 max-sm:hidden sm:grid-cols-2">
           <div className="border-border border-r"></div>
-          <div className="border-e-border border-l"></div>
+          <div className="border-border border-l"></div>
         </div>
 
-        <GridDivider className="gap-4 max-sm:hidden" rows={2} />
+        <GridDivider className="gap-4 max-sm:hidden" rows={rows} />
 
         <ul className="border-border grid grid-cols-1 gap-4 border-y sm:grid-cols-2">
           {blogPosts.slice(0, 4).map((blog) => (
@@ -44,7 +46,11 @@ export function Blog() {
       </PanelContent>
 
       <div className="flex justify-center border-t py-4">
-        <Button size="sm" nativeButton={false} render={<Link href="/blog" />}>
+        <Button
+          size="sm"
+          nativeButton={false}
+          render={<Link href="/blog" aria-label="View all blog posts" />}
+        >
           All posts
           <ArrowRightIcon />
         </Button>

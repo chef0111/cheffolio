@@ -1,145 +1,91 @@
 'use client';
 
-import type { Button as ButtonPrimitive } from '@base-ui/react/button';
-import { CheckIcon, CopyIcon } from 'lucide-react';
-import { AnimatePresence, motion } from 'motion/react';
-import * as React from 'react';
+import { CheckIcon, CircleXIcon, CopyIcon } from 'lucide-react';
+import { motion } from 'motion/react';
+import type { ComponentProps } from 'react';
 
-import { Button, buttonVariants } from '@/components/ui/button';
-import { useControlledState } from '@/hooks/use-controlled-state';
+import { Button } from '@/components/ui/button';
+import { IconSwap, IconSwapItem } from '@/components/ui/icon-swap';
+import type { CopyState } from '@/hooks/use-copy';
+import { useCopy } from '@/hooks/use-copy';
 import { cn } from '@/lib/utils';
 
-type CopyButtonBaseProps = Omit<
-  React.ComponentPropsWithoutRef<typeof Button>,
-  'children'
-> & {
-  copied?: boolean;
-  onCopiedChange?: (copied: boolean, content?: string) => void;
-  delay?: number;
+export type CopyStateIconProps = {
+  state: CopyState;
+  /** Custom icon for idle state. */
+  idleIcon?: React.ReactNode;
+  /** Custom icon for done state. */
+  doneIcon?: React.ReactNode;
+  /** Custom icon for error state. */
+  errorIcon?: React.ReactNode;
 };
 
-type TextCopyProps = CopyButtonBaseProps & {
-  copyType?: 'text';
-  content: string;
-};
+export function CopyStateIcon({
+  state,
+  idleIcon,
+  doneIcon,
+  errorIcon,
+}: CopyStateIconProps) {
+  return (
+    <IconSwap>
+      <IconSwapItem key={state} as={motion.span}>
+        {state === 'idle' && (idleIcon ?? <CopyIcon data-slot="idle-icon" />)}
 
-type ImageCopyProps = CopyButtonBaseProps & {
-  copyType: 'image';
-  content: string; // data URL or blob URL
-};
+        {state === 'done' && (doneIcon ?? <CheckIcon data-slot="done-icon" />)}
 
-type CopyButtonProps = TextCopyProps | ImageCopyProps;
-
-async function copyTextToClipboard(text: string): Promise<void> {
-  await navigator.clipboard.writeText(text);
+        {state === 'error' &&
+          (errorIcon ?? <CircleXIcon data-slot="error-icon" />)}
+      </IconSwapItem>
+    </IconSwap>
+  );
 }
 
-async function copyImageToClipboard(dataUrl: string): Promise<void> {
-  const response = await fetch(dataUrl);
-  const blob = await response.blob();
+export type CopyButtonProps = ComponentProps<typeof Button> & {
+  /** The text to copy, or a function that returns the text. */
+  text: string | (() => string);
+  /** Called with the copied text on successful copy. */
+  onCopySuccess?: (text: string) => void;
+  /** Called with the error if the copy operation fails. */
+  onCopyError?: (error: Error) => void;
+} & Omit<CopyStateIconProps, 'state'>;
 
-  // Ensure we're copying as PNG for maximum compatibility
-  const pngBlob =
-    blob.type === 'image/png' ? blob : await convertToPngBlob(blob);
-
-  await navigator.clipboard.write([
-    new ClipboardItem({ 'image/png': pngBlob }),
-  ]);
-}
-
-async function convertToPngBlob(blob: Blob): Promise<Blob> {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      canvas.width = img.width;
-      canvas.height = img.height;
-      const ctx = canvas.getContext('2d');
-      if (!ctx) {
-        reject(new Error('Failed to get canvas context'));
-        return;
-      }
-      ctx.drawImage(img, 0, 0);
-      canvas.toBlob((pngBlob) => {
-        if (pngBlob) resolve(pngBlob);
-        else reject(new Error('Failed to convert to PNG'));
-      }, 'image/png');
-    };
-    img.onerror = () => reject(new Error('Failed to load image'));
-    img.src = URL.createObjectURL(blob);
-  });
-}
-
-function CopyButton({
+export function CopyButton({
   className,
-  content,
-  copied,
-  onCopiedChange,
+  size = 'icon',
+  children,
+  text,
+  idleIcon,
+  doneIcon,
+  errorIcon,
   onClick,
-  variant,
-  size,
-  delay = 3000,
-  copyType = 'text',
+  onCopySuccess,
+  onCopyError,
   ...props
 }: CopyButtonProps) {
-  const [isCopied, setIsCopied] = useControlledState({
-    value: copied,
-    onChange: onCopiedChange,
+  const { state, copy } = useCopy({
+    onCopySuccess,
+    onCopyError,
   });
-
-  const handleCopy = React.useCallback(
-    async (e: Parameters<NonNullable<ButtonPrimitive.Props['onClick']>>[0]) => {
-      onClick?.(e);
-      if (isCopied || !content) return;
-
-      try {
-        if (copyType === 'image') {
-          await copyImageToClipboard(content);
-        } else {
-          await copyTextToClipboard(content);
-        }
-
-        setIsCopied(true);
-        onCopiedChange?.(true, content);
-        setTimeout(() => {
-          setIsCopied(false);
-          onCopiedChange?.(false);
-        }, delay);
-      } catch (error) {
-        console.error(`Error copying ${copyType}:`, error);
-      }
-    },
-    [onClick, isCopied, content, copyType, setIsCopied, onCopiedChange, delay]
-  );
-
-  const Icon = isCopied ? CheckIcon : CopyIcon;
 
   return (
     <Button
-      data-slot="copy-button"
-      className={cn('group/copy-button', className)}
+      className={cn('will-change-transform', className)}
       size={size}
-      variant={variant}
-      onClick={handleCopy}
-      aria-label={isCopied ? 'Copied' : 'Copy to clipboard'}
-      aria-pressed={isCopied}
+      onClick={(e) => {
+        copy(text);
+        onClick?.(e);
+      }}
+      aria-label="Copy"
       {...props}
     >
-      <span className="sr-only">Copy button</span>
-      <AnimatePresence mode="popLayout">
-        <motion.span
-          key={isCopied ? 'check' : 'copy'}
-          data-slot="copy-button-icon"
-          initial={{ scale: 0, opacity: 0.4, filter: 'blur(4px)' }}
-          animate={{ scale: 1, opacity: 1, filter: 'blur(0px)' }}
-          exit={{ scale: 0, opacity: 0.4, filter: 'blur(4px)' }}
-          transition={{ duration: 0.25 }}
-        >
-          <Icon />
-        </motion.span>
-      </AnimatePresence>
+      <CopyStateIcon
+        data-icon="inline-start"
+        state={state}
+        idleIcon={idleIcon}
+        doneIcon={doneIcon}
+        errorIcon={errorIcon}
+      />
+      {children}
     </Button>
   );
 }
-
-export { buttonVariants, CopyButton, type CopyButtonProps };

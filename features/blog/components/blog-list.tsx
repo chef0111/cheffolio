@@ -9,10 +9,12 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from '@/components/ui/empty';
-import { cn } from '@/lib/utils';
+import { cn, getRowCounts } from '@/lib/utils';
 
 import type { Blog } from '../types/blog';
 import { BlogItem } from './blog-item';
+
+const DESKTOP_COLS = 2;
 
 export function BlogListEmpty() {
   return (
@@ -41,6 +43,7 @@ export function BlogList({
   blogs: Blog[];
   empty?: React.ReactNode;
 }) {
+  const rows = getRowCounts(blogs.length, DESKTOP_COLS);
   const isEmpty = blogs.length === 0;
 
   return (
@@ -53,7 +56,7 @@ export function BlogList({
         ) : (
           <>
             <ColumnDivider className="z-1" />
-            <GridDivider className="gap-4 max-sm:hidden" rows={2} />
+            <GridDivider className="gap-4 max-sm:hidden" rows={rows} />
             <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               {blogs.map((blog, index) => (
                 <li key={blog.slug} className="group">
@@ -61,7 +64,6 @@ export function BlogList({
                     blog={blog}
                     loading={index <= 3 ? 'eager' : 'lazy'}
                   />
-                  <div className="border-border h-4 w-full border-y group-last:hidden sm:hidden" />
                 </li>
               ))}
             </ul>
@@ -102,8 +104,8 @@ function ColumnDivider({ className }: { className?: string }) {
         className
       )}
     >
-      <div className="border-r" />
-      <div className="border-l" />
+      <div className="border-border border-r" />
+      <div className="border-border border-l" />
     </div>
   );
 }

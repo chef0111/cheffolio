@@ -65,8 +65,8 @@ export function PhoneItem({ phoneNumber }: PhoneItemProps) {
           className="text-muted-foreground bg-transparent"
           variant="ghost"
           size="icon-xs"
-          content={isClient ? phoneNumberDecoded : '[Phone protected]'}
-          onCopiedChange={() => {
+          text={phoneNumberDecoded}
+          onCopySuccess={() => {
             trigger('success');
           }}
         />
