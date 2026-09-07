@@ -36,7 +36,10 @@ export function BlogItem({
 
       <div className="flex flex-col gap-1 p-2">
         <Heading className="text-lg leading-snug font-medium text-balance">
-          <Link href={`/blog/${blog.slug}`}>
+          <Link
+            href={`/blog/${blog.slug}`}
+            aria-label={`Read ${blog.metadata.title}`}
+          >
             <span className="absolute inset-0" aria-hidden />
             {blog.metadata.title}
           </Link>

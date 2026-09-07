@@ -9,7 +9,8 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from '@/components/ui/empty';
-import { cn, getRowCounts } from '@/lib/utils';
+import { cn } from '@/lib/utils';
+import { getRowCounts } from '@/utils/grid';
 
 import type { Blog } from '../types/blog';
 import { BlogItem } from './blog-item';

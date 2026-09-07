@@ -4,6 +4,7 @@ export * from './claude';
 export * from './github';
 export * from './javascript';
 export * from './linkedin';
+export * from './markdown';
 export * from './mongodb';
 export * from './moon';
 export * from './openai';
