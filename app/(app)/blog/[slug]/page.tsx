@@ -33,6 +33,7 @@ import { DocPageRoot } from '@/features/blog/components/doc/doc-page-root';
 import { DocShareMenu } from '@/features/blog/components/doc/doc-share-menu';
 import { TOCInline } from '@/features/blog/components/doc/toc-inline';
 import { TOCMinimap } from '@/features/blog/components/doc/toc-minimap';
+import { MDX } from '@/features/blog/components/mdx';
 import {
   findNeighbour,
   getAllBlogs,
@@ -256,17 +257,21 @@ export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
           <DocContentCol className="flex h-full flex-col">
             <Panel className="decor-t screen-line-bottom-none flex flex-1 flex-col p-0">
               <Prose className="p-4">
-                <p className="text-muted-foreground">
+                <p className="text-muted-foreground not-typeset mb-(--typeset-flow)">
                   {blog.metadata.description}
                 </p>
 
                 <TOCInline className="lg:hidden" items={toc} />
+
+                <div>
+                  <MDX content={blog.content} />
+                </div>
               </Prose>
             </Panel>
           </DocContentCol>
 
           <DocRightCol>
-            <div className="sticky top-[calc(var(--doc-cols-top,0)+(--spacing(3)))] opacity-0 in-data-doc-cols-ready:opacity-100">
+            <div className="fixed top-[calc(var(--doc-cols-top,0)+(--spacing(3)))] right-0 opacity-0 in-data-doc-cols-ready:opacity-100">
               <TOCMinimap items={toc} />
             </div>
           </DocRightCol>

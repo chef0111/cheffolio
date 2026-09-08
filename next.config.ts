@@ -8,12 +8,19 @@ const nextConfig: NextConfig = {
     instantInsights: {
       validationLevel: 'manual-warning',
     },
+    optimizePackageImports: ['lucide-react'],
   },
+  transpilePackages: ['next-mdx-remote'],
   images: {
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'assets.giabao.dev',
+        port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
         port: '',
       },
     ],

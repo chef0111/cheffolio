@@ -30,7 +30,7 @@ export function TOCInline({
   return (
     <Collapsible
       className={cn(
-        'not-prose group/inline-toc bg-surface inset-ring-border/64 rounded-lg font-sans inset-ring-1',
+        'not-typeset group/inline-toc bg-surface inset-ring-border/64 rounded-lg font-sans inset-ring-1',
         className
       )}
       onOpenChange={(open, eventDetails) => {

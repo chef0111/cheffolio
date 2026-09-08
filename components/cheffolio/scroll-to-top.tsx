@@ -33,7 +33,7 @@ export function ScrollToTop({
         'fixed right-4 bottom-[calc(var(--bottom,0.75rem)+env(safe-area-inset-bottom,0))] z-100 lg:right-8',
         'transition-[background-color,opacity] duration-300 data-[scroll-direction=down]:opacity-30 data-[scroll-direction=up]:opacity-100 data-[visible=false]:opacity-0',
         'data-[scroll-direction=down]:hover:opacity-100',
-        'rounded-xl border-none',
+        'rounded-lg border-none',
         className
       )}
       variant="secondary"
@@ -41,7 +41,7 @@ export function ScrollToTop({
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       {...props}
     >
-      <ArrowUpIcon />
+      <ArrowUpIcon className="size-5" />
       <span className="sr-only">Scroll to top</span>
     </Button>
   );

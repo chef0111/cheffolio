@@ -1,9 +1,5 @@
 export type ExperiencePositionIcon =
-  | 'code'
-  | 'design'
-  | 'education'
-  | 'business'
-  | 'idea';
+  'code' | 'design' | 'education' | 'business' | 'idea';
 
 export type ExperiencePosition = {
   id: string;

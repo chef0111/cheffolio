@@ -1,6 +1,8 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
+
+@import './components.css';
 @import './typeset.css';
 
 @plugin '@tailwindcss/typography';
@@ -112,6 +114,10 @@
   --color-selection-foreground: var(--selection-foreground);
   --color-surface: var(--surface);
   --color-surface-foreground: var(--surface-foreground);
+  --color-code: var(--code);
+  --color-code-foreground: var(--code-foreground);
+  --color-code-number: var(--code-number);
+  --color-code-highlight: var(--code-highlight);
 
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
@@ -207,34 +213,6 @@
   }
 }
 
-@utility prose-chef {
-  @apply prose-headings:tracking-tight prose-headings:text-balance prose-h2:font-semibold;
-  @apply prose-a:font-normal prose-a:wrap-break-word prose-a:text-foreground prose-a:link-underline;
-  @apply prose-code:rounded-md prose-code:border prose-code:bg-muted/50 prose-code:px-[0.3rem] prose-code:py-[0.2rem] prose-code:text-sm prose-code:font-normal prose-code:before:content-none prose-code:after:content-none;
-  @apply prose-strong:font-medium;
-  @apply prose-hr:border-border;
-  @apply prose-blockquote:border-s-2 prose-blockquote:font-normal prose-blockquote:text-muted-foreground prose-blockquote:not-italic prose-blockquote:[&_p:first-of-type]:before:content-none prose-blockquote:[&_p:last-of-type]:after:content-none;
-}
-
-@utility code-inline {
-  @apply bg-muted/50 rounded-md border px-1.5 py-0.5 font-mono text-[0.8125rem] whitespace-pre-wrap in-data-table-nowrap:whitespace-nowrap;
-}
-
-@utility prose-no-margin {
-  & > :first-child {
-    @apply mt-0;
-  }
-
-  & > :last-child {
-    @apply mb-0;
-  }
-
-  :where(p):not(:where([class~='not-prose'], [class~='not-prose'] *)),
-  :where([data-rehype-pretty-code-figure]) {
-    @apply mt-3 mb-3;
-  }
-}
-
 @utility no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -311,6 +289,10 @@
   --selection-foreground: oklch(0.985 0 0);
   --surface: oklch(0.985 0 0);
   --surface-foreground: oklch(0.141 0.005 285.823);
+  --code: var(--background);
+  --code-foreground: var(--foreground);
+  --code-number: oklch(0.24 0.01 0 / 0.3);
+  --code-highlight: oklch(0.49 0.18 257.61 / 0.06);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
@@ -383,6 +365,10 @@
   --selection-foreground: oklch(0.141 0.005 285.823);
   --surface: oklch(0.21 0.006 285.885);
   --surface-foreground: oklch(0.985 0 0);
+  --code: var(--background);
+  --code-foreground: var(--foreground);
+  --code-number: oklch(0.43 0 0);
+  --code-highlight: oklch(0.71 0.24 42.36 / 0.06);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);

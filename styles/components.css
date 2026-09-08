@@ -1,0 +1,76 @@
+@utility prose-chef {
+  @apply prose-headings:tracking-tight prose-headings:text-balance prose-h2:font-semibold;
+  @apply prose-a:font-normal prose-a:wrap-break-word prose-a:text-foreground prose-a:link-underline;
+  @apply prose-code:rounded-md prose-code:border prose-code:bg-muted/50 prose-code:px-[0.3rem] prose-code:py-[0.2rem] prose-code:text-sm prose-code:font-normal prose-code:before:content-none prose-code:after:content-none;
+  @apply prose-strong:font-medium;
+  @apply prose-hr:border-border;
+  @apply prose-blockquote:border-s-2 prose-blockquote:font-normal prose-blockquote:text-muted-foreground prose-blockquote:not-italic prose-blockquote:[&_p:first-of-type]:before:content-none prose-blockquote:[&_p:last-of-type]:after:content-none;
+}
+
+@utility code-inline {
+  @apply bg-muted/50 rounded-md border px-1.5 py-0.5 font-mono text-[0.8125rem] whitespace-pre-wrap in-data-table-nowrap:whitespace-nowrap;
+}
+
+@utility prose-no-margin {
+  & > :first-child {
+    @apply mt-0;
+  }
+
+  & > :last-child {
+    @apply mb-0;
+  }
+
+  :where(p):not(:where([class~='not-prose'], [class~='not-prose'] *)),
+  :where([data-rehype-pretty-code-figure]) {
+    @apply mt-3 mb-3;
+  }
+}
+
+@layer components {
+  [data-rehype-pretty-code-figure] {
+    @apply bg-surface text-surface-foreground inset-ring-border/64 relative my-[1.25em] rounded-xl p-1 inset-ring-1;
+    @apply has-data-rehype-pretty-code-title:pt-0;
+
+    pre {
+      @apply no-scrollbar overflow-x-auto overscroll-x-contain py-4 outline-none;
+    }
+
+    code {
+      @apply min-w-full font-mono text-sm;
+    }
+
+    [data-line] {
+      @apply pr-(--code-padding-right,0) pl-4;
+    }
+  }
+
+  [data-line] span {
+    @apply text-(--shiki-light) dark:text-(--shiki-dark);
+  }
+
+  [data-rehype-pretty-code-title] {
+    @apply text-muted-foreground [&_svg]:text-muted-foreground flex items-center gap-3 py-2.5 pr-8.5 pl-3 font-mono text-sm [&_svg]:size-4 [&_svg]:shrink-0;
+  }
+
+  [data-line-numbers] {
+    counter-reset: line;
+  }
+
+  [data-line-numbers] [data-line] {
+    @apply pl-0;
+  }
+
+  [data-line-numbers] [data-line]::before {
+    counter-increment: line;
+    content: counter(line);
+    @apply bg-code text-code-number sticky left-0 z-1 inline-block w-16 pe-6 text-right text-sm;
+  }
+
+  [data-highlighted-line] {
+    @apply after:bg-code-highlight relative after:pointer-events-none after:absolute after:inset-0 after:z-2;
+  }
+
+  [data-highlighted-chars] {
+    @apply before:bg-code-highlight relative bg-transparent before:pointer-events-none before:absolute before:inset-0 before:rounded-sm;
+  }
+}
