@@ -3,6 +3,11 @@ import type { ComponentProps } from 'react';
 import { CopyButton } from '@/components/cheffolio/copy-button';
 import { cn } from '@/lib/utils';
 
+import { getIconExtension } from './extensions/get-icon';
+
+const copyButtonClassName =
+  "text-muted-foreground z-10 border-none [&_svg:not([class*='size-'])]:size-4";
+
 export const mdxCodeBlockComponents = {
   figure({ className, ...props }: ComponentProps<'figure'>) {
     const hasPrettyCode = 'data-rehype-pretty-code-figure' in props;
@@ -14,8 +19,40 @@ export const mdxCodeBlockComponents = {
       />
     );
   },
-  figcaption: ({ children, ...props }: ComponentProps<'figcaption'>) => {
-    return <figcaption {...props}>{children}</figcaption>;
+  figcaption: ({
+    children,
+    __rawString__,
+    ...props
+  }: ComponentProps<'figcaption'> & {
+    __rawString__?: string;
+  }) => {
+    const iconExtension =
+      'data-language' in props && typeof props['data-language'] === 'string'
+        ? getIconExtension(props['data-language'])
+        : null;
+
+    const hasCodeTitle =
+      'data-rehype-pretty-code-title' in props && typeof children === 'string';
+
+    return (
+      <figcaption {...props}>
+        {iconExtension}
+        {hasCodeTitle ? (
+          <span className="min-w-0 flex-1 truncate">{children}</span>
+        ) : (
+          children
+        )}
+        {__rawString__ && (
+          <CopyButton
+            data-slot="copy-button"
+            className={cn(copyButtonClassName, 'rounded-md')}
+            variant="ghost"
+            size="icon-xs"
+            text={__rawString__}
+          />
+        )}
+      </figcaption>
+    );
   },
   pre({
     __withMeta__,
@@ -27,7 +64,12 @@ export const mdxCodeBlockComponents = {
     __rawString__?: string;
   }) {
     return (
-      <div className="group/pre bg-code relative rounded-[10px] border">
+      <div
+        className={cn(
+          'group/pre bg-code rounded-[10px] border',
+          !__withMeta__ && 'relative'
+        )}
+      >
         <pre
           className={cn(
             __rawString__ && !__withMeta__ && '[--code-padding-right:6rem]',
@@ -36,13 +78,12 @@ export const mdxCodeBlockComponents = {
           {...props}
         />
 
-        {__rawString__ ? (
+        {__rawString__ && !__withMeta__ ? (
           <CopyButton
             data-slot="copy-button"
             className={cn(
-              "text-muted-foreground absolute top-2 right-2 z-10 rounded-[6px] border-none [&_svg:not([class*='size-'])]:size-4",
-              __withMeta__ && 'top-1.5 right-1.5 rounded-md',
-              !__withMeta__ && 'opacity-0 group-hover/pre:opacity-100'
+              copyButtonClassName,
+              'absolute top-2 right-2 opacity-0 group-hover/pre:opacity-100'
             )}
             variant="ghost"
             size="icon-xs"

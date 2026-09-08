@@ -19,7 +19,10 @@ export function Blog() {
   const rows = getRowCounts(blogPosts.length, 2);
 
   return (
-    <Panel id="blog" className="screen-line-bottom-none screen-line-top-none">
+    <Panel
+      id="blog"
+      className="screen-line-bottom-none screen-line-top-none -mt-px"
+    >
       <PanelHeader>
         <PanelTitle>
           Blog
@@ -27,7 +30,7 @@ export function Blog() {
         </PanelTitle>
       </PanelHeader>
 
-      <PanelContent className="decor-t px-0">
+      <PanelContent className="decor-t -mb-px px-0">
         <div className="pointer-events-none absolute inset-0 -z-1 grid grid-cols-1 gap-4 max-sm:hidden sm:grid-cols-2">
           <div className="border-border border-r"></div>
           <div className="border-border border-l"></div>

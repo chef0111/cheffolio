@@ -55,16 +55,28 @@ export function rehypeHighlightCodeRawString() {
           return;
         }
 
+        const firstChild = node.children.at(0);
         const preElement = node.children.at(-1);
         if (!preElement || preElement.tagName !== 'pre') {
           return;
         }
 
+        const withMeta = firstChild?.tagName === 'figcaption';
+
         preElement.properties = {
           ...preElement.properties,
-          __withMeta__: node.children.at(0)?.tagName === 'figcaption',
-          __rawString__: node.__rawString__,
+          __withMeta__: withMeta,
+          ...(!withMeta && node.__rawString__
+            ? { __rawString__: node.__rawString__ }
+            : {}),
         };
+
+        if (withMeta && firstChild) {
+          firstChild.properties = {
+            ...firstChild.properties,
+            __rawString__: node.__rawString__,
+          };
+        }
       }
     });
   };
