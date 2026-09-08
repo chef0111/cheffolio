@@ -19,7 +19,7 @@ const SORTED_AWARDS = [...AWARDS].sort((a, b) => {
 export function Awards() {
   return (
     <Panel id="awards" className="screen-line-bottom-none screen-line-top-none">
-      <PanelHeader className="-mt-px">
+      <PanelHeader className="-mb-px">
         <PanelTitle>
           Honors & Awards
           <PanelTitleSup>({AWARDS.length})</PanelTitleSup>

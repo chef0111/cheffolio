@@ -1,4 +1,4 @@
-import { cacheLife, cacheTag } from 'next/cache';
+import { cacheLife } from 'next/cache';
 
 import type { Activity } from '@/components/kibo-ui/contribution-graph';
 import { GITHUB_PROFILE } from '@/config/site';
@@ -40,14 +40,13 @@ const normalizeContributions = (value: unknown): Activity[] => {
 
 export const getGitHubContributions = async () => {
   'use cache';
-
-  cacheTag('github-contributions');
   cacheLife({
-    revalidate: 3600, // Cache for 1 hour
+    stale: 3600,
+    revalidate: 24 * 3600,
   });
 
   if (!process.env.GITHUB_CONTRIBUTIONS_API) {
-    return [];
+    throw new Error('GITHUB_CONTRIBUTIONS_API is missing');
   }
 
   try {

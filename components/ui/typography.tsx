@@ -16,10 +16,7 @@ function Prose({
     props: mergeProps<'div'>(
       {
         'data-slot': 'prose',
-        className: cn(
-          'prose max-w-none prose-chef prose-zinc dark:prose-invert',
-          className
-        ),
+        className: cn('typeset max-w-none', className),
       } as React.ComponentProps<'div'>,
       props
     ),
@@ -31,10 +28,7 @@ function ProseMono({
   ...props
 }: React.ComponentProps<typeof Prose>) {
   return (
-    <Prose
-      className={cn('prose-sm text-foreground font-mono', className)}
-      {...props}
-    />
+    <Prose className={cn('text-foreground font-mono', className)} {...props} />
   );
 }
 
@@ -44,7 +38,7 @@ function Code({ className, ...props }: React.ComponentProps<'code'>) {
   return (
     <code
       data-slot={isCodeBlock ? 'code-block' : 'code-inline'}
-      className={cn(!isCodeBlock && 'not-prose code-inline', className)}
+      className={className}
       {...props}
     />
   );
@@ -73,7 +67,7 @@ function Heading<T extends HeadingTypes = 'h1'>({
     >
       <a
         href={`#${props.id}`}
-        className="peer not-prose"
+        className="peer not-typeset"
         title="Link to section"
       >
         {props.children}

@@ -4,6 +4,13 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
   reactCompiler: true,
+  experimental: {
+    instantInsights: {
+      validationLevel: 'manual-warning',
+    },
+    optimizePackageImports: ['lucide-react'],
+  },
+  transpilePackages: ['next-mdx-remote'],
   images: {
     remotePatterns: [
       {
@@ -11,8 +18,44 @@ const nextConfig: NextConfig = {
         hostname: 'assets.giabao.dev',
         port: '',
       },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        port: '',
+      },
     ],
     qualities: [100, 75],
+  },
+  async redirects() {
+    return [
+      {
+        source: '/:section(blog)/:slug.mdx',
+        destination: '/:section/:slug.md',
+        permanent: true,
+      },
+    ];
+  },
+  async rewrites() {
+    return {
+      // beforeFiles so these run before prerendered pages are served;
+      beforeFiles: [
+        {
+          source: '/:section(blog)/:slug.md',
+          destination: '/blog.md/:slug',
+        },
+        {
+          source: '/:section(blog)/:slug',
+          destination: '/blog.md/:slug',
+          has: [
+            {
+              type: 'header',
+              key: 'accept',
+              value: '(?<accept>.*text/markdown.*)',
+            },
+          ],
+        },
+      ],
+    };
   },
 };
 

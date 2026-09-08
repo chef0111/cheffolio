@@ -64,8 +64,8 @@ export function EmailItem({ email }: EmailItemProps) {
           className="text-muted-foreground bg-transparent"
           variant="ghost"
           size="icon-xs"
-          content={isClient ? emailDecoded : '[Email protected]'}
-          onCopiedChange={() => {
+          text={emailDecoded}
+          onCopySuccess={() => {
             trigger('success');
           }}
         />

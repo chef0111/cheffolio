@@ -90,10 +90,10 @@ export default function BlogsPage() {
         ])}
       />
 
-      <div className="flex flex-1 flex-col">
-        <PageHeading className="pt-24">
+      <div className="mx-auto flex flex-1 flex-col md:max-w-4xl">
+        <PageHeading className="-mt-px pt-24">
           <PageHeadingTagline>{title}</PageHeadingTagline>
-          <PageHeadingTitle className="decor-all screen-line-bottom-none">
+          <PageHeadingTitle className="decor-all screen-line-bottom-none -my-px">
             {description}
           </PageHeadingTitle>
         </PageHeading>
@@ -109,9 +109,8 @@ export default function BlogsPage() {
         <Suspense fallback={<BlogList blogs={blogPosts} />}>
           <BlogListFiltered blogs={blogPosts} />
         </Suspense>
+        <StripeSeparator />
       </div>
-
-      <StripeSeparator />
     </>
   );
 }

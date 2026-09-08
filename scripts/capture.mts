@@ -25,7 +25,7 @@ const SIZE = {
 
 type Theme = 'light' | 'dark';
 type Size = keyof typeof SIZE;
-type ScreenshotType = 'webp' | 'png';
+type ScreenshotType = 'webp' | 'jpeg';
 
 type CaptureJob = {
   name: string;
@@ -62,7 +62,7 @@ const JOBS = [
     path: '/og',
     size: 'ogImage',
     themes: ['dark'],
-    type: 'png',
+    type: 'jpeg',
   },
 ] as const satisfies readonly CaptureJob[];
 
@@ -129,7 +129,7 @@ async function downscaleToDefinedSize(
 
   let buffer: Buffer;
   switch (type) {
-    case 'png':
+    case 'jpeg':
       buffer = await pipeline.png().toBuffer();
       break;
     case 'webp':
@@ -185,7 +185,7 @@ async function captureScreenshot({
     await page.screenshot({
       path: filePath,
       type: job.type,
-      quality: job.type !== 'png' ? 90 : undefined,
+      quality: job.type !== 'jpeg' ? 90 : undefined,
     });
 
     if (DPR > 1) {

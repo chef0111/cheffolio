@@ -34,7 +34,7 @@ export default function Page() {
         <ProfileHeader />
         <Overview />
         <SocialLinks />
-        <StripeSeparator />
+        <StripeSeparator className="-mb-px" />
 
         <About />
         <StripeSeparator />
