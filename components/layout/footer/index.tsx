@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 
 import { Brand } from '@/components/cheffolio/brand';
 import { PanelContent } from '@/components/cheffolio/panel';
-import { GitHubIcon, LinkedinIcon, XIcon } from '@/components/icons';
+import { GitHubIcon, LinkedInIcon, XIcon } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import { FOOTER_SLOGAN, GITHUB_REPO_URL, UTM_PARAMS } from '@/config/site';
 import { USER } from '@/features/portfolio/data/user';
@@ -25,7 +25,7 @@ export function SiteFooter() {
                   size="icon-sm"
                   variant="ghost"
                   aria-label={label}
-                  className="text-muted-foreground hover:text-foreground"
+                  className="text-muted-foreground hover:text-foreground group/social"
                   render={
                     <a
                       href={href}
@@ -97,6 +97,8 @@ const socialLinks = [
   {
     href: addQueryParams(USER.socialLinks.linkedin, UTM_PARAMS),
     label: 'Linkedin',
-    icon: <LinkedinIcon />,
+    icon: (
+      <LinkedInIcon className="fill-muted-foreground! group-hover/social:fill-foreground!" />
+    ),
   },
 ];

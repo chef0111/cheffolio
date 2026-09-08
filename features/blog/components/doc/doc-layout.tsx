@@ -18,7 +18,7 @@ export function DocGrid({ className, ...props }: React.ComponentProps<'div'>) {
     <div
       data-slot="doc-grid"
       className={cn(
-        'mx-auto grid w-full grid-cols-1 lg:grid-cols-[1fr_var(--container-3xl)_1fr]',
+        'mx-auto grid w-full grid-cols-1 lg:grid-cols-[1fr_var(--container-4xl)_1fr]',
         className
       )}
       {...props}

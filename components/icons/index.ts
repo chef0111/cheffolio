@@ -1,6 +1,7 @@
 export * from './chevron-down-icon';
 export * from './chevrons-down-up-icon';
 export * from './claude';
+export * from './facebook';
 export * from './github';
 export * from './javascript';
 export * from './linkedin';

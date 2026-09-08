@@ -101,7 +101,7 @@ function TOCList() {
   const items = useItems();
 
   return (
-    <ul className="flex size-full flex-col px-6 py-4 text-sm">
+    <ul className="flex size-full flex-col px-4 py-2 text-sm">
       {items.map((item) => (
         <li key={item.id} className="flex py-1">
           <a

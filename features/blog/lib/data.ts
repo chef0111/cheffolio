@@ -52,3 +52,18 @@ export const getAllBlogs = cache(() => {
 export function getBlogBySlug(slug: string) {
   return getAllBlogs().find((blog) => blog.slug === slug);
 }
+
+export function findNeighbour(blogs: Blog[], slug: string) {
+  const len = blogs.length;
+
+  for (let i = 0; i < len; ++i) {
+    if (blogs[i].slug === slug) {
+      return {
+        previous: i > 0 ? blogs[i - 1] : null,
+        next: i < len - 1 ? blogs[i + 1] : null,
+      };
+    }
+  }
+
+  return { previous: null, next: null };
+}

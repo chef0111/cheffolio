@@ -157,8 +157,8 @@ export function ViewOptions({ markdownUrl }: { markdownUrl: string }) {
       />
       <DropdownMenuContent
         className="w-fit"
-        align="start"
-        alignOffset={-6}
+        align="end"
+        alignOffset={-5}
         finalFocus={false}
       >
         {items.map(({ title, href, icon: Icon }) => (
