@@ -11,7 +11,7 @@ const ScrollToTop = dynamic(() =>
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="group/layout relative isolate flex min-h-dvh flex-col overflow-hidden">
+    <div className="group/layout relative isolate flex min-h-dvh flex-col overflow-x-clip">
       <SiteHeader />
       <main className="flex w-full max-w-screen flex-1 flex-col overflow-x-clip px-2">
         {children}

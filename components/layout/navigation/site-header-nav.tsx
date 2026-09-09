@@ -1,6 +1,5 @@
 'use client';
 
-import { FullWidthDivider } from '@/components/cheffolio/full-width-divider';
 import { useScroll } from '@/hooks/use-scroll';
 import { cn } from '@/lib/utils';
 
@@ -10,9 +9,9 @@ export function SiteHeaderNav({ children }: { children?: React.ReactNode }) {
   return (
     <header
       className={cn(
-        'border-b-border border-x-border bg-background fixed top-0 left-1/2 z-100 mx-auto w-full max-w-4xl -translate-x-1/2 rounded-b-none border border-t-transparent transition-all ease-out [@media(max-width:896px)]:max-w-[calc(100%-1rem)]',
+        'border-x-border screen-line-top screen-line-bottom bg-background sticky top-0 z-100 mx-auto -mb-(--header-height) w-full max-w-4xl shrink-0 rounded-b-none border border-y-transparent transition-all ease-out [@media(max-width:896px)]:max-w-[calc(100%-1rem)]',
         {
-          'border-border bg-background/95 supports-backdrop-filter:bg-background/50 top-2 rounded-md shadow backdrop-blur-md [@media(max-width:896px)]:max-w-[calc(100%-2rem)] [@media(min-width:896px)]:max-w-[calc(var(--container-4xl)-1rem)]':
+          'border-border bg-background/95 screen-line-top-none screen-line-bottom-none supports-backdrop-filter:bg-background/50 top-2 rounded-md shadow backdrop-blur-md [@media(max-width:896px)]:max-w-[calc(100%-2rem)] [@media(min-width:896px)]:max-w-[calc(var(--container-4xl)-1rem)]':
             scrolled,
         }
       )}
@@ -28,9 +27,6 @@ export function SiteHeaderNav({ children }: { children?: React.ReactNode }) {
       >
         {children}
       </nav>
-      <FullWidthDivider
-        className={cn('transition-none', { hidden: scrolled })}
-      />
     </header>
   );
 }
