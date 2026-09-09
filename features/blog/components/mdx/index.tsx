@@ -7,7 +7,6 @@ import rehypeSlug from 'rehype-slug';
 import remarkCodeImport from 'remark-code-import';
 import remarkGfm from 'remark-gfm';
 
-import { FramedImage } from '@/components/cheffolio/embed';
 import { Code, Heading } from '@/components/ui/typography';
 import { UTM_PARAMS } from '@/config/site';
 import { rehypeAddQueryParams } from '@/lib/rehype-add-query-params';
@@ -17,6 +16,7 @@ import {
   rehypeHighlightCodeRawString,
 } from '@/lib/rehype-code-block';
 
+import { FramedImage } from './embed';
 import { mdxCodeBlockComponents } from './mdx-code-block';
 
 const components: MDXRemoteProps['components'] = {

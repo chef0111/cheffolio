@@ -6,8 +6,7 @@ export function FramedImage({
 }: React.ComponentProps<'img'> & {
   canZoom?: boolean;
 }) {
-  // eslint-disable-next-line jsx-a11y/alt-text
-  const image = <img {...props} />;
+  const image = <img alt={props.alt} {...props} />;
 
   return (
     <figure className="relative [&_img]:rounded-lg">
