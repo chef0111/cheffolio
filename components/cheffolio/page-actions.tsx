@@ -25,7 +25,7 @@ import type { CopyState } from '@/hooks/use-copy';
 
 const cache = new Map<string, string>();
 
-export function LLMCopyButton({ markdownUrl }: { markdownUrl: string }) {
+export function MDCopyButton({ markdownUrl }: { markdownUrl: string }) {
   const [state, setState] = React.useState<CopyState>('idle');
   const [isCopying, setIsCopying] = React.useState(false);
   const operationRef = React.useRef(false);
@@ -94,11 +94,9 @@ function getPrompt(url: string) {
 }
 
 function getGitHubSourceUrl(markdownUrl: string) {
-  const fileName = markdownUrl
-    .replace(/^\/blog\//, '')
-    .replace(/\.md$/, '.mdx');
+  const fileName = markdownUrl.replace(/^\//, '').replace(/\.md$/, '.mdx');
 
-  return `https://github.com/chef0111/cheffolio/blob/main/features/blog/content/${fileName}`;
+  return `https://github.com/chef0111/cheffolio/blob/main/docs/${fileName}`;
 }
 
 export function ViewOptions({ markdownUrl }: { markdownUrl: string }) {
@@ -177,10 +175,10 @@ export function ViewOptions({ markdownUrl }: { markdownUrl: string }) {
   );
 }
 
-export function LLMCopyButtonGroup({ markdownUrl }: { markdownUrl: string }) {
+export function MDCopyButtonGroup({ markdownUrl }: { markdownUrl: string }) {
   return (
     <ButtonGroup>
-      <LLMCopyButton markdownUrl={markdownUrl} />
+      <MDCopyButton markdownUrl={markdownUrl} />
       <ButtonGroupSeparator orientation="vertical" />
       <ViewOptions markdownUrl={markdownUrl} />
     </ButtonGroup>

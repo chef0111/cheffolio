@@ -5,19 +5,17 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
 import { Brand, BrandMark } from '@/components/cheffolio/brand';
-import { useMediaQuery } from '@/hooks/use-media-query';
 
-const calcDistance = (el: HTMLElement, mobile: boolean) => {
+const calcDistance = (el: HTMLElement) => {
   const rect = el.getBoundingClientRect();
   const scrollTop = document.documentElement.scrollTop;
-  const headerHeight = mobile ? 56 : 58;
+  const headerHeight = 65;
   return scrollTop + rect.top + rect.height - headerHeight;
 };
 
 function BrandMotion() {
   const { scrollY } = useScroll();
   const [visible, setVisible] = useState(false);
-  const mobile = useMediaQuery('(max-width: 640px)');
   const distanceRef = useRef(160);
 
   useMotionValueEvent(scrollY, 'change', (latestValue) => {
@@ -28,17 +26,17 @@ function BrandMotion() {
     const coverMark = document.getElementById('js-cover-mark');
     if (!coverMark) return;
 
-    distanceRef.current = calcDistance(coverMark, mobile);
+    distanceRef.current = calcDistance(coverMark);
 
     const resizeObserver = new ResizeObserver(() => {
-      distanceRef.current = calcDistance(coverMark, mobile);
+      distanceRef.current = calcDistance(coverMark);
     });
     resizeObserver.observe(coverMark);
 
     return () => {
       resizeObserver.disconnect();
     };
-  }, [mobile]);
+  }, []);
 
   return (
     <div data-visible={visible} className="group/motion relative">

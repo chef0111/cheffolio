@@ -5,23 +5,23 @@ import { remark } from 'remark';
 import remarkGfm from 'remark-gfm';
 import remarkMdx from 'remark-mdx';
 
-import type { Blog } from '../types/blog';
+import type { Doc } from '@/types/document';
 
 const processor = remark().use(remarkMdx).use(remarkGfm).use(remarkHeading);
 
-export async function getMarkdownText(blog: Blog) {
+export async function getMarkdownText(doc: Doc) {
   'use cache';
   cacheLife('max');
 
   const processed = await processor.process({
-    value: blog.content,
+    value: doc.content,
   });
 
-  return `# ${blog.metadata.title}
+  return `# ${doc.metadata.title}
 
-${blog.metadata.description}
+${doc.metadata.description}
 
 ${processed.value}
 
-Last updated on ${format(new Date(blog.metadata.updatedAt), 'MMMM d, yyyy')}`;
+Last updated on ${format(new Date(doc.metadata.updatedAt), 'MMMM d, yyyy')}`;
 }

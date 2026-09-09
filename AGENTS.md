@@ -19,7 +19,7 @@ Next.js 16 (App Router) portfolio, blog, and shadcn registry website.
 
 All content lives in `src/features/blog/content/` as MDX files.
 
-- **Data layer**: `src/features/blog/lib/data.ts` (`getAllBlogs`, `getBlogBySlug`)
+- **Data layer**: `src/features/blog/lib/data.ts` (`getAllDocs`, `getDocBySlug`)
 - **Blog UI**: `src/features/blog/components/`
 - **Portfolio UI**: `src/features/portfolio/components/`
 - **Projects UI**: `src/features/projects/components/`

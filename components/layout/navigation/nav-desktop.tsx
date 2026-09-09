@@ -52,7 +52,7 @@ function NavItem({ className, ...props }: React.ComponentProps<typeof Link>) {
   return (
     <Link
       className={cn(
-        'text-muted-foreground hover:text-foreground aria-[current=page]:text-foreground text-sm font-medium tracking-wide transition-[color]',
+        'text-muted-foreground hover:text-foreground aria-[current=page]:text-foreground font-medium tracking-wide transition-[color]',
         className
       )}
       {...props}

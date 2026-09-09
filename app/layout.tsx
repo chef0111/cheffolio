@@ -155,7 +155,7 @@ export default function RootLayout({
           <ProgressProvider
             color="var(--foreground)"
             height="2px"
-            delay={500}
+            delay={300}
             options={{ showSpinner: false }}
           >
             <CommandMenuProvider>

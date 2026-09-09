@@ -1,4 +1,4 @@
-export type BlogMetadata = {
+export type DocMetadata = {
   title: string;
   description: string;
   /**
@@ -6,6 +6,12 @@ export type BlogMetadata = {
    * Use an absolute URL or a path under /public. Recommended size: 1200x630.
    */
   image?: string;
+  /**
+   * Category identifier, derived from the doc's content subfolder
+   * (e.g. `content/blog/*` → "blog"). Not declared in frontmatter;
+   * injected when docs are read. Used for filtering (see getDocsByCategory).
+   */
+  category?: string;
   /** Flag to show a "New" badge/highlight in the UI. */
   new?: boolean;
   updated?: boolean;
@@ -17,9 +23,9 @@ export type BlogMetadata = {
   updatedAt: string;
 };
 
-export type Blog = {
+export type Doc = {
   /** Parsed frontmatter metadata from the MDX file. */
-  metadata: BlogMetadata;
+  metadata: DocMetadata;
   /** Slug derived from the MDX filename (without extension). */
   slug: string;
   /** MDX content body without frontmatter. */
@@ -30,7 +36,7 @@ export type Blog = {
  * Minimal blog data for client components that don't need the full content.
  * Reduces serialization overhead and bundle size.
  */
-export type BlogPreview = {
+export type DocPreview = {
   slug: string;
   title: string;
   category?: string;

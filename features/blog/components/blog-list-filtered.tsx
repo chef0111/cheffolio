@@ -1,7 +1,7 @@
 'use client';
 
+import type { Blog } from '../../../types/document';
 import { useFilteredBlogs } from '../hooks/use-filtered-blogs';
-import type { Blog } from '../types/blog';
 import { BlogList, BlogListEmpty, BlogListNoResults } from './blog-list';
 
 export function BlogListFiltered({ blogs }: { blogs: Blog[] }) {

@@ -12,7 +12,7 @@ import {
 import { cn } from '@/lib/utils';
 import { getRowCounts } from '@/utils/grid';
 
-import type { Blog } from '../types/blog';
+import type { Blog } from '../../../types/document';
 import { BlogItem } from './blog-item';
 
 const DESKTOP_COLS = 2;

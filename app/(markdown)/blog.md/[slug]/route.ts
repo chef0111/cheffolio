@@ -1,11 +1,11 @@
 import { cacheLife } from 'next/cache';
 import { notFound } from 'next/navigation';
 
-import { getAllBlogs, getBlogBySlug } from '@/features/blog/lib/data';
-import { getMarkdownText } from '@/features/blog/lib/get-md-text';
+import { getAllDocs, getDocBySlug } from '@/lib/document';
+import { getMarkdownText } from '@/lib/get-md-text';
 
 export function generateStaticParams() {
-  return getAllBlogs().map((blog) => ({
+  return getAllDocs().map((blog) => ({
     slug: blog.slug,
   }));
 }
@@ -14,10 +14,10 @@ async function getCachedMarkdown(slug: string) {
   'use cache';
   cacheLife('max');
 
-  const post = getBlogBySlug(slug);
-  if (!post) return null;
+  const blog = getDocBySlug(slug);
+  if (!blog) return null;
 
-  return getMarkdownText(post);
+  return getMarkdownText(blog);
 }
 
 export async function GET(

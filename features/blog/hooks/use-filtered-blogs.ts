@@ -1,4 +1,7 @@
-import type { Blog } from '../types/blog';
+'use client';
+
+import type { Blog } from '@/types/document';
+
 import { useSearchQuery } from './use-search-query';
 
 const normalize = (text: string) => text.toLowerCase().replaceAll(' ', '');
