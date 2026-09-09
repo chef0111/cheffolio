@@ -16,11 +16,11 @@ const categories = Object.entries(groupByCategory(TECH_STACK));
 export function TechStack() {
   return (
     <Panel id={ID} className="screen-line-bottom-none screen-line-top-none">
-      <PanelHeader>
+      <PanelHeader className="decor-b">
         <PanelTitle>Tech Stack</PanelTitle>
       </PanelHeader>
 
-      <PanelContent className="decor-all p-0 [--badge-height:--spacing(6)] [--col-left-width:--spacing(48)]">
+      <PanelContent className="p-0 [--badge-height:--spacing(6)] [--col-left-width:--spacing(48)]">
         <ul>
           <div
             className="pointer-events-none absolute inset-y-0 left-(--col-left-width) -z-1 w-px bg-[linear-gradient(to_bottom,var(--line)_4px,transparent_2px)] bg-size-[1px_6px] bg-repeat-y max-sm:hidden"

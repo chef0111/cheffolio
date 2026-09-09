@@ -19,14 +19,14 @@ const SORTED_AWARDS = [...AWARDS].sort((a, b) => {
 export function Awards() {
   return (
     <Panel id="awards" className="screen-line-bottom-none screen-line-top-none">
-      <PanelHeader>
+      <PanelHeader className="decor-b">
         <PanelTitle>
           Honors & Awards
           <PanelTitleSup>({AWARDS.length})</PanelTitleSup>
         </PanelTitle>
       </PanelHeader>
 
-      <PanelContent className="decor-t p-0">
+      <PanelContent className="p-0">
         <CollapsibleList
           items={SORTED_AWARDS}
           max={3}

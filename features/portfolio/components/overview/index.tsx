@@ -25,7 +25,7 @@ import { ResumeItem } from './resume-item';
 
 export function Overview() {
   return (
-    <Panel className="decor-all screen-line-bottom-none">
+    <Panel className="decor-t screen-line-bottom-none">
       <h2 className="sr-only">Profile overview</h2>
 
       <PanelContent className="space-y-2.5">

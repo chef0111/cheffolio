@@ -16,14 +16,14 @@ export function Projects() {
       id="projects"
       className="screen-line-bottom-none screen-line-top-none"
     >
-      <PanelHeader>
+      <PanelHeader className="decor-b">
         <PanelTitle>
           Projects
           <PanelTitleSup>({PROJECTS.length})</PanelTitleSup>
         </PanelTitle>
       </PanelHeader>
 
-      <PanelContent className="decor-t flow-root p-0">
+      <PanelContent className="flow-root p-0">
         <CollapsibleList
           items={PROJECTS}
           max={3}

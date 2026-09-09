@@ -17,11 +17,11 @@ export function Experiences() {
       id="experience"
       className="screen-line-bottom-none screen-line-top-none"
     >
-      <PanelHeader>
+      <PanelHeader className="decor-b">
         <PanelTitle>Experience</PanelTitle>
       </PanelHeader>
 
-      <PanelContent className="decor-t p-0">
+      <PanelContent className="p-0">
         <div>
           {EXPERIENCES.map((experience, index) => (
             <React.Fragment key={experience.id}>
