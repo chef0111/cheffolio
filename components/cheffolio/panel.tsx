@@ -76,8 +76,14 @@ function PanelDecor({
       className={cn(panelDecorVariants({ position }), className)}
       {...props}
     >
-      <PlusIcon className="stroke-background absolute size-7 stroke-5" />
-      <PlusIcon className="stroke-border relative size-full stroke-[1.5]" />
+      <PlusIcon
+        data-slot="panel-plus-background"
+        className="stroke-background absolute size-7 stroke-5"
+      />
+      <PlusIcon
+        data-slot="panel-plus-icon"
+        className="stroke-muted-foreground/30 relative size-full stroke-[1.5]"
+      />
     </span>
   );
 }
