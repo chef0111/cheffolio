@@ -4,12 +4,12 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-  "relative group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none selection:bg-transparent selection:text-foreground [-webkit-touch-callout:none] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:scale-95 sm:active:scale-97 data-[slot=command-menu-trigger]:active:text-foreground data-[slot=command-menu-trigger]:data-pressed:text-foreground disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 ",
+  "@container-normal relative group/button isolate inline-flex shrink-0 items-center overflow-hidden justify-center rounded-md border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none selection:bg-transparent selection:text-foreground [-webkit-touch-callout:none] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:scale-95 sm:active:scale-97 data-[slot=command-menu-trigger]:active:text-foreground data-[slot=command-menu-trigger]:data-pressed:text-foreground disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 ",
   {
     variants: {
       variant: {
         default:
-          'bg-[linear-gradient(to_bottom,color-mix(in_srgb,var(--accent-foreground)_80%,transparent),var(--primary-accent))] dark:bg-[linear-gradient(to_top,var(--primary),var(--primary-accent))] ring-primary ring-1 border-none dark:ring-ring text-primary-foreground shadow-none',
+          "bg-primary bg-clip-border bg-[linear-gradient(to_bottom,var(--color-zinc-700),var(--primary-accent))] dark:bg-[linear-gradient(to_bottom,var(--primary),var(--primary-accent))] border-primary border dark:border-ring text-primary-foreground shadow-none before:absolute before:inset-0 before:-z-1 before:content-[''] before:[clip-path:inset(1.5px_round_calc(var(--btn-radius)-1.5px))] before:bg-linear-to-b before:from-primary before:to-primary-accent  before:transition-all dark:before:bg-none dark:before:bg-primary-accent",
         outline:
           'border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50',
         secondary:
