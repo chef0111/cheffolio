@@ -10,9 +10,9 @@ import {
   EmptyTitle,
 } from '@/components/ui/empty';
 import { cn } from '@/lib/utils';
+import type { Doc } from '@/types/document';
 import { getRowCounts } from '@/utils/grid';
 
-import type { Blog } from '../../../types/document';
 import { BlogItem } from './blog-item';
 
 const DESKTOP_COLS = 2;
@@ -41,7 +41,7 @@ export function BlogList({
   blogs,
   empty = <BlogListEmpty />,
 }: {
-  blogs: Blog[];
+  blogs: Doc[];
   empty?: React.ReactNode;
 }) {
   const rows = getRowCounts(blogs.length, DESKTOP_COLS);
