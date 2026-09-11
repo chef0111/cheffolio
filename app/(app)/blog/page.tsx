@@ -16,7 +16,7 @@ import { BlogList } from '@/features/blog/components/blog-list';
 import { BlogListFiltered } from '@/features/blog/components/blog-list-filtered';
 import { BlogSearchInput } from '@/features/blog/components/blog-search-input';
 import { SearchInput } from '@/features/blog/components/search-input';
-import { getAllDocs } from '@/lib/document';
+import { getBlogPosts } from '@/lib/document';
 import { absoluteUrl } from '@/lib/utils';
 
 const title = 'Blog';
@@ -71,7 +71,7 @@ function getBlogJsonLd(
 }
 
 export default function BlogsPage() {
-  const blogPosts = getAllDocs();
+  const blogPosts = getBlogPosts();
 
   return (
     <>

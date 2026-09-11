@@ -23,6 +23,12 @@ function readMDXFile(filePath: string) {
   return parseFrontmatter(rawContent);
 }
 
+/**
+ * Reads MDX docs from `dir`, grouping them by their immediate subfolder.
+ * The subfolder name is the doc's category (e.g. `docs/blogs/*.mdx`
+ * yields docs with `category: "blogs"`), so category is derived from the
+ * file location rather than declared in frontmatter.
+ */
 function getMDXData(dir: string) {
   const categoryDirs = fs
     .readdirSync(dir, { withFileTypes: true })
@@ -64,6 +70,17 @@ export function getDocBySlug(slug: string) {
 
 export function getDocsByCategory(category: string) {
   return getAllDocs().filter((doc) => doc.metadata?.category === category);
+}
+
+export const BLOG_CATEGORY = 'blog';
+export const RESUME_CATEGORY = 'resume';
+
+export function getBlogPosts() {
+  return getDocsByCategory(BLOG_CATEGORY);
+}
+
+export function getResumeDoc() {
+  return getDocsByCategory(RESUME_CATEGORY);
 }
 
 export function findNeighbour(docs: Doc[], slug: string) {

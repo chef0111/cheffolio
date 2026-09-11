@@ -1,23 +1,21 @@
 import { cacheLife } from 'next/cache';
 import { notFound } from 'next/navigation';
 
-import { getAllDocs, getDocBySlug } from '@/lib/document';
-import { getMarkdownText } from '@/lib/get-md-text';
+import { getAllDocs } from '@/lib/document';
+import { processMdxForLLMs } from '@/lib/process-mdx';
 
 export function generateStaticParams() {
-  return getAllDocs().map((blog) => ({
-    slug: blog.slug,
+  return getAllDocs().map((doc) => ({
+    slug: doc.slug,
   }));
 }
 
-async function getCachedMarkdown(slug: string) {
+async function getCachedDoc(slug: string) {
   'use cache';
   cacheLife('max');
 
-  const blog = getDocBySlug(slug);
-  if (!blog) return null;
-
-  return getMarkdownText(blog);
+  const allDocs = getAllDocs();
+  return allDocs.find((doc) => doc.slug === slug);
 }
 
 export async function GET(
@@ -25,13 +23,13 @@ export async function GET(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params;
-  const markdown = await getCachedMarkdown(slug);
+  const doc = await getCachedDoc(slug);
 
-  if (!markdown) {
+  if (!doc) {
     notFound();
   }
 
-  return new Response(markdown, {
+  return new Response(await processMdxForLLMs(doc), {
     headers: {
       'Content-Type': 'text/markdown;charset=utf-8',
     },

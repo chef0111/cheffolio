@@ -9,7 +9,7 @@ import type { Doc } from '@/types/document';
 
 const processor = remark().use(remarkMdx).use(remarkGfm).use(remarkHeading);
 
-export async function getMarkdownText(doc: Doc) {
+export async function processMdxForLLMs(doc: Doc) {
   'use cache';
   cacheLife('max');
 
