@@ -11,11 +11,11 @@ import {
 } from '@/components/cheffolio/panel';
 import { Button } from '@/components/ui/button';
 import { BlogItem } from '@/features/blog/components/blog-item';
-import { getAllBlogs } from '@/features/blog/lib/data';
+import { getBlogPosts } from '@/lib/document';
 import { getRowCounts } from '@/utils/grid';
 
 export function Blog() {
-  const blogPosts = getAllBlogs();
+  const blogPosts = getBlogPosts();
   const rows = getRowCounts(blogPosts.length, 2);
 
   return (
@@ -27,10 +27,10 @@ export function Blog() {
         </PanelTitle>
       </PanelHeader>
 
-      <PanelContent className="px-0">
+      <PanelContent className="relative px-0">
         <div className="pointer-events-none absolute inset-0 -z-1 grid grid-cols-1 gap-4 max-sm:hidden sm:grid-cols-2">
-          <div className="border-border border-r"></div>
-          <div className="border-border border-l"></div>
+          <div className="border-border border-r" />
+          <div className="border-border border-l" />
         </div>
 
         <GridDivider className="gap-4 max-sm:hidden" rows={rows} />

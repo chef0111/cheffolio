@@ -1,3 +1,5 @@
+'use client';
+
 import { debounce, useQueryState } from 'nuqs';
 
 export function useSearchQuery() {

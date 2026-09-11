@@ -47,13 +47,16 @@ export function TOCInline({
       </CollapsibleTrigger>
 
       <CollapsibleContent>
-        <ul className="flex flex-col px-4 pb-2">
+        <ul className="flex flex-col px-2 pb-2">
           {items.map((item) => (
-            <li key={item.url} className="flex py-1">
+            <li
+              key={item.url}
+              className="hover:bg-muted group/toc-item flex rounded-md px-2 py-1 transition-colors"
+            >
               <Link
                 href={item.url}
                 data-depth={item.depth}
-                className="text-muted-foreground hover:text-accent-foreground text-sm transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-8"
+                className="text-muted-foreground group-hover/toc-item:text-accent-foreground w-full text-sm data-[depth=3]:pl-4 data-[depth=4]:pl-8"
               >
                 {item.title}
               </Link>

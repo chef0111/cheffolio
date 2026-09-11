@@ -29,7 +29,7 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
-        source: '/:section(blog)/:slug.mdx',
+        source: '/:section(blog|resume)/:slug.mdx',
         destination: '/:section/:slug.md',
         permanent: true,
       },
@@ -40,12 +40,12 @@ const nextConfig: NextConfig = {
       // beforeFiles so these run before prerendered pages are served;
       beforeFiles: [
         {
-          source: '/:section(blog)/:slug.md',
-          destination: '/blog.md/:slug',
+          source: '/:section(blog|resume)/:slug.md',
+          destination: '/doc.md/:slug',
         },
         {
-          source: '/:section(blog)/:slug',
-          destination: '/blog.md/:slug',
+          source: '/:section(blog|resume)/:slug',
+          destination: '/doc.md/:slug',
           has: [
             {
               type: 'header',

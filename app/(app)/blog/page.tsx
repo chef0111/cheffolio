@@ -16,7 +16,7 @@ import { BlogList } from '@/features/blog/components/blog-list';
 import { BlogListFiltered } from '@/features/blog/components/blog-list-filtered';
 import { BlogSearchInput } from '@/features/blog/components/blog-search-input';
 import { SearchInput } from '@/features/blog/components/search-input';
-import { getAllBlogs } from '@/features/blog/lib/data';
+import { getBlogPosts } from '@/lib/document';
 import { absoluteUrl } from '@/lib/utils';
 
 const title = 'Blog';
@@ -71,7 +71,7 @@ function getBlogJsonLd(
 }
 
 export default function BlogsPage() {
-  const blogPosts = getAllBlogs();
+  const blogPosts = getBlogPosts();
 
   return (
     <>
@@ -93,7 +93,7 @@ export default function BlogsPage() {
       <div className="mx-auto flex flex-1 flex-col md:max-w-4xl">
         <PageHeading className="pt-24">
           <PageHeadingTagline>{title}</PageHeadingTagline>
-          <PageHeadingTitle className="decor-t screen-line-bottom-none -my-px">
+          <PageHeadingTitle className="decor-t screen-line-bottom-none">
             {description}
           </PageHeadingTitle>
         </PageHeading>

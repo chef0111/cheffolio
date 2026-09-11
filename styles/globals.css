@@ -327,7 +327,7 @@
     1 100%
   );
 
-  --header-height: --spacing(12);
+  --header-height: --spacing(14);
   --fade-top-height: --spacing(24);
   --fade-bottom-height: --spacing(24);
   --separator-height: --spacing(8);
@@ -346,8 +346,8 @@
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-accent: oklch(0.985 0 0);
+  --primary: oklch(0.985 0 0);
+  --primary-accent: oklch(0.92 0.004 286.32);
   --primary-foreground: oklch(0.205 0 0);
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
@@ -431,28 +431,6 @@
   }
   [data-slot='button'].rounded-lg {
     --btn-radius: var(--radius-lg);
-  }
-
-  [data-slot='button'][data-variant='default'] {
-    isolation: isolate;
-  }
-
-  [data-slot='button'][data-variant='default']::before {
-    content: '';
-    position: absolute;
-    inset: 1.5px;
-    z-index: -1;
-    border-radius: calc(var(--btn-radius) - 1.5px);
-    background: linear-gradient(
-      to bottom,
-      var(--primary),
-      var(--primary-accent)
-    );
-    transition: all;
-  }
-
-  .dark [data-slot='button'][data-variant='default']::before {
-    background: var(--primary);
   }
 
   /* Custom scrollbar */

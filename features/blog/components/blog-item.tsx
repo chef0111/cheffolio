@@ -3,7 +3,7 @@ import type { ImageProps } from 'next/image';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import type { Blog } from '../types/blog';
+import type { Doc } from '@/types/document';
 
 type Heading = 'h2' | 'h3' | 'h4';
 
@@ -12,7 +12,7 @@ export function BlogItem({
   heading,
   loading = 'lazy',
 }: {
-  blog: Blog;
+  blog: Doc;
   heading?: Heading;
   loading?: ImageProps['loading'];
 }) {

@@ -7,7 +7,9 @@ import { notFound } from 'next/navigation';
 import type { BlogPosting, WithContext } from 'schema-dts';
 
 import { simpleOgImageUrl } from '@/app/og/params';
+import { MDCopyButtonGroup } from '@/components/cheffolio/page-actions';
 import { Panel } from '@/components/cheffolio/panel';
+import { ShareMenu } from '@/components/cheffolio/share-menu';
 import { StripeSeparator } from '@/components/cheffolio/stripe-separator';
 import { jsonLdBreadcrumbList, JsonLdScript } from '@/components/json-ld';
 import { Button } from '@/components/ui/button';
@@ -28,22 +30,16 @@ import {
   DocLeftCol,
   DocRightCol,
 } from '@/features/blog/components/doc/doc-layout';
-import { LLMCopyButtonGroup } from '@/features/blog/components/doc/doc-page-actions';
 import { DocPageRoot } from '@/features/blog/components/doc/doc-page-root';
-import { DocShareMenu } from '@/features/blog/components/doc/doc-share-menu';
 import { TOCInline } from '@/features/blog/components/doc/toc-inline';
 import { TOCMinimap } from '@/features/blog/components/doc/toc-minimap';
 import { MDX } from '@/features/blog/components/mdx';
-import {
-  findNeighbour,
-  getAllBlogs,
-  getBlogBySlug,
-} from '@/features/blog/lib/data';
-import type { Blog } from '@/features/blog/types/blog';
+import { findNeighbour, getAllDocs, getDocBySlug } from '@/lib/document';
 import { absoluteUrl } from '@/lib/utils';
+import type { Doc } from '@/types/document';
 
 export function generateStaticParams() {
-  const blogs = getAllBlogs();
+  const blogs = getAllDocs();
   return blogs.map((blog) => ({ slug: blog.slug }));
 }
 
@@ -54,7 +50,7 @@ export async function generateMetadata({
   cacheLife('max');
 
   const { slug } = await params;
-  const blog = getBlogBySlug(slug);
+  const blog = getDocBySlug(slug);
 
   if (!blog) return notFound();
 
@@ -90,7 +86,7 @@ export async function generateMetadata({
   };
 }
 
-function getPageJsonLd(blog: Blog): WithContext<BlogPosting> {
+function getPageJsonLd(blog: Doc): WithContext<BlogPosting> {
   const blogUrl = `/blog/${blog.slug}`;
 
   return {
@@ -123,13 +119,13 @@ export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
   cacheLife('max');
 
   const { slug } = await params;
-  const blog = getBlogBySlug(slug);
+  const blog = getDocBySlug(slug);
 
   if (!blog) return notFound();
 
   const toc = getTableOfContents(blog.content);
 
-  const allBlogs = getAllBlogs();
+  const allBlogs = getAllDocs();
   const { previous, next } = findNeighbour(allBlogs, slug);
 
   return (
@@ -173,8 +169,8 @@ export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
             </Button>
 
             <div className="flex items-center gap-2">
-              <LLMCopyButtonGroup markdownUrl={`/blog/${blog.slug}.md`} />
-              <DocShareMenu
+              <MDCopyButtonGroup markdownUrl={`/blog/${blog.slug}.md`} />
+              <ShareMenu
                 title={blog.metadata.title}
                 url={`/blog/${blog.slug}`}
               />

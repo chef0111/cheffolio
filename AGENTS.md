@@ -6,24 +6,25 @@ Next.js 16 (App Router) portfolio, blog, and shadcn registry website.
 
 ## Project structure
 
-| Directory                              | Purpose                                                    |
-| -------------------------------------- | ---------------------------------------------------------- |
-| `src/app/`                             | App Router pages, layouts, API routes                      |
-| `src/components/cheffolio/`            | Shared UI components                                       |
-| `src/features/`                        | Feature modules: `blog`, `portfolio`, `projects`, `resume` |
-| `src/config/`                          | Site (`site.ts`), JSON-LD config                           |
-| `src/scripts/`                         | Build scripts (capture) run with Bun                       |
-| `src/hooks/`, `src/lib/`, `src/utils/` | Hooks, libraries, utilities                                |
+| Directory                  | Purpose                                                    |
+| -------------------------- | ---------------------------------------------------------- |
+| `app/`                     | App Router pages, layouts, API routes                      |
+| `components/cheffolio/`    | Shared UI components                                       |
+| `features/`                | Feature modules: `blog`, `portfolio`, `projects`, `resume` |
+| `config/`                  | Site (`site.ts`), JSON-LD config                           |
+| `scripts/`                 | Build scripts (capture) run with Bun                       |
+| `hooks/`, `lib/`, `utils/` | Hooks, libraries, utilities                                |
+| `docs/`                    | Documentation content (blog, resume)                       |
 
 ## Content system
 
-All content lives in `src/features/blog/content/` as MDX files.
+All content lives in `docs/blog/` and `docs/resume/` as MDX files.
 
-- **Data layer**: `src/features/blog/lib/data.ts` (`getAllBlogs`, `getBlogBySlug`)
-- **Blog UI**: `src/features/blog/components/`
-- **Portfolio UI**: `src/features/portfolio/components/`
-- **Projects UI**: `src/features/projects/components/`
-- **Resume UI**: `src/features/resume/components/`
+- **Data layer**: `features/blog/lib/data.ts` (`getAllDocs`, `getDocBySlug`)
+- **Blog UI**: `features/blog/components/`
+- **Portfolio UI**: `features/portfolio/components/`
+- **Projects UI**: `features/projects/components/`
+- **Resume UI**: `features/resume/components/`
 
 ## Coding guidelines
 
