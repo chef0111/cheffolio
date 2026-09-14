@@ -49,12 +49,8 @@ const nextConfig: NextConfig = {
           destination: '/doc.md/:slug',
         },
         {
-          source: '/resume.md',
-          destination: '/doc.md/resume',
-        },
-        {
           source: '/resume',
-          destination: '/doc.md/resume',
+          destination: '/resume.md',
           has: [
             {
               type: 'header',
