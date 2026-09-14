@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-const ZOOM_STEP = 1.25;
+const ZOOM_STEP = 0.25;
 const MIN_ZOOM = 0.5;
 const MAX_ZOOM = 3;
 
@@ -10,27 +10,25 @@ const MAX_ZOOM = 3;
 export type ResumeViewerState = {
   src: string;
   numPages: number;
-  currentPage: number;
   zoom: number;
 };
 
 export type ResumeViewerActions = {
   setNumPages: (numPages: number) => void;
-  setCurrentPage: (page: number) => void;
-  goToPage: (page: number) => void;
   zoomIn: () => void;
   zoomOut: () => void;
   fitWidth: () => void;
 };
 
-export type ResumeViewerContextValue = ResumeViewerState &
-  ResumeViewerActions & {
-    /** Scroll container that owns the pages; parts use it for scrolling and sizing. */
-    viewportRef: React.RefObject<HTMLDivElement | null>;
-  };
+export type ResumeViewerContextValue = ResumeViewerState & ResumeViewerActions;
 
 const ResumeViewerContext =
   React.createContext<ResumeViewerContextValue | null>(null);
+
+const PreviewReadyContext = React.createContext<{
+  isPreviewReady: boolean;
+  setPreviewReady: (ready: boolean) => void;
+} | null>(null);
 
 export function useResumeViewer() {
   const context = React.use(ResumeViewerContext);
@@ -44,8 +42,21 @@ export function useResumeViewer() {
   return context;
 }
 
+export function useResumePreviewReady() {
+  const context = React.use(PreviewReadyContext);
+
+  if (!context) {
+    throw new Error(
+      'ResumeViewer parts must be rendered inside <ResumeViewer>'
+    );
+  }
+
+  return context;
+}
+
 function clampZoom(zoom: number) {
-  return Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, zoom));
+  const snapped = Math.round(zoom / ZOOM_STEP) * ZOOM_STEP;
+  return Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, snapped));
 }
 
 export function ResumeViewerProvider({
@@ -55,28 +66,23 @@ export function ResumeViewerProvider({
   src: string;
   children: React.ReactNode;
 }) {
-  const viewportRef = React.useRef<HTMLDivElement | null>(null);
   const [numPages, setNumPages] = React.useState(0);
-  const [currentPage, setCurrentPage] = React.useState(1);
   const [zoom, setZoom] = React.useState(1);
+  const [previewSrc, setPreviewSrc] = React.useState(src);
+  const [isPreviewReady, setPreviewReady] = React.useState(false);
 
-  const goToPage = React.useCallback((page: number) => {
-    const viewport = viewportRef.current;
-    if (!viewport) return;
-
-    const target = viewport.querySelector<HTMLElement>(
-      `[data-slot="resume-viewer-page"][data-page-number="${page}"]`
-    );
-
-    target?.scrollIntoView({ block: 'start', behavior: 'smooth' });
-  }, []);
+  if (previewSrc !== src) {
+    setPreviewSrc(src);
+    setPreviewReady(false);
+    setNumPages(0);
+  }
 
   const zoomIn = React.useCallback(() => {
-    setZoom((current) => clampZoom(current * ZOOM_STEP));
+    setZoom((current) => clampZoom(current + ZOOM_STEP));
   }, []);
 
   const zoomOut = React.useCallback(() => {
-    setZoom((current) => clampZoom(current / ZOOM_STEP));
+    setZoom((current) => clampZoom(current - ZOOM_STEP));
   }, []);
 
   const fitWidth = React.useCallback(() => {
@@ -87,18 +93,23 @@ export function ResumeViewerProvider({
     () => ({
       src,
       numPages,
-      currentPage,
       zoom,
-      viewportRef,
       setNumPages,
-      setCurrentPage,
-      goToPage,
       zoomIn,
       zoomOut,
       fitWidth,
     }),
-    [src, numPages, currentPage, zoom, goToPage, zoomIn, zoomOut, fitWidth]
+    [src, numPages, zoom, zoomIn, zoomOut, fitWidth]
   );
 
-  return <ResumeViewerContext value={value}>{children}</ResumeViewerContext>;
+  const preview = React.useMemo(
+    () => ({ isPreviewReady, setPreviewReady }),
+    [isPreviewReady]
+  );
+
+  return (
+    <ResumeViewerContext value={value}>
+      <PreviewReadyContext value={preview}>{children}</PreviewReadyContext>
+    </ResumeViewerContext>
+  );
 }

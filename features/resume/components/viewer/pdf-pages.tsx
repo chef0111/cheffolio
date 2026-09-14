@@ -1,131 +1,136 @@
 'use client';
 
+import 'pdfjs-dist/webpack.mjs';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
+import '../../styles/pdf-text-layer.css';
 
 import React from 'react';
-import { Document, Page, pdfjs } from 'react-pdf';
+import { Document, Page } from 'react-pdf';
 
-import { useResumeViewer } from './resume-viewer-context';
-import { ResumeViewerPlaceholder } from './resume-viewer-placeholder';
-
-// react-pdf requires the worker to be configured in the module that renders <Document>.
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-  'pdfjs-dist/build/pdf.worker.min.mjs',
-  import.meta.url
-).toString();
+import {
+  useResumePreviewReady,
+  useResumeViewer,
+} from '../../context/resume-viewer-provider';
 
 const PAGE_GAP_PX = 16;
 const MAX_PAGE_WIDTH_PX = 900;
-const VISIBILITY_THRESHOLDS = [0.25, 0.5, 0.75, 1];
+const WIDTH_SNAP_PX = 4;
+const A4_ASPECT = '210 / 297';
 
-function useViewportWidth(viewportRef: React.RefObject<HTMLDivElement | null>) {
+function useStableWidth(elementRef: React.RefObject<HTMLElement | null>) {
   const [width, setWidth] = React.useState(0);
 
-  React.useEffect(() => {
-    const viewport = viewportRef.current;
-    if (!viewport) return;
+  React.useLayoutEffect(() => {
+    const element = elementRef.current;
+    if (!element) return;
 
-    const observer = new ResizeObserver(([entry]) => {
-      setWidth(entry.contentRect.width);
-    });
+    const read = () => {
+      const next = Math.round(element.clientWidth);
 
-    observer.observe(viewport);
+      setWidth((current) => {
+        if (next <= 0) return current;
+        if (current === 0) return next;
+        if (Math.abs(current - next) < WIDTH_SNAP_PX) return current;
+        return next;
+      });
+    };
+
+    read();
+
+    const observer = new ResizeObserver(read);
+    observer.observe(element);
 
     return () => observer.disconnect();
-  }, [viewportRef]);
+  }, [elementRef]);
 
   return width;
 }
 
-/** Reports the page with the largest visible area as the current page. */
-function useCurrentPageTracking(
-  viewportRef: React.RefObject<HTMLDivElement | null>,
-  numPages: number,
-  setCurrentPage: (page: number) => void
-) {
-  React.useEffect(() => {
-    const viewport = viewportRef.current;
-    if (!viewport || numPages === 0) return;
-
-    const ratios = new Map<number, number>();
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          const page = Number((entry.target as HTMLElement).dataset.pageNumber);
-          ratios.set(page, entry.isIntersecting ? entry.intersectionRatio : 0);
-        }
-
-        let bestPage = 0;
-        let bestRatio = 0;
-        for (const [page, ratio] of ratios) {
-          if (ratio > bestRatio) {
-            bestPage = page;
-            bestRatio = ratio;
-          }
-        }
-
-        if (bestPage > 0) setCurrentPage(bestPage);
-      },
-      { root: viewport, threshold: VISIBILITY_THRESHOLDS }
-    );
-
-    const pages = viewport.querySelectorAll<HTMLElement>(
-      '[data-slot="resume-viewer-page"]'
-    );
-    pages.forEach((page) => observer.observe(page));
-
-    return () => observer.disconnect();
-  }, [viewportRef, numPages, setCurrentPage]);
-}
-
 export function PdfPages() {
-  const { src, numPages, zoom, viewportRef, setNumPages, setCurrentPage } =
-    useResumeViewer();
-
-  const viewportWidth = useViewportWidth(viewportRef);
-  useCurrentPageTracking(viewportRef, numPages, setCurrentPage);
-
-  const fitWidth = Math.min(viewportWidth, MAX_PAGE_WIDTH_PX);
-  const pageWidth = Math.max(0, Math.floor(fitWidth * zoom));
-
-  if (viewportWidth === 0) return <ResumeViewerPlaceholder />;
+  const { src, zoom, setNumPages } = useResumeViewer();
+  const { setPreviewReady } = useResumePreviewReady();
 
   return (
-    <Document
-      file={src}
-      className="flex flex-col items-center"
-      loading={<ResumeViewerPlaceholder />}
-      error={
-        <p className="text-muted-foreground py-8 text-center text-sm">
-          The PDF could not be loaded.
-        </p>
-      }
-      externalLinkTarget="_blank"
-      externalLinkRel="noopener noreferrer"
-      onLoadSuccess={(pdf) => setNumPages(pdf.numPages)}
-    >
-      <div
-        data-slot="resume-viewer-pages"
-        className="flex flex-col items-center"
-        style={{ gap: PAGE_GAP_PX }}
-      >
-        {Array.from({ length: numPages }, (_, index) => {
-          const pageNumber = index + 1;
+    <PdfDocument
+      key={src}
+      src={src}
+      zoom={zoom}
+      setNumPages={setNumPages}
+      setPreviewReady={setPreviewReady}
+    />
+  );
+}
 
-          return (
-            <div
-              key={pageNumber}
-              data-slot="resume-viewer-page"
-              data-page-number={pageNumber}
-              className="bg-white shadow-sm"
-            >
-              <Page pageNumber={pageNumber} width={pageWidth} loading={null} />
-            </div>
-          );
-        })}
-      </div>
-    </Document>
+function PdfDocument({
+  src,
+  zoom,
+  setNumPages,
+  setPreviewReady,
+}: {
+  src: string;
+  zoom: number;
+  setNumPages: (numPages: number) => void;
+  setPreviewReady: (ready: boolean) => void;
+}) {
+  const sizerRef = React.useRef<HTMLDivElement>(null);
+  const sizerWidth = useStableWidth(sizerRef);
+  const [loadedPages, setLoadedPages] = React.useState(0);
+
+  const fitWidth = Math.min(sizerWidth, MAX_PAGE_WIDTH_PX);
+  const pageWidth = Math.max(0, Math.floor(fitWidth * zoom));
+
+  return (
+    <div className="flex min-h-full w-full flex-col items-center">
+      <div ref={sizerRef} className="w-full max-w-225" />
+
+      {pageWidth > 0 ? (
+        <Document
+          file={src}
+          className="flex w-full flex-col items-center"
+          loading={null}
+          error={
+            <p className="text-muted-foreground py-8 text-center text-sm">
+              The PDF could not be loaded.
+            </p>
+          }
+          externalLinkTarget="_blank"
+          externalLinkRel="noopener noreferrer"
+          onLoadSuccess={(pdf) => {
+            setLoadedPages(pdf.numPages);
+            setNumPages(pdf.numPages);
+          }}
+        >
+          <div
+            data-slot="resume-viewer-pages"
+            className="flex flex-col items-center"
+            style={{ gap: PAGE_GAP_PX }}
+          >
+            {Array.from({ length: loadedPages }, (_, index) => {
+              const pageNumber = index + 1;
+
+              return (
+                <div
+                  key={pageNumber}
+                  data-slot="resume-viewer-page"
+                  data-page-number={pageNumber}
+                  className="bg-white shadow-sm"
+                  style={{ width: pageWidth, aspectRatio: A4_ASPECT }}
+                >
+                  <Page
+                    pageNumber={pageNumber}
+                    width={pageWidth}
+                    loading={null}
+                    onRenderSuccess={
+                      pageNumber === 1 ? () => setPreviewReady(true) : undefined
+                    }
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </Document>
+      ) : null}
+    </div>
   );
 }

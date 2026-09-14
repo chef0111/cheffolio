@@ -1,7 +1,4 @@
-import { ArrowLeftIcon } from 'lucide-react';
 import type { Metadata } from 'next';
-import Link from 'next/link';
-import { notFound } from 'next/navigation';
 
 import { simpleOgImageUrl } from '@/app/og/params';
 import { MDCopyButtonGroup } from '@/components/cheffolio/page-actions';
@@ -14,7 +11,7 @@ import { Panel } from '@/components/cheffolio/panel';
 import { ShareMenu } from '@/components/cheffolio/share-menu';
 import { StripeSeparator } from '@/components/cheffolio/stripe-separator';
 import { jsonLdBreadcrumbList, JsonLdScript } from '@/components/json-ld';
-import { Button } from '@/components/ui/button';
+import { RESUME_MD_PATH, RESUME_PATH, RESUME_PDF_PATH } from '@/config/resume';
 import { X_PROFILE } from '@/config/site';
 import {
   DocContainer,
@@ -31,21 +28,12 @@ import {
   ResumeViewerToolbar,
   ResumeViewerViewport,
 } from '@/features/resume/components/viewer/resume-viewer';
-import {
-  RESUME_MD_PATH,
-  RESUME_PATH,
-  RESUME_PDF_PATH,
-} from '@/features/resume/lib/constants';
-import { getResumeDoc } from '@/lib/document';
 
-export async function generateMetadata(): Promise<Metadata> {
-  const doc = getResumeDoc();
+const title = 'Resume';
+const description = 'View and download my professional resume';
+const ogImage = simpleOgImageUrl(title, description);
 
-  if (!doc) return notFound();
-
-  const { title, description } = doc.metadata;
-  const ogImage = simpleOgImageUrl(title, description);
-
+export function generateMetadata(): Metadata {
   return {
     title,
     description,
@@ -72,12 +60,6 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function ResumePage() {
-  const doc = getResumeDoc();
-
-  if (!doc) return notFound();
-
-  const { title, description } = doc.metadata;
-
   return (
     <>
       <JsonLdScript
@@ -87,56 +69,46 @@ export default function ResumePage() {
         ])}
       />
 
-      <div className="mx-auto flex flex-1 flex-col md:max-w-4xl">
-        <PageHeading className="pt-24 pb-1">
-          <PageHeadingTitle className="decor-t screen-line-bottom-none">
+      <div className="mx-auto flex w-full flex-1 flex-col md:max-w-4xl">
+        <PageHeading className="pt-26">
+          <PageHeadingTitle className="decor-t screen-line-bottom-none pt-2 pb-0">
             {title}
           </PageHeadingTitle>
-          <PageHeadingDescription className="py-0">
+          <PageHeadingDescription className="pt-0 pb-2">
             {description}
           </PageHeadingDescription>
         </PageHeading>
 
         <DocPageRoot className="flex flex-1 flex-col">
-          <DocContainer>
-            <Panel className="decor-t screen-line-bottom-none flex items-center justify-between p-2">
-              <Button
-                size="sm"
-                variant="ghost"
-                nativeButton={false}
-                className="text-muted-foreground gap-1.5 text-base tracking-wider"
-                render={<Link href="/" />}
-              >
-                <ArrowLeftIcon data-icon="inline-start" className="size-4" />
-                Home
-              </Button>
+          <ResumeViewer src={RESUME_PDF_PATH}>
+            <DocContainer>
+              <Panel className="decor-t screen-line-bottom-none flex items-center justify-between p-2">
+                <ResumeViewerToolbar className="[@media(max-width:360px)]:hidden" />
 
-              <div className="flex items-center gap-2">
-                <DownloadResumeButton />
-                <MDCopyButtonGroup markdownUrl={RESUME_MD_PATH} />
-                <ShareMenu title={title} url={RESUME_PATH} />
-              </div>
-            </Panel>
+                <div className="ml-auto flex items-center gap-2">
+                  <MDCopyButtonGroup markdownUrl={RESUME_MD_PATH} />
+                  <ShareMenu title={title} url={RESUME_PATH} />
+                  <DownloadResumeButton />
+                </div>
+              </Panel>
 
-            <StripeSeparator />
-          </DocContainer>
+              <StripeSeparator />
+            </DocContainer>
 
-          <DocGrid className="flex-1 grid-rows-1">
-            <DocLeftCol />
+            <DocGrid className="flex-1 grid-rows-1">
+              <DocLeftCol />
 
-            <DocContentCol className="flex h-full flex-col">
-              <Panel className="decor-t screen-line-bottom-none screen-line-top-none flex flex-1 flex-col p-0">
-                <ResumeViewer src={RESUME_PDF_PATH}>
-                  <ResumeViewerToolbar className="screen-line-bottom" />
-                  <ResumeViewerViewport>
+              <DocContentCol className="flex h-full flex-col">
+                <Panel className="decor-t screen-line-bottom-none screen-line-top-none flex flex-1 flex-col py-4">
+                  <ResumeViewerViewport className="border-y">
                     <ResumeViewerPages />
                   </ResumeViewerViewport>
-                </ResumeViewer>
-              </Panel>
-            </DocContentCol>
+                </Panel>
+              </DocContentCol>
 
-            <DocRightCol />
-          </DocGrid>
+              <DocRightCol />
+            </DocGrid>
+          </ResumeViewer>
         </DocPageRoot>
       </div>
       <StripeSeparator />

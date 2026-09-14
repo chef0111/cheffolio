@@ -1,0 +1,23 @@
+/* Keep the text layer for hit-testing and copy, but never paint a second
+ * glyph copy. pdf.js restores a visible ::selection color, which shows a
+ * mis-styled (often italic, fallback-font) duplicate on top of the canvas. */
+.react-pdf__Page .textLayer span {
+  font-style: normal !important;
+  font-synthesis: none;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+.react-pdf__Page .textLayer span::selection,
+.react-pdf__Page .textLayer ::selection {
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  background: color-mix(in srgb, AccentColor, transparent 75%);
+}
+
+.react-pdf__Page .textLayer span::-moz-selection,
+.react-pdf__Page .textLayer ::-moz-selection {
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  background: rgba(0, 0, 255, 0.25);
+}

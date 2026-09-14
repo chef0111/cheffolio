@@ -5,9 +5,10 @@ export function ResumeViewerPlaceholder() {
   return (
     <div
       data-slot="resume-viewer-placeholder"
-      className="mx-auto flex aspect-[1/1.414] w-full max-w-3xl items-center justify-center bg-white shadow-sm"
+      className="text-muted-foreground mx-auto flex h-full w-full max-w-4xl flex-col items-center justify-center gap-3"
     >
-      <Spinner className="text-zinc-400" />
+      <Spinner className="size-8" />
+      <span className="text-sm">Loading embedded resume…</span>
     </div>
   );
 }

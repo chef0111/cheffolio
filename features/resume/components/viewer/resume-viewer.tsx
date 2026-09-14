@@ -1,12 +1,6 @@
 'use client';
 
-import {
-  ChevronDownIcon,
-  ChevronUpIcon,
-  MaximizeIcon,
-  ZoomInIcon,
-  ZoomOutIcon,
-} from 'lucide-react';
+import { MaximizeIcon, ZoomInIcon, ZoomOutIcon } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import React from 'react';
 
@@ -18,15 +12,19 @@ import {
 } from '@/components/ui/button-group';
 import { cn } from '@/lib/utils';
 
-import { ResumeViewerProvider, useResumeViewer } from './resume-viewer-context';
+import {
+  ResumeViewerProvider,
+  useResumePreviewReady,
+  useResumeViewer,
+} from '../../context/resume-viewer-provider';
 import { ResumeViewerPlaceholder } from './resume-viewer-placeholder';
 
 const PdfPages = dynamic(
   () => import('./pdf-pages').then((module) => module.PdfPages),
-  { ssr: false, loading: () => <ResumeViewerPlaceholder /> }
+  { ssr: false }
 );
 
-/** Root: owns document URL, page count, current page, and zoom. */
+/** Root: owns document URL, page count, and zoom. */
 export function ResumeViewer({
   src,
   className,
@@ -50,49 +48,17 @@ export function ResumeViewerToolbar({
   className,
   ...props
 }: React.ComponentProps<'div'>) {
-  const { numPages, currentPage, zoom, goToPage, zoomIn, zoomOut, fitWidth } =
-    useResumeViewer();
+  const { numPages, zoom, zoomIn, zoomOut, fitWidth } = useResumeViewer();
 
   const isLoaded = numPages > 0;
-  const canGoPrevious = isLoaded && currentPage > 1;
-  const canGoNext = isLoaded && currentPage < numPages;
   const isFitWidth = zoom === 1;
 
   return (
     <div
       data-slot="resume-viewer-toolbar"
-      className={cn(
-        'flex flex-wrap items-center justify-between gap-2 p-2',
-        className
-      )}
+      className={cn('flex flex-wrap items-center justify-between', className)}
       {...props}
     >
-      <ButtonGroup aria-label="Pages">
-        <Button
-          variant="secondary"
-          size="icon-sm"
-          aria-label="Previous page"
-          disabled={!canGoPrevious}
-          onClick={() => goToPage(currentPage - 1)}
-        >
-          <ChevronUpIcon />
-        </Button>
-        <ButtonGroupSeparator />
-        <ButtonGroupText className="bg-secondary min-w-16 justify-center border-transparent font-mono text-xs tabular-nums">
-          {isLoaded ? `${currentPage} / ${numPages}` : '– / –'}
-        </ButtonGroupText>
-        <ButtonGroupSeparator />
-        <Button
-          variant="secondary"
-          size="icon-sm"
-          aria-label="Next page"
-          disabled={!canGoNext}
-          onClick={() => goToPage(currentPage + 1)}
-        >
-          <ChevronDownIcon />
-        </Button>
-      </ButtonGroup>
-
       <ButtonGroup aria-label="Zoom">
         <Button
           variant="secondary"
@@ -103,8 +69,8 @@ export function ResumeViewerToolbar({
         >
           <ZoomOutIcon />
         </Button>
-        <ButtonGroupSeparator />
-        <ButtonGroupText className="bg-secondary min-w-14 justify-center border-transparent font-mono text-xs tabular-nums">
+        <ButtonGroupSeparator className="ml-[-0.5px]" />
+        <ButtonGroupText className="bg-secondary min-w-12 justify-center border-transparent text-xs tabular-nums">
           {Math.round(zoom * 100)}%
         </ButtonGroupText>
         <ButtonGroupSeparator />
@@ -117,7 +83,7 @@ export function ResumeViewerToolbar({
         >
           <ZoomInIcon />
         </Button>
-        <ButtonGroupSeparator />
+        <ButtonGroupSeparator className="ml-[-0.5px] w-px" />
         <Button
           variant="secondary"
           size="icon-sm"
@@ -137,14 +103,11 @@ export function ResumeViewerViewport({
   className,
   ...props
 }: React.ComponentProps<'div'>) {
-  const { viewportRef } = useResumeViewer();
-
   return (
     <div
-      ref={viewportRef}
       data-slot="resume-viewer-viewport"
       className={cn(
-        'bg-muted/60 dark:bg-muted/20 h-[calc(100svh-14rem)] min-h-120 overflow-auto p-4',
+        'bg-background h-[calc(100svh-14rem)] min-h-120 scrollbar-gutter-stable overflow-y-scroll p-4',
         className
       )}
       {...props}
@@ -154,5 +117,25 @@ export function ResumeViewerViewport({
 
 /** Lazily loads react-pdf on the client only. */
 export function ResumeViewerPages() {
-  return <PdfPages />;
+  return (
+    <div className="relative flex min-h-full w-full flex-col items-center">
+      <ResumeViewerLoadingOverlay />
+      <PdfPages />
+    </div>
+  );
+}
+
+function ResumeViewerLoadingOverlay() {
+  const { isPreviewReady } = useResumePreviewReady();
+
+  return (
+    <div
+      className={cn(
+        'absolute inset-0 z-10 flex items-center',
+        isPreviewReady && 'pointer-events-none invisible'
+      )}
+    >
+      <ResumeViewerPlaceholder />
+    </div>
+  );
 }
