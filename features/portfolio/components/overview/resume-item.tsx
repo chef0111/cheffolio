@@ -7,9 +7,8 @@ import {
   IntroItemLink,
 } from '@/components/cheffolio/intro-item';
 import { Button } from '@/components/ui/button';
-import { UTM_PARAMS } from '@/config/site';
 import { USER } from '@/features/portfolio/data/user';
-import { addQueryParams } from '@/utils/url';
+import { RESUME_PDF_FILENAME } from '@/features/resume/lib/constants';
 
 export function ResumeItem() {
   return (
@@ -19,12 +18,7 @@ export function ResumeItem() {
       </IntroItemIcon>
 
       <IntroItemContent>
-        <IntroItemLink
-          href={addQueryParams(USER.resume!, UTM_PARAMS)}
-          aria-label="Personal resume"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <IntroItemLink href={USER.resume!} aria-label="Personal resume">
           Personal Resume
         </IntroItemLink>
       </IntroItemContent>
@@ -37,9 +31,8 @@ export function ResumeItem() {
           aria-label="Download resume"
           render={
             <a
-              href={USER.resume}
-              download={USER.resumeDownloadUrl}
-              rel="noopener noreferrer"
+              href={USER.resumeDownloadUrl}
+              download={RESUME_PDF_FILENAME}
               aria-label="Download resume"
             />
           }

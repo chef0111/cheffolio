@@ -175,7 +175,6 @@ export const View = ({ children, style, className, ...rest }: ViewProps) => {
     wrap,
     fixed,
     break: br,
-    minPresenceAhead: _m,
     ...dom
   } = rest as ViewProps & Record<string, unknown>;
   const merged = {
@@ -217,7 +216,6 @@ export const Text = ({
   children,
   style,
   className,
-  render: _render,
   href,
   src,
   ...rest
@@ -297,7 +295,7 @@ export const Document = ({
 
 export const Page = ({
   children,
-  size: _size,
+  size,
   style,
 }: {
   children?: ReactNode;
@@ -310,6 +308,7 @@ export const Page = ({
       {
         display: 'flex',
         flexDirection: 'column',
+        size,
         ...flatten(style),
       } as React.CSSProperties
     }

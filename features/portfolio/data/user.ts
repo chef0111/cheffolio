@@ -1,4 +1,5 @@
 import type { User } from '@/features/portfolio/types/user';
+import { RESUME_PATH, RESUME_PDF_PATH } from '@/features/resume/lib/constants';
 
 export const USER: User = {
   firstName: 'Gia Bảo',
@@ -27,9 +28,8 @@ export const USER: User = {
       website: 'https://uit.edu.vn',
     },
   ],
-  resume: 'https://assets.giabao.dev/LeTranGiaBao-CV.pdf',
-  resumeDownloadUrl:
-    'https://drive.usercontent.google.com/u/1/uc?id=1xsDkTup_tUPN1PdSMPp8znP_-9aZ_1UF&export=download',
+  resume: RESUME_PATH,
+  resumeDownloadUrl: RESUME_PDF_PATH,
   skills: [
     'React',
     'Next.js',

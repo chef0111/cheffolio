@@ -79,14 +79,8 @@ export default function BlogsPage() {
 
       <JsonLdScript
         data={jsonLdBreadcrumbList([
-          {
-            name: 'Home',
-            href: '/',
-          },
-          {
-            name: 'Blog',
-            href: '/blog',
-          },
+          { name: 'Home', href: '/' },
+          { name: 'Blog', href: '/blog' },
         ])}
       />
 

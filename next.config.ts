@@ -33,6 +33,11 @@ const nextConfig: NextConfig = {
         destination: '/:section/:slug.md',
         permanent: true,
       },
+      {
+        source: '/resume.mdx',
+        destination: '/resume.md',
+        permanent: true,
+      },
     ];
   },
   async rewrites() {
@@ -42,6 +47,21 @@ const nextConfig: NextConfig = {
         {
           source: '/:section(blog|resume)/:slug.md',
           destination: '/doc.md/:slug',
+        },
+        {
+          source: '/resume.md',
+          destination: '/doc.md/resume',
+        },
+        {
+          source: '/resume',
+          destination: '/doc.md/resume',
+          has: [
+            {
+              type: 'header',
+              key: 'accept',
+              value: '(?<accept>.*text/markdown.*)',
+            },
+          ],
         },
         {
           source: '/:section(blog|resume)/:slug',
