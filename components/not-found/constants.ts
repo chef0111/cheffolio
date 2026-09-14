@@ -4,7 +4,7 @@ export const CANVAS_HEIGHT = 600;
 export const BALL_SIZE = 21;
 export const BALL_SPEED = 10;
 /** Smallest angle from +X. 45° so a serve is never flatter than a diagonal. */
-export const BALL_LAUNCH_ANGLE = Math.PI / 4;
+export const BALL_LAUNCH_ANGLE = Math.PI / 6;
 
 export const PADDLE_WIDTH = 96;
 export const PADDLE_HEIGHT = 24;

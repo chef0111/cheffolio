@@ -74,7 +74,7 @@ export default function BlogsPage() {
   const blogPosts = getBlogPosts();
 
   return (
-    <>
+    <div className="flex w-full flex-1 flex-col">
       <JsonLdScript data={getBlogJsonLd(blogPosts)} />
 
       <JsonLdScript
@@ -105,6 +105,6 @@ export default function BlogsPage() {
         </Suspense>
         <StripeSeparator />
       </div>
-    </>
+    </div>
   );
 }
