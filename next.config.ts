@@ -1,5 +1,7 @@
 import type { NextConfig } from 'next';
 
+import { RESUME_PDF_FILENAME } from './config/resume';
+
 const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
@@ -11,6 +13,19 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ['lucide-react'],
   },
   transpilePackages: ['next-mdx-remote'],
+  async headers() {
+    return [
+      {
+        source: '/resume.pdf',
+        headers: [
+          {
+            key: 'Content-Disposition',
+            value: `inline; filename="${RESUME_PDF_FILENAME}"`,
+          },
+        ],
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {

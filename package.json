@@ -10,10 +10,11 @@
     "url": "git+https://github.com/chef0111/cheffolio.git"
   },
   "scripts": {
-    "dev": "portless run next dev",
-    "build": "next build",
+    "dev": "bun run render:resume && portless run next dev",
+    "build": "bun run render:resume && next build",
     "start": "portless run next start",
-    "next": "next build && portless run next start",
+    "next": "bun run build && portless run next start",
+    "render:resume": "bun run --bun ./scripts/render-resume-pdf.ts",
     "lint": "eslint . --cache --cache-location .eslintcache",
     "lint:fix": "eslint --fix . --cache --cache-location .eslintcache",
     "format": "prettier --write \"**/*.{ts,tsx,md,mdx}\" --cache",

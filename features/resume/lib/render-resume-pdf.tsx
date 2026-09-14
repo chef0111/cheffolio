@@ -1,10 +1,6 @@
-import 'server-only';
-
-import { cacheLife } from 'next/cache';
 import { compileMDX } from 'next-mdx-remote/rsc';
 import type { ReactNode } from 'react';
 import remarkGfm from 'remark-gfm';
-import { measure, render } from 'takumi-pdf/next';
 
 import { PdfcnThemeProvider } from '@/components/pdf/theme-provider';
 import { RESUME_FONT_FAMILY } from '@/config/resume';
@@ -22,6 +18,7 @@ import {
 import { planResumePagination } from './paginate-resume';
 import { resumeFonts } from './pdf-fonts';
 import { resumeTheme } from './pdf-theme';
+import { measure, render } from './takumi';
 
 const { page } = resumeTheme.spacing;
 
@@ -62,11 +59,10 @@ function themed(node: ReactNode) {
 
 /**
  * Compiles the Resume source with the PDF component map and renders it to
- * A4 bytes with Takumi. Cached for the lifetime of the build.
+ * A4 bytes with Takumi. Runs from the Bun build script, not a Vercel function.
  */
 export async function renderResumePdf(doc: ResumeDoc): Promise<Uint8Array> {
   'use cache';
-  cacheLife('max');
 
   const { content } = await compileMDX({
     source: doc.content,

@@ -17,6 +17,9 @@
 /.next/
 /out/
 
+# generated at build by scripts/render-resume-pdf.ts
+/public/resume.pdf
+
 # production
 /build
 
