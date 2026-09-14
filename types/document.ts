@@ -32,6 +32,24 @@ export type Doc = {
   content: string;
 };
 
+/** Contact links shown in the Resume header. */
+export type ResumeLinks = {
+  website: string;
+  github: string;
+  linkedin: string;
+};
+
+/** Frontmatter of the Resume source: base doc fields plus the header block. */
+export type ResumeMetadata = DocMetadata & {
+  name: string;
+  location: string;
+  links: ResumeLinks;
+};
+
+export type ResumeDoc = Doc & {
+  metadata: ResumeMetadata;
+};
+
 /**
  * Minimal blog data for client components that don't need the full content.
  * Reduces serialization overhead and bundle size.

@@ -93,10 +93,16 @@ function getPrompt(url: string) {
   return `Read ${url}. I want to ask questions about it.`;
 }
 
+/**
+ * Maps a Markdown mirror URL to its MDX source on GitHub.
+ * `/blog/foo.md` -> `docs/blog/foo.mdx`; a single segment like `/resume.md`
+ * lives in a folder of the same name, `docs/resume/resume.mdx`.
+ */
 function getGitHubSourceUrl(markdownUrl: string) {
-  const fileName = markdownUrl.replace(/^\//, '').replace(/\.md$/, '.mdx');
+  const path = markdownUrl.replace(/^\//, '').replace(/\.md$/, '');
+  const filePath = path.includes('/') ? path : `${path}/${path}`;
 
-  return `https://github.com/chef0111/cheffolio/blob/main/docs/${fileName}`;
+  return `https://github.com/chef0111/cheffolio/blob/main/docs/${filePath}.mdx`;
 }
 
 export function ViewOptions({ markdownUrl }: { markdownUrl: string }) {

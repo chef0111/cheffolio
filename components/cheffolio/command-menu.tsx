@@ -38,6 +38,7 @@ import {
 import { Empty, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
 import { Kbd, KbdGroup } from '@/components/ui/kbd';
 import { Separator } from '@/components/ui/separator';
+import { RESUME_PDF_FILENAME } from '@/config/resume';
 import { UTM_PARAMS } from '@/config/site';
 import { useCommandMenu } from '@/context/command-menu-provider';
 import { SOCIAL_LINKS } from '@/features/portfolio/data/social-links';
@@ -151,10 +152,16 @@ export function CommandMenuDialog() {
   );
 
   const handleDownload = React.useCallback(
-    (link: string) => {
+    (link: string, filename: string) => {
       setOpen(false);
       haptic();
-      window.open(link, '_self', 'noopener noreferrer');
+
+      // A temporary anchor with `download` keeps the browser from opening the
+      // inline PDF and lets us control the saved filename.
+      const anchor = document.createElement('a');
+      anchor.href = link;
+      anchor.download = filename;
+      anchor.click();
     },
     [setOpen]
   );
@@ -200,12 +207,14 @@ export function CommandMenuDialog() {
           />
 
           <CommandGroup heading="Personal Info">
-            <CommandItem onSelect={() => handleOpenLink(USER.resume!, true)}>
+            <CommandItem onSelect={() => handleOpenLink(USER.resume!)}>
               <FileUser className="text-muted-foreground" />
               Personal Resume
             </CommandItem>
             <CommandItem
-              onSelect={() => handleDownload(USER.resumeDownloadUrl!)}
+              onSelect={() =>
+                handleDownload(USER.resumeDownloadUrl!, RESUME_PDF_FILENAME)
+              }
             >
               <DownloadIcon className="text-muted-foreground" />
               Download Resume

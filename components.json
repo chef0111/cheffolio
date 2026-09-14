@@ -24,6 +24,7 @@
   "registries": {
     "@kibo-ui": "https://www.kibo-ui.com/r/{name}.json",
     "@ncdai": "https://chanhdai.com/r/{name}.json",
+    "@pdfcn": "https://www.pdfcn.dev/r/{name}.json",
     "@soundcn": "https://soundcn.xyz/r/{name}.json"
   }
 }

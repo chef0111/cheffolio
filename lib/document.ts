@@ -3,7 +3,12 @@ import matter from 'gray-matter';
 import path from 'path';
 import { cache } from 'react';
 
-import type { Doc, DocMetadata } from '@/types/document';
+import type {
+  Doc,
+  DocMetadata,
+  ResumeDoc,
+  ResumeLinks,
+} from '@/types/document';
 
 function parseFrontmatter(fileContent: string) {
   const file = matter(fileContent);
@@ -64,12 +69,12 @@ export const getAllDocs = cache(() => {
   });
 });
 
-export function getDocBySlug(slug: string) {
-  return getAllDocs().find((doc) => doc.slug === slug);
-}
-
 export function getDocsByCategory(category: string) {
   return getAllDocs().filter((doc) => doc.metadata?.category === category);
+}
+
+export function getDocBySlug(slug: string, category: string) {
+  return getDocsByCategory(category).find((doc) => doc.slug === slug);
 }
 
 export const BLOG_CATEGORY = 'blog';
@@ -79,8 +84,38 @@ export function getBlogPosts() {
   return getDocsByCategory(BLOG_CATEGORY);
 }
 
-export function getResumeDoc() {
-  return getDocsByCategory(RESUME_CATEGORY);
+const RESUME_LINK_KEYS = ['website', 'github', 'linkedin'] as const;
+
+function isResumeDoc(doc: Doc): doc is ResumeDoc {
+  const { name, location, links } = doc.metadata as Partial<
+    ResumeDoc['metadata']
+  >;
+
+  if (typeof name !== 'string' || typeof location !== 'string') return false;
+  if (!links || typeof links !== 'object') return false;
+
+  return RESUME_LINK_KEYS.every(
+    (key) => typeof (links as Partial<ResumeLinks>)[key] === 'string'
+  );
+}
+
+/**
+ * The single Resume source. Returns undefined when no doc exists and throws
+ * when the frontmatter lacks the header fields the PDF and Markdown mirror
+ * depend on, so authoring mistakes fail the build instead of rendering blanks.
+ */
+export function getResumeDoc(): ResumeDoc | undefined {
+  const doc = getDocsByCategory(RESUME_CATEGORY)[0];
+
+  if (!doc) return undefined;
+
+  if (!isResumeDoc(doc)) {
+    throw new Error(
+      `docs/${RESUME_CATEGORY}/${doc.slug}.mdx is missing header frontmatter (name, location, links.website, links.github, links.linkedin)`
+    );
+  }
+
+  return doc;
 }
 
 export function findNeighbour(docs: Doc[], slug: string) {

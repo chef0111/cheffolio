@@ -74,19 +74,13 @@ export default function BlogsPage() {
   const blogPosts = getBlogPosts();
 
   return (
-    <>
+    <div className="flex w-full flex-1 flex-col">
       <JsonLdScript data={getBlogJsonLd(blogPosts)} />
 
       <JsonLdScript
         data={jsonLdBreadcrumbList([
-          {
-            name: 'Home',
-            href: '/',
-          },
-          {
-            name: 'Blog',
-            href: '/blog',
-          },
+          { name: 'Home', href: '/' },
+          { name: 'Blog', href: '/blog' },
         ])}
       />
 
@@ -111,6 +105,6 @@ export default function BlogsPage() {
         </Suspense>
         <StripeSeparator />
       </div>
-    </>
+    </div>
   );
 }

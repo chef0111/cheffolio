@@ -1,3 +1,4 @@
+import { RESUME_PATH, RESUME_PDF_PATH } from '@/config/resume';
 import type { User } from '@/features/portfolio/types/user';
 
 export const USER: User = {
@@ -27,9 +28,8 @@ export const USER: User = {
       website: 'https://uit.edu.vn',
     },
   ],
-  resume: 'https://assets.giabao.dev/LeTranGiaBao-CV.pdf',
-  resumeDownloadUrl:
-    'https://drive.usercontent.google.com/u/1/uc?id=1xsDkTup_tUPN1PdSMPp8znP_-9aZ_1UF&export=download',
+  resume: RESUME_PATH,
+  resumeDownloadUrl: RESUME_PDF_PATH,
   skills: [
     'React',
     'Next.js',

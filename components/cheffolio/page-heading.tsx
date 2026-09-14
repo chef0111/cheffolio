@@ -14,10 +14,6 @@ export function PageHeading({
       {...props}
     >
       {children}
-      <div
-        data-slot="page-heading-description-line"
-        className="screen-line-bottom hidden h-px group-has-data-[slot=page-heading-description]/page-heading:flex"
-      />
     </div>
   );
 }
