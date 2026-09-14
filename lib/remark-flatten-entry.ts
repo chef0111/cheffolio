@@ -2,14 +2,19 @@ import type { Heading, PhrasingContent, Root, RootContent } from 'mdast';
 import type { MdxJsxFlowElement } from 'mdast-util-mdx-jsx';
 import { visit } from 'unist-util-visit';
 
+import type { EntryProps } from '@/features/resume/components/pdf/entry';
+
 const ENTRY_NAME = 'Entry';
 
-type EntryAttributes = {
-  title?: string;
-  subtitle?: string;
-  date?: string;
-  href?: string;
-};
+type EntryAttributes = Partial<Omit<EntryProps, 'children'>>;
+
+const ENTRY_ATTRIBUTE_NAMES = {
+  title: true,
+  subtitle: true,
+  date: true,
+  href: true,
+  location: true,
+} as const satisfies Record<keyof Omit<EntryProps, 'children'>, true>;
 
 function readAttributes(node: MdxJsxFlowElement): EntryAttributes {
   const attributes: EntryAttributes = {};
@@ -26,12 +31,7 @@ function readAttributes(node: MdxJsxFlowElement): EntryAttributes {
 }
 
 function isEntryAttribute(name: string): name is keyof EntryAttributes {
-  return (
-    name === 'title' ||
-    name === 'subtitle' ||
-    name === 'date' ||
-    name === 'href'
-  );
+  return name in ENTRY_ATTRIBUTE_NAMES;
 }
 
 function buildHeading({
@@ -39,12 +39,17 @@ function buildHeading({
   subtitle,
   date,
   href,
+  location,
 }: EntryAttributes): Heading {
   const titleNode: PhrasingContent = href
     ? { type: 'link', url: href, children: [{ type: 'text', value: title }] }
     : { type: 'text', value: title };
 
-  const tail = [subtitle ? ` | ${subtitle}` : '', date ? ` (${date})` : '']
+  const tail = [
+    subtitle ? ` | ${subtitle}` : '',
+    location ? ` | ${location}` : '',
+    date ? ` (${date})` : '',
+  ]
     .join('')
     .trimEnd();
 

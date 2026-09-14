@@ -69,12 +69,12 @@ export const getAllDocs = cache(() => {
   });
 });
 
-export function getDocBySlug(slug: string) {
-  return getAllDocs().find((doc) => doc.slug === slug);
-}
-
 export function getDocsByCategory(category: string) {
   return getAllDocs().filter((doc) => doc.metadata?.category === category);
+}
+
+export function getDocBySlug(slug: string, category: string) {
+  return getDocsByCategory(category).find((doc) => doc.slug === slug);
 }
 
 export const BLOG_CATEGORY = 'blog';
