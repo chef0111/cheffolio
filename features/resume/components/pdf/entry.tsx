@@ -1,13 +1,13 @@
-'use no memo';
-// Takumi runs these outside React's renderer, without the compiler runtime.
-
-import type { ReactNode } from 'react';
+import { Children, Fragment, isValidElement, type ReactNode } from 'react';
 
 import { KeepTogether } from '@/components/pdf/keep-together/keep-together';
 import { usePdfcnTheme } from '@/components/pdf/theme-provider';
 import { Text, View } from '@/lib/pdfcn/pdf-primitives';
 
 import { ExternalLinkPdfIcon } from './icons';
+import { BulletList, FlushList } from './resume-list';
+
+type WithChildren = { children?: ReactNode };
 
 export type EntryProps = {
   title: string;
@@ -17,6 +17,20 @@ export type EntryProps = {
   location?: string;
   children?: ReactNode;
 };
+
+function withEntryLists(node: ReactNode): ReactNode {
+  if (!isValidElement(node)) return node;
+
+  if (node.type === Fragment) {
+    return Children.map((node.props as WithChildren).children, withEntryLists);
+  }
+
+  if (node.type === FlushList) {
+    return <BulletList>{node}</BulletList>;
+  }
+
+  return node;
+}
 
 /**
  * A dated resume item: title and date on the first row, subtitle and
@@ -37,21 +51,19 @@ export function Entry({
     fontFamily: heading.fontFamily,
     fontSize: heading.fontSize.h3,
     fontWeight: heading.fontWeight,
-    lineHeight: body.lineHeight,
     color: theme.colors.foreground,
     textDecoration: 'none',
   };
 
   const metaStyle = {
     fontSize: body.fontSize,
-    lineHeight: body.lineHeight,
     color: theme.colors.foreground,
   };
 
   const hasSecondRow = Boolean(subtitle || location);
 
   return (
-    <KeepTogether style={{ marginBottom: theme.spacing.componentGap }}>
+    <KeepTogether>
       <View
         style={{
           flexDirection: 'row',
@@ -64,12 +76,16 @@ export function Entry({
           <Text style={titleStyle} href={href}>
             {title}
           </Text>
-          {href ? <ExternalLinkPdfIcon size={7} /> : null}
+          {href && <ExternalLinkPdfIcon size={7} />}
         </View>
-        {date ? <Text style={metaStyle}>{date}</Text> : null}
+        {date && (
+          <Text style={{ ...metaStyle, color: theme.colors.mutedForeground }}>
+            {date}
+          </Text>
+        )}
       </View>
 
-      {hasSecondRow ? (
+      {hasSecondRow && (
         <View
           style={{
             flexDirection: 'row',
@@ -81,15 +97,15 @@ export function Entry({
           <Text style={{ ...metaStyle, fontStyle: 'italic' }}>
             {subtitle ?? ''}
           </Text>
-          {location ? (
-            <Text style={{ ...metaStyle, fontStyle: 'italic' }}>
+          {location && (
+            <Text style={{ ...metaStyle, color: theme.colors.mutedForeground }}>
               {location}
             </Text>
-          ) : null}
+          )}
         </View>
-      ) : null}
+      )}
 
-      {children}
+      {Children.map(children, withEntryLists)}
     </KeepTogether>
   );
 }

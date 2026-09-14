@@ -1,6 +1,3 @@
-'use no memo';
-// Takumi runs these outside React's renderer, without the compiler runtime.
-
 import type { CSSProperties, ReactNode } from 'react';
 
 import { usePdfcnTheme } from '@/components/pdf/theme-provider';
@@ -75,15 +72,13 @@ function ContactSeparator() {
   );
 }
 
-/** Identity block: name, then location and contact links in one centered row. */
+/** Identity block: declared in the frontmatter. */
 export function ResumeHeader({ name, location, links }: ResumeHeaderProps) {
   const theme = usePdfcnTheme();
   const { heading } = theme.typography;
 
   return (
-    <View
-      style={{ alignItems: 'center', marginBottom: theme.spacing.sectionGap }}
-    >
+    <View style={{ alignItems: 'center', marginBottom: 0 }}>
       <h1
         style={
           flatten({
@@ -93,7 +88,6 @@ export function ResumeHeader({ name, location, links }: ResumeHeaderProps) {
             lineHeight: heading.lineHeight,
             color: theme.colors.foreground,
             margin: 0,
-            marginBottom: 4,
             letterSpacing: 0.5,
           }) as CSSProperties
         }

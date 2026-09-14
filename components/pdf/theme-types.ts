@@ -120,6 +120,8 @@ export interface ColorTokens {
   primaryForeground: string;
   /** Table borders, dividers, rules */
   border: string;
+  /** Dividers, rules, and other decorative lines */
+  divider: string;
   /** Secondary accent for call-to-action elements, badges */
   accent: string;
   /** Error text, warning indicators */

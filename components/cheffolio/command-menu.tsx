@@ -38,11 +38,11 @@ import {
 import { Empty, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
 import { Kbd, KbdGroup } from '@/components/ui/kbd';
 import { Separator } from '@/components/ui/separator';
+import { RESUME_PDF_FILENAME } from '@/config/resume';
 import { UTM_PARAMS } from '@/config/site';
 import { useCommandMenu } from '@/context/command-menu-provider';
 import { SOCIAL_LINKS } from '@/features/portfolio/data/social-links';
 import { USER } from '@/features/portfolio/data/user';
-import { RESUME_PDF_FILENAME } from '@/features/resume/lib/constants';
 import { haptic } from '@/lib/haptic';
 import { copyText } from '@/utils/copy';
 import { decodeEmail, decodePhoneNumber } from '@/utils/string';

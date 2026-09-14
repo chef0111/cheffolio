@@ -1,10 +1,25 @@
 import { defaultPrimitives } from '@/components/pdf/primitives';
 import type { PdfcnTheme } from '@/components/pdf/theme-types';
+import { RESUME_FONT_FAMILY } from '@/config/resume';
 
-import { RESUME_FONT_FAMILY } from './constants';
+export function withBodyLineHeight(
+  theme: PdfcnTheme,
+  lineHeight: number
+): PdfcnTheme {
+  return {
+    ...theme,
+    typography: {
+      ...theme.typography,
+      body: {
+        ...theme.typography.body,
+        lineHeight,
+      },
+    },
+  };
+}
 
 /**
- * Tight, monochrome tokens that mimic a LaTeX resume: Latin Modern
+ * Tight, monochrome tokens that mimic a LaTeX resume: CMU Serif
  * everywhere, black rules, and small vertical gaps. All lengths are points;
  * the pdfcn primitives convert them to CSS px for Takumi.
  */
@@ -14,11 +29,12 @@ export const resumeTheme: PdfcnTheme = {
   colors: {
     foreground: '#000000',
     background: '#ffffff',
-    muted: '#f4f4f5',
-    mutedForeground: '#3f3f46',
+    muted: '#626262',
+    mutedForeground: '#737373',
     primary: '#000000',
     primaryForeground: '#ffffff',
     border: '#000000',
+    divider: '#dddddd',
     accent: '#000000',
     destructive: '#dc2626',
     success: '#16a34a',
@@ -52,7 +68,7 @@ export const resumeTheme: PdfcnTheme = {
       marginBottom: 36,
       marginLeft: 40,
     },
-    sectionGap: 10,
+    sectionGap: 20,
     paragraphGap: 3,
     componentGap: 6,
   },

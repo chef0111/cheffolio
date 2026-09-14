@@ -13,6 +13,7 @@ export const professionalTheme: PdfcnTheme = {
     accent: '#3b82f6',
     background: '#ffffff',
     border: '#e4e4e7',
+    divider: '#dddddd',
     destructive: '#dc2626',
     foreground: '#18181b',
     info: '#0ea5e9',

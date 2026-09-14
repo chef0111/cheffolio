@@ -7,8 +7,8 @@ import {
   IntroItemLink,
 } from '@/components/cheffolio/intro-item';
 import { Button } from '@/components/ui/button';
+import { RESUME_PDF_FILENAME } from '@/config/resume';
 import { USER } from '@/features/portfolio/data/user';
-import { RESUME_PDF_FILENAME } from '@/features/resume/lib/constants';
 
 export function ResumeItem() {
   return (

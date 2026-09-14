@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 
-import { RESUME_PDF_FILENAME } from '@/features/resume/lib/constants';
+import { RESUME_PDF_FILENAME } from '@/config/resume';
 import { renderResumePdf } from '@/features/resume/lib/render-resume-pdf';
 import { getResumeDoc } from '@/lib/document';
 

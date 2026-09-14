@@ -1,6 +1,3 @@
-'use no memo';
-// Takumi runs these outside React's renderer, without the compiler runtime.
-
 import { usePdfcnTheme, useSafeMemo } from '@/components/pdf/theme-provider';
 import type { PdfcnTheme } from '@/components/pdf/theme-types';
 import type { PDFComponentProps } from '@/components/pdf/types';

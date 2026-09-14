@@ -1,5 +1,5 @@
+import { RESUME_PATH, RESUME_PDF_PATH } from '@/config/resume';
 import type { User } from '@/features/portfolio/types/user';
-import { RESUME_PATH, RESUME_PDF_PATH } from '@/features/resume/lib/constants';
 
 export const USER: User = {
   firstName: 'Gia Bảo',

@@ -1,17 +1,14 @@
 import { DownloadIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import {
-  RESUME_PDF_FILENAME,
-  RESUME_PDF_PATH,
-} from '@/features/resume/lib/constants';
+import { RESUME_PDF_FILENAME, RESUME_PDF_PATH } from '@/config/resume';
 
 export function DownloadResumeButton(
   props: Omit<React.ComponentProps<typeof Button>, 'render' | 'nativeButton'>
 ) {
   return (
     <Button
-      size="sm"
+      size="icon-sm"
       variant="secondary"
       className="gap-1.5 active:scale-none!"
       nativeButton={false}
@@ -24,8 +21,7 @@ export function DownloadResumeButton(
       }
       {...props}
     >
-      <DownloadIcon data-icon="inline-start" />
-      <span className="max-[28rem]:hidden">Download</span>
+      <DownloadIcon />
     </Button>
   );
 }
