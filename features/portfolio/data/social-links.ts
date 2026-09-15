@@ -40,7 +40,7 @@ export const SOCIAL = {
     sameAs: true,
   },
   instagram: {
-    icon: `${baseUrl}/instagram.webp`,
+    icon: `${baseUrl}/instagram.webp?t=1789469508`,
     title: 'Instagram',
     profile: '@chef.0111',
     href: USER.socialLinks.instagram,
