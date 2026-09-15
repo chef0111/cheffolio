@@ -12,21 +12,18 @@ export function DocPageRoot({
     const container = ref.current;
     if (!container) return;
 
-    const docTitle = container.querySelector<HTMLElement>(
-      '[data-slot="doc-title"]'
+    const docOgImage = container.querySelector<HTMLElement>(
+      '[data-slot="doc-og-image"]'
     );
 
     const update = () => {
-      if (!docTitle) {
+      if (!docOgImage) {
         document.documentElement.style.removeProperty('--doc-cols-top');
         container.removeAttribute('data-doc-cols-ready');
         return;
       }
-      const bottom = docTitle.getBoundingClientRect().bottom + window.scrollY;
-      document.documentElement.style.setProperty(
-        '--doc-cols-top',
-        `${bottom}px`
-      );
+      const top = docOgImage.getBoundingClientRect().top + window.scrollY;
+      document.documentElement.style.setProperty('--doc-cols-top', `${top}px`);
       container.setAttribute('data-doc-cols-ready', '');
     };
 

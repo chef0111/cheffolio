@@ -28,7 +28,7 @@ export default function Page() {
       <JsonLdScript data={getPageJsonLd()} />
 
       <div
-        className="mx-auto w-full **:data-[slot=panel]:scroll-mt-[calc(var(--header-height)+var(--separator-height))] md:max-w-4xl"
+        className="**:data-[slot=panel]:scroll-header mx-auto w-full md:max-w-4xl"
         aria-label="Portfolio"
       >
         <ProfileHeader />

@@ -12,6 +12,8 @@ export type DocMetadata = {
    * injected when docs are read. Used for filtering (see getDocsByCategory).
    */
   category?: string;
+  /** Tags for the document. Used for filtering. */
+  tags?: string[];
   /** Flag to show a "New" badge/highlight in the UI. */
   new?: boolean;
   updated?: boolean;

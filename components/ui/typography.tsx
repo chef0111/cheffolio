@@ -62,7 +62,10 @@ function Heading<T extends HeadingTypes = 'h1'>({
 
   return (
     <Comp
-      className={cn('flex flex-row items-center gap-2', className)}
+      className={cn(
+        'scroll-header flex flex-row items-center gap-2',
+        className
+      )}
       {...props}
     >
       <a

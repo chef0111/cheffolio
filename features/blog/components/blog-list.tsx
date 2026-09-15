@@ -87,7 +87,7 @@ function BlogListEmptyState({
   description: string;
 }) {
   return (
-    <Empty className="py-26.5">
+    <Empty className="py-30">
       <EmptyHeader>
         <EmptyMedia variant="icon">{icon}</EmptyMedia>
         <EmptyTitle>{title}</EmptyTitle>

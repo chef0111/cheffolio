@@ -143,7 +143,10 @@ function PanelTitle({
     defaultTagName: 'h2',
     props: mergeProps<'h2'>(
       {
-        className: cn('text-3xl font-semibold tracking-tight py-1', className),
+        className: cn(
+          'text-3xl font-semibold text-balance tracking-tight py-1',
+          className
+        ),
       },
       props
     ),

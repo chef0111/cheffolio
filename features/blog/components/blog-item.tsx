@@ -1,8 +1,10 @@
 import { format } from 'date-fns';
+import { CalendarIcon, ChevronRightIcon } from 'lucide-react';
 import type { ImageProps } from 'next/image';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { Tag } from '@/components/ui/tag';
 import type { Doc } from '@/types/document';
 
 type Heading = 'h2' | 'h3' | 'h4';
@@ -23,7 +25,7 @@ export function BlogItem({
       {blog.metadata.image && (
         <div className="relative select-none [--image-radius:var(--radius-xl)]">
           <Image
-            className="ease-out-cubic aspect-1200/630 rounded-(--image-radius) grayscale transition-[filter] duration-300 group-hover/post:grayscale-0"
+            className="ease-out-cubic aspect-40/21 rounded-(--image-radius) grayscale transition-[filter] duration-300 group-hover/post:grayscale-0"
             src={blog.metadata.image}
             alt={blog.metadata.title}
             width={1200}
@@ -34,8 +36,8 @@ export function BlogItem({
         </div>
       )}
 
-      <div className="flex flex-col gap-1 p-2">
-        <Heading className="text-lg leading-snug font-medium text-balance">
+      <div className="flex flex-col gap-2 p-2">
+        <Heading className="text-lg leading-snug font-medium text-pretty">
           <Link
             href={`/blog/${blog.slug}`}
             aria-label={`Read ${blog.metadata.title}`}
@@ -53,14 +55,31 @@ export function BlogItem({
           )}
         </Heading>
 
-        <dl>
-          <dt className="sr-only">Published on</dt>
-          <dd className="text-muted-foreground text-sm">
-            <time dateTime={new Date(blog.metadata.createdAt).toISOString()}>
-              {format(new Date(blog.metadata.createdAt), 'dd.MM.yyyy')}
-            </time>
-          </dd>
-        </dl>
+        {blog.metadata.tags && blog.metadata.tags.length > 0 && (
+          <ul className="flex flex-wrap gap-1.5">
+            {blog.metadata.tags.map((tag, index) => (
+              <li key={index} className="flex">
+                <Tag className="capitalize">{tag}</Tag>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        <div className="text-muted-foreground flex items-center justify-between text-sm">
+          <dl>
+            <dt className="sr-only">Published on</dt>
+            <dd className="flex items-center gap-2">
+              <CalendarIcon className="size-4" />
+              <time dateTime={new Date(blog.metadata.createdAt).toISOString()}>
+                {format(new Date(blog.metadata.createdAt), 'dd-MM-yyyy')}
+              </time>
+            </dd>
+          </dl>
+          <span className="group-hover/post:text-foreground flex items-center gap-1.5 transition-colors">
+            Read more
+            <ChevronRightIcon className="size-4" />
+          </span>
+        </div>
       </div>
     </div>
   );

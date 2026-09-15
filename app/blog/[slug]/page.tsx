@@ -1,14 +1,17 @@
+import { format } from 'date-fns';
 import { getTableOfContents } from 'fumadocs-core/content/toc';
 import { ArrowLeftIcon, ArrowRightIcon } from 'lucide-react';
 import type { Metadata, Route } from 'next';
 import { cacheLife } from 'next/cache';
+import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { BlogPosting, WithContext } from 'schema-dts';
 
 import { simpleOgImageUrl } from '@/app/og/params';
+import { FullWidthDivider } from '@/components/cheffolio/full-width-divider';
 import { MDCopyButtonGroup } from '@/components/cheffolio/page-actions';
-import { Panel } from '@/components/cheffolio/panel';
+import { Panel, PanelHeader, PanelTitle } from '@/components/cheffolio/panel';
 import { ShareMenu } from '@/components/cheffolio/share-menu';
 import { StripeSeparator } from '@/components/cheffolio/stripe-separator';
 import { jsonLdBreadcrumbList, JsonLdScript } from '@/components/json-ld';
@@ -244,20 +247,65 @@ export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
             </Panel>
 
             <StripeSeparator />
-
-            <h1
-              data-slot="doc-title"
-              className="border-x px-4 py-1 text-4xl font-medium tracking-tight text-balance"
-            >
-              {blog.metadata.title}
-            </h1>
           </DocContainer>
 
           <DocGrid className="flex-1 grid-rows-1">
             <DocLeftCol />
 
             <DocContentCol className="flex h-full flex-col">
-              <Panel className="decor-t screen-line-bottom-none flex flex-1 flex-col p-0">
+              <div
+                data-slot="doc-og-image"
+                className="relative w-full border-x p-4"
+              >
+                <div className="pointer-events-none absolute inset-x-4 inset-y-0 -z-1 border-x" />
+                <FullWidthDivider className="top-4" contained />
+                <FullWidthDivider className="bottom-4" contained />
+                <div className="relative aspect-40/21 w-full select-none">
+                  <Image
+                    className="ease-out-cubic grayscale transition-[filter] duration-300 hover:grayscale-0"
+                    src={
+                      blog.metadata.image ??
+                      simpleOgImageUrl(
+                        blog.metadata.title,
+                        blog.metadata.description
+                      )
+                    }
+                    alt={blog.metadata.title}
+                    fill
+                    priority
+                  />
+                  <div className="pointer-events-none absolute inset-0 inset-ring-1 inset-ring-black/15 dark:inset-ring-white/15" />
+
+                  <dl
+                    className="absolute bottom-4 left-4"
+                    data-slot="doc-created-at"
+                  >
+                    <dt className="sr-only">Published on</dt>
+                    <dd className="text-sm text-zinc-500">
+                      <time
+                        dateTime={new Date(
+                          blog.metadata.createdAt
+                        ).toISOString()}
+                      >
+                        {format(
+                          new Date(blog.metadata.createdAt),
+                          'MMMM dd, yyyy'
+                        )}
+                      </time>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+
+              <StripeSeparator />
+
+              <Panel className="decor-t screen-line-bottom-none screen-line-top-none flex flex-1 flex-col p-0">
+                <PanelHeader className="decor-b py-2">
+                  <PanelTitle className="text-4xl font-medium tracking-tight text-balance">
+                    {blog.metadata.title}
+                  </PanelTitle>
+                </PanelHeader>
+
                 <Prose className="p-4">
                   <p className="text-muted-foreground not-typeset mb-(--typeset-flow)">
                     {blog.metadata.description}
@@ -273,7 +321,7 @@ export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
             </DocContentCol>
 
             <DocRightCol>
-              <div className="fixed top-[calc(var(--doc-cols-top,0)+(--spacing(3)))] right-0 opacity-0 in-data-doc-cols-ready:opacity-100">
+              <div className="sticky top-[calc(var(--doc-cols-top,0)+(--spacing(3)))] right-0 opacity-0 in-data-doc-cols-ready:opacity-100">
                 <TOCMinimap items={toc} />
               </div>
             </DocRightCol>
