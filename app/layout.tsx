@@ -7,7 +7,6 @@ import Script from 'next/script';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import type { WebSite, WithContext } from 'schema-dts';
 
-import { CommandMenuDialog } from '@/components/cheffolio/command-menu';
 import { JsonLdScript } from '@/components/json-ld';
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -162,7 +161,6 @@ export default function RootLayout({
               <TooltipProvider>
                 <NuqsAdapter>{children}</NuqsAdapter>
               </TooltipProvider>
-              <CommandMenuDialog />
             </CommandMenuProvider>
           </ProgressProvider>
           <Toaster position="bottom-center" closeButton />

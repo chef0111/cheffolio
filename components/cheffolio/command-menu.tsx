@@ -1,7 +1,5 @@
 'use client';
 
-import { useCommandState } from 'cmdk';
-import type { LucideProps } from 'lucide-react';
 import {
   AwardIcon,
   BoxIcon,
@@ -9,10 +7,12 @@ import {
   CornerDownLeftIcon,
   DownloadIcon,
   FileUser,
+  HomeIcon,
   LayersIcon,
   MailIcon,
   MonitorIcon,
   MoonStarIcon,
+  NewspaperIcon,
   PhoneIcon,
   Search,
   ServerIcon,
@@ -44,53 +44,81 @@ import { useCommandMenu } from '@/context/command-menu-provider';
 import { SOCIAL_LINKS } from '@/features/portfolio/data/social-links';
 import { USER } from '@/features/portfolio/data/user';
 import { haptic } from '@/lib/haptic';
+import type { DocPreview } from '@/types/document';
 import { copyText } from '@/utils/copy';
 import { decodeEmail, decodePhoneNumber } from '@/utils/string';
 import { addQueryParams } from '@/utils/url';
 
 import { Brand } from './brand';
 
-type CommandType = 'command' | 'page' | 'link';
+type CommandType = 'command' | 'page' | 'section' | 'link';
 
 type CommandLinkItem = {
   title: string;
   href: string;
   type: CommandType;
-  icon?: React.ComponentType<LucideProps>;
+  icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   iconImage?: string;
   keywords?: string[];
   openInNewTab?: boolean;
 };
 
+const MENU_LINKS: CommandLinkItem[] = [
+  {
+    title: 'Home',
+    href: '/',
+    type: 'page',
+    icon: HomeIcon,
+  },
+  {
+    title: 'Blog',
+    href: '/blog',
+    type: 'page',
+    icon: NewspaperIcon,
+  },
+  {
+    title: 'Projects',
+    href: '/projects',
+    type: 'page',
+    icon: BoxIcon,
+  },
+  {
+    title: 'Resume',
+    href: '/resume',
+    type: 'page',
+    icon: FileUser,
+  },
+];
+
 const PORTFOLIO_LINKS: CommandLinkItem[] = [
   {
     title: 'About',
     href: '/#about',
-    type: 'page',
+    type: 'section',
     icon: TextInitial,
   },
   {
     title: 'Tech Stack',
     href: '/#stack',
-    type: 'page',
+    type: 'section',
     icon: LayersIcon,
   },
   {
     title: 'Experience',
     href: '/#experience',
-    type: 'page',
+    type: 'section',
     icon: BriefcaseBusinessIcon,
   },
   {
     title: 'Projects',
     href: '/#projects',
-    type: 'page',
+    type: 'section',
     icon: BoxIcon,
   },
   {
     title: 'Honors & Awards',
     href: '/#awards',
-    type: 'page',
+    type: 'section',
     icon: AwardIcon,
   },
 ];
@@ -114,10 +142,13 @@ export function CommandMenu() {
   return <CommandMenuTrigger onClick={handleOpen} />;
 }
 
-export function CommandMenuDialog() {
-  const { open, setOpen } = useCommandMenu();
+export function CommandMenuDialog({ blogs }: { blogs: DocPreview[] }) {
   const router = useRouter();
+  const { open, setOpen } = useCommandMenu();
   const { setTheme } = useTheme();
+
+  const [selectedCommandType, setSelectedCommandType] =
+    React.useState<CommandType | null>(null);
 
   useHotkeys(
     'mod+k',
@@ -126,6 +157,10 @@ export function CommandMenuDialog() {
     },
     { preventDefault: true, enableOnFormTags: true }
   );
+
+  const handleLinkHover = React.useCallback((link: CommandLinkItem) => {
+    setSelectedCommandType(link.type);
+  }, []);
 
   const handleOpenLink = React.useCallback(
     (href: string, openInNewTab = false) => {
@@ -175,6 +210,19 @@ export function CommandMenuDialog() {
     [setOpen, setTheme]
   );
 
+  const blogLinks = React.useMemo(
+    () =>
+      blogs
+        .filter((blog) => blog.category === 'blog')
+        .map<CommandLinkItem>((blog) => ({
+          title: blog.title,
+          href: `/blog/${blog.slug}`,
+          type: 'page',
+          keywords: ['blog'],
+        })),
+    [blogs]
+  );
+
   return (
     <CommandDialog
       title="Command Menu"
@@ -196,13 +244,28 @@ export function CommandMenuDialog() {
           </CommandEmpty>
 
           <CommandLinkGroup
+            heading="Menu"
+            links={MENU_LINKS}
+            onLinkHover={handleLinkHover}
+            onLinkSelect={handleOpenLink}
+          />
+          <CommandLinkGroup
             heading="Portfolio"
             links={PORTFOLIO_LINKS}
+            onLinkHover={handleLinkHover}
+            onLinkSelect={handleOpenLink}
+          />
+          <CommandLinkGroup
+            heading="Blog"
+            links={blogLinks}
+            fallbackIcon={NewspaperIcon}
+            onLinkHover={handleLinkHover}
             onLinkSelect={handleOpenLink}
           />
           <CommandLinkGroup
             heading="Social Links"
             links={SOCIAL_LINK_ITEMS}
+            onLinkHover={handleLinkHover}
             onLinkSelect={handleOpenLink}
           />
 
@@ -269,7 +332,7 @@ export function CommandMenuDialog() {
         </CommandList>
       </div>
 
-      <CommandMenuFooter />
+      <CommandMenuFooter selectedCommandType={selectedCommandType} />
     </CommandDialog>
   );
 }
@@ -317,11 +380,13 @@ function CommandLinkGroup({
   heading,
   links,
   fallbackIcon,
+  onLinkHover,
   onLinkSelect,
 }: {
   heading: string;
   links: CommandLinkItem[];
-  fallbackIcon?: React.ComponentType<LucideProps>;
+  fallbackIcon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  onLinkHover: (link: CommandLinkItem) => void;
   onLinkSelect: (href: string, openInNewTab?: boolean) => void;
 }) {
   return (
@@ -332,7 +397,9 @@ function CommandLinkGroup({
         return (
           <CommandItem
             key={link.href}
+            value={`${link.type}-${link.title}-${link.href}`}
             keywords={link.keywords}
+            onMouseEnter={() => onLinkHover(link)}
             onSelect={() => onLinkSelect(link.href, link.openInNewTab)}
           >
             {link?.iconImage ? (
@@ -358,49 +425,15 @@ function CommandLinkGroup({
 const ENTER_ACTION_LABELS: Record<CommandType, string> = {
   command: 'Run Command',
   page: 'Go to Page',
+  section: 'Go to Section',
   link: 'Open Link',
 };
 
-type CommandMetaMap = Map<
-  string,
-  {
-    commandType: CommandType;
-  }
->;
-
-function buildCommandMetaMap() {
-  const commandMetaMap: CommandMetaMap = new Map();
-
-  commandMetaMap.set('Light', { commandType: 'command' });
-  commandMetaMap.set('Dark', { commandType: 'command' });
-  commandMetaMap.set('System', { commandType: 'command' });
-
-  commandMetaMap.set('Download CV', {
-    commandType: 'command',
-  });
-  commandMetaMap.set('Copy Email Address', {
-    commandType: 'command',
-  });
-  commandMetaMap.set('Copy Phone Number', {
-    commandType: 'command',
-  });
-
-  SOCIAL_LINK_ITEMS.forEach((item) => {
-    commandMetaMap.set(item.title, {
-      commandType: 'link',
-    });
-  });
-
-  return commandMetaMap;
-}
-
-const COMMAND_META_MAP = buildCommandMetaMap();
-
-function CommandMenuFooter() {
-  const selectedCommandType = useCommandState(
-    (state) => COMMAND_META_MAP.get(state.value)?.commandType ?? 'page'
-  );
-
+function CommandMenuFooter({
+  selectedCommandType,
+}: {
+  selectedCommandType: CommandType | null;
+}) {
   return (
     <>
       <div className="flex h-10" />
@@ -409,7 +442,7 @@ function CommandMenuFooter() {
         <Brand className="text-muted-foreground size-6" />
 
         <div className="flex shrink-0 items-center gap-2 max-sm:hidden">
-          <span>{ENTER_ACTION_LABELS[selectedCommandType]}</span>
+          <span>{ENTER_ACTION_LABELS[selectedCommandType ?? 'page']}</span>
           <Kbd>
             <CornerDownLeftIcon />
           </Kbd>

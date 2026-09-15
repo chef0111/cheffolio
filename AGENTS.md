@@ -54,6 +54,7 @@ bun run upgrade:next        # Upgrade Next.js
 bun run upgrade:tailwind    # Upgrade Tailwind CSS
 bun run capture             # Capture screenshots of components
 bun run capture:sync        # Capture screenshots of components and sync to R2
+bun run render:resume       # Render resume PDF
 ```
 
 ### Local dev URL
