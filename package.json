@@ -1,0 +1,25 @@
+{
+  "name": "create-gb-app",
+  "version": "0.0.0",
+  "description": "Scaffold a typed fullstack React app with a working notes domain",
+  "type": "module",
+  "bin": {
+    "create-gb-app": "./src/cli.ts"
+  },
+  "scripts": {
+    "dev": "bun src/cli.ts",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit"
+  },
+  "files": [
+    "src"
+  ],
+  "engines": {
+    "bun": ">=1.3.0"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/bun": "^1.3.4",
+    "typescript": "^5.9.2"
+  }
+}
