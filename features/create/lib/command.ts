@@ -1,7 +1,7 @@
-import type { FlagGroup, StudioFlags } from '../types/stack';
+import type { CreateFlags, FlagGroup } from '../types/stack';
 import { isOptionEnabled, isRelationalGroup, YES_DEFAULTS } from './compat';
 
-export const PROJECT_NAME = 'my-app';
+export const DEFAULT_PROJECT_NAME = 'my-app';
 export const DEFAULT_COMMAND = 'npx create-gb-app my-app --yes';
 
 const CLI_FLAGS: { key: FlagGroup; flag: string }[] = [
@@ -17,8 +17,24 @@ const CLI_FLAGS: { key: FlagGroup; flag: string }[] = [
   { key: 'linter', flag: '--linter' },
 ];
 
-export function buildCommand(flags: StudioFlags): string {
-  const parts = ['npx', 'create-gb-app', PROJECT_NAME, '--yes'];
+export function resolveProjectName(name: string): string {
+  const trimmed = name.trim();
+  return trimmed.length > 0 ? trimmed : DEFAULT_PROJECT_NAME;
+}
+
+function shellQuote(value: string): string {
+  if (/^[A-Za-z0-9._@/=+-]+$/.test(value)) {
+    return value;
+  }
+  return `'${value.replaceAll("'", `'\\''`)}'`;
+}
+
+export function buildCommand(
+  flags: CreateFlags,
+  projectName = DEFAULT_PROJECT_NAME
+): string {
+  const dir = shellQuote(resolveProjectName(projectName));
+  const parts = ['npx', 'create-gb-app', dir, '--yes'];
 
   for (const { key, flag } of CLI_FLAGS) {
     if (flags.backend === 'convex' && isRelationalGroup(key)) {
@@ -35,7 +51,7 @@ export function buildCommand(flags: StudioFlags): string {
 }
 
 export function isSelectable(
-  flags: StudioFlags,
+  flags: CreateFlags,
   group: FlagGroup,
   value: string
 ): boolean {

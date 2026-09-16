@@ -11,28 +11,28 @@ import {
 import { StripeSeparator } from '@/components/cheffolio/stripe-separator';
 import { jsonLdBreadcrumbList, JsonLdScript } from '@/components/json-ld';
 import { X_PROFILE } from '@/config/site';
-import { StudioFallback } from '@/features/studio/components/studio-fallback';
+import { CreateFallback } from '@/features/create/components/create-fallback';
 
-const StudioWorkspace = dynamic(() =>
-  import('@/features/studio/components/studio-workspace').then(
-    (mod) => mod.StudioWorkspace
+const CreateWorkspace = dynamic(() =>
+  import('@/features/create/components/create-workspace').then(
+    (mod) => mod.CreateWorkspace
   )
 );
 
-const title = 'Studio';
+const title = 'Create';
 const description = 'Copy a create-gb-app command and preview the folder tree';
 const ogImage = simpleOgImageUrl(title, description);
-const STUDIO_PATH = '/studio';
+const CREATE_PATH = '/create';
 
 export function generateMetadata(): Metadata {
   return {
     title,
     description,
     alternates: {
-      canonical: STUDIO_PATH,
+      canonical: CREATE_PATH,
     },
     openGraph: {
-      url: STUDIO_PATH,
+      url: CREATE_PATH,
       type: 'website',
       images: {
         url: ogImage,
@@ -50,13 +50,13 @@ export function generateMetadata(): Metadata {
   };
 }
 
-export default function StudioPage() {
+export default function CreatePage() {
   return (
     <>
       <JsonLdScript
         data={jsonLdBreadcrumbList([
           { name: 'Home', href: '/' },
-          { name: 'Studio', href: STUDIO_PATH },
+          { name: 'Create', href: CREATE_PATH },
         ])}
       />
 
@@ -72,8 +72,8 @@ export default function StudioPage() {
 
         <StripeSeparator />
 
-        <Suspense fallback={<StudioFallback />}>
-          <StudioWorkspace />
+        <Suspense fallback={<CreateFallback />}>
+          <CreateWorkspace />
         </Suspense>
 
         <StripeSeparator />

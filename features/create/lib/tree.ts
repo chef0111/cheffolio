@@ -1,5 +1,5 @@
-import type { StudioFlags } from '../types/stack';
-import { PROJECT_NAME } from './command';
+import type { CreateFlags } from '../types/stack';
+import { DEFAULT_PROJECT_NAME, resolveProjectName } from './command';
 
 export type TreeNode = {
   name: string;
@@ -8,14 +8,18 @@ export type TreeNode = {
   children?: TreeNode[];
 };
 
-export function getFolderTree(flags: StudioFlags): TreeNode {
+export function getFolderTree(
+  flags: CreateFlags,
+  projectName = DEFAULT_PROJECT_NAME
+): TreeNode {
+  const name = resolveProjectName(projectName);
   switch (flags.backend) {
     case 'self':
-      return folder(PROJECT_NAME, PROJECT_NAME, selfChildren(flags));
+      return folder(name, name, selfChildren(flags));
     case 'nest':
-      return folder(PROJECT_NAME, PROJECT_NAME, nestChildren(flags));
+      return folder(name, name, nestChildren(flags));
     case 'convex':
-      return folder(PROJECT_NAME, PROJECT_NAME, convexChildren(flags));
+      return folder(name, name, convexChildren(flags));
     default: {
       const _exhaustive: never = flags.backend;
       throw new Error(`unhandled backend: ${_exhaustive}`);
@@ -23,7 +27,21 @@ export function getFolderTree(flags: StudioFlags): TreeNode {
   }
 }
 
-function selfChildren(flags: StudioFlags): TreeNode[] {
+export function collectFolderIds(node: TreeNode): string[] {
+  const ids: string[] = [];
+  const children = node.children ?? [];
+  if (node.kind === 'folder' && children.length > 0) {
+    ids.push(node.path);
+  }
+  for (const child of children) {
+    if (child.kind === 'folder') {
+      ids.push(...collectFolderIds(child));
+    }
+  }
+  return ids;
+}
+
+function selfChildren(flags: CreateFlags): TreeNode[] {
   const appRoot = flags.frontend === 'next' ? 'app' : 'src/routes';
   const appChildren: TreeNode[] = [folder('notes', `${appRoot}/notes`)];
 
@@ -63,7 +81,7 @@ function selfChildren(flags: StudioFlags): TreeNode[] {
   return children;
 }
 
-function nestChildren(flags: StudioFlags): TreeNode[] {
+function nestChildren(flags: CreateFlags): TreeNode[] {
   const children: TreeNode[] = [
     folder('apps/web', 'apps/web'),
     folder('apps/server', 'apps/server'),
@@ -82,7 +100,7 @@ function nestChildren(flags: StudioFlags): TreeNode[] {
   return children;
 }
 
-function convexChildren(flags: StudioFlags): TreeNode[] {
+function convexChildren(flags: CreateFlags): TreeNode[] {
   const appRoot = flags.frontend === 'next' ? 'app' : 'src/routes';
   const children: TreeNode[] = [
     folder(appRoot, appRoot),

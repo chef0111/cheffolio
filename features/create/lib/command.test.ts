@@ -1,10 +1,27 @@
 import { expect, test } from 'bun:test';
 
+import { convertNpmCommand } from '@/components/code-block-command';
+
 import { buildCommand, isSelectable } from './command';
 import { YES_DEFAULTS } from './compat';
 
 test('literal --yes command', () => {
   expect(buildCommand(YES_DEFAULTS)).toBe('npx create-gb-app my-app --yes');
+});
+
+test('custom project name is quoted in the command', () => {
+  expect(buildCommand(YES_DEFAULTS, 'my app')).toBe(
+    "npx create-gb-app 'my app' --yes"
+  );
+});
+
+test('convertNpmCommand maps the default command', () => {
+  expect(convertNpmCommand('npx create-gb-app my-app --yes')).toEqual({
+    pnpm: 'pnpm create gb-app my-app --yes',
+    yarn: 'yarn create gb-app my-app --yes',
+    npm: 'npx create-gb-app my-app --yes',
+    bun: 'bunx --bun create-gb-app my-app --yes',
+  });
 });
 
 test('polar plus clerk is not selectable', () => {

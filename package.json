@@ -42,6 +42,7 @@
     "fumadocs-typescript": "^5.4.0",
     "geist": "^1.7.0",
     "gray-matter": "^4.0.3",
+    "jotai": "^3.0.0",
     "libphonenumber-js": "^1.12.42",
     "lucide-react": "^1.16.0",
     "motion": "^13.1.1",

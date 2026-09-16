@@ -1,4 +1,4 @@
-import type { FlagGroup, StudioFlags } from '../types/stack';
+import type { CreateFlags, FlagGroup } from '../types/stack';
 
 export const FLAG_GROUP_LABELS: Record<FlagGroup, string> = {
   frontend: 'Frontend',
@@ -14,7 +14,7 @@ export const FLAG_GROUP_LABELS: Record<FlagGroup, string> = {
 };
 
 type FlagOption<K extends FlagGroup> = {
-  value: StudioFlags[K];
+  value: CreateFlags[K];
   label: string;
 };
 

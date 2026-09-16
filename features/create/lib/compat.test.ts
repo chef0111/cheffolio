@@ -1,7 +1,7 @@
 import { expect, test } from 'bun:test';
 
 import compat from '../data/compat.json';
-import { FLAG_GROUPS, type FlagGroup, type StudioFlags } from '../types/stack';
+import { type CreateFlags, FLAG_GROUPS, type FlagGroup } from '../types/stack';
 import { buildCommand } from './command';
 import {
   disabledRuleId,
@@ -12,13 +12,14 @@ import {
 } from './compat';
 
 test('vendored yesDefault is the picker default', () => {
-  const { monorepo: _, ...flags } = compat.yesDefault;
+  const { monorepo, ...flags } = compat.yesDefault;
+  expect(monorepo).toBe(false);
   expect(flags).toEqual(YES_DEFAULTS);
 });
 
 for (const legal of compat.legal) {
   test(legal.name, () => {
-    const flags = { ...YES_DEFAULTS, ...legal.flags } as StudioFlags;
+    const flags = { ...YES_DEFAULTS, ...legal.flags } as CreateFlags;
     for (const group of FLAG_GROUPS) {
       if (!(group in legal.stack)) {
         continue;
@@ -26,7 +27,11 @@ for (const legal of compat.legal) {
       if (!isGroupVisible(flags, group)) {
         continue;
       }
-      expect(flags[group]).toBe(legal.stack[group as keyof typeof legal.stack]);
+      const expected = legal.stack[group as keyof typeof legal.stack];
+      if (typeof expected !== 'string') {
+        continue;
+      }
+      expect(flags[group] as string).toBe(expected);
     }
 
     const command = buildCommand(flags);
@@ -41,7 +46,7 @@ for (const legal of compat.legal) {
 
 for (const illegal of compat.illegal) {
   test(illegal.name, () => {
-    const patch = illegal.flags as Partial<StudioFlags>;
+    const patch = illegal.flags as Partial<CreateFlags>;
     const groups = (Object.keys(patch) as FlagGroup[]).filter(
       (group) => patch[group] !== undefined
     );
@@ -56,12 +61,12 @@ for (const illegal of compat.illegal) {
         ...YES_DEFAULTS,
         ...patch,
         [group]: YES_DEFAULTS[group],
-      } as StudioFlags;
+      } as CreateFlags;
       return disabledRuleId(probe, group, value);
     });
     expect(hits).toContain(illegal.ruleId as RuleId);
 
-    const flags = { ...YES_DEFAULTS, ...patch } as StudioFlags;
+    const flags = { ...YES_DEFAULTS, ...patch } as CreateFlags;
     if (flags.backend !== 'convex') {
       return;
     }

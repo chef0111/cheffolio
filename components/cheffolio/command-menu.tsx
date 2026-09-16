@@ -78,8 +78,8 @@ const MENU_LINKS: CommandLinkItem[] = [
     icon: NewspaperIcon,
   },
   {
-    title: 'Studio',
-    href: '/studio',
+    title: 'Create',
+    href: '/create',
     type: 'page',
     icon: BoxesIcon,
   },

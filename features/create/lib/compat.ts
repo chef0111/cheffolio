@@ -1,12 +1,12 @@
 import {
   type Auth,
   type Backend,
+  type CreateFlags,
   type Database,
   type DbSetup,
   FLAG_GROUPS,
   type FlagGroup,
   type Payments,
-  type StudioFlags,
 } from '../types/stack';
 
 export const RULE_IDS = {
@@ -39,7 +39,7 @@ export const RULE_MESSAGES: Record<RuleId, string> = {
   'clerk-polar-forbidden': 'Clerk cannot be used with Polar',
 };
 
-export const YES_DEFAULTS: StudioFlags = {
+export const YES_DEFAULTS: CreateFlags = {
   frontend: 'next',
   backend: 'self',
   api: 'orpc',
@@ -63,7 +63,7 @@ export function isRelationalGroup(group: FlagGroup): boolean {
   return RELATIONAL_GROUPS.has(group);
 }
 
-export function isGroupVisible(flags: StudioFlags, group: FlagGroup): boolean {
+export function isGroupVisible(flags: CreateFlags, group: FlagGroup): boolean {
   if (flags.backend === 'convex' && isRelationalGroup(group)) {
     return false;
   }
@@ -71,7 +71,7 @@ export function isGroupVisible(flags: StudioFlags, group: FlagGroup): boolean {
 }
 
 export function disabledRuleId(
-  flags: StudioFlags,
+  flags: CreateFlags,
   group: FlagGroup,
   value: string
 ): RuleId | null {
@@ -79,7 +79,7 @@ export function disabledRuleId(
 }
 
 export function isOptionEnabled(
-  flags: StudioFlags,
+  flags: CreateFlags,
   group: FlagGroup,
   value: string
 ): boolean {
@@ -87,7 +87,7 @@ export function isOptionEnabled(
 }
 
 export function disabledReason(
-  flags: StudioFlags,
+  flags: CreateFlags,
   group: FlagGroup,
   value: string
 ): string | null {
@@ -120,7 +120,7 @@ function convexRelationalRule(group: FlagGroup): RuleId | null {
 }
 
 function disabledRule(
-  flags: StudioFlags,
+  flags: CreateFlags,
   group: FlagGroup,
   value: string
 ): RuleId | null {
@@ -186,11 +186,11 @@ function disabledRule(
 }
 
 export function applyFlagChange<K extends FlagGroup>(
-  flags: StudioFlags,
+  flags: CreateFlags,
   key: K,
-  value: StudioFlags[K]
-): StudioFlags {
-  const next: StudioFlags = { ...flags, [key]: value };
+  value: CreateFlags[K]
+): CreateFlags {
+  const next: CreateFlags = { ...flags, [key]: value };
 
   switch (key) {
     case 'backend':
@@ -216,7 +216,7 @@ export function applyFlagChange<K extends FlagGroup>(
   }
 }
 
-export function normalizeFlags(flags: StudioFlags): StudioFlags {
+export function normalizeFlags(flags: CreateFlags): CreateFlags {
   let next = flags;
 
   for (const group of FLAG_GROUPS) {
@@ -251,9 +251,9 @@ export function normalizeFlags(flags: StudioFlags): StudioFlags {
 }
 
 function applyBackendSideEffects(
-  flags: StudioFlags,
+  flags: CreateFlags,
   backend: Backend
-): StudioFlags {
+): CreateFlags {
   switch (backend) {
     case 'nest':
       return { ...flags, api: 'orpc' };
@@ -275,9 +275,9 @@ function applyBackendSideEffects(
 }
 
 function applyDatabaseSideEffects(
-  flags: StudioFlags,
+  flags: CreateFlags,
   database: Database
-): StudioFlags {
+): CreateFlags {
   if (database === 'sqlite' && flags.dbSetup === 'docker') {
     return { ...flags, dbSetup: 'none' };
   }
@@ -290,7 +290,7 @@ function applyDatabaseSideEffects(
   return flags;
 }
 
-function applyAuthSideEffects(flags: StudioFlags, auth: Auth): StudioFlags {
+function applyAuthSideEffects(flags: CreateFlags, auth: Auth): CreateFlags {
   if (auth === 'none') {
     return { ...flags, payments: 'none' };
   }
@@ -301,9 +301,9 @@ function applyAuthSideEffects(flags: StudioFlags, auth: Auth): StudioFlags {
 }
 
 function applyPaymentsSideEffects(
-  flags: StudioFlags,
+  flags: CreateFlags,
   payments: Payments
-): StudioFlags {
+): CreateFlags {
   if (payments !== 'none' && flags.auth === 'none') {
     return { ...flags, payments: 'none' };
   }
@@ -314,9 +314,9 @@ function applyPaymentsSideEffects(
 }
 
 function applyDbSetupSideEffects(
-  flags: StudioFlags,
+  flags: CreateFlags,
   dbSetup: DbSetup
-): StudioFlags {
+): CreateFlags {
   if (dbSetup === 'docker' && flags.database === 'sqlite') {
     return { ...flags, dbSetup: 'none' };
   }

@@ -45,7 +45,12 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/projects',
-        destination: '/studio',
+        destination: '/create',
+        permanent: true,
+      },
+      {
+        source: '/studio',
+        destination: '/create',
         permanent: true,
       },
       {

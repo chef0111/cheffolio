@@ -35,7 +35,7 @@ export const FLAG_GROUPS = [
 
 export type FlagGroup = (typeof FLAG_GROUPS)[number];
 
-export type StudioFlags = {
+export type CreateFlags = {
   frontend: Frontend;
   backend: Backend;
   api: Api;

@@ -18,11 +18,11 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { FLAG_GROUP_LABELS, FLAG_OPTIONS } from '../data/options';
 import { isSelectable } from '../lib/command';
 import { disabledReason, isGroupVisible } from '../lib/compat';
-import { FLAG_GROUPS, type FlagGroup, type StudioFlags } from '../types/stack';
-import { useStudio } from './studio-provider';
+import { type CreateFlags, FLAG_GROUPS, type FlagGroup } from '../types/stack';
+import { useCreate } from './create-provider';
 
-export function StudioPicker() {
-  const { flags } = useStudio();
+export function CreatePicker() {
+  const { flags } = useCreate();
 
   return (
     <Card className="rounded-none ring-0">
@@ -44,7 +44,7 @@ export function StudioPicker() {
 
 function FlagRadioGroup({ group }: { group: FlagGroup }) {
   const id = useId();
-  const { flags, setFlag } = useStudio();
+  const { flags, setFlag } = useCreate();
   const selected = flags[group];
 
   return (
@@ -95,8 +95,8 @@ function FlagRadioGroup({ group }: { group: FlagGroup }) {
 function assignFlag(
   group: FlagGroup,
   value: unknown,
-  flags: StudioFlags,
-  setFlag: <K extends FlagGroup>(key: K, value: StudioFlags[K]) => void
+  flags: CreateFlags,
+  setFlag: <K extends FlagGroup>(key: K, value: CreateFlags[K]) => void
 ) {
   if (typeof value !== 'string') {
     return;
@@ -104,5 +104,5 @@ function assignFlag(
   if (!isSelectable(flags, group, value)) {
     return;
   }
-  setFlag(group, value as StudioFlags[typeof group]);
+  setFlag(group, value as CreateFlags[typeof group]);
 }

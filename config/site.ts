@@ -23,8 +23,8 @@ export const DESKTOP_NAV: NavItem[] = [
     href: '/blog',
   },
   {
-    title: 'Studio',
-    href: '/studio',
+    title: 'Create',
+    href: '/create',
   },
   {
     title: 'Resume',
@@ -44,8 +44,8 @@ export const MOBILE_NAV: NavItem[] = [
     icon: NewspaperIcon,
   },
   {
-    title: 'Studio',
-    href: '/studio',
+    title: 'Create',
+    href: '/create',
     icon: BoxesIcon,
   },
   {
