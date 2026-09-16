@@ -29,7 +29,7 @@ export function CreateTree() {
       selectable={false}
       className="px-2 py-3"
     >
-      <TreeView>
+      <TreeView aria-labelledby="create-folder-tree">
         <FolderTreeNode node={tree} level={0} isLast />
       </TreeView>
     </TreeProvider>
@@ -53,7 +53,13 @@ function FolderTreeNode({
   const nodeId = treeNodeId(node, parentId);
 
   return (
-    <TreeNode nodeId={nodeId} level={level} isLast={isLast}>
+    <TreeNode
+      aria-label={node.name}
+      hasChildren={hasChildren}
+      isLast={isLast}
+      level={level}
+      nodeId={nodeId}
+    >
       <TreeNodeTrigger>
         <TreeExpander hasChildren={hasChildren} />
         <TreeIcon hasChildren={isFolder} />

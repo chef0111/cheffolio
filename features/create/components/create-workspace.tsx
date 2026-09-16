@@ -23,9 +23,9 @@ export function CreateWorkspace() {
           <div className="border-border md:border-r">
             <CreatePicker />
           </div>
-          <Card className="rounded-none ring-0">
+          <Card className="rounded-none bg-transparent ring-0">
             <CardHeader className="border-b">
-              <CardTitle>Folder tree</CardTitle>
+              <CardTitle id="create-folder-tree">Folder tree</CardTitle>
             </CardHeader>
             <CardContent className="p-0">
               <CreateTree />

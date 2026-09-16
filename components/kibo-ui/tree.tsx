@@ -178,6 +178,7 @@ export type TreeNodeProps = HTMLAttributes<HTMLDivElement> & {
   level?: number;
   isLast?: boolean;
   parentPath?: boolean[];
+  hasChildren?: boolean;
   children?: ReactNode;
 };
 
@@ -186,12 +187,16 @@ export const TreeNode = ({
   level = 0,
   isLast = false,
   parentPath = [],
+  hasChildren = false,
   children,
   className,
   ...props
 }: TreeNodeProps) => {
   const generatedId = useId();
   const nodeId = providedNodeId ?? generatedId;
+  const { expandedIds, selectedIds } = useTree();
+  const isExpanded = expandedIds.has(nodeId);
+  const isSelected = selectedIds.includes(nodeId);
 
   // Build the parent path - mark positions where the parent was the last child
   const currentPath = level === 0 ? [] : [...parentPath];
@@ -214,7 +219,13 @@ export const TreeNode = ({
         parentPath: currentPath,
       }}
     >
-      <div className={cn('select-none', className)} {...props}>
+      <div
+        aria-expanded={hasChildren ? isExpanded : undefined}
+        aria-selected={isSelected}
+        className={cn('select-none', className)}
+        role="treeitem"
+        {...props}
+      >
         {children}
       </div>
     </TreeNodeContext.Provider>
@@ -229,17 +240,13 @@ export const TreeNodeTrigger = ({
   onClick,
   ...props
 }: TreeNodeTriggerProps) => {
-  const { selectedIds, expandedIds, toggleExpanded, handleSelection, indent } =
-    useTree();
+  const { selectedIds, toggleExpanded, handleSelection, indent } = useTree();
   const { nodeId, level } = useTreeNode();
   const isSelected = selectedIds.includes(nodeId);
-  const isExpanded = expandedIds.has(nodeId);
 
   return (
     <motion.button
       type="button"
-      role="treeitem"
-      aria-expanded={isExpanded}
       className={cn(
         'group relative mx-1 flex w-full cursor-pointer items-center rounded-md border-0 bg-transparent px-3 py-2 text-left transition-all duration-200',
         'hover:bg-accent/50',
@@ -270,7 +277,7 @@ export const TreeLines = () => {
   }
 
   return (
-    <div className="pointer-events-none absolute top-0 bottom-0 left-0">
+    <span className="pointer-events-none absolute top-0 bottom-0 left-0">
       {/* Render vertical lines for all parent levels */}
       {Array.from({ length: level }, (_, index) => {
         const shouldHideLine = parentPath[index] === true;
@@ -279,7 +286,7 @@ export const TreeLines = () => {
         }
 
         return (
-          <div
+          <span
             className="border-border/40 absolute top-0 bottom-0 border-l"
             key={index.toString()}
             style={{
@@ -291,7 +298,7 @@ export const TreeLines = () => {
       })}
 
       {/* Horizontal connector line */}
-      <div
+      <span
         className="border-border/40 absolute top-1/2 border-t"
         style={{
           left: (level - 1) * (indent ?? 0) + 12,
@@ -302,7 +309,7 @@ export const TreeLines = () => {
 
       {/* Vertical line to midpoint for last items */}
       {isLast && (
-        <div
+        <span
           className="border-border/40 absolute top-0 border-l"
           style={{
             left: (level - 1) * (indent ?? 0) + 12,
@@ -310,7 +317,7 @@ export const TreeLines = () => {
           }}
         />
       )}
-    </div>
+    </span>
   );
 };
 
@@ -346,6 +353,7 @@ export const TreeNodeContent = ({
             className={className}
             exit={{ y: -10 }}
             initial={{ y: -10 }}
+            role="group"
             transition={{
               duration: animateExpand ? 0.2 : 0,
               delay: animateExpand ? 0.1 : 0,
@@ -360,7 +368,7 @@ export const TreeNodeContent = ({
   );
 };
 
-export type TreeExpanderProps = ComponentProps<typeof motion.div> & {
+export type TreeExpanderProps = ComponentProps<typeof motion.span> & {
   hasChildren?: boolean;
 };
 
@@ -374,25 +382,25 @@ export const TreeExpander = ({
   const isExpanded = expandedIds.has(nodeId);
 
   if (!hasChildren) {
-    return <div className="mr-1 h-4 w-4" />;
+    return <span className="mr-1 inline-block h-4 w-4" />;
   }
 
   return (
-    <motion.div
+    <motion.span
       animate={{ rotate: isExpanded ? 90 : 0 }}
       className={cn(
-        'pointer-events-none mr-1 flex h-4 w-4 items-center justify-center',
+        'pointer-events-none mr-1 inline-flex h-4 w-4 items-center justify-center',
         className
       )}
       transition={{ duration: 0.2, ease: 'easeInOut' }}
       {...props}
     >
       <ChevronRight className="text-muted-foreground h-3 w-3" />
-    </motion.div>
+    </motion.span>
   );
 };
 
-export type TreeIconProps = ComponentProps<typeof motion.div> & {
+export type TreeIconProps = ComponentProps<typeof motion.span> & {
   icon?: ReactNode;
   hasChildren?: boolean;
 };
@@ -423,9 +431,9 @@ export const TreeIcon = ({
     );
 
   return (
-    <motion.div
+    <motion.span
       className={cn(
-        'text-muted-foreground mr-2 flex h-4 w-4 items-center justify-center',
+        'text-muted-foreground mr-2 inline-flex h-4 w-4 items-center justify-center',
         className
       )}
       transition={{ duration: 0.15 }}
@@ -433,7 +441,7 @@ export const TreeIcon = ({
       {...props}
     >
       {icon || getDefaultIcon()}
-    </motion.div>
+    </motion.span>
   );
 };
 
