@@ -61,6 +61,10 @@ export function parseArgs(argv: string[]): RawFlags {
       flags.help = true;
       continue;
     }
+    if (arg === "--version" || arg === "-v") {
+      flags.version = true;
+      continue;
+    }
     if (arg === "--yes" || arg === "-y") {
       flags.yes = true;
       continue;
@@ -158,6 +162,8 @@ export const USAGE = `create-gb-app [dir] [flags]
   bunx create-gb-app my-app --yes
 
 Flags
+  --help, -h
+  --version, -v
   --yes, -y
   --frontend next|tanstack-start
   --backend self|nest|convex

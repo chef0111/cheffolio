@@ -1,0 +1,114 @@
+#!/usr/bin/env bun
+
+import { mkdir, rm } from "node:fs/promises";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import pkg from "../package.json" with { type: "json" };
+import {
+  ALL_TARGETS,
+  bunCompileTarget,
+  hostTarget,
+  platformPackageName,
+  type CompileTarget,
+} from "./targets.ts";
+
+const dir = dirname(fileURLToPath(import.meta.url));
+const root = join(dir, "..");
+process.chdir(root);
+
+const allFlag = process.argv.includes("--all");
+const skipInstall = process.argv.includes("--skip-install");
+
+const targets: CompileTarget[] = allFlag
+  ? ALL_TARGETS
+  : [hostTarget()];
+
+await rm(join(root, "dist"), { recursive: true, force: true });
+
+if (!skipInstall) {
+  const proc = Bun.spawn(
+    [
+      "bun",
+      "install",
+      "--os=*",
+      "--cpu=*",
+      `@opentui/core@${pkg.dependencies["@opentui/core"]}`,
+    ],
+    { cwd: root, stdout: "inherit", stderr: "inherit" },
+  );
+  const code = await proc.exited;
+  if (code !== 0) {
+    throw new Error("failed to install OpenTUI native packages");
+  }
+}
+
+const binaries: Record<string, string> = {};
+
+for (const item of targets) {
+  const name = platformPackageName(item, pkg.name);
+  const outDir = join(root, "dist", name, "bin");
+  await mkdir(outDir, { recursive: true });
+  console.log(`building ${name}`);
+
+  const define: Record<string, string> = {
+    CREATE_GB_APP_VERSION: JSON.stringify(pkg.version),
+  };
+  if (item.os === "linux") {
+    define["process.env.OPENTUI_LIBC"] = JSON.stringify(item.abi ?? "glibc");
+  }
+
+  const result = await Bun.build({
+    entrypoints: ["./src/index.ts"],
+    minify: true,
+    compile: {
+      target: bunCompileTarget(item) as never,
+      outfile: join(outDir, "create-gb-app"),
+    },
+    define,
+  });
+
+  if (!result.success) {
+    for (const log of result.logs) {
+      console.error(log);
+    }
+    process.exit(1);
+  }
+
+  if (item.os === process.platform && item.arch === process.arch && !item.abi && item.avx2 !== false) {
+    const binaryPath = join(
+      outDir,
+      process.platform === "win32" ? "create-gb-app.exe" : "create-gb-app",
+    );
+    const smoke = Bun.spawn([binaryPath, "--help"], {
+      stdout: "pipe",
+      stderr: "pipe",
+    });
+    const stdout = await new Response(smoke.stdout).text();
+    const stderr = await new Response(smoke.stderr).text();
+    const code = await smoke.exited;
+    if (code !== 0 || !stdout.includes("create-gb-app")) {
+      console.error(stdout, stderr);
+      throw new Error(`smoke test failed for ${name}`);
+    }
+    console.log(`smoke test passed: ${name} --help`);
+  }
+
+  await Bun.write(
+    join(root, "dist", name, "package.json"),
+    `${JSON.stringify(
+      {
+        name,
+        version: pkg.version,
+        preferUnplugged: true,
+        os: [item.os],
+        cpu: [item.arch],
+        ...(item.abi ? { libc: [item.abi] } : {}),
+      },
+      null,
+      2,
+    )}\n`,
+  );
+  binaries[name] = pkg.version;
+}
+
+export { binaries };

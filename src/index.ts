@@ -1,6 +1,7 @@
 #!/usr/bin/env bun
 
 import { parseArgs, ParseError, USAGE } from "./cli/parse-args.ts";
+import { VERSION } from "./cli/version.ts";
 import { inferPackageManager } from "./cli/package-manager.ts";
 import { generateApp } from "./generate/run.ts";
 import { CompatError } from "./stack/errors.ts";
@@ -30,6 +31,11 @@ export async function main(argv: string[]): Promise<void> {
 
   if (flags.help) {
     process.stdout.write(USAGE);
+    return;
+  }
+
+  if (flags.version) {
+    process.stdout.write(`${VERSION}\n`);
     return;
   }
 

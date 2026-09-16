@@ -11,6 +11,7 @@ export type Linter = "eslint" | "biome" | "oxlint";
 
 export type RawFlags = {
   help?: boolean;
+  version?: boolean;
   yes?: boolean;
   frontend?: Frontend;
   backend?: Backend;

@@ -9,7 +9,9 @@
   "scripts": {
     "dev": "bun src/index.ts",
     "test": "bun test",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "build": "bun script/build.ts",
+    "publish:prepare": "bun script/publish.ts"
   },
   "files": [
     "src"
