@@ -8,7 +8,14 @@ export function emitPrisma(ctx: EmitCtx): void {
   ctx.pkg.scripts["db:generate"] = "prisma generate";
   ctx.pkg.scripts["db:push"] = "prisma db push";
 
-  const dbPath = joinPath(libDir(ctx.stack), "db.ts");
+  const dbPath =
+    ctx.stack.backend === "nest"
+      ? "apps/server/src/db.ts"
+      : joinPath(libDir(ctx.stack), "db.ts");
+  const schemaPath =
+    ctx.stack.backend === "nest"
+      ? "apps/server/prisma/schema.prisma"
+      : "prisma/schema.prisma";
   const noteUser =
     ctx.stack.auth === "none"
       ? ""
@@ -116,7 +123,7 @@ if (process.env.NODE_ENV !== "production") {
 
   setFile(
     ctx.files,
-    "prisma/schema.prisma",
+    schemaPath,
     `generator client {
   provider = "prisma-client-js"
 }

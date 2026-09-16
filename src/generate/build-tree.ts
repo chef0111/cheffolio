@@ -2,6 +2,7 @@ import type { Stack } from "../stack/types.ts";
 import { setFile, sortRecord } from "./files.ts";
 import { emitBetterAuth } from "./layers/better-auth.ts";
 import { emitEslintPrettier } from "./layers/eslint.ts";
+import { emitNest } from "./layers/nest.ts";
 import { emitNext } from "./layers/next.ts";
 import { emitNotes } from "./layers/notes.ts";
 import { emitOrpc } from "./layers/orpc.ts";
@@ -145,7 +146,8 @@ export function buildTree(stack: Stack, ctx: GenerateContext): FileMap {
       break;
     }
     case "nest":
-      throw new Error("nest generate is not implemented yet");
+      emitNest(emitCtx);
+      break;
     case "convex":
       throw new Error("convex generate is not implemented yet");
     default: {
@@ -154,10 +156,12 @@ export function buildTree(stack: Stack, ctx: GenerateContext): FileMap {
     }
   }
 
-  emitAuth(stack, emitCtx);
-  emitUi(stack, emitCtx);
-  emitLinter(stack, emitCtx);
-  emitNotes(emitCtx);
+  if (stack.backend !== "nest") {
+    emitAuth(stack, emitCtx);
+    emitUi(stack, emitCtx);
+    emitLinter(stack, emitCtx);
+    emitNotes(emitCtx);
+  }
 
   pkg.dependencies = sortRecord(pkg.dependencies);
   pkg.devDependencies = sortRecord(pkg.devDependencies);
