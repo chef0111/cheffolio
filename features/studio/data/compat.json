@@ -66,6 +66,21 @@
       "ruleId": "convex-database-off"
     },
     {
+      "name": "Convex with an API",
+      "flags": { "backend": "convex", "api": "trpc" },
+      "ruleId": "convex-api-off"
+    },
+    {
+      "name": "Convex with an ORM",
+      "flags": { "backend": "convex", "orm": "drizzle" },
+      "ruleId": "convex-orm-off"
+    },
+    {
+      "name": "Convex with docker",
+      "flags": { "backend": "convex", "dbSetup": "docker" },
+      "ruleId": "convex-db-setup-off"
+    },
+    {
       "name": "Docker plus sqlite",
       "flags": { "database": "sqlite", "dbSetup": "docker" },
       "ruleId": "sqlite-docker-forbidden"
@@ -74,6 +89,11 @@
       "name": "Neon plus mysql",
       "flags": { "dbSetup": "neon", "database": "mysql" },
       "ruleId": "neon-requires-postgres"
+    },
+    {
+      "name": "Supabase plus mysql",
+      "flags": { "dbSetup": "supabase", "database": "mysql" },
+      "ruleId": "supabase-requires-postgres"
     },
     {
       "name": "Clerk plus Polar",

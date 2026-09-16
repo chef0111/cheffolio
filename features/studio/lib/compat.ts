@@ -70,6 +70,14 @@ export function isGroupVisible(flags: StudioFlags, group: FlagGroup): boolean {
   return true;
 }
 
+export function disabledRuleId(
+  flags: StudioFlags,
+  group: FlagGroup,
+  value: string
+): RuleId | null {
+  return disabledRule(flags, group, value);
+}
+
 export function isOptionEnabled(
   flags: StudioFlags,
   group: FlagGroup,
