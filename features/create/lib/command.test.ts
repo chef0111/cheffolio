@@ -1,6 +1,6 @@
 import { expect, test } from 'bun:test';
 
-import { convertNpmCommand } from '@/components/code-block-command';
+import { convertNpmCommand } from '@/lib/convert-npm-command';
 
 import { buildCommand, isSelectable } from './command';
 import { YES_DEFAULTS } from './compat';

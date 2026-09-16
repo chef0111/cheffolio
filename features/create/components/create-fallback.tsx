@@ -1,11 +1,9 @@
 import { Panel } from '@/components/cheffolio/panel';
-import {
-  CodeBlockCommand,
-  convertNpmCommand,
-} from '@/components/code-block-command';
+import { CodeBlockCommand } from '@/components/code-block-command';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { convertNpmCommand } from '@/lib/convert-npm-command';
 
 import { DEFAULT_COMMAND, DEFAULT_PROJECT_NAME } from '../lib/command';
 
