@@ -1,0 +1,24 @@
+ create-gb-app                                                                  
+ Backend                      ┌───────────────────────────────────────────────┐ 
+    Self                      │Tree                                           │ 
+    Nest                      │app                                            │ 
+  ▶ Convex                    │convex                                         │ 
+ Frontend                     │package.json                                   │ 
+  ▶ Next                      │Command                                        │ 
+    Start                     │create-gb-app my-app --backend convex          │ 
+ Auth                         │Polar available                                │ 
+  ▶ Better Auth               │API and database hidden                        │ 
+    Clerk                     │                                               │ 
+    None                      │                                               │ 
+ Payments                     │                                               │ 
+  ▶ None                      │                                               │ 
+    Stripe                    │                                               │ 
+    Polar                     │                                               │ 
+  ▶ Generate                  └───────────────────────────────────────────────┘ 
+ Tab cycles. Escape exits. Enter on Generate writes files.                      
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                

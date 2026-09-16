@@ -1,0 +1,24 @@
+ create-gb-app                                                                  
+ Backend                      ┌───────────────────────────────────────────────┐ 
+    Self                      │Tree                                           │ 
+  ▶ Nest                      │apps/web                                       │ 
+    Convex                    │apps/server                                    │ 
+ Frontend                     │packages/contract                              │ 
+  ▶ Next                      │packages/typescript-config                     │ 
+    Start                     │packages/ui                                    │ 
+ Auth                         │turbo.json                                     │ 
+  ▶ Better Auth               │Command                                        │ 
+    Clerk                     │create-gb-app my-app --backend nest            │ 
+    None                      │Polar available                                │ 
+ Payments                     │API visible                                    │ 
+  ▶ None                      │                                               │ 
+    Stripe                    │                                               │ 
+    Polar                     │                                               │ 
+  ▶ Generate                  └───────────────────────────────────────────────┘ 
+ Tab cycles. Escape exits. Enter on Generate writes files.                      
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                

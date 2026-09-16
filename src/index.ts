@@ -34,8 +34,8 @@ export async function main(argv: string[]): Promise<void> {
   }
 
   if (!shouldGenerateHeadless(flags)) {
-    process.stderr.write("error: pass --yes to generate without the wizard\n");
-    process.exitCode = 1;
+    const { mountWizard } = await import("./tui/mount.ts");
+    await mountWizard(flags);
     return;
   }
 
