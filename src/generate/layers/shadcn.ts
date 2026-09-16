@@ -6,9 +6,13 @@ export function emitShadcn(ctx: EmitCtx): void {
   ctx.pkg.dependencies["tailwind-merge"] = "^3.3.1";
   ctx.pkg.dependencies["class-variance-authority"] = "^0.7.1";
 
+  const root = ctx.stack.frontend === "tanstack-start" ? "src/" : "";
+  const css =
+    ctx.stack.frontend === "tanstack-start" ? "src/styles.css" : "app/globals.css";
+
   setFile(
     ctx.files,
-    "lib/utils.ts",
+    `${root}lib/utils.ts`,
     `import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -29,7 +33,7 @@ export function cn(...inputs: ClassValue[]) {
         tsx: true,
         tailwind: {
           config: "",
-          css: "app/globals.css",
+          css,
           baseColor: "neutral",
           cssVariables: false,
         },
@@ -46,7 +50,7 @@ export function cn(...inputs: ClassValue[]) {
 
   setFile(
     ctx.files,
-    "components/ui/button.tsx",
+    `${root}components/ui/button.tsx`,
     `import type { ButtonHTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 
@@ -69,7 +73,7 @@ export function Button({
 
   setFile(
     ctx.files,
-    "components/ui/input.tsx",
+    `${root}components/ui/input.tsx`,
     `import type { InputHTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 
@@ -92,7 +96,7 @@ export function Input({
 
   setFile(
     ctx.files,
-    "components/ui/card.tsx",
+    `${root}components/ui/card.tsx`,
     `import type { HTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 

@@ -2,6 +2,10 @@ import { setFile } from "../files.ts";
 import type { EmitCtx } from "../types.ts";
 
 export function emitNotes(ctx: EmitCtx): void {
+  if (ctx.stack.backend === "convex") {
+    emitConvexNotes(ctx);
+    return;
+  }
   if (
     ctx.stack.frontend === "tanstack-start" &&
     ctx.stack.backend === "self" &&
@@ -305,4 +309,67 @@ function NotesPage() {
 `,
   );
 }
+
+function emitConvexNotes(ctx: EmitCtx): void {
+  const ui = ctx.stack.ui === "shadcn";
+  setFile(
+    ctx.files,
+    "src/routes/notes.tsx",
+    `import { createFileRoute } from "@tanstack/react-router";
+import { useMutation, useQuery } from "convex/react";
+import { useState } from "react";
+import { api } from "../../convex/_generated/api";
+${ui ? `import { Button } from "../components/ui/button";
+import { Card } from "../components/ui/card";
+import { Input } from "../components/ui/input";` : ""}
+
+export const Route = createFileRoute("/notes")({
+  component: NotesPage,
+});
+
+function NotesPage() {
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const notes = useQuery(api.notes.list);
+  const create = useMutation(api.notes.create);
+
+  return (
+    <main className="mx-auto flex min-h-screen max-w-xl flex-col gap-6 p-8">
+      <h1 className="text-2xl font-semibold">Notes</h1>
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          void create({ title, body });
+          setTitle("");
+          setBody("");
+        }}
+      >
+        ${
+          ui
+            ? `<Input name="title" value={title} onChange={(event) => setTitle(event.target.value)} required />
+        <Input name="body" value={body} onChange={(event) => setBody(event.target.value)} />
+        <Button type="submit">Add note</Button>`
+            : `<input name="title" value={title} onChange={(event) => setTitle(event.target.value)} required />
+        <input name="body" value={body} onChange={(event) => setBody(event.target.value)} />
+        <button type="submit">Add note</button>`
+        }
+      </form>
+      <ul>
+        {(notes ?? []).map((note) => (
+          <li key={note._id}>
+            ${
+              ui
+                ? `<Card className="p-4"><h2 className="font-medium">{note.title}</h2><p>{note.body}</p></Card>`
+                : `<article><h2>{note.title}</h2><p>{note.body}</p></article>`
+            }
+          </li>
+        ))}
+      </ul>
+    </main>
+  );
+}
+`,
+  );
+}
+
 

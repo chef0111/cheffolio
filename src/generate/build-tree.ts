@@ -1,6 +1,8 @@
 import type { Stack } from "../stack/types.ts";
 import { setFile, sortRecord } from "./files.ts";
 import { emitBetterAuth } from "./layers/better-auth.ts";
+import { emitClerk } from "./layers/clerk.ts";
+import { emitConvex } from "./layers/convex.ts";
 import { emitEslintPrettier } from "./layers/eslint.ts";
 import { emitNest } from "./layers/nest.ts";
 import { emitNext } from "./layers/next.ts";
@@ -50,7 +52,8 @@ function emitAuth(stack: Stack, ctx: Parameters<typeof emitNext>[0]) {
     case "none":
       break;
     case "clerk":
-      throw new Error("clerk generate is not implemented yet");
+      emitClerk(ctx);
+      break;
     default: {
       const _exhaustive: never = stack.auth;
       throw new Error(`unhandled auth: ${_exhaustive}`);
@@ -149,7 +152,9 @@ export function buildTree(stack: Stack, ctx: GenerateContext): FileMap {
       emitNest(emitCtx);
       break;
     case "convex":
-      throw new Error("convex generate is not implemented yet");
+      emitFrontend(stack, emitCtx);
+      emitConvex(emitCtx);
+      break;
     default: {
       const _exhaustive: never = stack;
       throw new Error(`unhandled stack: ${JSON.stringify(_exhaustive)}`);
