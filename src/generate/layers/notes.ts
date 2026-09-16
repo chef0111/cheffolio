@@ -188,9 +188,6 @@ export function NotesClient() {
 }
 
 function emitStartTrpcNotes(ctx: EmitCtx): void {
-  if (ctx.stack.auth !== "none") {
-    throw new Error("start tRPC auth generate is not implemented yet");
-  }
 
   setFile(
     ctx.files,

@@ -3,7 +3,14 @@ import type { EmitCtx } from "../types.ts";
 
 export function emitPostgres(ctx: EmitCtx): void {
   const dbName = ctx.projectName.replace(/[^a-zA-Z0-9_]/g, "_") || "app";
-  const databaseUrl = `postgres://postgres:postgres@localhost:5432/${dbName}`;
+  const databaseUrl =
+    ctx.stack.backend === "convex"
+      ? ""
+      : ctx.stack.database === "sqlite"
+        ? `file:./dev.db`
+        : ctx.stack.database === "mysql"
+          ? `mysql://root:root@localhost:3306/${dbName}`
+          : `postgres://postgres:postgres@localhost:5432/${dbName}`;
   const authLines =
     ctx.stack.auth === "better-auth"
       ? `BETTER_AUTH_SECRET="dev-secret-change-me-please-32chars"

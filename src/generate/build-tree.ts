@@ -3,7 +3,11 @@ import { setFile, sortRecord } from "./files.ts";
 import { emitBetterAuth } from "./layers/better-auth.ts";
 import { emitClerk } from "./layers/clerk.ts";
 import { emitConvex } from "./layers/convex.ts";
+import { emitDbSetup } from "./layers/db-setup.ts";
+import { emitDrizzle } from "./layers/drizzle.ts";
 import { emitEslintPrettier } from "./layers/eslint.ts";
+import { emitPolar } from "./layers/polar.ts";
+import { emitStripe } from "./layers/stripe.ts";
 import { emitNest } from "./layers/nest.ts";
 import { emitNext } from "./layers/next.ts";
 import { emitNotes } from "./layers/notes.ts";
@@ -19,12 +23,11 @@ import type { FileMap, GenerateContext, PackageJsonShape } from "./types.ts";
 
 function emitDatabase(stack: Extract<Stack, { backend: "self" | "nest" }>, ctx: Parameters<typeof emitNext>[0]) {
   switch (stack.database) {
+    case "sqlite":
+    case "mysql":
     case "postgres":
       emitPostgres(ctx);
       break;
-    case "sqlite":
-    case "mysql":
-      throw new Error(`${stack.database} generate is not implemented yet`);
     default: {
       const _exhaustive: never = stack.database;
       throw new Error(`unhandled database: ${_exhaustive}`);
@@ -36,12 +39,15 @@ function emitDatabase(stack: Extract<Stack, { backend: "self" | "nest" }>, ctx: 
       emitPrisma(ctx);
       break;
     case "drizzle":
-      throw new Error("drizzle generate is not implemented yet");
+      emitDrizzle(ctx);
+      break;
     default: {
       const _exhaustive: never = stack.orm;
       throw new Error(`unhandled orm: ${_exhaustive}`);
     }
   }
+
+  emitDbSetup(ctx);
 }
 
 function emitAuth(stack: Stack, ctx: Parameters<typeof emitNext>[0]) {
@@ -92,6 +98,23 @@ function emitLinter(stack: Stack, ctx: Parameters<typeof emitNext>[0]) {
   }
 }
 
+function emitPayments(stack: Stack, ctx: Parameters<typeof emitNext>[0]) {
+  switch (stack.payments) {
+    case "none":
+      break;
+    case "stripe":
+      emitStripe(ctx);
+      break;
+    case "polar":
+      emitPolar(ctx);
+      break;
+    default: {
+      const _exhaustive: never = stack.payments;
+      throw new Error(`unhandled payments: ${_exhaustive}`);
+    }
+  }
+}
+
 function emitFrontend(stack: Stack, ctx: Parameters<typeof emitNext>[0]) {
   switch (stack.frontend) {
     case "next":
@@ -116,9 +139,6 @@ function emitApi(stack: Extract<Stack, { backend: "self" }>, ctx: Parameters<typ
       emitOrpc(ctx);
       break;
     case "trpc":
-      if (stack.frontend !== "tanstack-start") {
-        throw new Error("next tRPC generate is not implemented yet");
-      }
       emitTrpc(ctx);
       break;
     default: {
@@ -163,9 +183,15 @@ export function buildTree(stack: Stack, ctx: GenerateContext): FileMap {
 
   if (stack.backend !== "nest") {
     emitAuth(stack, emitCtx);
+    emitPayments(stack, emitCtx);
     emitUi(stack, emitCtx);
     emitLinter(stack, emitCtx);
     emitNotes(emitCtx);
+  } else {
+    if (stack.auth === "clerk") {
+      emitClerk(emitCtx);
+    }
+    emitPayments(stack, emitCtx);
   }
 
   pkg.dependencies = sortRecord(pkg.dependencies);

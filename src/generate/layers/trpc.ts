@@ -9,6 +9,11 @@ export function emitTrpc(ctx: EmitCtx): void {
   ctx.pkg.dependencies.zod = "^4.1.5";
   ctx.pkg.dependencies.superjson = "^2.2.2";
 
+  if (ctx.stack.frontend === "next") {
+    emitTrpcNext(ctx);
+    return;
+  }
+
   setFile(
     ctx.files,
     "src/server/trpc.ts",
@@ -124,3 +129,131 @@ export function Providers(props: { children: ReactNode }) {
 `,
   );
 }
+
+function emitTrpcNext(ctx: EmitCtx): void {
+  const clerk = ctx.stack.auth === "clerk";
+  setFile(
+    ctx.files,
+    "server/trpc.ts",
+    clerk
+      ? `import { initTRPC, TRPCError } from "@trpc/server";
+import { auth } from "@clerk/nextjs/server";
+import superjson from "superjson";
+
+export const createContext = async () => {
+  return { auth: await auth() };
+};
+
+const t = initTRPC.context<typeof createContext>().create({
+  transformer: superjson,
+});
+
+export const router = t.router;
+export const publicProcedure = t.procedure;
+export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
+  if (!ctx.auth.userId) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+  return next({ ctx });
+});
+`
+      : `import { initTRPC } from "@trpc/server";
+import superjson from "superjson";
+
+export const createContext = async () => ({});
+
+const t = initTRPC.context<typeof createContext>().create({
+  transformer: superjson,
+});
+
+export const router = t.router;
+export const publicProcedure = t.procedure;
+`,
+  );
+
+  setFile(
+    ctx.files,
+    "server/router.ts",
+    `import { z } from "zod";
+import { prisma } from "@/lib/db";
+import { publicProcedure, router } from "./trpc";
+
+export const appRouter = router({
+  notes: {
+    list: publicProcedure.query(async () => {
+      return prisma.note.findMany({ orderBy: { createdAt: "desc" } });
+    }),
+    create: publicProcedure
+      .input(z.object({ title: z.string().min(1), body: z.string() }))
+      .mutation(async ({ input }) => {
+        return prisma.note.create({ data: input });
+      }),
+  },
+});
+
+export type AppRouter = typeof appRouter;
+`,
+  );
+
+  setFile(
+    ctx.files,
+    "app/api/trpc/[trpc]/route.ts",
+    `import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
+import { appRouter } from "@/server/router";
+import { createContext } from "@/server/trpc";
+
+const handler = (req: Request) =>
+  fetchRequestHandler({
+    endpoint: "/api/trpc",
+    req,
+    router: appRouter,
+    createContext,
+  });
+
+export { handler as GET, handler as POST };
+`,
+  );
+
+  setFile(
+    ctx.files,
+    "lib/trpc.ts",
+    `import { createTRPCReact } from "@trpc/react-query";
+import type { AppRouter } from "@/server/router";
+
+export const trpc = createTRPCReact<AppRouter>();
+`,
+  );
+
+  const clerkWrap = ctx.stack.auth === "clerk";
+  setFile(
+    ctx.files,
+    "app/providers.tsx",
+    `"use client";
+
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { httpBatchLink } from "@trpc/client";
+${clerkWrap ? `import { ClerkProvider } from "@clerk/nextjs";` : ""}
+import { useState, type ReactNode } from "react";
+import superjson from "superjson";
+import { trpc } from "@/lib/trpc";
+
+export function Providers(props: { children: ReactNode }) {
+  const [queryClient] = useState(() => new QueryClient());
+  const [trpcClient] = useState(() =>
+    trpc.createClient({
+      links: [httpBatchLink({ url: "/api/trpc", transformer: superjson })],
+    }),
+  );
+
+  const tree = (
+    <trpc.Provider client={trpcClient} queryClient={queryClient}>
+      <QueryClientProvider client={queryClient}>{props.children}</QueryClientProvider>
+    </trpc.Provider>
+  );
+
+  return ${clerkWrap ? "<ClerkProvider>{tree}</ClerkProvider>" : "tree"};
+}
+`,
+  );
+}
+

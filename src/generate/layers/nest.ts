@@ -2,6 +2,8 @@ import { workspaceProtocol } from "../../cli/package-manager.ts";
 import { setFile } from "../files.ts";
 import type { EmitCtx } from "../types.ts";
 import { emitBiome } from "./biome.ts";
+import { emitDbSetup } from "./db-setup.ts";
+import { emitDrizzle } from "./drizzle.ts";
 import { emitPostgres } from "./postgres.ts";
 import { emitPrisma } from "./prisma.ts";
 
@@ -10,6 +12,9 @@ function proto(ctx: EmitCtx): string {
 }
 
 export function emitNest(ctx: EmitCtx): void {
+  if (ctx.stack.backend !== "nest") {
+    throw new Error("emitNest requires nest");
+  }
   if (ctx.stack.frontend !== "next") {
     throw new Error("nest Start generate is not implemented yet");
   }
@@ -24,7 +29,19 @@ export function emitNest(ctx: EmitCtx): void {
   ctx.pkg.workspaces = ["apps/*", "packages/*"];
 
   emitPostgres(ctx);
-  emitPrisma(ctx);
+  switch (ctx.stack.orm) {
+    case "prisma":
+      emitPrisma(ctx);
+      break;
+    case "drizzle":
+      emitDrizzle(ctx);
+      break;
+    default: {
+      const _exhaustive: never = ctx.stack.orm;
+      throw new Error(`unhandled orm: ${_exhaustive}`);
+    }
+  }
+  emitDbSetup(ctx);
 
   setFile(
     ctx.files,
