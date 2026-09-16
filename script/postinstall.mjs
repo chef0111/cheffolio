@@ -46,7 +46,7 @@ export function packageNamesFor(options) {
   return [base];
 }
 
-function supportsAvx2() {
+function detectAvx2() {
   if (os.arch() !== "x64") {
     return true;
   }
@@ -54,10 +54,46 @@ function supportsAvx2() {
     try {
       return /(^|\s)avx2(\s|$)/i.test(fs.readFileSync("/proc/cpuinfo", "utf8"));
     } catch {
-      return true;
+      return null;
     }
   }
-  return true;
+  if (os.platform() === "darwin") {
+    const leaf7 = childProcess.spawnSync("sysctl", ["-n", "machdep.cpu.leaf7_features"], {
+      encoding: "utf8",
+    });
+    if (leaf7.status === 0) {
+      return /\bAVX2\b/i.test(leaf7.stdout || "");
+    }
+    const features = childProcess.spawnSync("sysctl", ["-n", "machdep.cpu.features"], {
+      encoding: "utf8",
+    });
+    if (features.status !== 0) {
+      return null;
+    }
+    return /\bAVX2\b/i.test(features.stdout || "");
+  }
+  if (os.platform() === "win32") {
+    for (const exe of ["pwsh.exe", "powershell.exe"]) {
+      const result = childProcess.spawnSync(
+        exe,
+        ["-NoProfile", "-Command", "[System.Runtime.Intrinsics.X86.Avx2]::IsSupported"],
+        { encoding: "utf8", windowsHide: true, timeout: 5000 },
+      );
+      const text = (result.stdout || "").trim();
+      if (/^True$/i.test(text)) {
+        return true;
+      }
+      if (/^False$/i.test(text)) {
+        return false;
+      }
+    }
+    return null;
+  }
+  return null;
+}
+
+function supportsAvx2() {
+  return detectAvx2() === true;
 }
 
 function isMusl() {
@@ -101,7 +137,7 @@ function sourceBinaryName() {
 }
 
 function targetBinaryPath() {
-  return path.join(packageRoot(), "bin", "create-gb-app.exe");
+  return path.join(packageRoot(), "bin", sourceBinaryName());
 }
 
 function resolveBinary(name) {
@@ -138,6 +174,10 @@ function verifyBinary() {
   return result.status === 0;
 }
 
+export function npmCli(platform = os.platform()) {
+  return platform === "win32" ? "npm.cmd" : "npm";
+}
+
 function installPackage(name, packageJson) {
   const version = packageJson.optionalDependencies?.[name];
   if (!version) {
@@ -146,7 +186,7 @@ function installPackage(name, packageJson) {
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), "create-gb-app-install-"));
   try {
     const result = childProcess.spawnSync(
-      "npm",
+      npmCli(),
       ["install", "--ignore-scripts", "--no-save", "--loglevel=error", "--prefix", temp, `${name}@${version}`],
       { stdio: "inherit", windowsHide: true },
     );

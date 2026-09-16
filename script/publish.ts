@@ -29,7 +29,7 @@ export function wrapperPackageJson(
     version,
     license: pkg.license,
     bin: {
-      "create-gb-app": "./bin/create-gb-app.exe",
+      "create-gb-app": "./bin/create-gb-app.mjs",
     },
     scripts: {
       postinstall: "node ./postinstall.mjs",
@@ -48,22 +48,13 @@ export function defaultBinaryVersions(version = pkg.version): Record<string, str
   return binaries;
 }
 
-const STUB = [
-  'echo "Error: create-gb-app\'s postinstall script was not run." >&2',
-  'echo "" >&2',
-  'echo "This occurs when using --ignore-scripts during installation." >&2',
-  "exit 1",
-  "",
-].join("\n");
-
 export async function writeWrapper(dest = join(root, "dist", pkg.name)): Promise<WrapperManifest> {
   const binaries = defaultBinaryVersions();
   const manifest = wrapperPackageJson(binaries);
   await mkdir(join(dest, "bin"), { recursive: true });
   await Bun.write(join(dest, "package.json"), `${JSON.stringify(manifest, null, 2)}\n`);
   await Bun.write(join(dest, "postinstall.mjs"), Bun.file(join(root, "script/postinstall.mjs")));
-  await Bun.write(join(dest, "bin/create-gb-app"), STUB);
-  await Bun.write(join(dest, "bin/create-gb-app.exe"), STUB);
+  await Bun.write(join(dest, "bin/create-gb-app.mjs"), Bun.file(join(root, "script/run.mjs")));
   return manifest;
 }
 

@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 import pkg from "../package.json" with { type: "json" };
 import {
   ALL_TARGETS,
+  binaryFileName,
   bunCompileTarget,
   hostTarget,
   platformPackageName,
@@ -43,6 +44,7 @@ if (!skipInstall) {
 }
 
 const binaries: Record<string, string> = {};
+const host = hostTarget();
 
 for (const item of targets) {
   const name = platformPackageName(item, pkg.name);
@@ -57,12 +59,13 @@ for (const item of targets) {
     define["process.env.OPENTUI_LIBC"] = JSON.stringify(item.abi ?? "glibc");
   }
 
+  const outfileName = binaryFileName(item.os);
   const result = await Bun.build({
     entrypoints: ["./src/index.ts"],
     minify: true,
     compile: {
       target: bunCompileTarget(item) as never,
-      outfile: join(outDir, "create-gb-app"),
+      outfile: join(outDir, outfileName),
     },
     define,
   });
@@ -74,11 +77,13 @@ for (const item of targets) {
     process.exit(1);
   }
 
-  if (item.os === process.platform && item.arch === process.arch && !item.abi && item.avx2 !== false) {
-    const binaryPath = join(
-      outDir,
-      process.platform === "win32" ? "create-gb-app.exe" : "create-gb-app",
-    );
+  const isHostBuild =
+    item.os === host.os &&
+    item.arch === host.arch &&
+    item.abi === host.abi &&
+    item.avx2 === host.avx2;
+  if (isHostBuild) {
+    const binaryPath = join(outDir, outfileName);
     const smoke = Bun.spawn([binaryPath, "--help"], {
       stdout: "pipe",
       stderr: "pipe",
