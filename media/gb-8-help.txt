@@ -1,0 +1,23 @@
+PASS 232ms
+create-gb-app [dir] [flags]
+
+  npx create-gb-app my-app --yes
+  pnpm create gb-app my-app --yes
+  bunx create-gb-app my-app --yes
+
+Flags
+  --help, -h
+  --version, -v
+  --yes, -y
+  --frontend next|tanstack-start
+  --backend self|nest|convex
+  --api orpc|trpc
+  --database postgres|sqlite|mysql
+  --orm prisma|drizzle
+  --db-setup none|docker|neon|supabase
+  --auth none|better-auth|clerk
+  --payments none|stripe|polar
+  --ui shadcn|none
+  --linter eslint|biome|oxlint
+  --no-git
+  --no-install

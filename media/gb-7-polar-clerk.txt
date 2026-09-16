@@ -1,0 +1,3 @@
+polar clerk error
+PASS code=1 files=0
+error: Clerk cannot be used with Polar (clerk-polar-forbidden)

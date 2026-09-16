@@ -1,0 +1,2 @@
+PASS
+bin=./bin/create-gb-app.exe

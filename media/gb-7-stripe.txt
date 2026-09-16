@@ -1,0 +1,9 @@
+stripe clerk
+PASS webhook=true portal=true checkout=true
+app/api/stripe/
+app/api/stripe/checkout/
+app/api/stripe/checkout/route.ts
+app/api/stripe/webhook/
+app/api/stripe/webhook/route.ts
+app/portal/
+app/portal/page.tsx
