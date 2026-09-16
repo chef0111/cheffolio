@@ -149,6 +149,11 @@ export function parseArgs(argv: string[]): RawFlags {
     }
   }
 
+  if (positionals.length > 1) {
+    throw new ParseError(
+      `unexpected extra arguments: ${positionals.slice(1).join(" ")}`,
+    );
+  }
   if (positionals[0]) {
     flags.projectName = positionals[0];
   }

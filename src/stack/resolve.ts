@@ -63,7 +63,7 @@ export function resolveStack(raw: RawFlags): Stack {
     if (raw.orm !== undefined) {
       throw new CompatError(RULE_IDS.convexOrmOff);
     }
-    if (raw.dbSetup !== undefined) {
+    if (raw.dbSetup !== undefined && raw.dbSetup !== "none") {
       throw new CompatError(RULE_IDS.convexDbSetupOff);
     }
     assertPayments(auth, payments);

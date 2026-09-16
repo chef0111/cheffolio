@@ -44,3 +44,18 @@ describe("parse then resolve", () => {
     });
   });
 });
+
+test("convex with explicit db-setup none", () => {
+  const convexHappy = compat.legal.find((row) => row.name === "convex happy path");
+  expect(convexHappy).toBeDefined();
+  expect(resolveStack({ backend: "convex", dbSetup: "none" })).toEqual(
+    convexHappy?.stack,
+  );
+});
+
+test("CompatError ruleId is not writable", () => {
+  const error = new CompatError("nest-requires-orpc");
+  expect(Object.getOwnPropertyDescriptor(error, "ruleId")?.writable).toBe(
+    false,
+  );
+});
