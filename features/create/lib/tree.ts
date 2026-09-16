@@ -27,15 +27,20 @@ export function getFolderTree(
   }
 }
 
-export function collectFolderIds(node: TreeNode): string[] {
+export function treeNodeId(node: TreeNode, parentId?: string): string {
+  return parentId ? `${parentId}/${node.path}` : `root:${node.path}`;
+}
+
+export function collectFolderIds(node: TreeNode, parentId?: string): string[] {
+  const id = treeNodeId(node, parentId);
   const ids: string[] = [];
   const children = node.children ?? [];
   if (node.kind === 'folder' && children.length > 0) {
-    ids.push(node.path);
+    ids.push(id);
   }
   for (const child of children) {
     if (child.kind === 'folder') {
-      ids.push(...collectFolderIds(child));
+      ids.push(...collectFolderIds(child, id));
     }
   }
   return ids;

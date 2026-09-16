@@ -11,7 +11,11 @@ import {
   TreeView,
 } from '@/components/kibo-ui/tree';
 
-import { collectFolderIds, type TreeNode as FolderNode } from '../lib/tree';
+import {
+  collectFolderIds,
+  type TreeNode as FolderNode,
+  treeNodeId,
+} from '../lib/tree';
 import { useCreate } from './create-provider';
 
 export function CreateTree() {
@@ -20,7 +24,7 @@ export function CreateTree() {
 
   return (
     <TreeProvider
-      key={tree.path}
+      key={expandedIds.join('|')}
       defaultExpandedIds={expandedIds}
       selectable={false}
       className="px-2 py-3"
@@ -36,17 +40,20 @@ function FolderTreeNode({
   node,
   level,
   isLast,
+  parentId,
 }: {
   node: FolderNode;
   level: number;
   isLast: boolean;
+  parentId?: string;
 }) {
   const children = node.children ?? [];
   const isFolder = node.kind === 'folder';
   const hasChildren = children.length > 0;
+  const nodeId = treeNodeId(node, parentId);
 
   return (
-    <TreeNode nodeId={node.path} level={level} isLast={isLast}>
+    <TreeNode nodeId={nodeId} level={level} isLast={isLast}>
       <TreeNodeTrigger>
         <TreeExpander hasChildren={hasChildren} />
         <TreeIcon hasChildren={isFolder} />
@@ -56,10 +63,11 @@ function FolderTreeNode({
         <TreeNodeContent hasChildren>
           {children.map((child, index) => (
             <FolderTreeNode
-              key={child.path}
+              key={treeNodeId(child, nodeId)}
               node={child}
               level={level + 1}
               isLast={index === children.length - 1}
+              parentId={nodeId}
             />
           ))}
         </TreeNodeContent>

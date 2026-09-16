@@ -168,7 +168,7 @@ export const TreeProvider = ({
 export type TreeViewProps = HTMLAttributes<HTMLDivElement>;
 
 export const TreeView = ({ className, children, ...props }: TreeViewProps) => (
-  <div className={cn('p-2', className)} {...props}>
+  <div className={cn('p-2', className)} role="tree" {...props}>
     {children}
   </div>
 );
@@ -221,7 +221,7 @@ export const TreeNode = ({
   );
 };
 
-export type TreeNodeTriggerProps = ComponentProps<typeof motion.div>;
+export type TreeNodeTriggerProps = ComponentProps<typeof motion.button>;
 
 export const TreeNodeTrigger = ({
   children,
@@ -229,14 +229,19 @@ export const TreeNodeTrigger = ({
   onClick,
   ...props
 }: TreeNodeTriggerProps) => {
-  const { selectedIds, toggleExpanded, handleSelection, indent } = useTree();
+  const { selectedIds, expandedIds, toggleExpanded, handleSelection, indent } =
+    useTree();
   const { nodeId, level } = useTreeNode();
   const isSelected = selectedIds.includes(nodeId);
+  const isExpanded = expandedIds.has(nodeId);
 
   return (
-    <motion.div
+    <motion.button
+      type="button"
+      role="treeitem"
+      aria-expanded={isExpanded}
       className={cn(
-        'group relative mx-1 flex cursor-pointer items-center rounded-md px-3 py-2 transition-all duration-200',
+        'group relative mx-1 flex w-full cursor-pointer items-center rounded-md border-0 bg-transparent px-3 py-2 text-left transition-all duration-200',
         'hover:bg-accent/50',
         isSelected && 'bg-accent/80',
         className
@@ -252,7 +257,7 @@ export const TreeNodeTrigger = ({
     >
       <TreeLines />
       {children as ReactNode}
-    </motion.div>
+    </motion.button>
   );
 };
 
@@ -362,10 +367,9 @@ export type TreeExpanderProps = ComponentProps<typeof motion.div> & {
 export const TreeExpander = ({
   hasChildren = false,
   className,
-  onClick,
   ...props
 }: TreeExpanderProps) => {
-  const { expandedIds, toggleExpanded } = useTree();
+  const { expandedIds } = useTree();
   const { nodeId } = useTreeNode();
   const isExpanded = expandedIds.has(nodeId);
 
@@ -377,14 +381,9 @@ export const TreeExpander = ({
     <motion.div
       animate={{ rotate: isExpanded ? 90 : 0 }}
       className={cn(
-        'mr-1 flex h-4 w-4 cursor-pointer items-center justify-center',
+        'pointer-events-none mr-1 flex h-4 w-4 items-center justify-center',
         className
       )}
-      onClick={(e) => {
-        e.stopPropagation();
-        toggleExpanded(nodeId);
-        onClick?.(e);
-      }}
       transition={{ duration: 0.2, ease: 'easeInOut' }}
       {...props}
     >
