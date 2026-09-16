@@ -44,6 +44,11 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: '/projects',
+        destination: '/studio',
+        permanent: true,
+      },
+      {
         source: '/:section(blog|resume)/:slug.mdx',
         destination: '/:section/:slug.md',
         permanent: true,

@@ -1,0 +1,84 @@
+{
+  "yesDefault": {
+    "frontend": "next",
+    "backend": "self",
+    "api": "orpc",
+    "database": "postgres",
+    "orm": "prisma",
+    "dbSetup": "none",
+    "auth": "better-auth",
+    "payments": "none",
+    "ui": "shadcn",
+    "linter": "eslint",
+    "monorepo": false
+  },
+  "legal": [
+    {
+      "name": "nest happy path",
+      "flags": { "backend": "nest" },
+      "stack": {
+        "frontend": "next",
+        "backend": "nest",
+        "api": "orpc",
+        "database": "postgres",
+        "orm": "prisma",
+        "dbSetup": "none",
+        "auth": "better-auth",
+        "payments": "none",
+        "ui": "shadcn",
+        "linter": "eslint",
+        "monorepo": true
+      }
+    },
+    {
+      "name": "convex happy path",
+      "flags": { "backend": "convex" },
+      "stack": {
+        "frontend": "next",
+        "backend": "convex",
+        "auth": "better-auth",
+        "payments": "none",
+        "ui": "shadcn",
+        "linter": "eslint",
+        "monorepo": false
+      }
+    }
+  ],
+  "illegal": [
+    {
+      "name": "Nest without oRPC",
+      "flags": { "backend": "nest", "api": "trpc" },
+      "ruleId": "nest-requires-orpc"
+    },
+    {
+      "name": "Polar without Better Auth",
+      "flags": { "payments": "polar", "auth": "none" },
+      "ruleId": "polar-requires-better-auth"
+    },
+    {
+      "name": "Payments without auth",
+      "flags": { "payments": "stripe", "auth": "none" },
+      "ruleId": "payments-require-auth"
+    },
+    {
+      "name": "Convex with a database",
+      "flags": { "backend": "convex", "database": "postgres" },
+      "ruleId": "convex-database-off"
+    },
+    {
+      "name": "Docker plus sqlite",
+      "flags": { "database": "sqlite", "dbSetup": "docker" },
+      "ruleId": "sqlite-docker-forbidden"
+    },
+    {
+      "name": "Neon plus mysql",
+      "flags": { "dbSetup": "neon", "database": "mysql" },
+      "ruleId": "neon-requires-postgres"
+    },
+    {
+      "name": "Clerk plus Polar",
+      "flags": { "auth": "clerk", "payments": "polar" },
+      "ruleId": "clerk-polar-forbidden"
+    }
+  ]
+}

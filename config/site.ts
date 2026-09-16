@@ -1,4 +1,4 @@
-import { BoxIcon, FileUserIcon, HomeIcon, NewspaperIcon } from 'lucide-react';
+import { BoxesIcon, FileUserIcon, HomeIcon, NewspaperIcon } from 'lucide-react';
 
 import { SOCIAL } from '@/features/portfolio/data/social-links';
 import { USER } from '@/features/portfolio/data/user';
@@ -23,8 +23,8 @@ export const DESKTOP_NAV: NavItem[] = [
     href: '/blog',
   },
   {
-    title: 'Projects',
-    href: '/projects',
+    title: 'Studio',
+    href: '/studio',
   },
   {
     title: 'Resume',
@@ -44,9 +44,9 @@ export const MOBILE_NAV: NavItem[] = [
     icon: NewspaperIcon,
   },
   {
-    title: 'Projects',
-    href: '/projects',
-    icon: BoxIcon,
+    title: 'Studio',
+    href: '/studio',
+    icon: BoxesIcon,
   },
   {
     title: 'Resume',

@@ -2,6 +2,7 @@
 
 import {
   AwardIcon,
+  BoxesIcon,
   BoxIcon,
   BriefcaseBusinessIcon,
   CornerDownLeftIcon,
@@ -77,10 +78,10 @@ const MENU_LINKS: CommandLinkItem[] = [
     icon: NewspaperIcon,
   },
   {
-    title: 'Projects',
-    href: '/projects',
+    title: 'Studio',
+    href: '/studio',
     type: 'page',
-    icon: BoxIcon,
+    icon: BoxesIcon,
   },
   {
     title: 'Resume',
