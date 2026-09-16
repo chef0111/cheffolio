@@ -1,7 +1,15 @@
-import { expect, test } from "bun:test";
+import { beforeAll, expect, test } from "bun:test";
 import { testRender } from "@opentui/react/test-utils";
 import { createElement } from "react";
 import { App } from "../src/tui/app.tsx";
+
+beforeAll(async () => {
+  const setup = await testRender(createElement(App, { initialFlags: {} }), {
+    width: 80,
+    height: 24,
+  });
+  setup.renderer.destroy();
+});
 
 test("wizard first frame shows Backend and blocks Polar when auth is none", async () => {
   const started = performance.now();
