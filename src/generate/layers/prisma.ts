@@ -1,4 +1,5 @@
 import { setFile } from "../files.ts";
+import { joinPath, libDir } from "../paths.ts";
 import type { EmitCtx } from "../types.ts";
 
 export function emitPrisma(ctx: EmitCtx): void {
@@ -7,33 +8,18 @@ export function emitPrisma(ctx: EmitCtx): void {
   ctx.pkg.scripts["db:generate"] = "prisma generate";
   ctx.pkg.scripts["db:push"] = "prisma db push";
 
-  setFile(
-    ctx.files,
-    "lib/db.ts",
-    `import { PrismaClient } from "@prisma/client";
-
-const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
-
-export const prisma = globalForPrisma.prisma ?? new PrismaClient();
-
-if (process.env.NODE_ENV !== "production") {
-  globalForPrisma.prisma = prisma;
-}
-`,
-  );
-
-  setFile(
-    ctx.files,
-    "prisma/schema.prisma",
-    `generator client {
-  provider = "prisma-client-js"
-}
-
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
+  const dbPath = joinPath(libDir(ctx.stack), "db.ts");
+  const noteUser =
+    ctx.stack.auth === "none"
+      ? ""
+      : `
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+`;
+  const noteIndex = ctx.stack.auth === "none" ? "" : "\n  @@index([userId])";
+  const authModels =
+    ctx.stack.auth === "better-auth"
+      ? `
 model User {
   id            String    @id
   name          String
@@ -71,7 +57,7 @@ model Account {
   accountId             String
   providerId            String
   userId                String
-  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   accessToken           String?
   refreshToken          String?
   idToken               String?
@@ -97,18 +83,57 @@ model Verification {
   @@index([identifier])
   @@map("verification")
 }
+`
+      : ctx.stack.auth === "clerk"
+        ? ""
+        : "";
 
+  const provider =
+    ctx.stack.backend === "convex"
+      ? "postgresql"
+      : ctx.stack.backend === "self" || ctx.stack.backend === "nest"
+        ? ctx.stack.database === "mysql"
+          ? "mysql"
+          : ctx.stack.database === "sqlite"
+            ? "sqlite"
+            : "postgresql"
+        : "postgresql";
+
+  setFile(
+    ctx.files,
+    dbPath,
+    `import { PrismaClient } from "@prisma/client";
+
+const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
+
+export const prisma = globalForPrisma.prisma ?? new PrismaClient();
+
+if (process.env.NODE_ENV !== "production") {
+  globalForPrisma.prisma = prisma;
+}
+`,
+  );
+
+  setFile(
+    ctx.files,
+    "prisma/schema.prisma",
+    `generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "${provider}"
+  url      = env("DATABASE_URL")
+}
+${authModels}
 model Note {
   id        String   @id @default(cuid())
   title     String
-  body      String
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  body      String${noteUser}
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([userId])
+  updatedAt DateTime @updatedAt${noteIndex}
 }
 `,
   );
 }
+

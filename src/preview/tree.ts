@@ -14,6 +14,9 @@ export function previewTree(stack: Stack): string {
     case "convex":
       return ["app", "convex", "package.json"].join("\n");
     case "self":
+      if (stack.frontend === "tanstack-start") {
+        return ["src/routes", "src/server", "prisma", "package.json"].join("\n");
+      }
       return ["app", "lib", "prisma", "package.json"].join("\n");
     default: {
       const _exhaustive: never = stack;

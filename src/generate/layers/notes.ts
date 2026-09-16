@@ -2,6 +2,15 @@ import { setFile } from "../files.ts";
 import type { EmitCtx } from "../types.ts";
 
 export function emitNotes(ctx: EmitCtx): void {
+  if (
+    ctx.stack.frontend === "tanstack-start" &&
+    ctx.stack.backend === "self" &&
+    ctx.stack.api === "trpc"
+  ) {
+    emitStartTrpcNotes(ctx);
+    return;
+  }
+
   setFile(
     ctx.files,
     "router.ts",
@@ -173,3 +182,127 @@ export function NotesClient() {
 `,
   );
 }
+
+function emitStartTrpcNotes(ctx: EmitCtx): void {
+  if (ctx.stack.auth !== "none") {
+    throw new Error("start tRPC auth generate is not implemented yet");
+  }
+
+  setFile(
+    ctx.files,
+    "src/server/router.ts",
+    `import { z } from "zod";
+import { prisma } from "../lib/db";
+import { publicProcedure, router } from "./trpc";
+
+export const appRouter = router({
+  notes: {
+    list: publicProcedure.query(async () => {
+      return prisma.note.findMany({ orderBy: { createdAt: "desc" } });
+    }),
+    create: publicProcedure
+      .input(z.object({ title: z.string().min(1), body: z.string() }))
+      .mutation(async ({ input }) => {
+        return prisma.note.create({
+          data: { title: input.title, body: input.body },
+        });
+      }),
+    update: publicProcedure
+      .input(
+        z.object({
+          id: z.string(),
+          title: z.string().min(1),
+          body: z.string(),
+        }),
+      )
+      .mutation(async ({ input }) => {
+        return prisma.note.update({
+          where: { id: input.id },
+          data: { title: input.title, body: input.body },
+        });
+      }),
+    delete: publicProcedure
+      .input(z.object({ id: z.string() }))
+      .mutation(async ({ input }) => {
+        await prisma.note.delete({ where: { id: input.id } });
+        return { ok: true };
+      }),
+  },
+});
+
+export type AppRouter = typeof appRouter;
+`,
+  );
+
+  setFile(
+    ctx.files,
+    "src/routes/notes.tsx",
+    `import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+import { trpc } from "../lib/trpc";
+
+export const Route = createFileRoute("/notes")({
+  component: NotesPage,
+});
+
+function NotesPage() {
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const notes = trpc.notes.list.useQuery();
+  const utils = trpc.useUtils();
+  const create = trpc.notes.create.useMutation({
+    onSuccess: async () => {
+      setTitle("");
+      setBody("");
+      await utils.notes.list.invalidate();
+    },
+  });
+
+  return (
+    <main className="mx-auto flex min-h-screen max-w-xl flex-col gap-6 p-8">
+      <h1 className="text-2xl font-semibold">Notes</h1>
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          create.mutate({ title, body });
+        }}
+      >
+        <label>
+          Title
+          <input
+            name="title"
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+            required
+          />
+        </label>
+        <label>
+          Body
+          <input
+            name="body"
+            value={body}
+            onChange={(event) => setBody(event.target.value)}
+          />
+        </label>
+        <button type="submit" disabled={create.isPending}>
+          Add note
+        </button>
+      </form>
+      {notes.error ? <p>{notes.error.message}</p> : null}
+      <ul>
+        {(notes.data ?? []).map((note) => (
+          <li key={note.id}>
+            <article>
+              <h2>{note.title}</h2>
+              <p>{note.body}</p>
+            </article>
+          </li>
+        ))}
+      </ul>
+    </main>
+  );
+}
+`,
+  );
+}
+

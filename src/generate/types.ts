@@ -1,3 +1,5 @@
+import type { Stack } from "../stack/types.ts";
+
 export type FileMap = Record<string, string>;
 
 export type PackageManager = "npm" | "pnpm" | "yarn" | "bun";
@@ -19,4 +21,5 @@ export type PackageJsonShape = {
 export type EmitCtx = GenerateContext & {
   files: FileMap;
   pkg: PackageJsonShape;
+  stack: Stack;
 };

@@ -5,10 +5,13 @@ import { emitEslintPrettier } from "./layers/eslint.ts";
 import { emitNext } from "./layers/next.ts";
 import { emitNotes } from "./layers/notes.ts";
 import { emitOrpc } from "./layers/orpc.ts";
+import { emitOxlint } from "./layers/oxlint.ts";
 import { emitPostgres } from "./layers/postgres.ts";
 import { emitPrisma } from "./layers/prisma.ts";
 import { emitSelf } from "./layers/self.ts";
 import { emitShadcn } from "./layers/shadcn.ts";
+import { emitStart } from "./layers/start.ts";
+import { emitTrpc } from "./layers/trpc.ts";
 import type { FileMap, GenerateContext, PackageJsonShape } from "./types.ts";
 
 function emitDatabase(stack: Extract<Stack, { backend: "self" | "nest" }>, ctx: Parameters<typeof emitNext>[0]) {
@@ -44,8 +47,9 @@ function emitAuth(stack: Stack, ctx: Parameters<typeof emitNext>[0]) {
       emitBetterAuth(ctx);
       break;
     case "none":
+      break;
     case "clerk":
-      throw new Error(`${stack.auth} generate is not implemented yet`);
+      throw new Error("clerk generate is not implemented yet");
     default: {
       const _exhaustive: never = stack.auth;
       throw new Error(`unhandled auth: ${_exhaustive}`);
@@ -59,7 +63,7 @@ function emitUi(stack: Stack, ctx: Parameters<typeof emitNext>[0]) {
       emitShadcn(ctx);
       break;
     case "none":
-      throw new Error("ui none generate is not implemented yet");
+      break;
     default: {
       const _exhaustive: never = stack.ui;
       throw new Error(`unhandled ui: ${_exhaustive}`);
@@ -72,12 +76,50 @@ function emitLinter(stack: Stack, ctx: Parameters<typeof emitNext>[0]) {
     case "eslint":
       emitEslintPrettier(ctx);
       break;
-    case "biome":
     case "oxlint":
-      throw new Error(`${stack.linter} generate is not implemented yet`);
+      emitOxlint(ctx);
+      break;
+    case "biome":
+      throw new Error("biome generate is not implemented yet");
     default: {
       const _exhaustive: never = stack.linter;
       throw new Error(`unhandled linter: ${_exhaustive}`);
+    }
+  }
+}
+
+function emitFrontend(stack: Stack, ctx: Parameters<typeof emitNext>[0]) {
+  switch (stack.frontend) {
+    case "next":
+      emitNext(ctx);
+      break;
+    case "tanstack-start":
+      emitStart(ctx);
+      break;
+    default: {
+      const _exhaustive: never = stack.frontend;
+      throw new Error(`unhandled frontend: ${_exhaustive}`);
+    }
+  }
+}
+
+function emitApi(stack: Extract<Stack, { backend: "self" }>, ctx: Parameters<typeof emitNext>[0]) {
+  switch (stack.api) {
+    case "orpc":
+      if (stack.frontend !== "next") {
+        throw new Error("start oRPC generate is not implemented yet");
+      }
+      emitOrpc(ctx);
+      break;
+    case "trpc":
+      if (stack.frontend !== "tanstack-start") {
+        throw new Error("next tRPC generate is not implemented yet");
+      }
+      emitTrpc(ctx);
+      break;
+    default: {
+      const _exhaustive: never = stack.api;
+      throw new Error(`unhandled api: ${_exhaustive}`);
     }
   }
 }
@@ -92,19 +134,13 @@ export function buildTree(stack: Stack, ctx: GenerateContext): FileMap {
     dependencies: {},
     devDependencies: {},
   };
-  const emitCtx = { ...ctx, files, pkg };
+  const emitCtx = { ...ctx, files, pkg, stack };
 
   switch (stack.backend) {
     case "self": {
       emitSelf(emitCtx);
-      if (stack.frontend === "tanstack-start") {
-        throw new Error("tanstack-start generate is not implemented yet");
-      }
-      emitNext(emitCtx);
-      if (stack.api === "trpc") {
-        throw new Error("trpc generate is not implemented yet");
-      }
-      emitOrpc(emitCtx);
+      emitFrontend(stack, emitCtx);
+      emitApi(stack, emitCtx);
       emitDatabase(stack, emitCtx);
       break;
     }

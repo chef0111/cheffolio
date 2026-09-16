@@ -5,6 +5,7 @@ import { previewTree } from "../preview/tree.ts";
 import { CompatError } from "../stack/errors.ts";
 import { resolveStack } from "../stack/resolve.ts";
 import type {
+  Api,
   Auth,
   Backend,
   Frontend,
@@ -12,11 +13,12 @@ import type {
   RawFlags,
 } from "../stack/types.ts";
 
-type FocusId = "backend" | "frontend" | "auth" | "payments" | "confirm";
+type FocusId = "backend" | "frontend" | "api" | "auth" | "payments" | "confirm";
 
 const FOCUS_ORDER: FocusId[] = [
   "backend",
   "frontend",
+  "api",
   "auth",
   "payments",
   "confirm",
@@ -31,6 +33,11 @@ const BACKEND_OPTIONS = [
 const FRONTEND_OPTIONS = [
   { name: "Next", description: "Next.js App Router", value: "next" },
   { name: "Start", description: "TanStack Start", value: "tanstack-start" },
+];
+
+const API_OPTIONS = [
+  { name: "oRPC", description: "Router-first procedures", value: "orpc" },
+  { name: "tRPC", description: "Router type from this app", value: "trpc" },
 ];
 
 const AUTH_OPTIONS = [
@@ -60,8 +67,13 @@ function indexOfValue(options: Array<{ value: string }>, value: string | undefin
   return index >= 0 ? index : fallback;
 }
 
-function nextFocus(current: FocusId): FocusId {
-  return FOCUS_ORDER[(FOCUS_ORDER.indexOf(current) + 1) % FOCUS_ORDER.length];
+function nextFocus(current: FocusId, backend: Backend | undefined): FocusId {
+  const order =
+    backend === "convex"
+      ? FOCUS_ORDER.filter((id) => id !== "api")
+      : FOCUS_ORDER;
+  const index = order.indexOf(current);
+  return order[(index < 0 ? 0 : index + 1) % order.length];
 }
 
 export type AppProps = {
@@ -74,7 +86,7 @@ export function App({ initialFlags = {}, onExit, onGenerate }: AppProps) {
   const [flags, setFlags] = useState<RawFlags>(() => ({
     frontend: initialFlags.frontend ?? "next",
     backend: initialFlags.backend ?? "self",
-    api: initialFlags.api,
+    api: initialFlags.api ?? "orpc",
     auth: initialFlags.auth ?? "better-auth",
     payments: initialFlags.payments ?? "none",
     ui: initialFlags.ui ?? "shadcn",
@@ -103,7 +115,7 @@ export function App({ initialFlags = {}, onExit, onGenerate }: AppProps) {
       return;
     }
     if (key.name === "tab") {
-      setFocus((current: FocusId) => nextFocus(current));
+      setFocus((current: FocusId) => nextFocus(current, flags.backend));
     }
   });
 
@@ -164,6 +176,27 @@ export function App({ initialFlags = {}, onExit, onGenerate }: AppProps) {
               }
             }}
           />
+          {flags.backend === "convex" ? null : (
+            <box flexDirection="column">
+              <text>API</text>
+              <select
+                focused={focus === "api"}
+                height={2}
+                showDescription={false}
+                options={
+                  flags.backend === "nest"
+                    ? API_OPTIONS.filter((option) => option.value === "orpc")
+                    : API_OPTIONS
+                }
+                selectedIndex={indexOfValue(API_OPTIONS, flags.api)}
+                onChange={(_index, option) => {
+                  if (option?.value) {
+                    patch({ api: option.value as Api });
+                  }
+                }}
+              />
+            </box>
+          )}
           <text>Auth</text>
           <select
             focused={focus === "auth"}

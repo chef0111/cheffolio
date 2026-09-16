@@ -52,3 +52,28 @@ test("Convex hides api and database", async () => {
     setup.renderer.destroy();
   }
 });
+
+test("Start plus tRPC preview lists src/routes", async () => {
+  const setup = await testRender(
+    createElement(App, {
+      initialFlags: {
+        frontend: "tanstack-start",
+        backend: "self",
+        api: "trpc",
+        auth: "none",
+        ui: "none",
+        linter: "oxlint",
+      },
+    }),
+    { width: 80, height: 24 },
+  );
+  try {
+    await setup.renderOnce();
+    const frame = setup.captureCharFrame();
+    expect(frame).toContain("src/routes");
+    expect(frame).toContain("--frontend tanstack-start");
+    expect(frame).toContain("--api trpc");
+  } finally {
+    setup.renderer.destroy();
+  }
+});
