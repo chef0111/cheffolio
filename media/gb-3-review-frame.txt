@@ -1,4 +1,5 @@
  create-gb-app                                                                  
+ create-gb-app my-app --auth none                                               
  Backend                      ┌───────────────────────────────────────────────┐ 
   ▶ Self                      │Tree                                           │ 
     Nest                      │app                                            │ 
@@ -6,9 +7,12 @@
  Frontend                     │prisma                                         │ 
   ▶ Next                      │package.json                                   │ 
     Start                     │Command                                        │ 
- Auth                         │create-gb-app my-app --auth none               │ 
-    Better Auth               │Polar unavailable                              │ 
-    Clerk                     │API visible                                    │ 
+ API                          │create-gb-app my-app --auth none               │ 
+  ▶ oRPC                      │Polar unavailable                              │ 
+    tRPC                      │API visible                                    │ 
+ Auth                         │                                               │ 
+    Better Auth               │                                               │ 
+    Clerk                     │                                               │ 
   ▶ None                      │                                               │ 
  Payments                     │                                               │ 
   ▶ None                      │                                               │ 
@@ -16,9 +20,5 @@
                               │                                               │ 
   ▶ Generate                  └───────────────────────────────────────────────┘ 
  Tab cycles. Escape exits. Enter on Generate writes files.                      
-                                                                                
-                                                                                
-                                                                                
-                                                                                
                                                                                 
                                                                                 

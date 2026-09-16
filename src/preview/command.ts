@@ -1,6 +1,13 @@
 import { YES_DEFAULTS } from "../stack/resolve.ts";
 import type { RawFlags } from "../stack/types.ts";
 
+function shellQuote(value: string): string {
+  if (/^[A-Za-z0-9._@/=+-]+$/.test(value)) {
+    return value;
+  }
+  return `'${value.replaceAll("'", `'\\''`)}'`;
+}
+
 function definedEntries(flags: RawFlags): Array<[string, string]> {
   const entries: Array<[string, string]> = [];
   if (flags.frontend && flags.frontend !== YES_DEFAULTS.frontend) {
@@ -37,10 +44,10 @@ function definedEntries(flags: RawFlags): Array<[string, string]> {
 }
 
 export function formatCommand(flags: RawFlags): string {
-  const dir = flags.projectName ?? "my-app";
+  const dir = shellQuote(flags.projectName ?? "my-app");
   const parts = ["create-gb-app", dir];
   for (const [flag, value] of definedEntries(flags)) {
-    parts.push(flag, value);
+    parts.push(flag, shellQuote(value));
   }
   if (flags.yes) {
     parts.push("--yes");

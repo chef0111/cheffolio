@@ -1,12 +1,12 @@
- create-gb-app                          
-  ▶ Self                      ┌───────┐ 
-    Nest                      │appe   │ 
-    Convex                    │lib    │ 
-  ▶ Next                      │Command│ 
-    Start                     │create-│ 
- AutBetter Auth               │gb-app │ 
-    Clerk                     │Polarp │ 
-  ▶ None                      │unavail│ 
-  ▶ None                      │API    │ 
- Tab cycles. Escape exits. Enterionble┘ 
- Generate writes files.                 
+ create-gb-app my-app --auth none       
+  ▶ Self                                
+    Nest                                
+    Convex                              
+  ▶ Next                                
+    Start                               
+ AutBetter Auth                         
+    Clerk                               
+ ┌────────────────────────────────────┐ 
+ │Command                             │ 
+ └APIavisibleilableapp─--auth─none────┘ 
+ Tab cycles. Escape exits. Enter on     

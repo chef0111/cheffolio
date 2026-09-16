@@ -1,4 +1,5 @@
  create-gb-app                                                                  
+ create-gb-app my-app --backend nest                                            
  Backend                      ┌───────────────────────────────────────────────┐ 
     Self                      │Tree                                           │ 
   ▶ Nest                      │apps/web                                       │ 
@@ -6,19 +7,18 @@
  Frontend                     │packages/contract                              │ 
   ▶ Next                      │packages/typescript-config                     │ 
     Start                     │packages/ui                                    │ 
- Auth                         │turbo.json                                     │ 
-  ▶ Better Auth               │Command                                        │ 
-    Clerk                     │create-gb-app my-app --backend nest            │ 
-    None                      │Polar available                                │ 
- Payments                     │API visible                                    │ 
+ API                          │turbo.json                                     │ 
+  ▶ oRPC                      │Command                                        │ 
+                              │create-gb-app my-app --backend nest            │ 
+ Auth                         │Polar available                                │ 
+  ▶ Better Auth               │API visible                                    │ 
+    Clerk                     │                                               │ 
+    None                      │                                               │ 
+ Payments                     │                                               │ 
   ▶ None                      │                                               │ 
     Stripe                    │                                               │ 
     Polar                     │                                               │ 
   ▶ Generate                  └───────────────────────────────────────────────┘ 
  Tab cycles. Escape exits. Enter on Generate writes files.                      
-                                                                                
-                                                                                
-                                                                                
-                                                                                
                                                                                 
                                                                                 

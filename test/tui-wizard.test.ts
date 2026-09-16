@@ -85,3 +85,29 @@ test("Start plus tRPC preview lists src/routes", async () => {
     setup.renderer.destroy();
   }
 });
+
+test("argv database sqlite survives in the command preview", async () => {
+  const setup = await testRender(
+    createElement(App, { initialFlags: { database: "sqlite" } }),
+    { width: 80, height: 24 },
+  );
+  try {
+    await setup.renderOnce();
+    expect(setup.captureCharFrame()).toContain("--database sqlite");
+  } finally {
+    setup.renderer.destroy();
+  }
+});
+
+test("40x12 still shows the full command preview", async () => {
+  const setup = await testRender(
+    createElement(App, { initialFlags: { auth: "none" } }),
+    { width: 40, height: 12 },
+  );
+  try {
+    await setup.renderOnce();
+    expect(setup.captureCharFrame()).toContain("create-gb-app my-app");
+  } finally {
+    setup.renderer.destroy();
+  }
+});

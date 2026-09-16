@@ -1,4 +1,4 @@
-import { useKeyboard } from "@opentui/react";
+import { useKeyboard, useTerminalDimensions } from "@opentui/react";
 import { useMemo, useState } from "react";
 import { formatCommand } from "../preview/command.ts";
 import { previewTree } from "../preview/tree.ts";
@@ -82,19 +82,38 @@ export type AppProps = {
   onGenerate?: (flags: RawFlags) => void | Promise<void>;
 };
 
-export function App({ initialFlags = {}, onExit, onGenerate }: AppProps) {
-  const [flags, setFlags] = useState<RawFlags>(() => ({
+function wizardFlags(initialFlags: RawFlags): RawFlags {
+  const backend = initialFlags.backend ?? "self";
+  const flags: RawFlags = {
+    ...initialFlags,
     frontend: initialFlags.frontend ?? "next",
-    backend: initialFlags.backend ?? "self",
-    api: initialFlags.api ?? "orpc",
+    backend,
     auth: initialFlags.auth ?? "better-auth",
     payments: initialFlags.payments ?? "none",
     ui: initialFlags.ui ?? "shadcn",
     linter: initialFlags.linter ?? "eslint",
     projectName: initialFlags.projectName ?? "my-app",
-    noGit: initialFlags.noGit,
-    noInstall: initialFlags.noInstall,
-  }));
+  };
+  if (backend === "convex") {
+    flags.api = undefined;
+    flags.database = undefined;
+    flags.orm = undefined;
+    if (flags.dbSetup !== "none") {
+      flags.dbSetup = undefined;
+    }
+  } else if (flags.api === undefined) {
+    flags.api = "orpc";
+  }
+  if (backend === "nest") {
+    flags.api = "orpc";
+  }
+  return flags;
+}
+
+export function App({ initialFlags = {}, onExit, onGenerate }: AppProps) {
+  const { width } = useTerminalDimensions();
+  const stacked = width < 72;
+  const [flags, setFlags] = useState<RawFlags>(() => wizardFlags(initialFlags));
   const [focus, setFocus] = useState<FocusId>("backend");
 
   const payments = paymentOptions(flags.auth);
@@ -148,8 +167,9 @@ export function App({ initialFlags = {}, onExit, onGenerate }: AppProps) {
   return (
     <box flexDirection="column" paddingLeft={1} paddingRight={1}>
       <text>create-gb-app</text>
-      <box flexDirection="row" gap={1} flexGrow={1}>
-        <box flexDirection="column" width={28}>
+      <text>{command}</text>
+      <box flexDirection={stacked ? "column" : "row"} gap={1} flexGrow={1}>
+        <box flexDirection="column" width={stacked ? undefined : 28}>
           <text>Backend</text>
           <select
             focused={focus === "backend"}
