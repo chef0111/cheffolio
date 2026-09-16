@@ -25,7 +25,7 @@ export function CreatePicker() {
   const { flags } = useCreate();
 
   return (
-    <Card className="rounded-none ring-0">
+    <Card className="rounded-none bg-transparent ring-0">
       <CardHeader className="border-b">
         <CardTitle>Stack</CardTitle>
       </CardHeader>

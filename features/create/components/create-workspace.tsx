@@ -18,7 +18,7 @@ export function CreateWorkspace() {
           <CreateCommand />
         </div>
       </Panel>
-      <Panel className="screen-line-top-none p-0">
+      <Panel className="screen-line-top-none border-t p-0">
         <div className="grid md:grid-cols-2">
           <div className="border-border md:border-r">
             <CreatePicker />

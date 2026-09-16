@@ -3,7 +3,7 @@
 import { ScrollArea } from '@base-ui/react/scroll-area';
 import { useAtom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
-import { TerminalIcon, TextAlignStartIcon } from 'lucide-react';
+import { DollarSign, TerminalIcon, TextAlignStartIcon } from 'lucide-react';
 import { useMemo } from 'react';
 
 import { CopyButton } from '@/components/cheffolio/copy-button';
@@ -74,7 +74,7 @@ export function CodeBlockCommand({
     : ((available[0] as PackageManager | undefined) ?? 'npm');
 
   return (
-    <div className="bg-code relative overflow-hidden rounded-xl">
+    <div className="bg-surface relative overflow-hidden rounded-xl border shadow-sm">
       <Tabs
         className="gap-0"
         value={active}
@@ -82,7 +82,7 @@ export function CodeBlockCommand({
           setPackageManager(value as PackageManager);
         }}
       >
-        <ScrollArea.Root className="shadow-border w-full pr-10 shadow-[inset_0_-1px_0_0]">
+        <ScrollArea.Root className="w-full pr-10">
           <TabsList
             className={cn(
               '[&_svg]:text-muted-foreground h-10 max-w-full justify-start rounded-none bg-transparent p-0 pl-4 inset-ring-0 dark:bg-transparent [&_svg]:size-4 [&_svg]:shrink-0',
@@ -112,7 +112,11 @@ export function CodeBlockCommand({
         </ScrollArea.Root>
 
         {tabsFiltered.map(([key, value]) => (
-          <TabsContent key={key} value={key}>
+          <TabsContent
+            key={key}
+            value={key}
+            className="bg-background mx-2 mb-2 rounded-md border"
+          >
             <pre
               data-pm={key}
               className="group/tabs-content-pre overscroll-x-contain p-4 leading-6 not-data-[pm=prompt]:overflow-x-auto"
@@ -120,12 +124,12 @@ export function CodeBlockCommand({
               <code
                 data-slot="code-block"
                 data-language="bash"
-                className="text-muted-foreground font-mono text-sm/none group-data-[pm=prompt]/tabs-content-pre:whitespace-normal"
+                className="text-muted-foreground flex items-center gap-1 font-mono text-sm/none group-data-[pm=prompt]/tabs-content-pre:whitespace-normal"
               >
+                <DollarSign className="size-4" />
                 <span className="select-none group-data-[pm=prompt]/tabs-content-pre:hidden">
-                  ${' '}
+                  {value}
                 </span>
-                {value}
               </code>
             </pre>
           </TabsContent>
