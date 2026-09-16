@@ -18,7 +18,7 @@
     "lint:fix": "eslint --fix . --cache --cache-location .eslintcache",
     "format": "prettier --write \"**/*.{ts,tsx,md,mdx}\" --cache",
     "format:check": "prettier --check \"**/*.{ts,tsx,md,mdx}\" --cache",
-    "typecheck": "node ./node_modules/typescript-7/bin/tsc --skipLibCheck --extendedDiagnostics --pretty",
+    "typecheck": "node ./node_modules/typescript-7/bin/tsc --skipLibCheck --extendedDiagnostics --pretty && node ./node_modules/typescript-7/bin/tsc -p tsconfig.test.json --skipLibCheck --pretty",
     "capture": "bun run --bun ./scripts/capture.mts",
     "capture:sync": "bun run --bun ./scripts/capture-sync.mts",
     "render:resume": "bun run --bun ./scripts/render-resume-pdf.ts",

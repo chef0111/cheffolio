@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": ["bun"],
+    "plugins": [],
+    "incremental": false
+  },
+  "include": ["**/*.test.ts"],
+  "exclude": ["node_modules"]
+}
