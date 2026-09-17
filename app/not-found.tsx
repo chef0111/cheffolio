@@ -4,6 +4,8 @@ import { simpleOgImageUrl } from '@/app/og/params';
 import { NotFound } from '@/components/not-found';
 import { ClearedOverlay } from '@/components/not-found/cleared-overlay';
 
+export const instant = false;
+
 const title = 'Page not found';
 const description =
   'The page you are looking for does not exist or has been moved.';
@@ -27,7 +29,10 @@ export const metadata: Metadata = {
 
 export default function NotFoundPage() {
   return (
-    <div className="flex min-h-screen flex-col items-center gap-8 max-md:pt-10 md:justify-center">
+    <div
+      data-slot="not-found"
+      className="flex min-h-screen flex-col items-center gap-8 max-md:pt-10 md:justify-center"
+    >
       <div className="mask-b-from-20% mask-b-to-100% text-7xl font-extrabold select-none!">
         404
       </div>

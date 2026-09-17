@@ -12,13 +12,13 @@ import { CreateTree } from './create-tree';
 export function CreateWorkspace() {
   return (
     <CreateProvider>
-      <Panel className="screen-line-bottom-none p-0">
+      <Panel className="screen-line-bottom-none screen-line-top-none p-0">
         <CreateNameField />
         <div className="border-border border-t px-4 py-3">
           <CreateCommand />
         </div>
       </Panel>
-      <Panel className="screen-line-top-none border-t p-0">
+      <Panel className="screen-line-top-none screen-line-bottom-none border-t p-0">
         <div className="grid md:grid-cols-2">
           <div className="border-border md:border-r">
             <CreatePicker />

@@ -20,7 +20,7 @@ const CreateWorkspace = dynamic(() =>
 );
 
 const title = 'Create';
-const description = 'Copy a create-gb-app command and preview the folder tree';
+const description = 'The Full-stack React starter for your next project';
 const ogImage = simpleOgImageUrl(title, description);
 const CREATE_PATH = '/create';
 
@@ -60,7 +60,7 @@ export default function CreatePage() {
         ])}
       />
 
-      <div className="mx-auto flex w-full flex-1 flex-col md:max-w-4xl">
+      <div className="mx-auto flex w-full flex-1 flex-col">
         <PageHeading className="pt-26">
           <PageHeadingTitle className="decor-t screen-line-bottom-none pt-2 pb-0">
             {title}
@@ -75,9 +75,8 @@ export default function CreatePage() {
         <Suspense fallback={<CreateFallback />}>
           <CreateWorkspace />
         </Suspense>
-
-        <StripeSeparator />
       </div>
+      <StripeSeparator />
     </>
   );
 }

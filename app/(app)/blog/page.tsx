@@ -50,7 +50,7 @@ export const metadata: Metadata = {
 };
 
 function getBlogJsonLd(
-  posts: { slug: string; metadata: { title: string; createdAt: string } }[]
+  blogs: { slug: string; metadata: { title: string; createdAt: string } }[]
 ): WithContext<Blog> {
   return {
     '@context': 'https://schema.org',
@@ -60,12 +60,12 @@ function getBlogJsonLd(
     description,
     url: absoluteUrl('/blog'),
     isPartOf: { '@id': JSON_LD_ID.website },
-    blogPost: posts.map((post) => ({
+    blogPost: blogs.map((blog) => ({
       '@type': 'BlogPosting',
-      '@id': absoluteUrl(`/blog/${post.slug}`),
-      headline: post.metadata.title,
-      url: absoluteUrl(`/blog/${post.slug}`),
-      datePublished: new Date(post.metadata.createdAt).toISOString(),
+      '@id': absoluteUrl(`/blog/${blog.slug}`),
+      headline: blog.metadata.title,
+      url: absoluteUrl(`/blog/${blog.slug}`),
+      datePublished: new Date(blog.metadata.createdAt).toISOString(),
     })),
   };
 }

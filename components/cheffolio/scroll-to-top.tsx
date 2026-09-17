@@ -34,6 +34,7 @@ export function ScrollToTop({
         'transition-[background-color,opacity] duration-300 data-[scroll-direction=down]:opacity-30 data-[scroll-direction=up]:opacity-100 data-[visible=false]:opacity-0',
         'data-[scroll-direction=down]:hover:opacity-100',
         'rounded-lg border-none',
+        'not-found-hidden',
         className
       )}
       variant="secondary"

@@ -13,8 +13,11 @@ import { FooterCopyright } from './copyright';
 
 export function SiteFooter() {
   return (
-    <footer className="relative w-full min-w-0 px-2" aria-label="Site footer">
-      <div className="border-border screen-line-bottom mx-auto border-x group-has-data-[slot=layout-wide]/layout:container md:max-w-4xl">
+    <footer
+      className="not-found-hidden relative w-full min-w-0 px-2"
+      aria-label="Site footer"
+    >
+      <div className="border-border screen-line-bottom mx-auto border-x group-data-[layout=wide]/layout:container md:max-w-4xl">
         <div className="flex flex-col gap-4 pt-4">
           <div className="flex flex-col items-center justify-center">
             <div className="flex items-center gap-2">
@@ -63,7 +66,7 @@ export function SiteFooter() {
           </PanelContent>
         </div>
 
-        <div className="flex max-w-4xl flex-col justify-between gap-2 py-4">
+        <div className="flex w-full flex-col justify-between gap-2 py-4">
           <Suspense
             fallback={
               <p className="text-muted-foreground font-pixel-square text-center text-sm">

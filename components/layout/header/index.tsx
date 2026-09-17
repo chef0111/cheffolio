@@ -1,8 +1,10 @@
 import Link from 'next/link';
+import { Suspense } from 'react';
 
+import { BrandMark } from '@/components/cheffolio/brand';
 import { CommandMenu } from '@/components/cheffolio/command-menu';
 import { GitHubIcon } from '@/components/icons';
-import { NavDesktop } from '@/components/layout/navigation/nav-desktop';
+import { Nav, NavDesktop } from '@/components/layout/navigation/nav-desktop';
 import { SiteHeaderNav } from '@/components/layout/navigation/site-header-nav';
 import { Button } from '@/components/ui/button';
 import { DESKTOP_NAV, GITHUB_REPO_URL, UTM_PARAMS } from '@/config/site';
@@ -19,10 +21,23 @@ export function SiteHeader() {
         href="/"
         aria-label="Home"
       >
-        <SiteHeaderMark />
+        <Suspense
+          fallback={
+            <BrandMark
+              fillOpacity={0}
+              stroke="currentColor"
+              strokeWidth={1}
+              aria-hidden
+            />
+          }
+        >
+          <SiteHeaderMark />
+        </Suspense>
       </Link>
       <div className="flex items-center gap-2 *:first:mr-2 max-sm:*:data-[slot=command-menu-trigger]:hidden">
-        <NavDesktop items={DESKTOP_NAV} />
+        <Suspense fallback={<Nav items={DESKTOP_NAV} className="mr-2" />}>
+          <NavDesktop items={DESKTOP_NAV} />
+        </Suspense>
         <CommandMenu />
         <Button
           size="icon"
