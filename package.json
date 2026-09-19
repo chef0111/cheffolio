@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "description": "Scaffold a typed fullstack React app with a working notes domain",
   "type": "module",
+  "exports": {
+    "./generate": "./src/generate/public.ts"
+  },
   "bin": {
     "create-gb-app": "./src/index.ts"
   },

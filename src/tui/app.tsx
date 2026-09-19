@@ -92,7 +92,7 @@ function wizardFlags(initialFlags: RawFlags): RawFlags {
     payments: initialFlags.payments ?? "none",
     ui: initialFlags.ui ?? "shadcn",
     linter: initialFlags.linter ?? "eslint",
-    projectName: initialFlags.projectName ?? "my-app",
+    projectName: initialFlags.projectName ?? "my-gb-app",
   };
   if (backend === "convex") {
     flags.api = undefined;

@@ -49,7 +49,7 @@ test("convex with explicit db-setup none", () => {
   const convexHappy = compat.legal.find((row) => row.name === "convex happy path");
   expect(convexHappy).toBeDefined();
   expect(resolveStack({ backend: "convex", dbSetup: "none" })).toEqual(
-    convexHappy?.stack,
+    convexHappy!.stack as Stack,
   );
 });
 

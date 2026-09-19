@@ -1,9 +1,9 @@
 PASS 232ms
 create-gb-app [dir] [flags]
 
-  npx create-gb-app my-app --yes
-  pnpm create gb-app my-app --yes
-  bunx create-gb-app my-app --yes
+  npx create-gb-app my-gb-app --yes
+  pnpm create gb-app my-gb-app --yes
+  bunx create-gb-app my-gb-app --yes
 
 Flags
   --help, -h

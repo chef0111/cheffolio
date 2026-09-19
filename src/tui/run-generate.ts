@@ -4,7 +4,7 @@ import { resolveStack } from "../stack/resolve.ts";
 import type { RawFlags } from "../stack/types.ts";
 
 export async function runWizardGenerate(flags: RawFlags): Promise<void> {
-  const dest = flags.projectName ?? "my-app";
+  const dest = flags.projectName ?? "my-gb-app";
   try {
     const stack = resolveStack(flags);
     const result = await generateApp({

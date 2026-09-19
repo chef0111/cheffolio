@@ -17,7 +17,3 @@ export function inferPackageManager(
   }
   return "npm";
 }
-
-export function workspaceProtocol(packageManager: PackageManager): "workspace:*" | "*" {
-  return packageManager === "npm" ? "*" : "workspace:*";
-}

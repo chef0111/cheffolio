@@ -106,7 +106,7 @@ test("40x12 still shows the full command preview", async () => {
   );
   try {
     await setup.renderOnce();
-    expect(setup.captureCharFrame()).toContain("create-gb-app my-app");
+    expect(setup.captureCharFrame()).toContain("create-gb-app my-gb-app");
   } finally {
     setup.renderer.destroy();
   }

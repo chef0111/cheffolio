@@ -1,5 +1,5 @@
  create-gb-app                                                                  
- create-gb-app my-app --backend nest                                            
+ create-gb-app my-gb-app --backend nest                                            
  Backend                      ┌───────────────────────────────────────────────┐ 
     Self                      │Tree                                           │ 
   ▶ Nest                      │apps/web                                       │ 
@@ -9,7 +9,7 @@
     Start                     │packages/ui                                    │ 
  API                          │turbo.json                                     │ 
   ▶ oRPC                      │Command                                        │ 
-                              │create-gb-app my-app --backend nest            │ 
+                              │create-gb-app my-gb-app --backend nest            │ 
  Auth                         │Polar available                                │ 
   ▶ Better Auth               │API visible                                    │ 
     Clerk                     │                                               │ 

@@ -6,6 +6,10 @@ import { inferPackageManager } from "../src/cli/package-manager.ts";
 import { buildTree } from "../src/generate/build-tree.ts";
 import { writeTree } from "../src/generate/write-tree.ts";
 import { resolveStack } from "../src/stack/resolve.ts";
+import {
+  buildTree as publicBuildTree,
+  resolveStack as publicResolveStack,
+} from "create-gb-app/generate";
 
 const YES_PATHS = [
   ".env",
@@ -92,4 +96,12 @@ test("writeTree --yes --no-git dest has package.json and no turbo.json", async (
   expect(listing).not.toContain("turbo.json");
   expect(listing).not.toContain(".git");
   await rm(dest, { recursive: true, force: true });
+});
+
+test("public generate import emits the same --yes paths", () => {
+  const files = publicBuildTree(publicResolveStack({ yes: true }), {
+    projectName: "yes-app",
+    packageManager: "bun",
+  });
+  expect(Object.keys(files).sort()).toEqual(YES_PATHS);
 });

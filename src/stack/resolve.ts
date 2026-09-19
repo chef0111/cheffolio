@@ -4,6 +4,7 @@ import type {
   Database,
   DbSetup,
   Payments,
+  PresetFields,
   RawFlags,
   Stack,
 } from "./types.ts";
@@ -19,7 +20,7 @@ export const YES_DEFAULTS = {
   payments: "none",
   ui: "shadcn",
   linter: "eslint",
-} as const;
+} as const satisfies PresetFields;
 
 function assertPayments(auth: Auth, payments: Payments): void {
   if (auth === "clerk" && payments === "polar") {

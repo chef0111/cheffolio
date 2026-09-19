@@ -1,18 +1,45 @@
-export type Frontend = "next" | "tanstack-start";
-export type Backend = "self" | "nest" | "convex";
-export type Api = "orpc" | "trpc";
-export type Database = "postgres" | "sqlite" | "mysql";
-export type Orm = "prisma" | "drizzle";
-export type DbSetup = "none" | "docker" | "neon" | "supabase";
-export type Auth = "none" | "better-auth" | "clerk";
-export type Payments = "none" | "stripe" | "polar";
-export type Ui = "shadcn" | "none";
-export type Linter = "eslint" | "biome" | "oxlint";
+import {
+  APIS,
+  AUTHS,
+  BACKENDS,
+  DATABASES,
+  DB_SETUPS,
+  FRONTENDS,
+  LINTERS,
+  ORMS,
+  PAYMENTS,
+  UIS,
+} from "./vocab.ts";
+
+export type Frontend = (typeof FRONTENDS)[number];
+export type Backend = (typeof BACKENDS)[number];
+export type Api = (typeof APIS)[number];
+export type Database = (typeof DATABASES)[number];
+export type Orm = (typeof ORMS)[number];
+export type DbSetup = (typeof DB_SETUPS)[number];
+export type Auth = (typeof AUTHS)[number];
+export type Payments = (typeof PAYMENTS)[number];
+export type Ui = (typeof UIS)[number];
+export type Linter = (typeof LINTERS)[number];
+
+export type PresetFields = {
+  frontend: Frontend;
+  backend: Backend;
+  api: Api;
+  database: Database;
+  orm: Orm;
+  dbSetup: DbSetup;
+  auth: Auth;
+  payments: Payments;
+  ui: Ui;
+  linter: Linter;
+};
 
 export type RawFlags = {
   help?: boolean;
   version?: boolean;
   yes?: boolean;
+  preset?: string;
   frontend?: Frontend;
   backend?: Backend;
   api?: Api;

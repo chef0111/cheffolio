@@ -1,12 +1,12 @@
  create-gb-app                                                                  
- create-gb-app my-app --backend convex                                          
+ create-gb-app my-gb-app --backend convex                                          
  Backend                      ┌───────────────────────────────────────────────┐ 
     Self                      │Tree                                           │ 
     Nest                      │app                                            │ 
   ▶ Convex                    │convex                                         │ 
  Frontend                     │package.json                                   │ 
   ▶ Next                      │Command                                        │ 
-    Start                     │create-gb-app my-app --backend convex          │ 
+    Start                     │create-gb-app my-gb-app --backend convex          │ 
  Auth                         │Polar available                                │ 
   ▶ Better Auth               │API and database hidden                        │ 
     Clerk                     │                                               │ 

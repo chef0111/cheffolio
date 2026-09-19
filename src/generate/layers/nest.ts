@@ -1,4 +1,5 @@
-import { workspaceProtocol } from "../../cli/package-manager.ts";
+import { GenerateError } from "../errors.ts";
+import { workspaceProtocol } from "../workspace-protocol.ts";
 import { setFile } from "../files.ts";
 import type { EmitCtx } from "../types.ts";
 import { emitBiome } from "./biome.ts";
@@ -16,7 +17,10 @@ export function emitNest(ctx: EmitCtx): void {
     throw new Error("emitNest requires nest");
   }
   if (ctx.stack.frontend !== "next") {
-    throw new Error("nest Start generate is not implemented yet");
+    throw new GenerateError(
+      "nest-start",
+      "nest Start generate is not implemented yet",
+    );
   }
 
   const dep = proto(ctx);
@@ -76,9 +80,15 @@ export function emitNest(ctx: EmitCtx): void {
       emitBiome(ctx);
       break;
     case "eslint":
-      throw new Error("nest eslint generate is not implemented yet");
+      throw new GenerateError(
+        "nest-eslint",
+        "nest eslint generate is not implemented yet",
+      );
     case "oxlint":
-      throw new Error("nest oxlint generate is not implemented yet");
+      throw new GenerateError(
+        "nest-oxlint",
+        "nest oxlint generate is not implemented yet",
+      );
     default: {
       const _exhaustive: never = ctx.stack.linter;
       throw new Error(`unhandled linter: ${_exhaustive}`);

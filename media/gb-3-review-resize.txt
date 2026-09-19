@@ -1,4 +1,4 @@
- create-gb-app my-app --auth none       
+ create-gb-app my-gb-app --auth none       
   ▶ Self                                
     Nest                                
     Convex                              

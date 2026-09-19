@@ -19,6 +19,7 @@ import { emitSelf } from "./layers/self.ts";
 import { emitShadcn } from "./layers/shadcn.ts";
 import { emitStart } from "./layers/start.ts";
 import { emitTrpc } from "./layers/trpc.ts";
+import { GenerateError } from "./errors.ts";
 import type { FileMap, GenerateContext, PackageJsonShape } from "./types.ts";
 
 function emitDatabase(stack: Extract<Stack, { backend: "self" | "nest" }>, ctx: Parameters<typeof emitNext>[0]) {
@@ -90,7 +91,7 @@ function emitLinter(stack: Stack, ctx: Parameters<typeof emitNext>[0]) {
       emitOxlint(ctx);
       break;
     case "biome":
-      throw new Error("biome generate is not implemented yet");
+      throw new GenerateError("biome", "biome generate is not implemented yet");
     default: {
       const _exhaustive: never = stack.linter;
       throw new Error(`unhandled linter: ${_exhaustive}`);
@@ -134,7 +135,10 @@ function emitApi(stack: Extract<Stack, { backend: "self" }>, ctx: Parameters<typ
   switch (stack.api) {
     case "orpc":
       if (stack.frontend !== "next") {
-        throw new Error("start oRPC generate is not implemented yet");
+        throw new GenerateError(
+          "start-orpc",
+          "start oRPC generate is not implemented yet",
+        );
       }
       emitOrpc(ctx);
       break;

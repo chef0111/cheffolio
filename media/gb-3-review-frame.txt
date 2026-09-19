@@ -1,5 +1,5 @@
  create-gb-app                                                                  
- create-gb-app my-app --auth none                                               
+ create-gb-app my-gb-app --auth none                                               
  Backend                      ┌───────────────────────────────────────────────┐ 
   ▶ Self                      │Tree                                           │ 
     Nest                      │app                                            │ 
@@ -7,7 +7,7 @@
  Frontend                     │prisma                                         │ 
   ▶ Next                      │package.json                                   │ 
     Start                     │Command                                        │ 
- API                          │create-gb-app my-app --auth none               │ 
+ API                          │create-gb-app my-gb-app --auth none               │ 
   ▶ oRPC                      │Polar unavailable                              │ 
     tRPC                      │API visible                                    │ 
  Auth                         │                                               │ 

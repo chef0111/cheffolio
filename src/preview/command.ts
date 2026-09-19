@@ -1,5 +1,8 @@
+import { parsePresetToken } from "../preset.ts";
 import { YES_DEFAULTS } from "../stack/resolve.ts";
 import type { RawFlags } from "../stack/types.ts";
+import type { FlagGroup } from "../stack/vocab.ts";
+import { RELATIONAL_GROUPS, STACK_CLI_FLAGS } from "../stack/vocab.ts";
 
 function shellQuote(value: string): string {
   if (/^[A-Za-z0-9._@/=+-]+$/.test(value)) {
@@ -8,44 +11,40 @@ function shellQuote(value: string): string {
   return `'${value.replaceAll("'", `'\\''`)}'`;
 }
 
+function impliedValue(baseline: RawFlags, key: FlagGroup): string | undefined {
+  const backend = baseline.backend ?? YES_DEFAULTS.backend;
+  if (
+    backend === "convex" &&
+    (RELATIONAL_GROUPS as readonly FlagGroup[]).includes(key)
+  ) {
+    return undefined;
+  }
+  const fromBaseline = baseline[key];
+  if (fromBaseline !== undefined) {
+    return fromBaseline;
+  }
+  return YES_DEFAULTS[key];
+}
+
 function definedEntries(flags: RawFlags): Array<[string, string]> {
+  const baseline = flags.preset ? parsePresetToken(flags.preset) : {};
   const entries: Array<[string, string]> = [];
-  if (flags.frontend && flags.frontend !== YES_DEFAULTS.frontend) {
-    entries.push(["--frontend", flags.frontend]);
-  }
-  if (flags.backend && flags.backend !== YES_DEFAULTS.backend) {
-    entries.push(["--backend", flags.backend]);
-  }
-  if (flags.api && flags.backend !== "nest" && flags.api !== YES_DEFAULTS.api) {
-    entries.push(["--api", flags.api]);
-  }
-  if (flags.database && flags.database !== YES_DEFAULTS.database) {
-    entries.push(["--database", flags.database]);
-  }
-  if (flags.orm && flags.orm !== YES_DEFAULTS.orm) {
-    entries.push(["--orm", flags.orm]);
-  }
-  if (flags.dbSetup && flags.dbSetup !== YES_DEFAULTS.dbSetup) {
-    entries.push(["--db-setup", flags.dbSetup]);
-  }
-  if (flags.auth && flags.auth !== YES_DEFAULTS.auth) {
-    entries.push(["--auth", flags.auth]);
-  }
-  if (flags.payments && flags.payments !== YES_DEFAULTS.payments) {
-    entries.push(["--payments", flags.payments]);
-  }
-  if (flags.ui && flags.ui !== YES_DEFAULTS.ui) {
-    entries.push(["--ui", flags.ui]);
-  }
-  if (flags.linter && flags.linter !== YES_DEFAULTS.linter) {
-    entries.push(["--linter", flags.linter]);
+  for (const { key, flag } of STACK_CLI_FLAGS) {
+    const current = flags[key];
+    if (current === undefined || current === impliedValue(baseline, key)) {
+      continue;
+    }
+    entries.push([flag, current]);
   }
   return entries;
 }
 
 export function formatCommand(flags: RawFlags): string {
-  const dir = shellQuote(flags.projectName ?? "my-app");
+  const dir = shellQuote(flags.projectName ?? "my-gb-app");
   const parts = ["create-gb-app", dir];
+  if (flags.preset) {
+    parts.push("--preset", shellQuote(flags.preset));
+  }
   for (const [flag, value] of definedEntries(flags)) {
     parts.push(flag, shellQuote(value));
   }

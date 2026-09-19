@@ -1,5 +1,6 @@
 import { expect, test } from "bun:test";
 import { buildTree } from "../src/generate/build-tree.ts";
+import { GenerateError } from "../src/generate/errors.ts";
 import { resolveStack } from "../src/stack/resolve.ts";
 
 const NEST_FLAGS = {
@@ -58,4 +59,20 @@ test("npm workspaces use star protocol", () => {
   });
   expect(files["apps/web/package.json"]).toContain('"@repo/contract": "*"');
   expect(files["apps/web/package.json"]).not.toContain("workspace:");
+});
+
+test("nest plus default eslint has no FileMap", () => {
+  try {
+    buildTree(resolveStack({ backend: "nest" }), {
+      projectName: "nest-app",
+      packageManager: "npm",
+    });
+    throw new Error("expected GenerateError");
+  } catch (error) {
+    expect(error).toBeInstanceOf(GenerateError);
+    expect((error as GenerateError).code).toBe("nest-eslint");
+    expect((error as GenerateError).message).toBe(
+      "nest eslint generate is not implemented yet",
+    );
+  }
 });

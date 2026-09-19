@@ -1,22 +1,23 @@
+import {
+  overlayRawFlags,
+  parsePresetToken,
+} from "../preset.ts";
+import {
+  APIS,
+  AUTHS,
+  BACKENDS,
+  DATABASES,
+  DB_SETUPS,
+  FRONTENDS,
+  LINTERS,
+  ORMS,
+  PAYMENTS,
+  UIS,
+} from "../stack/vocab.ts";
 import type { RawFlags } from "../stack/types.ts";
+import { ParseError } from "../stack/parse-error.ts";
 
-const FRONTENDS = ["next", "tanstack-start"] as const;
-const BACKENDS = ["self", "nest", "convex"] as const;
-const APIS = ["orpc", "trpc"] as const;
-const DATABASES = ["postgres", "sqlite", "mysql"] as const;
-const ORMS = ["prisma", "drizzle"] as const;
-const DB_SETUPS = ["none", "docker", "neon", "supabase"] as const;
-const AUTHS = ["none", "better-auth", "clerk"] as const;
-const PAYMENTS = ["none", "stripe", "polar"] as const;
-const UIS = ["shadcn", "none"] as const;
-const LINTERS = ["eslint", "biome", "oxlint"] as const;
-
-export class ParseError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "ParseError";
-  }
-}
+export { ParseError };
 
 function oneOf<T extends string>(
   name: string,
@@ -84,6 +85,12 @@ export function parseArgs(argv: string[]): RawFlags {
 
     const name = arg.includes("=") ? arg.slice(0, arg.indexOf("=")) : arg;
     switch (name) {
+      case "--preset": {
+        const { value, consumed } = takeValue(argv, i, name);
+        flags.preset = value;
+        i += consumed;
+        break;
+      }
       case "--frontend": {
         const { value, consumed } = takeValue(argv, i, name);
         flags.frontend = oneOf("frontend", value, FRONTENDS);
@@ -157,19 +164,42 @@ export function parseArgs(argv: string[]): RawFlags {
   if (positionals[0]) {
     flags.projectName = positionals[0];
   }
-  return flags;
+
+  const token = flags.preset;
+  if (token === undefined) {
+    return flags;
+  }
+
+  try {
+    const { preset: _token, ...explicit } = flags;
+    void _token;
+    return overlayRawFlags(
+      { ...parsePresetToken(token), preset: token },
+      explicit,
+    );
+  } catch (error) {
+    if (error instanceof ParseError) {
+      throw error;
+    }
+    throw new ParseError(
+      error instanceof Error ? error.message : `invalid --preset ${token}`,
+    );
+  }
 }
 
 export const USAGE = `create-gb-app [dir] [flags]
 
-  npx create-gb-app my-app --yes
-  pnpm create gb-app my-app --yes
-  bunx create-gb-app my-app --yes
+  npx create-gb-app my-gb-app --yes
+  pnpm create gb-app my-gb-app --yes
+  bunx create-gb-app my-gb-app --yes
+  npx create-gb-app my-gb-app --yes --preset nest
+  npx create-gb-app my-gb-app --yes --preset g1… --frontend tanstack-start
 
 Flags
   --help, -h
   --version, -v
   --yes, -y
+  --preset <nest|start|convex|g1…>
   --frontend next|tanstack-start
   --backend self|nest|convex
   --api orpc|trpc
