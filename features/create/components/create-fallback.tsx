@@ -9,8 +9,8 @@ import { DEFAULT_COMMAND, DEFAULT_PROJECT_NAME } from '../lib/command';
 
 export function CreateFallback() {
   return (
-    <>
-      <Panel className="screen-line-bottom-none p-0">
+    <Panel className="screen-line-top-none screen-line-bottom-none grid grid-cols-1 p-0 md:grid-cols-2 lg:grid-cols-3">
+      <Card className="col-span-1 gap-0 rounded-none bg-transparent ring-0">
         <div className="flex flex-col gap-2 px-4 py-3">
           <Label htmlFor="create-project-name">Project name</Label>
           <Input
@@ -20,32 +20,20 @@ export function CreateFallback() {
             disabled
           />
         </div>
-        <div className="border-border border-t px-4 py-3">
+        <div className="border-b px-4 pb-3">
           <CodeBlockCommand {...convertNpmCommand(DEFAULT_COMMAND)} />
         </div>
-      </Panel>
-      <Panel className="screen-line-top-none p-0">
-        <div className="grid md:grid-cols-2">
-          <Card className="border-border rounded-none ring-0 md:border-r">
-            <CardHeader className="border-b">
-              <CardTitle>Stack</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground text-sm">Loading options</p>
-            </CardContent>
-          </Card>
-          <Card className="rounded-none ring-0">
-            <CardHeader className="border-b">
-              <CardTitle>Folder tree</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground font-mono text-sm">
-                {DEFAULT_PROJECT_NAME}
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-      </Panel>
-    </>
+      </Card>
+      <div className="border-border md:col-span-1 md:border-l lg:col-span-2">
+        <Card className="rounded-none bg-transparent ring-0">
+          <CardHeader className="border-b">
+            <CardTitle>Builder</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-muted-foreground text-sm">Loading options</p>
+          </CardContent>
+        </Card>
+      </div>
+    </Panel>
   );
 }

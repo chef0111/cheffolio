@@ -22,7 +22,7 @@ export function CreateNameField() {
         onBlur={() => {
           setProjectName(resolveProjectName(projectName));
         }}
-        placeholder="my-app"
+        placeholder="my-gb-app"
         autoComplete="off"
         spellCheck={false}
       />

@@ -2,14 +2,10 @@ import type { IconProps } from './type';
 
 export function ShadcnIcon(props: IconProps) {
   return (
-    <svg
-      viewBox="0 0 256 256"
-      className="stroke-foreground"
-      aria-hidden
-      {...props}
-    >
+    <svg viewBox="0 0 256 256" aria-hidden {...props}>
       <path
         fill="none"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="32"

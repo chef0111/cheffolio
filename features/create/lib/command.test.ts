@@ -6,7 +6,7 @@ import { buildCommand, isSelectable } from './command';
 import { YES_DEFAULTS } from './compat';
 
 test('literal --yes command', () => {
-  expect(buildCommand(YES_DEFAULTS)).toBe('npx create-gb-app my-app --yes');
+  expect(buildCommand(YES_DEFAULTS)).toBe('npx create-gb-app my-gb-app --yes');
 });
 
 test('custom project name is quoted in the command', () => {
@@ -16,11 +16,11 @@ test('custom project name is quoted in the command', () => {
 });
 
 test('convertNpmCommand maps the default command', () => {
-  expect(convertNpmCommand('npx create-gb-app my-app --yes')).toEqual({
-    pnpm: 'pnpm create gb-app my-app --yes',
-    yarn: 'yarn create gb-app my-app --yes',
-    npm: 'npx create-gb-app my-app --yes',
-    bun: 'bunx --bun create-gb-app my-app --yes',
+  expect(convertNpmCommand('npx create-gb-app my-gb-app --yes')).toEqual({
+    pnpm: 'pnpm create gb-app my-gb-app --yes',
+    yarn: 'yarn create gb-app my-gb-app --yes',
+    npm: 'npx create-gb-app my-gb-app --yes',
+    bun: 'bunx --bun create-gb-app my-gb-app --yes',
   });
 });
 
@@ -35,7 +35,7 @@ test('polar plus clerk is not selectable', () => {
 
 test('nest adds --backend nest', () => {
   expect(buildCommand({ ...YES_DEFAULTS, backend: 'nest' })).toBe(
-    'npx create-gb-app my-app --yes --backend nest'
+    'npx create-gb-app my-gb-app --yes --backend nest'
   );
 });
 
@@ -47,5 +47,5 @@ test('convex adds --backend convex without database flags', () => {
       database: 'mysql',
       api: 'trpc',
     })
-  ).toBe('npx create-gb-app my-app --yes --backend convex');
+  ).toBe('npx create-gb-app my-gb-app --yes --backend convex');
 });

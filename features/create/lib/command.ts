@@ -1,8 +1,8 @@
 import type { CreateFlags, FlagGroup } from '../types/stack';
 import { isOptionEnabled, isRelationalGroup, YES_DEFAULTS } from './compat';
 
-export const DEFAULT_PROJECT_NAME = 'my-app';
-export const DEFAULT_COMMAND = 'npx create-gb-app my-app --yes';
+export const DEFAULT_PROJECT_NAME = 'my-gb-app';
+export const DEFAULT_COMMAND = 'npx create-gb-app my-gb-app --yes';
 
 const CLI_FLAGS: { key: FlagGroup; flag: string }[] = [
   { key: 'frontend', flag: '--frontend' },

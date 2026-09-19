@@ -2,7 +2,7 @@
 
 import { useId } from 'react';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import {
   Field,
   FieldContent,
@@ -21,14 +21,11 @@ import { disabledReason, isGroupVisible } from '../lib/compat';
 import { type CreateFlags, FLAG_GROUPS, type FlagGroup } from '../types/stack';
 import { useCreate } from './create-provider';
 
-export function CreatePicker() {
+export function CreateBuilder() {
   const { flags } = useCreate();
 
   return (
     <Card className="rounded-none bg-transparent ring-0">
-      <CardHeader className="border-b">
-        <CardTitle>Stack</CardTitle>
-      </CardHeader>
       <CardContent>
         <FieldGroup className="gap-6">
           {FLAG_GROUPS.map((group) =>
@@ -55,7 +52,7 @@ function FlagRadioGroup({ group }: { group: FlagGroup }) {
         onValueChange={(value) => {
           assignFlag(group, value, flags, setFlag);
         }}
-        className="grid grid-cols-1 gap-2 sm:grid-cols-2"
+        className="grid grid-cols-1 gap-2 lg:grid-cols-2"
       >
         {FLAG_OPTIONS[group].map((option) => {
           const optionId = `${id}-${option.value}`;
@@ -78,8 +75,13 @@ function FlagRadioGroup({ group }: { group: FlagGroup }) {
                   disabled={!enabled}
                 />
                 <FieldContent>
-                  <FieldTitle>{option.label}</FieldTitle>
-                  {reason ? (
+                  <FieldTitle>
+                    <option.icon className="size-4" />
+                    {option.label}
+                  </FieldTitle>
+                  {enabled ? (
+                    <FieldDescription>{option.description}</FieldDescription>
+                  ) : reason ? (
                     <FieldDescription>{reason}</FieldDescription>
                   ) : null}
                 </FieldContent>

@@ -35,7 +35,7 @@ for (const legal of compat.legal) {
     }
 
     const command = buildCommand(flags);
-    expect(command.startsWith('npx create-gb-app my-app --yes')).toBe(true);
+    expect(command.startsWith('npx create-gb-app my-gb-app --yes')).toBe(true);
     for (const [key, value] of Object.entries(legal.flags)) {
       if (key === 'backend' && value !== YES_DEFAULTS.backend) {
         expect(command).toContain(`--backend ${value}`);

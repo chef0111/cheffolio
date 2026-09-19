@@ -1,38 +1,47 @@
 'use client';
 
-import { Panel } from '@/components/cheffolio/panel';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Tabs,
+  TabsContent,
+  TabsIndicator,
+  TabsList,
+  TabsTrigger,
+} from '@/components/ui/tabs';
 
+import { CreateBuilder } from './create-builder';
 import { CreateCommand } from './create-command';
 import { CreateNameField } from './create-name-field';
-import { CreatePicker } from './create-picker';
+import { CreatePreview } from './create-preview';
 import { CreateProvider } from './create-provider';
-import { CreateTree } from './create-tree';
 
 export function CreateWorkspace() {
   return (
     <CreateProvider>
-      <Panel className="screen-line-bottom-none screen-line-top-none p-0">
-        <CreateNameField />
-        <div className="border-border border-t px-4 py-3">
-          <CreateCommand />
-        </div>
-      </Panel>
-      <Panel className="screen-line-top-none screen-line-bottom-none border-t p-0">
-        <div className="grid md:grid-cols-2">
-          <div className="border-border md:border-r">
-            <CreatePicker />
+      <div className="grid flex-1 grid-cols-1 border-x p-0 md:grid-cols-2 lg:grid-cols-3">
+        <div className="col-span-1 gap-0 rounded-none bg-transparent ring-0">
+          <CreateNameField />
+          <div className="border-b px-4 pb-3">
+            <CreateCommand />
           </div>
-          <Card className="rounded-none bg-transparent ring-0">
-            <CardHeader className="border-b">
-              <CardTitle id="create-folder-tree">Folder tree</CardTitle>
-            </CardHeader>
-            <CardContent className="p-0">
-              <CreateTree />
-            </CardContent>
-          </Card>
         </div>
-      </Panel>
+        <div className="border-border md:col-span-1 md:border-l lg:col-span-2">
+          <Tabs defaultValue="builder" className="h-full gap-0">
+            <div className="flex items-center border-b px-4 py-2">
+              <TabsList>
+                <TabsTrigger value="builder">Builder</TabsTrigger>
+                <TabsTrigger value="tree">Tree</TabsTrigger>
+                <TabsIndicator />
+              </TabsList>
+            </div>
+            <TabsContent value="builder" className="overflow-auto">
+              <CreateBuilder />
+            </TabsContent>
+            <TabsContent value="tree" className="min-h-0 overflow-hidden">
+              <CreatePreview />
+            </TabsContent>
+          </Tabs>
+        </div>
+      </div>
     </CreateProvider>
   );
 }

@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 
 import { simpleOgImageUrl } from '@/app/og/params';
@@ -12,15 +11,10 @@ import { StripeSeparator } from '@/components/cheffolio/stripe-separator';
 import { jsonLdBreadcrumbList, JsonLdScript } from '@/components/json-ld';
 import { X_PROFILE } from '@/config/site';
 import { CreateFallback } from '@/features/create/components/create-fallback';
-
-const CreateWorkspace = dynamic(() =>
-  import('@/features/create/components/create-workspace').then(
-    (mod) => mod.CreateWorkspace
-  )
-);
+import { CreateWorkspace } from '@/features/create/components/create-workspace';
 
 const title = 'Create';
-const description = 'The Full-stack React starter for your next project';
+const description = 'The Full-stack React Starter Kit for your next project';
 const ogImage = simpleOgImageUrl(title, description);
 const CREATE_PATH = '/create';
 

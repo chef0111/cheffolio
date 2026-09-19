@@ -10,7 +10,6 @@ import {
   normalizeFlags,
   YES_DEFAULTS,
 } from '../lib/compat';
-import { getFolderTree, type TreeNode } from '../lib/tree';
 import {
   APIS,
   AUTHS,
@@ -32,7 +31,6 @@ type CreateContextValue = {
   projectName: string;
   setProjectName: (name: string) => void;
   command: string;
-  tree: TreeNode;
 };
 
 const CreateContext = createContext<CreateContextValue | null>(null);
@@ -64,7 +62,6 @@ export function CreateProvider({ children }: { children: ReactNode }) {
   const { name: projectName, ...rawFlags } = params;
   const flags = normalizeFlags(rawFlags);
   const command = buildCommand(flags, projectName);
-  const tree = getFolderTree(flags, projectName);
 
   const setFlag = useCallback(
     <K extends FlagGroup>(key: K, value: CreateFlags[K]) => {
@@ -90,7 +87,7 @@ export function CreateProvider({ children }: { children: ReactNode }) {
 
   return (
     <CreateContext.Provider
-      value={{ flags, setFlag, projectName, setProjectName, command, tree }}
+      value={{ flags, setFlag, projectName, setProjectName, command }}
     >
       {children}
     </CreateContext.Provider>

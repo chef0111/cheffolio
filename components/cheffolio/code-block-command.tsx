@@ -3,7 +3,7 @@
 import { ScrollArea } from '@base-ui/react/scroll-area';
 import { useAtom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
-import { DollarSign, TerminalIcon, TextAlignStartIcon } from 'lucide-react';
+import { TerminalIcon, TextAlignStartIcon } from 'lucide-react';
 import { useMemo } from 'react';
 
 import { CopyButton } from '@/components/cheffolio/copy-button';
@@ -43,10 +43,10 @@ export type CodeBlockCommandProps = {
 
 export function CodeBlockCommand({
   prompt,
-  pnpm,
-  yarn,
-  npm,
   bun,
+  pnpm,
+  npm,
+  yarn,
   onCopySuccess,
   onCopyError,
 }: CodeBlockCommandProps) {
@@ -55,12 +55,12 @@ export function CodeBlockCommand({
   const tabs = useMemo(
     () => ({
       prompt,
-      pnpm,
-      yarn,
-      npm,
       bun,
+      pnpm,
+      npm,
+      yarn,
     }),
-    [prompt, pnpm, yarn, npm, bun]
+    [prompt, bun, pnpm, npm, yarn]
   );
 
   const tabsFiltered = useMemo(
@@ -74,7 +74,7 @@ export function CodeBlockCommand({
     : ((available[0] as PackageManager | undefined) ?? 'npm');
 
   return (
-    <div className="bg-surface relative overflow-hidden rounded-xl border shadow-sm">
+    <div className="bg-surface relative overflow-hidden rounded-lg border shadow-sm">
       <Tabs
         className="gap-0"
         value={active}
@@ -119,15 +119,15 @@ export function CodeBlockCommand({
           >
             <pre
               data-pm={key}
-              className="group/tabs-content-pre overscroll-x-contain p-4 leading-6 not-data-[pm=prompt]:overflow-x-auto"
+              className="group/tabs-content-pre overscroll-x-contain leading-6"
             >
               <code
                 data-slot="code-block"
                 data-language="bash"
-                className="text-muted-foreground flex items-center gap-1 font-mono text-sm/none group-data-[pm=prompt]/tabs-content-pre:whitespace-normal"
+                className="text-muted-foreground flex items-center gap-1 p-4 font-mono text-sm/none not-group-data-[pm=prompt]/tabs-content-pre:overflow-x-auto group-data-[pm=prompt]/tabs-content-pre:whitespace-normal"
               >
-                <DollarSign className="size-4" />
                 <span className="select-none group-data-[pm=prompt]/tabs-content-pre:hidden">
+                  <span className="select-none!">$ </span>
                   {value}
                 </span>
               </code>

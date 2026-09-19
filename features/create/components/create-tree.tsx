@@ -15,22 +15,45 @@ import {
   collectFolderIds,
   type TreeNode as FolderNode,
   treeNodeId,
-} from '../lib/tree';
-import { useCreate } from './create-provider';
+} from '../lib/tree-from-paths';
 
-export function CreateTree() {
-  const { tree } = useCreate();
+type CreateTreeProps = {
+  tree: FolderNode;
+  selectedPath: string | null;
+  onSelectPath: (path: string) => void;
+};
+
+export function CreateTree({
+  tree,
+  selectedPath,
+  onSelectPath,
+}: CreateTreeProps) {
   const expandedIds = collectFolderIds(tree);
+  const selectedIds = selectedPath ? [selectedPath] : [];
 
   return (
     <TreeProvider
-      key={expandedIds.join('|')}
+      key={treeNodeId(tree)}
       defaultExpandedIds={expandedIds}
-      selectable={false}
-      className="px-2 py-3"
+      selectedIds={selectedIds}
+      onSelectionChange={(ids) => {
+        const next = ids[0];
+        if (!next || next === selectedPath) {
+          return;
+        }
+        if (isFilePath(tree, next)) {
+          onSelectPath(next);
+        }
+      }}
+      className="px-2"
     >
-      <TreeView aria-labelledby="create-folder-tree">
-        <FolderTreeNode node={tree} level={0} isLast />
+      <TreeView aria-label="Project files">
+        <FolderTreeNode
+          node={tree}
+          level={0}
+          isLast
+          onSelectPath={onSelectPath}
+        />
       </TreeView>
     </TreeProvider>
   );
@@ -40,17 +63,17 @@ function FolderTreeNode({
   node,
   level,
   isLast,
-  parentId,
+  onSelectPath,
 }: {
   node: FolderNode;
   level: number;
   isLast: boolean;
-  parentId?: string;
+  onSelectPath: (path: string) => void;
 }) {
   const children = node.children ?? [];
   const isFolder = node.kind === 'folder';
   const hasChildren = children.length > 0;
-  const nodeId = treeNodeId(node, parentId);
+  const nodeId = treeNodeId(node);
 
   return (
     <TreeNode
@@ -60,7 +83,13 @@ function FolderTreeNode({
       level={level}
       nodeId={nodeId}
     >
-      <TreeNodeTrigger>
+      <TreeNodeTrigger
+        onClick={() => {
+          if (node.kind === 'file') {
+            onSelectPath(node.path);
+          }
+        }}
+      >
         <TreeExpander hasChildren={hasChildren} />
         <TreeIcon hasChildren={isFolder} />
         <TreeLabel className="font-mono">{node.name}</TreeLabel>
@@ -69,15 +98,22 @@ function FolderTreeNode({
         <TreeNodeContent hasChildren>
           {children.map((child, index) => (
             <FolderTreeNode
-              key={treeNodeId(child, nodeId)}
+              key={treeNodeId(child)}
               node={child}
               level={level + 1}
               isLast={index === children.length - 1}
-              parentId={nodeId}
+              onSelectPath={onSelectPath}
             />
           ))}
         </TreeNodeContent>
       ) : null}
     </TreeNode>
   );
+}
+
+function isFilePath(node: FolderNode, path: string): boolean {
+  if (node.kind === 'file') {
+    return node.path === path;
+  }
+  return (node.children ?? []).some((child) => isFilePath(child, path));
 }
