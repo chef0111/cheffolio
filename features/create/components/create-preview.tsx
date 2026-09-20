@@ -1,71 +1,123 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { startTransition, useEffect, useMemo, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { ButtonGroup } from '@/components/ui/button-group';
+import { Label } from '@/components/ui/label';
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from '@/components/ui/resizable';
 import { cn } from '@/lib/utils';
 
-import { CREATE_FILE_MAP, defaultSelectedPath } from '../data/file-map';
+import { defaultSelectedPath, type FileMap } from '../data/file-map';
 import { resolveProjectName } from '../lib/command';
+import { generateCreateFiles } from '../lib/generate-create-files';
 import { treeFromPaths } from '../lib/tree-from-paths';
+import { type CreateFlags, FLAG_GROUPS } from '../types/stack';
 import { CreateFilePreview } from './create-file-preview';
 import { useCreate } from './create-provider';
 import { CreateTree } from './create-tree';
 
-const FIXTURE_PATHS = Object.keys(CREATE_FILE_MAP);
-
 type NarrowPane = 'tree' | 'code';
+type PreviewResult = Awaited<ReturnType<typeof generateCreateFiles>>;
+
+const EMPTY_FILES: FileMap = {};
+
+const previewCache = new Map<string, ReturnType<typeof generateCreateFiles>>();
 
 export function CreatePreview() {
-  const { projectName } = useCreate();
+  const { flags, projectName } = useCreate();
   const rootName = resolveProjectName(projectName);
-  const tree = useMemo(
-    () => treeFromPaths(FIXTURE_PATHS, rootName),
-    [rootName]
-  );
-  const [selectedPath, setSelectedPath] = useState(
-    () => defaultSelectedPath(FIXTURE_PATHS) ?? FIXTURE_PATHS[0] ?? ''
-  );
+  const requestKey = previewKey(flags, projectName);
+  const [result, setResult] = useState<PreviewResult | null>(null);
+  const [selectedPath, setSelectedPath] = useState('');
   const [narrowPane, setNarrowPane] = useState<NarrowPane>('tree');
 
-  const contents = CREATE_FILE_MAP[selectedPath];
-  const file = contents === undefined ? null : { path: selectedPath, contents };
+  useEffect(() => {
+    let cancelled = false;
+    void previewResult(flags, projectName).then((next) => {
+      if (cancelled) {
+        return;
+      }
+      startTransition(() => {
+        setResult(next);
+      });
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [flags, projectName, requestKey]);
+
+  const files: FileMap = result?.ok ? result.files : EMPTY_FILES;
+  const paths = Object.keys(files);
+  const tree = useMemo(() => treeFromPaths(paths, rootName), [paths, rootName]);
+  const resolvedPath =
+    selectedPath in files
+      ? selectedPath
+      : (defaultSelectedPath(paths) ?? paths[0] ?? '');
+  const contents = files[resolvedPath];
+  const file = contents === undefined ? null : { path: resolvedPath, contents };
+
+  if (!result) {
+    return null;
+  }
+
+  if (!result.ok) {
+    return (
+      <p className="text-muted-foreground px-4 py-3 text-sm">
+        {result.message}
+      </p>
+    );
+  }
 
   return (
-    <div className="flex min-h-[28rem] flex-col">
+    <div className="flex min-h-112 flex-col">
       <CreatePreviewNarrowToggle
         pane={narrowPane}
         onPaneChange={setNarrowPane}
       />
-      <div className="grid min-h-0 flex-1 lg:grid-cols-2">
-        <div
-          className={cn(
-            'min-h-0 overflow-auto border-b lg:border-r lg:border-b-0',
-            narrowPane === 'code' && 'max-lg:hidden'
-          )}
+      <ResizablePanelGroup
+        orientation="horizontal"
+        className="min-h-0 flex-1 max-lg:block"
+      >
+        <ResizablePanel
+          defaultSize={34}
+          minSize={18}
+          className={cn('min-h-0', narrowPane === 'code' && 'max-lg:hidden')}
         >
-          <CreateTree
-            tree={tree}
-            selectedPath={selectedPath}
-            onSelectPath={(path) => {
-              if (!(path in CREATE_FILE_MAP)) {
-                return;
-              }
-              setSelectedPath(path);
-              setNarrowPane('code');
-            }}
-          />
-        </div>
-        <div
-          className={cn(
-            'min-h-0 overflow-auto',
-            narrowPane === 'tree' && 'max-lg:hidden'
-          )}
+          <div className="flex h-full min-h-0 flex-col">
+            <Label className="text-muted-foreground flex h-10 shrink-0 items-center px-4 text-sm">
+              Files
+            </Label>
+            <div className="bg-background min-h-0 flex-1 overflow-auto">
+              <CreateTree
+                tree={tree}
+                selectedPath={resolvedPath}
+                onSelectPath={(path) => {
+                  if (!(path in files)) {
+                    return;
+                  }
+                  setSelectedPath(path);
+                  setNarrowPane('code');
+                }}
+              />
+            </div>
+          </div>
+        </ResizablePanel>
+        <ResizableHandle withHandle className="max-lg:hidden" />
+        <ResizablePanel
+          defaultSize={66}
+          minSize={30}
+          className={cn('min-h-0', narrowPane === 'tree' && 'max-lg:hidden')}
         >
-          <CreateFilePreview file={file} />
-        </div>
-      </div>
+          <div className="h-full min-h-0 overflow-hidden p-1">
+            {file ? <CreateFilePreview key={file.path} file={file} /> : null}
+          </div>
+        </ResizablePanel>
+      </ResizablePanelGroup>
     </div>
   );
 }
@@ -105,4 +157,19 @@ function CreatePreviewNarrowToggle({
       </ButtonGroup>
     </div>
   );
+}
+
+function previewKey(flags: CreateFlags, projectName: string) {
+  return `${projectName}:${FLAG_GROUPS.map((group) => flags[group]).join(',')}`;
+}
+
+function previewResult(flags: CreateFlags, projectName: string) {
+  const key = previewKey(flags, projectName);
+  const cached = previewCache.get(key);
+  if (cached) {
+    return cached;
+  }
+  const next = generateCreateFiles(flags, projectName);
+  previewCache.set(key, next);
+  return next;
 }

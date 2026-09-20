@@ -67,8 +67,21 @@ test('collectFolderIds expands every folder with children', () => {
 
 test('default selected path prefers package.json', () => {
   expect(
-    defaultSelectedPath(['app/page.tsx', 'package.json', 'lib/utils.ts'])
+    defaultSelectedPath([
+      'README.md',
+      'app/page.tsx',
+      'package.json',
+      'lib/utils.ts',
+    ])
   ).toBe('package.json');
+});
+
+test('treeFromPaths keeps README.md as a file', () => {
+  const tree = treeFromPaths(['README.md', 'package.json'], 'my-gb-app');
+  expect(tree.children?.map((child) => child.name)).toEqual([
+    'package.json',
+    'README.md',
+  ]);
 });
 
 test('default selected path falls back to the first sorted key', () => {

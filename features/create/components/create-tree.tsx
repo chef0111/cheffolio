@@ -10,7 +10,9 @@ import {
   TreeProvider,
   TreeView,
 } from '@/components/kibo-ui/tree';
+import { getIconExtension } from '@/components/mdx/extensions/get-icon';
 
+import { languageFromPath } from '../lib/language-from-path';
 import {
   collectFolderIds,
   type TreeNode as FolderNode,
@@ -45,7 +47,6 @@ export function CreateTree({
           onSelectPath(next);
         }
       }}
-      className="px-2"
     >
       <TreeView aria-label="Project files">
         <FolderTreeNode
@@ -91,10 +92,17 @@ function FolderTreeNode({
         }}
       >
         <TreeExpander hasChildren={hasChildren} />
-        <TreeIcon hasChildren={isFolder} />
+        <TreeIcon
+          hasChildren={isFolder}
+          icon={
+            node.kind === 'file'
+              ? getIconExtension(languageFromPath(node.path))
+              : undefined
+          }
+        />
         <TreeLabel className="font-mono">{node.name}</TreeLabel>
       </TreeNodeTrigger>
-      {hasChildren ? (
+      {hasChildren && (
         <TreeNodeContent hasChildren>
           {children.map((child, index) => (
             <FolderTreeNode
@@ -106,7 +114,7 @@ function FolderTreeNode({
             />
           ))}
         </TreeNodeContent>
-      ) : null}
+      )}
     </TreeNode>
   );
 }

@@ -1,98 +1,118 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { type BundledLanguage, codeToHtml } from 'shiki/bundle/web';
+import {
+  type BundledLanguage,
+  bundledLanguages,
+  createHighlighter,
+  type ShikiTransformer,
+} from 'shiki/bundle/web';
+
+import { MDXCodeBlock } from '@/components/mdx/mdx-code-block';
+
+import { languageFromPath } from '../lib/language-from-path';
 
 const LANG_BY_EXT: Record<string, BundledLanguage> = {
   css: 'css',
+  env: 'shell',
   html: 'html',
   js: 'javascript',
   json: 'json',
   jsx: 'jsx',
   md: 'markdown',
   mdx: 'mdx',
+  mjs: 'javascript',
   ts: 'typescript',
   tsx: 'tsx',
   yaml: 'yaml',
   yml: 'yaml',
 };
 
+const HIGHLIGHT_LANGS = [...new Set(Object.values(LANG_BY_EXT))].filter(
+  (lang) => lang in bundledLanguages
+);
+
+const highlighterPromise = createHighlighter({
+  langs: HIGHLIGHT_LANGS,
+  themes: ['github-light', 'github-dark'],
+});
+
 const highlightCache = new Map<string, string>();
+
+const dataLineTransformer: ShikiTransformer = {
+  name: 'data-line',
+  line(node) {
+    node.properties['data-line'] = '';
+  },
+};
 
 export function CreateFilePreview({
   file,
 }: {
-  file: { path: string; contents: string } | null;
+  file: { path: string; contents: string };
 }) {
   const path = file?.path;
   const contents = file?.contents;
   const lang = path ? langFromPath(path) : null;
   const cacheKey =
     lang && contents !== undefined ? `${lang}\0${contents}` : null;
-  const [, setVersion] = useState(0);
-  const html = cacheKey ? highlightCache.get(cacheKey) : undefined;
+  const cached = cacheKey ? highlightCache.get(cacheKey) : undefined;
+  const [html, setHtml] = useState<string | null>(cached ?? null);
+  const markup = cached ?? html;
 
   useEffect(() => {
     if (!cacheKey || !lang || contents === undefined) {
       return;
     }
-    if (highlightCache.has(cacheKey)) {
-      return;
-    }
 
     let cancelled = false;
-    void codeToHtml(contents, {
-      lang,
-      themes: {
-        light: 'github-light',
-        dark: 'github-dark',
-      },
-      defaultColor: false,
-    }).then((next) => {
-      highlightCache.set(cacheKey, next);
-      if (!cancelled) {
-        setVersion((version) => version + 1);
-      }
-    });
+    const pending = highlightCache.has(cacheKey)
+      ? Promise.resolve(highlightCache.get(cacheKey) ?? '')
+      : highlighterPromise
+          .then((highlighter) =>
+            highlighter.codeToHtml(contents, {
+              lang,
+              themes: {
+                light: 'github-light',
+                dark: 'github-dark',
+              },
+              defaultColor: false,
+              transformers: [dataLineTransformer],
+            })
+          )
+          .then((next) => {
+            highlightCache.set(cacheKey, next);
+            return next;
+          });
+
+    void pending
+      .then((next) => {
+        if (!cancelled && next) {
+          setHtml(next);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setHtml(null);
+        }
+      });
 
     return () => {
       cancelled = true;
     };
   }, [cacheKey, contents, lang]);
 
-  if (!file) {
-    return (
-      <p className="text-muted-foreground px-4 py-3 text-sm">
-        No file selected
-      </p>
-    );
-  }
-
   return (
-    <div className="flex h-full min-h-0 flex-col">
-      <div className="text-muted-foreground border-b px-3 py-1.5 font-mono text-xs">
-        {file.path}
-      </div>
-      {html ? (
-        <div
-          className="min-h-0 flex-1 overflow-auto [&_.line_span]:text-(--shiki-light) dark:[&_.line_span]:text-(--shiki-dark) [&_pre]:bg-transparent [&_pre]:p-4"
-          dangerouslySetInnerHTML={{ __html: html }}
-        />
-      ) : (
-        <pre className="min-h-0 flex-1 overflow-auto p-4 font-mono text-sm">
-          <code>{file.contents}</code>
-        </pre>
-      )}
-    </div>
+    <MDXCodeBlock
+      language={languageFromPath(file.path)}
+      title={file.path}
+      html={markup}
+      raw={file.contents}
+      className="my-0 h-full min-h-0"
+    />
   );
 }
 
 function langFromPath(path: string): BundledLanguage | null {
-  const base = path.split('/').pop() ?? path;
-  const dot = base.lastIndexOf('.');
-  if (dot < 0) {
-    return null;
-  }
-  const ext = base.slice(dot + 1);
-  return LANG_BY_EXT[ext] ?? null;
+  return LANG_BY_EXT[languageFromPath(path)] ?? null;
 }

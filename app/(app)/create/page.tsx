@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { Suspense } from 'react';
 
 import { simpleOgImageUrl } from '@/app/og/params';
 import {
@@ -10,7 +9,6 @@ import {
 import { StripeSeparator } from '@/components/cheffolio/stripe-separator';
 import { jsonLdBreadcrumbList, JsonLdScript } from '@/components/json-ld';
 import { X_PROFILE } from '@/config/site';
-import { CreateFallback } from '@/features/create/components/create-fallback';
 import { CreateWorkspace } from '@/features/create/components/create-workspace';
 
 const title = 'Create';
@@ -66,9 +64,7 @@ export default function CreatePage() {
 
         <StripeSeparator />
 
-        <Suspense fallback={<CreateFallback />}>
-          <CreateWorkspace />
-        </Suspense>
+        <CreateWorkspace />
       </div>
       <StripeSeparator />
     </>
