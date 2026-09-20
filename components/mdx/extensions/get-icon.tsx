@@ -1,6 +1,9 @@
 import { FileIcon } from 'lucide-react';
 import type { ComponentProps } from 'react';
 
+import { MarkdownIcon } from '@/components/icons/markdown';
+import { PrismaIcon } from '@/components/icons/prisma';
+
 type IconProps = ComponentProps<'svg'>;
 
 function JsonIcon(props: IconProps) {
@@ -59,20 +62,32 @@ function ReactIcon(props: IconProps) {
 }
 
 export function getIconExtension(language: string) {
+  const className = 'size-4';
   switch (language) {
     case 'json':
-      return <JsonIcon />;
+      return <JsonIcon className={className} />;
     case 'css':
-      return <CssIcon />;
+      return <CssIcon className={className} />;
     case 'js':
-      return <JsIcon />;
+    case 'mjs':
+    case 'cjs':
+    case 'javascript':
+      return <JsIcon className={className} />;
     case 'ts':
+    case 'mts':
+    case 'cts':
     case 'typescript':
-      return <TsIcon />;
+      return <TsIcon className={className} />;
     case 'jsx':
     case 'tsx':
-      return <ReactIcon />;
+      return <ReactIcon className={className} />;
+    case 'md':
+    case 'mdx':
+    case 'markdown':
+      return <MarkdownIcon className={className} />;
+    case 'prisma':
+      return <PrismaIcon className={className} />;
     default:
-      return <FileIcon />;
+      return <FileIcon className={className} />;
   }
 }

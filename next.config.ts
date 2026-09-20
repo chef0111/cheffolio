@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
     },
     optimizePackageImports: ['lucide-react'],
   },
-  transpilePackages: ['next-mdx-remote'],
+  transpilePackages: ['next-mdx-remote', 'create-gb-app'],
   async headers() {
     return [
       {

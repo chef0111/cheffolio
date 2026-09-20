@@ -15,6 +15,7 @@ import { Panel, PanelHeader, PanelTitle } from '@/components/cheffolio/panel';
 import { ShareMenu } from '@/components/cheffolio/share-menu';
 import { StripeSeparator } from '@/components/cheffolio/stripe-separator';
 import { jsonLdBreadcrumbList, JsonLdScript } from '@/components/json-ld';
+import { MDX } from '@/components/mdx';
 import { Button } from '@/components/ui/button';
 import { Kbd } from '@/components/ui/kbd';
 import {
@@ -36,7 +37,6 @@ import {
 import { DocPageRoot } from '@/features/blog/components/doc/doc-page-root';
 import { TOCInline } from '@/features/blog/components/doc/toc-inline';
 import { TOCMinimap } from '@/features/blog/components/doc/toc-minimap';
-import { MDX } from '@/features/blog/components/mdx';
 import {
   BLOG_CATEGORY,
   findNeighbour,

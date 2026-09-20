@@ -19,6 +19,9 @@ import {
 import { FramedImage } from './embed';
 import { mdxCodeBlockComponents } from './mdx-code-block';
 
+export { getIconExtension } from './extensions/get-icon';
+export { MDXCodeBlock, mdxCodeBlockComponents } from './mdx-code-block';
+
 const components: MDXRemoteProps['components'] = {
   h1: (props: ComponentProps<'h1'>) => <Heading as="h1" {...props} />,
   h2: (props: ComponentProps<'h2'>) => <Heading as="h2" {...props} />,
