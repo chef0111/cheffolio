@@ -14,8 +14,13 @@ import {
   FieldTitle,
 } from '@/components/ui/field';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { cn } from '@/lib/utils';
 
-import { FLAG_GROUP_LABELS, FLAG_OPTIONS } from '../data/options';
+import {
+  FLAG_GROUP_LABELS,
+  FLAG_OPTIONS,
+  presentFlagOption,
+} from '../data/options';
 import { isSelectable } from '../lib/command';
 import { disabledReason, isGroupVisible } from '../lib/compat';
 import { type CreateFlags, FLAG_GROUPS, type FlagGroup } from '../types/stack';
@@ -54,7 +59,8 @@ function FlagRadioGroup({ group }: { group: FlagGroup }) {
         }}
         className="grid grid-cols-1 gap-2 lg:grid-cols-2"
       >
-        {FLAG_OPTIONS[group].map((option) => {
+        {FLAG_OPTIONS[group].map((rawOption) => {
+          const option = presentFlagOption(rawOption, flags);
           const optionId = `${id}-${option.value}`;
           const enabled = isSelectable(flags, group, option.value);
           const reason = disabledReason(flags, group, option.value);
@@ -67,6 +73,7 @@ function FlagRadioGroup({ group }: { group: FlagGroup }) {
             >
               <Field
                 orientation="horizontal"
+                className="relative items-start"
                 data-disabled={!enabled || undefined}
               >
                 <RadioGroupItem
@@ -74,17 +81,25 @@ function FlagRadioGroup({ group }: { group: FlagGroup }) {
                   value={option.value}
                   disabled={!enabled}
                 />
-                <FieldContent>
-                  <FieldTitle>
-                    <option.icon className="size-4" />
-                    {option.label}
-                  </FieldTitle>
+                <FieldContent className="pr-8">
+                  <FieldTitle>{option.label}</FieldTitle>
                   {enabled ? (
-                    <FieldDescription>{option.description}</FieldDescription>
+                    <FieldDescription className="text-balance">
+                      {option.description}
+                    </FieldDescription>
                   ) : reason ? (
                     <FieldDescription>{reason}</FieldDescription>
                   ) : null}
                 </FieldContent>
+                {option.icon && (
+                  <option.icon
+                    className={cn(
+                      'absolute top-3 right-3 size-6 shrink-0 self-center',
+                      option.value === 'none' && 'text-muted-foreground'
+                    )}
+                    aria-hidden
+                  />
+                )}
               </Field>
             </FieldLabel>
           );

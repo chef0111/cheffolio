@@ -1,30 +1,29 @@
-import {
-  AppWindowIcon,
-  CircleOffIcon,
-  CloudIcon,
-  CreditCardIcon,
-  CylinderIcon,
-  GaugeIcon,
-  HardDriveIcon,
-  KeyRoundIcon,
-  LeafIcon,
-  ShieldIcon,
-  SquareCheckIcon,
-  TriangleIcon,
-  WaypointsIcon,
-  ZapIcon,
-} from 'lucide-react';
 import type { ComponentType } from 'react';
 
-import { DockerIcon } from '@/components/icons/docker';
-import { DrizzleIcon } from '@/components/icons/drizzle';
-import { NestIcon } from '@/components/icons/nest';
-import { NextIcon } from '@/components/icons/next';
-import { OrpcIcon } from '@/components/icons/orpc';
-import { PostgresIcon } from '@/components/icons/postgres';
-import { PrismaIcon } from '@/components/icons/prisma';
-import { ShadcnIcon } from '@/components/icons/shadcn';
-import { TanStackStartIcon } from '@/components/icons/tanstack-start';
+import {
+  BetterAuthIcon,
+  BiomeIcon,
+  ClerkIcon,
+  ConvexIcon,
+  DockerIcon,
+  DrizzleIcon,
+  EslintIcon,
+  MysqlIcon,
+  NeonIcon,
+  NestIcon,
+  NextIcon,
+  OrpcIcon,
+  OxlintIcon,
+  PolarIcon,
+  PostgresIcon,
+  PrismaIcon,
+  ShadcnIcon,
+  SqliteIcon,
+  StripeIcon,
+  SupabaseIcon,
+  TanStackStartIcon,
+  TrpcIcon,
+} from '@/components/icons';
 import type { IconProps } from '@/components/icons/type';
 
 import type { CreateFlags, FlagGroup } from '../types/stack';
@@ -46,89 +45,89 @@ export type FlagOption<K extends FlagGroup> = {
   value: CreateFlags[K];
   label: string;
   description: string;
-  icon: ComponentType<IconProps>;
+  icon?: ComponentType<IconProps>;
 };
 
 export const FLAG_OPTIONS: { [K in FlagGroup]: readonly FlagOption<K>[] } = {
   frontend: [
     {
       value: 'next',
-      label: 'Next',
-      description: 'Next.js App Router',
+      label: 'Next.js',
+      description: 'The React framework for the web by Vercel',
       icon: NextIcon,
     },
     {
       value: 'tanstack-start',
       label: 'TanStack Start',
-      description: 'TanStack Start',
+      description: 'Full-stack React framework by TanStack',
       icon: TanStackStartIcon,
     },
   ],
   backend: [
     {
       value: 'self',
-      label: 'Self',
-      description: 'API in the same app',
-      icon: AppWindowIcon,
+      label: 'Fullstack Next.js',
+      description: 'Next.js built-in API routes & server actions',
+      icon: NextIcon,
     },
     {
       value: 'nest',
       label: 'Nest',
-      description: 'apps/web, apps/server, packages/contract',
+      description: 'A progressive Node.js framework',
       icon: NestIcon,
     },
     {
       value: 'convex',
       label: 'Convex',
-      description: 'convex/ directory',
-      icon: CloudIcon,
+      description: 'Reactive backend-as-a-service',
+      icon: ConvexIcon,
     },
   ],
   api: [
     {
       value: 'orpc',
       label: 'oRPC',
-      description: 'Router-first procedures',
+      description: 'Type-safe APIs made simple',
       icon: OrpcIcon,
     },
     {
       value: 'trpc',
       label: 'tRPC',
-      description: 'Router type from this app',
-      icon: WaypointsIcon,
+      description: 'End-to-end type-safe APIs',
+      icon: TrpcIcon,
     },
   ],
   database: [
     {
       value: 'postgres',
-      label: 'Postgres',
-      description: 'PostgreSQL',
+      label: 'PostgreSQL',
+      description: 'Advanced Open Source Relational Database',
       icon: PostgresIcon,
     },
     {
       value: 'sqlite',
       label: 'SQLite',
-      description: 'SQLite file',
-      icon: HardDriveIcon,
+      description: 'Small, fast, and reliable embedded database',
+      icon: SqliteIcon,
     },
     {
       value: 'mysql',
       label: 'MySQL',
-      description: 'MySQL',
-      icon: CylinderIcon,
+      description: 'Relational SQL',
+      icon: MysqlIcon,
     },
   ],
   orm: [
     {
       value: 'prisma',
       label: 'Prisma',
-      description: 'Prisma schema and client',
+      description: 'Typed ORM',
       icon: PrismaIcon,
     },
     {
       value: 'drizzle',
       label: 'Drizzle',
-      description: 'Drizzle ORM',
+      description: 'SQL-first ORM',
       icon: DrizzleIcon,
     },
   ],
@@ -136,46 +135,44 @@ export const FLAG_OPTIONS: { [K in FlagGroup]: readonly FlagOption<K>[] } = {
     {
       value: 'none',
       label: 'None',
-      description: 'Skip hosted setup',
-      icon: CircleOffIcon,
+      description: 'Skip hosted DB',
     },
     {
       value: 'docker',
       label: 'Docker',
-      description: 'docker-compose.yml',
+      description: 'Local Compose',
       icon: DockerIcon,
     },
     {
       value: 'neon',
       label: 'Neon',
-      description: 'Neon Postgres',
-      icon: ZapIcon,
+      description: 'Serverless Postgres',
+      icon: NeonIcon,
     },
     {
       value: 'supabase',
       label: 'Supabase',
-      description: 'Supabase Postgres',
-      icon: TriangleIcon,
+      description: 'Hosted Postgres',
+      icon: SupabaseIcon,
     },
   ],
   auth: [
     {
       value: 'none',
       label: 'None',
-      description: 'Public notes',
-      icon: CircleOffIcon,
+      description: 'No sign-in',
     },
     {
       value: 'better-auth',
       label: 'Better Auth',
-      description: 'Email and password',
-      icon: KeyRoundIcon,
+      description: 'TypeScript auth',
+      icon: BetterAuthIcon,
     },
     {
       value: 'clerk',
       label: 'Clerk',
       description: 'Hosted auth',
-      icon: ShieldIcon,
+      icon: ClerkIcon,
     },
   ],
   payments: [
@@ -183,53 +180,90 @@ export const FLAG_OPTIONS: { [K in FlagGroup]: readonly FlagOption<K>[] } = {
       value: 'none',
       label: 'None',
       description: 'No billing',
-      icon: CircleOffIcon,
     },
     {
       value: 'stripe',
       label: 'Stripe',
-      description: 'Checkout and portal',
-      icon: CreditCardIcon,
+      description: 'Payments API',
+      icon: StripeIcon,
     },
     {
       value: 'polar',
       label: 'Polar',
-      description: 'Polar checkout',
-      icon: ZapIcon,
+      description: 'OSS billing',
+      icon: PolarIcon,
     },
   ],
   ui: [
     {
       value: 'shadcn',
       label: 'shadcn',
-      description: 'shadcn/ui',
+      description: 'Component kit',
       icon: ShadcnIcon,
     },
     {
       value: 'none',
       label: 'None',
-      description: 'No component library',
-      icon: CircleOffIcon,
+      description: 'No UI kit',
     },
   ],
   linter: [
     {
       value: 'eslint',
       label: 'ESLint',
-      description: 'ESLint',
-      icon: SquareCheckIcon,
+      description: 'JS linter',
+      icon: EslintIcon,
     },
     {
       value: 'biome',
       label: 'Biome',
-      description: 'Biome',
-      icon: LeafIcon,
+      description: 'Fast toolchain',
+      icon: BiomeIcon,
     },
     {
       value: 'oxlint',
       label: 'Oxlint',
-      description: 'Oxlint',
-      icon: GaugeIcon,
+      description: 'Rust linter',
+      icon: OxlintIcon,
     },
   ],
 };
+
+export function presentFlagOption<K extends FlagGroup>(
+  option: FlagOption<K>,
+  flags: CreateFlags
+): FlagOption<K> {
+  if (option.value !== 'self') {
+    return option;
+  }
+
+  return {
+    ...option,
+    ...fullstackBackendCopy(flags.frontend),
+  };
+}
+
+export function fullstackBackendCopy(frontend: CreateFlags['frontend']): {
+  label: string;
+  description: string;
+  icon: ComponentType<IconProps>;
+} {
+  switch (frontend) {
+    case 'next':
+      return {
+        label: 'Fullstack Next.js',
+        description: 'Next.js built-in API routes & server actions',
+        icon: NextIcon,
+      };
+    case 'tanstack-start':
+      return {
+        label: 'Fullstack TanStack Start',
+        description: 'TanStack Start built-in API routes & server functions',
+        icon: TanStackStartIcon,
+      };
+    default: {
+      const _exhaustive: never = frontend;
+      throw new Error(`unhandled frontend: ${_exhaustive}`);
+    }
+  }
+}
