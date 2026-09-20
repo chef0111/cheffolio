@@ -11,6 +11,8 @@ import {
 
 export const RULE_IDS = {
   nestRequiresOrpc: 'nest-requires-orpc',
+  nestEslint: 'nest-eslint',
+  nestOxlint: 'nest-oxlint',
   polarRequiresBetterAuth: 'polar-requires-better-auth',
   paymentsRequireAuth: 'payments-require-auth',
   convexDatabaseOff: 'convex-database-off',
@@ -27,6 +29,8 @@ export type RuleId = (typeof RULE_IDS)[keyof typeof RULE_IDS];
 
 export const RULE_MESSAGES: Record<RuleId, string> = {
   'nest-requires-orpc': 'Nest requires oRPC',
+  'nest-eslint': 'Nest ESLint generate is not implemented yet',
+  'nest-oxlint': 'Nest Oxlint generate is not implemented yet',
   'polar-requires-better-auth': 'Polar requires Better Auth',
   'payments-require-auth': 'Payments require auth',
   'convex-database-off': 'Convex cannot use a database',
@@ -135,6 +139,15 @@ function disabledRule(
     return RULE_IDS.nestRequiresOrpc;
   }
 
+  if (group === 'linter' && flags.backend === 'nest') {
+    if (value === 'eslint') {
+      return RULE_IDS.nestEslint;
+    }
+    if (value === 'oxlint') {
+      return RULE_IDS.nestOxlint;
+    }
+  }
+
   if (group === 'dbSetup') {
     if (value === 'docker' && flags.database === 'sqlite') {
       return RULE_IDS.sqliteDockerForbidden;
@@ -226,8 +239,13 @@ export function normalizeFlags(flags: CreateFlags): CreateFlags {
     next = applyFlagChange(next, group, YES_DEFAULTS[group]);
   }
 
-  if (next.backend === 'nest' && next.api !== 'orpc') {
-    next = { ...next, api: 'orpc' };
+  if (next.backend === 'nest') {
+    if (next.api !== 'orpc') {
+      next = { ...next, api: 'orpc' };
+    }
+    if (next.linter !== 'biome') {
+      next = { ...next, linter: 'biome' };
+    }
   }
 
   if (next.backend === 'convex') {
@@ -256,7 +274,7 @@ function applyBackendSideEffects(
 ): CreateFlags {
   switch (backend) {
     case 'nest':
-      return { ...flags, api: 'orpc' };
+      return { ...flags, api: 'orpc', linter: 'biome' };
     case 'convex':
       return {
         ...flags,

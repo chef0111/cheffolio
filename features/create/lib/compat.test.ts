@@ -4,9 +4,11 @@ import compat from '../data/compat.json';
 import { type CreateFlags, FLAG_GROUPS, type FlagGroup } from '../types/stack';
 import { buildCommand } from './command';
 import {
+  applyFlagChange,
   disabledRuleId,
   isGroupVisible,
   isRelationalGroup,
+  normalizeFlags,
   type RuleId,
   YES_DEFAULTS,
 } from './compat';
@@ -15,6 +17,31 @@ test('vendored yesDefault is the picker default', () => {
   const { monorepo, ...flags } = compat.yesDefault;
   expect(monorepo).toBe(false);
   expect(flags).toEqual(YES_DEFAULTS);
+});
+
+test('nest plus default eslint side-effects to biome', () => {
+  const next = applyFlagChange(YES_DEFAULTS, 'backend', 'nest');
+  expect(next).toEqual({
+    ...YES_DEFAULTS,
+    backend: 'nest',
+    linter: 'biome',
+  });
+  expect(normalizeFlags({ ...YES_DEFAULTS, backend: 'nest' })).toEqual(next);
+  expect(disabledRuleId(next, 'linter', 'eslint')).toBe('nest-eslint');
+  expect(disabledRuleId(next, 'linter', 'biome')).toBeNull();
+  expect(disabledRuleId(next, 'linter', 'oxlint')).toBe('nest-oxlint');
+});
+
+test('nest plus oxlint side-effects to biome', () => {
+  const next = applyFlagChange(
+    { ...YES_DEFAULTS, linter: 'oxlint' },
+    'backend',
+    'nest'
+  );
+  expect(next.linter).toBe('biome');
+  expect(
+    normalizeFlags({ ...YES_DEFAULTS, backend: 'nest', linter: 'oxlint' })
+  ).toEqual(next);
 });
 
 for (const legal of compat.legal) {
@@ -35,11 +62,10 @@ for (const legal of compat.legal) {
     }
 
     const command = buildCommand(flags);
-    expect(command.startsWith('npx create-gb-app my-gb-app --yes')).toBe(true);
-    for (const [key, value] of Object.entries(legal.flags)) {
-      if (key === 'backend' && value !== YES_DEFAULTS.backend) {
-        expect(command).toContain(`--backend ${value}`);
-      }
+    expect(command.startsWith('npx create-gb-app my-gb-app')).toBe(true);
+    expect(command).not.toContain('--yes');
+    if (Object.keys(legal.flags).length > 0) {
+      expect(command).toContain('--preset');
     }
   });
 }
