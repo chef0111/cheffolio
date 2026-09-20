@@ -1,15 +1,18 @@
+import { cn } from '@/lib/utils';
+
 import type { IconProps } from './type';
 
-export function ShadcnIcon(props: IconProps) {
+export function ShadcnIcon({ className, ...props }: IconProps) {
   return (
     <svg
       viewBox="0 0 256 256"
-      className="stroke-foreground"
+      className={cn('text-black dark:text-white', className)}
       aria-hidden
       {...props}
     >
       <path
         fill="none"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="32"

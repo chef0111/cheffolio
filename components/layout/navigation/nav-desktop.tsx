@@ -15,7 +15,7 @@ export function NavDesktop({ items }: { items: NavItem<Route>[] }) {
   return <Nav className="max-sm:hidden" items={items} activeId={pathname} />;
 }
 
-function Nav({
+export function Nav({
   items,
   activeId,
   className,

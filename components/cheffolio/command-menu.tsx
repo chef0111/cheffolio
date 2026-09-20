@@ -9,6 +9,7 @@ import {
   FileUser,
   HomeIcon,
   LayersIcon,
+  LayoutPanelLeftIcon,
   MailIcon,
   MonitorIcon,
   MoonStarIcon,
@@ -77,16 +78,16 @@ const MENU_LINKS: CommandLinkItem[] = [
     icon: NewspaperIcon,
   },
   {
-    title: 'Projects',
-    href: '/projects',
-    type: 'page',
-    icon: BoxIcon,
-  },
-  {
     title: 'Resume',
     href: '/resume',
     type: 'page',
     icon: FileUser,
+  },
+  {
+    title: 'Create',
+    href: '/create',
+    type: 'page',
+    icon: LayoutPanelLeftIcon,
   },
 ];
 
@@ -229,6 +230,7 @@ export function CommandMenuDialog({ blogs }: { blogs: DocPreview[] }) {
       open={open}
       onOpenChange={setOpen}
       modal="trap-focus"
+      className="not-found-hidden"
     >
       <CommandMenuInput />
 

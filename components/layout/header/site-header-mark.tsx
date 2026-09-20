@@ -4,7 +4,7 @@ import { useMotionValueEvent, useScroll } from 'motion/react';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
-import { Brand, BrandMark } from '@/components/cheffolio/brand';
+import { BrandMark } from '@/components/cheffolio/brand';
 
 const calcDistance = (el: HTMLElement) => {
   const rect = el.getBoundingClientRect();
@@ -46,7 +46,7 @@ function BrandMotion() {
         className="ease-out-cubic stroke-foreground no-focus absolute top-0 left-0 opacity-100 transition-opacity duration-300 select-none group-data-[visible=true]/motion:opacity-0"
         tabIndex={-1}
       />
-      <Brand className="ease-out-cubic no-focus translate-y-2 opacity-0 transition-[opacity,translate] duration-300 group-data-[visible=true]/motion:translate-y-0 group-data-[visible=true]/motion:opacity-100" />
+      <BrandMark className="ease-out-cubic no-focus translate-y-2 opacity-0 transition-[opacity,translate] duration-300 group-data-[visible=true]/motion:translate-y-0 group-data-[visible=true]/motion:opacity-100" />
     </div>
   );
 }
@@ -54,5 +54,5 @@ function BrandMotion() {
 export function SiteHeaderMark() {
   const pathname = usePathname();
   const isHome = ['/', '/index'].includes(pathname);
-  return isHome ? <BrandMotion /> : <Brand />;
+  return isHome ? <BrandMotion /> : <BrandMark />;
 }

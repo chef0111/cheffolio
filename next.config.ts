@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
     },
     optimizePackageImports: ['lucide-react'],
   },
-  transpilePackages: ['next-mdx-remote'],
+  transpilePackages: ['next-mdx-remote', 'create-gb-app'],
   async headers() {
     return [
       {
@@ -43,6 +43,16 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      {
+        source: '/projects',
+        destination: '/create',
+        permanent: true,
+      },
+      {
+        source: '/studio',
+        destination: '/create',
+        permanent: true,
+      },
       {
         source: '/:section(blog|resume)/:slug.mdx',
         destination: '/:section/:slug.md',

@@ -94,3 +94,51 @@ export const mdxCodeBlockComponents = {
     );
   },
 };
+
+export function MDXCodeBlock({
+  language,
+  title,
+  html,
+  raw,
+  className,
+}: {
+  language: string;
+  title: string;
+  html: string | null;
+  raw: string;
+  className?: string;
+}) {
+  const Figure = mdxCodeBlockComponents.figure;
+  const Figcaption = mdxCodeBlockComponents.figcaption;
+
+  return (
+    <Figure
+      className={cn(
+        'my-0 flex h-full min-h-0 flex-1 flex-col overflow-hidden',
+        className
+      )}
+      data-rehype-pretty-code-figure=""
+    >
+      <Figcaption
+        data-rehype-pretty-code-title=""
+        data-language={language}
+        className="h-10 shrink-0"
+        __rawString__={raw}
+      >
+        {title}
+      </Figcaption>
+      {html ? (
+        <div
+          className="bg-code [&_pre]:no-scrollbar min-h-0 flex-1 overflow-hidden rounded-[9px] border [&_pre]:h-full [&_pre]:overflow-y-auto [&_pre]:bg-transparent"
+          dangerouslySetInnerHTML={{ __html: html }}
+        />
+      ) : (
+        <div className="group/pre bg-code relative min-h-0 flex-1 overflow-auto rounded-[9px] border">
+          <pre className="no-scrollbar h-full overflow-auto p-4 font-mono text-sm [--code-padding-right:6rem]">
+            <code>{raw}</code>
+          </pre>
+        </div>
+      )}
+    </Figure>
+  );
+}

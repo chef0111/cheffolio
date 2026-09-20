@@ -15,6 +15,7 @@ const eslintConfig = defineConfig([
     'out/**',
     'build/**',
     'next-env.d.ts',
+    '.scratch/**',
   ]),
   {
     // ESLint 10 removed context.getFilename(); eslint-plugin-react still uses it

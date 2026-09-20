@@ -22,7 +22,7 @@ export function ScrollFadeOverlay({
   return (
     <div
       className={cn(
-        'pointer-events-none fixed inset-x-0 z-50',
+        'not-found-hidden pointer-events-none fixed inset-x-0 z-50',
         isTop
           ? fadeOut
             ? 'scroll-fade-effect-top -top-0.5'

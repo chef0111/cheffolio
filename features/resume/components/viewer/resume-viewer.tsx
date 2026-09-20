@@ -107,7 +107,7 @@ export function ResumeViewerViewport({
     <div
       data-slot="resume-viewer-viewport"
       className={cn(
-        'bg-background h-[calc(100svh-14rem)] min-h-120 scrollbar-gutter-stable overflow-y-scroll p-4',
+        'bg-background aspect-3/4 min-h-120 w-full scrollbar-gutter-stable overflow-y-scroll p-4',
         className
       )}
       {...props}

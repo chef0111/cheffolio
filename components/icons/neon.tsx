@@ -1,0 +1,12 @@
+import type { IconProps } from './type';
+
+export function NeonIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden {...props}>
+      <path
+        fill="#00E599"
+        d="M24 0v24l-9.365-8.045V24H0V0ZM2.942 21.087h8.751V9.563l9.365 8.204V2.919L2.942 2.914Z"
+      />
+    </svg>
+  );
+}

@@ -6,15 +6,15 @@ Next.js 16 (App Router) portfolio, blog, and shadcn registry website.
 
 ## Project structure
 
-| Directory                  | Purpose                                                    |
-| -------------------------- | ---------------------------------------------------------- |
-| `app/`                     | App Router pages, layouts, API routes                      |
-| `components/cheffolio/`    | Shared UI components                                       |
-| `features/`                | Feature modules: `blog`, `portfolio`, `projects`, `resume` |
-| `config/`                  | Site (`site.ts`), JSON-LD config                           |
-| `scripts/`                 | Build scripts (capture) run with Bun                       |
-| `hooks/`, `lib/`, `utils/` | Hooks, libraries, utilities                                |
-| `docs/`                    | Documentation content (blog, resume)                       |
+| Directory                  | Purpose                                                  |
+| -------------------------- | -------------------------------------------------------- |
+| `app/`                     | App Router pages, layouts, API routes                    |
+| `components/cheffolio/`    | Shared UI components                                     |
+| `features/`                | Feature modules: `blog`, `portfolio`, `create`, `resume` |
+| `config/`                  | Site (`site.ts`), JSON-LD config                         |
+| `scripts/`                 | Build scripts (capture) run with Bun                     |
+| `hooks/`, `lib/`, `utils/` | Hooks, libraries, utilities                              |
+| `docs/`                    | Documentation content (blog, resume)                     |
 
 ## Content system
 
@@ -23,7 +23,7 @@ All content lives in `docs/blog/` and `docs/resume/` as MDX files.
 - **Data layer**: `features/blog/lib/data.ts` (`getAllDocs`, `getDocBySlug`)
 - **Blog UI**: `features/blog/components/`
 - **Portfolio UI**: `features/portfolio/components/`
-- **Projects UI**: `features/projects/components/`
+- **Create UI**: `features/create/components/`
 - **Resume UI**: `features/resume/components/`
 
 ## Coding guidelines
