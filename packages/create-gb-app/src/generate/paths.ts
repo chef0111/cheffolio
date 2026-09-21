@@ -1,4 +1,4 @@
-import type { Stack } from "../stack/types.ts";
+import type { Stack } from "../stack/types";
 
 export function isStart(stack: Stack): boolean {
   return stack.frontend === "tanstack-start";

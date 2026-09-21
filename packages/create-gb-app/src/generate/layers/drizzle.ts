@@ -1,6 +1,6 @@
-import { setFile } from "../files.ts";
-import { joinPath, libDir } from "../paths.ts";
-import type { EmitCtx } from "../types.ts";
+import { setFile } from "../files";
+import { joinPath, libDir } from "../paths";
+import type { EmitCtx } from "../types";
 
 export function emitDrizzle(ctx: EmitCtx): void {
   ctx.pkg.dependencies["drizzle-orm"] = "^0.44.5";

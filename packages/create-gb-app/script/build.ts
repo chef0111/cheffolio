@@ -11,7 +11,7 @@ import {
   hostTarget,
   platformPackageName,
   type CompileTarget,
-} from "./targets.ts";
+} from "./targets";
 
 const dir = dirname(fileURLToPath(import.meta.url));
 const root = join(dir, "..");
@@ -33,7 +33,7 @@ if (!skipInstall) {
       "install",
       "--os=*",
       "--cpu=*",
-      `@opentui/core@${pkg.dependencies["@opentui/core"]}`,
+      `@opentui/core@${pkg.optionalDependencies["@opentui/core"]}`,
     ],
     { cwd: root, stdout: "inherit", stderr: "inherit" },
   );

@@ -1,1 +1,1 @@
-import "./stack.bench.ts";
+import "./stack.bench";

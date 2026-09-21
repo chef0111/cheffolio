@@ -1,10 +1,10 @@
 import { basename, resolve } from "node:path";
-import type { RawFlags } from "../stack/types.ts";
-import type { Stack } from "../stack/types.ts";
-import { inferPackageManager } from "../cli/package-manager.ts";
-import { buildTree } from "./build-tree.ts";
-import type { PackageManager } from "./types.ts";
-import { writeTree } from "./write-tree.ts";
+import type { RawFlags } from "../stack/types";
+import type { Stack } from "../stack/types";
+import { inferPackageManager } from "../cli/package-manager";
+import { buildTree } from "./build-tree";
+import type { PackageManager } from "./types";
+import { writeTree } from "./write-tree";
 
 async function runCommand(command: string[], cwd: string): Promise<void> {
   const proc = Bun.spawn(command, {

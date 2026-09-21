@@ -4,7 +4,7 @@ import {
   ParseError,
   shouldGenerateHeadless,
   USAGE,
-} from "../src/cli/parse-args.ts";
+} from "../src/cli/parse-args";
 
 test("single directory positional", () => {
   expect(parseArgs(["my-gb-app", "--yes"])).toEqual({

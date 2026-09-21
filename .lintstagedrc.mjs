@@ -1,16 +1,21 @@
 import path from 'path';
 
-// See https://nextjs.org/docs/app/api-reference/config/eslint#running-lint-on-staged-files for details
-const buildEslintCommand = (filenames) =>
-  `eslint --fix ${filenames
-    .map((f) => `"${path.relative(process.cwd(), f)}"`)
-    .join(' ')}`;
+function quotedRelative(filenames) {
+  return filenames
+    .map((f) => `"${path.relative(process.cwd(), f).replaceAll('\\', '/')}"`)
+    .join(' ');
+}
 
-/**
- * @type {import('lint-staged').Configuration}
- */
 const lintStagedConfig = {
-  '*.{js,jsx,ts,tsx}': [buildEslintCommand, 'prettier --write'],
+  'apps/web/**/*.{js,jsx,ts,tsx}': [
+    (filenames) =>
+      `eslint --config apps/web/eslint.config.mjs --fix ${quotedRelative(filenames)}`,
+    'prettier --write',
+  ],
+  'packages/create-gb-app/**/*.{js,ts,tsx}': [
+    (filenames) =>
+      `eslint --config packages/create-gb-app/eslint.config.mjs --fix ${quotedRelative(filenames)}`,
+  ],
   '*.mdx': 'prettier --write',
 };
 

@@ -1,6 +1,6 @@
-export { CompatError, RULE_IDS } from "../stack/errors.ts";
-export { ParseError } from "../stack/parse-error.ts";
-export { resolveStack, YES_DEFAULTS } from "../stack/resolve.ts";
+export { CompatError, RULE_IDS } from "../stack/errors";
+export { ParseError } from "../stack/parse-error";
+export { resolveStack, YES_DEFAULTS } from "../stack/resolve";
 export type {
   Api,
   Auth,
@@ -15,7 +15,7 @@ export type {
   RawFlags,
   Stack,
   Ui,
-} from "../stack/types.ts";
+} from "../stack/types";
 export {
   APIS,
   AUTHS,
@@ -28,10 +28,10 @@ export {
   ORMS,
   PAYMENTS,
   UIS,
-} from "../stack/vocab.ts";
-export { decodePreset, encodePreset, rawFlagsFromPreset } from "../preset.ts";
-export type { PresetCode } from "../preset.ts";
-export { buildTree } from "./build-tree.ts";
-export { GENERATE_GAPS, GenerateError } from "./errors.ts";
-export type { GenerateGapCode } from "./errors.ts";
-export type { FileMap, GenerateContext, PackageManager } from "./types.ts";
+} from "../stack/vocab";
+export { decodePreset, encodePreset, rawFlagsFromPreset } from "../preset";
+export type { PresetCode } from "../preset";
+export { buildTree } from "./build-tree";
+export { GENERATE_GAPS, GenerateError } from "./errors";
+export type { GenerateGapCode } from "./errors";
+export type { FileMap, GenerateContext, PackageManager } from "./types";

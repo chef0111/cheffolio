@@ -22,5 +22,6 @@ test('generateCreateFiles returns the YES tree', async () => {
     return;
   }
   expect(Object.keys(result.files)).toContain('package.json');
-  expect(Object.keys(result.files).length).toBe(31);
+  expect(Object.keys(result.files)).toContain('README.md');
+  expect(Object.keys(result.files).length).toBe(32);
 });

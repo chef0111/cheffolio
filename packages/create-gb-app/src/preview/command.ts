@@ -1,8 +1,8 @@
-import { parsePresetToken } from "../preset.ts";
-import { YES_DEFAULTS } from "../stack/resolve.ts";
-import type { RawFlags } from "../stack/types.ts";
-import type { FlagGroup } from "../stack/vocab.ts";
-import { RELATIONAL_GROUPS, STACK_CLI_FLAGS } from "../stack/vocab.ts";
+import { parsePresetToken } from "../preset";
+import { YES_DEFAULTS } from "../stack/resolve";
+import type { RawFlags } from "../stack/types";
+import type { FlagGroup } from "../stack/vocab";
+import { RELATIONAL_GROUPS, STACK_CLI_FLAGS } from "../stack/vocab";
 
 function shellQuote(value: string): string {
   if (/^[A-Za-z0-9._@/=+-]+$/.test(value)) {

@@ -1,7 +1,7 @@
 import {
   overlayRawFlags,
   parsePresetToken,
-} from "../preset.ts";
+} from "../preset";
 import {
   APIS,
   AUTHS,
@@ -13,9 +13,9 @@ import {
   ORMS,
   PAYMENTS,
   UIS,
-} from "../stack/vocab.ts";
-import type { RawFlags } from "../stack/types.ts";
-import { ParseError } from "../stack/parse-error.ts";
+} from "../stack/vocab";
+import type { RawFlags } from "../stack/types";
+import { ParseError } from "../stack/parse-error";
 
 export { ParseError };
 

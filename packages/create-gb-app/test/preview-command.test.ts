@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { formatCommand } from "../src/preview/command.ts";
+import { formatCommand } from "../src/preview/command";
 
 test("quotes directory names with spaces", () => {
   expect(formatCommand({ projectName: "my app" })).toBe("create-gb-app 'my app'");

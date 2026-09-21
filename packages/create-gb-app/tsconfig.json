@@ -9,11 +9,13 @@
     "strict": true,
     "allowJs": true,
     "noEmit": true,
-    "allowImportingTsExtensions": true,
     "skipLibCheck": true,
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
     "resolveJsonModule": true,
+    "paths": {
+      "@/*": ["./*"]
+    },
     "types": ["bun"]
   },
   "include": ["src", "test", "script"]

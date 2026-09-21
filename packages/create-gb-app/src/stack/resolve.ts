@@ -1,4 +1,4 @@
-import { CompatError, RULE_IDS } from "./errors.ts";
+import { CompatError, RULE_IDS } from "./errors";
 import type {
   Auth,
   Database,
@@ -7,7 +7,7 @@ import type {
   PresetFields,
   RawFlags,
   Stack,
-} from "./types.ts";
+} from "./types";
 
 export const YES_DEFAULTS = {
   frontend: "next",

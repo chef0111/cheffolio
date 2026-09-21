@@ -1,5 +1,5 @@
-import { setFile } from "../files.ts";
-import type { EmitCtx } from "../types.ts";
+import { setFile } from "../files";
+import type { EmitCtx } from "../types";
 
 export function emitEslintPrettier(ctx: EmitCtx): void {
   ctx.pkg.scripts.lint = "eslint .";

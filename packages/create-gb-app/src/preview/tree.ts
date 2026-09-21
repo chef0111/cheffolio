@@ -1,4 +1,4 @@
-import type { Stack } from "../stack/types.ts";
+import type { Stack } from "../stack/types";
 
 export function previewTree(stack: Stack): string {
   switch (stack.backend) {

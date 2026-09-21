@@ -35,13 +35,13 @@ bun install
 
 ### 4. Configure Environment Variables
 
-Create a `.env.local` file based on `.env.example`:
+Create an `apps/web/.env.local` file based on `apps/web/.env.example`:
 
 ```bash
-cp .env.example .env.local
+cp apps/web/.env.example apps/web/.env.local
 ```
 
-Then, update the necessary environment variables inside `.env.local`.
+Then, update the necessary environment variables inside `apps/web/.env.local`.
 
 ### 5. Run the development server
 
@@ -49,7 +49,7 @@ Then, update the necessary environment variables inside `.env.local`.
 bun run dev
 ```
 
-The application should now be available at https://cheffolio.localhost
+The application should now be available at https://cheffolio.localhost. `bun run dev` runs `turbo run dev --filter=web`. The public origin stays `https://cheffolio.localhost`.
 
 ## Building for Production
 
@@ -80,4 +80,4 @@ bun run capture       # Capture screenshots into .cheffolio/screenshots
 bun run capture:sync  # Upload the folder to Cloudflare R2
 ```
 
-Set the `R2_*` credentials from `.env.example` before running `capture:sync`. The command uploads `.cheffolio/screenshots` to the bucket root (skips dotfiles), replaces keys that already exist, and leaves other remote objects untouched.
+Set the `R2_*` credentials from `apps/web/.env.example` before running `capture:sync`. The command uploads `.cheffolio/screenshots` to the bucket root (skips dotfiles), replaces keys that already exist, and leaves other remote objects untouched.

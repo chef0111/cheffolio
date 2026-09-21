@@ -1,6 +1,6 @@
 import { mkdir, readdir, writeFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
-import type { FileMap } from "./types.ts";
+import type { FileMap } from "./types";
 
 export async function writeTree(dest: string, files: FileMap): Promise<void> {
   const root = resolve(dest);

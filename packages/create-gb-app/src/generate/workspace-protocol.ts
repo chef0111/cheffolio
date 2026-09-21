@@ -1,4 +1,4 @@
-import type { PackageManager } from "./types.ts";
+import type { PackageManager } from "./types";
 
 export function workspaceProtocol(
   packageManager: PackageManager,

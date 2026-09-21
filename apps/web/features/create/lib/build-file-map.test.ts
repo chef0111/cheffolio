@@ -39,7 +39,8 @@ test('default generate includes package.json', () => {
   }
   expect(result.files['package.json']).toContain('"name": "my-gb-app"');
   expect(Object.keys(result.files)).toContain('.gitignore');
-  expect(Object.keys(result.files).length).toBe(31);
+  expect(Object.keys(result.files)).toContain('README.md');
+  expect(Object.keys(result.files).length).toBe(32);
 });
 
 test('nest plus eslint is a generate gap', () => {

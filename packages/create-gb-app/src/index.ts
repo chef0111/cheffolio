@@ -5,13 +5,13 @@ import {
   ParseError,
   shouldGenerateHeadless,
   USAGE,
-} from "./cli/parse-args.ts";
-import { VERSION } from "./cli/version.ts";
-import { inferPackageManager } from "./cli/package-manager.ts";
-import { generateApp } from "./generate/run.ts";
-import { CompatError } from "./stack/errors.ts";
-import { resolveStack } from "./stack/resolve.ts";
-import type { RawFlags } from "./stack/types.ts";
+} from "./cli/parse-args";
+import { VERSION } from "./cli/version";
+import { inferPackageManager } from "./cli/package-manager";
+import { generateApp } from "./generate/run";
+import { CompatError } from "./stack/errors";
+import { resolveStack } from "./stack/resolve";
+import type { RawFlags } from "./stack/types";
 
 function isInteractive(): boolean {
   return Boolean(process.stdin.isTTY && process.stdout.isTTY);
@@ -41,7 +41,7 @@ export async function main(argv: string[]): Promise<void> {
   }
 
   if (!shouldGenerateHeadless(flags, isInteractive())) {
-    const { mountWizard } = await import("./tui/mount.ts");
+    const { mountWizard } = await import("./tui/mount");
     await mountWizard(flags);
     return;
   }

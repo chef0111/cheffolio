@@ -1,6 +1,6 @@
-import { setFile } from "../files.ts";
-import { joinPath, libDir } from "../paths.ts";
-import type { EmitCtx } from "../types.ts";
+import { setFile } from "../files";
+import { joinPath, libDir } from "../paths";
+import type { EmitCtx } from "../types";
 
 export function emitPrisma(ctx: EmitCtx): void {
   ctx.pkg.dependencies["@prisma/client"] = "^6.16.1";

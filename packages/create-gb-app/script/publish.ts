@@ -4,7 +4,7 @@ import { mkdir } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import pkg from "../package.json" with { type: "json" };
-import { ALL_TARGETS, platformPackageName } from "./targets.ts";
+import { ALL_TARGETS, platformPackageName } from "./targets";
 
 const dir = dirname(fileURLToPath(import.meta.url));
 const root = join(dir, "..");

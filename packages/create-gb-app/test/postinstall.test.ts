@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test";
 import { npmCli, packageNamesFor } from "../script/postinstall.mjs";
-import { defaultBinaryVersions, wrapperPackageJson } from "../script/publish.ts";
-import { binaryFileName } from "../script/targets.ts";
+import { defaultBinaryVersions, wrapperPackageJson } from "../script/publish";
+import { binaryFileName } from "../script/targets";
 
 test("postinstall resolves win32-x64, darwin-arm64, and linux-x64 names", () => {
   expect(

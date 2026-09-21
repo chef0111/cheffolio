@@ -1,4 +1,4 @@
-import type { Stack } from "../stack/types.ts";
+import type { Stack } from "../stack/types";
 
 export type FileMap = Record<string, string>;
 
