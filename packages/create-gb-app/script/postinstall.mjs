@@ -104,9 +104,7 @@ function isMusl() {
     if (fs.existsSync("/etc/alpine-release")) {
       return true;
     }
-  } catch {
-    // ignore
-  }
+  } catch {}
   try {
     const result = childProcess.spawnSync("ldd", ["--version"], { encoding: "utf8" });
     return `${result.stdout || ""}${result.stderr || ""}`.toLowerCase().includes("musl");

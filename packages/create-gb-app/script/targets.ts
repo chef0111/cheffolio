@@ -63,9 +63,7 @@ function hostIsMusl(): boolean {
     if (existsSync("/etc/alpine-release")) {
       return true;
     }
-  } catch {
-    // ignore
-  }
+  } catch {}
   try {
     const result = spawnSync("ldd", ["--version"], { encoding: "utf8" });
     return `${result.stdout || ""}${result.stderr || ""}`.toLowerCase().includes("musl");
