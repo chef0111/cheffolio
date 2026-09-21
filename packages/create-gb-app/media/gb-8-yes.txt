@@ -1,0 +1,23 @@
+PASS
+done: wrote 31 files to D:\tmp\cga-gb8-live\yes-no-install
+
+.env
+.env.example
+.gitignore
+app/
+app/api/
+app/api/auth/
+app/api/auth/[...all]/
+app/api/auth/[...all]/route.ts
+app/globals.css
+app/layout.tsx
+app/login/
+app/login/page.tsx
+app/notes/
+app/notes/notes-client.tsx
+app/notes/page.tsx
+app/page.tsx
+app/providers.tsx
+app/rpc/
+app/rpc/[[...rest]]/
+app/rpc/[[...rest]]/route.ts

@@ -1,0 +1,3 @@
+neon env
+PASS compose=false
+DATABASE_URL="postgres://USER:PASSWORD@ep-xxx.region.aws.neon.tech/gb_7_neon?sslmode=require"
