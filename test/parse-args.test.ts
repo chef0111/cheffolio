@@ -1,5 +1,10 @@
 import { expect, test } from "bun:test";
-import { parseArgs, ParseError } from "../src/cli/parse-args.ts";
+import {
+  parseArgs,
+  ParseError,
+  shouldGenerateHeadless,
+  USAGE,
+} from "../src/cli/parse-args.ts";
 
 test("single directory positional", () => {
   expect(parseArgs(["my-gb-app", "--yes"])).toEqual({
@@ -46,4 +51,27 @@ test("explicit flags overlay the preset", () => {
 
 test("unknown --preset fails closed", () => {
   expect(() => parseArgs(["--preset", "nope"])).toThrow(ParseError);
+});
+
+test("copied preset command keeps directory and token without --yes", () => {
+  const raw = parseArgs(["my-gb-app", "--preset", "g111"]);
+  expect(raw.projectName).toBe("my-gb-app");
+  expect(raw.preset).toBe("g111");
+  expect(raw.yes).toBeUndefined();
+  expect(raw.backend).toBe("nest");
+});
+
+test("USAGE Flags list still includes --preset", () => {
+  const flagsBlock = USAGE.split("Flags")[1];
+  expect(flagsBlock).toContain("--preset");
+});
+
+test("shouldGenerateHeadless is true for preset, directory, yes, or non-TTY", () => {
+  expect(
+    shouldGenerateHeadless(parseArgs(["my-gb-app", "--preset", "g111"]), true),
+  ).toBe(true);
+  expect(shouldGenerateHeadless(parseArgs(["my-gb-app"]), true)).toBe(true);
+  expect(shouldGenerateHeadless(parseArgs(["--yes"]), true)).toBe(true);
+  expect(shouldGenerateHeadless({}, true)).toBe(false);
+  expect(shouldGenerateHeadless({}, false)).toBe(true);
 });

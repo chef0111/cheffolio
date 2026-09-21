@@ -52,6 +52,18 @@ function takeValue(argv: string[], index: number, name: string): {
   return { value: next, consumed: 1 };
 }
 
+export function shouldGenerateHeadless(
+  flags: RawFlags,
+  interactive: boolean,
+): boolean {
+  return (
+    Boolean(flags.yes) ||
+    Boolean(flags.preset) ||
+    Boolean(flags.projectName) ||
+    !interactive
+  );
+}
+
 export function parseArgs(argv: string[]): RawFlags {
   const flags: RawFlags = {};
   const positionals: string[] = [];
@@ -189,11 +201,9 @@ export function parseArgs(argv: string[]): RawFlags {
 
 export const USAGE = `create-gb-app [dir] [flags]
 
-  npx create-gb-app my-gb-app --yes
-  pnpm create gb-app my-gb-app --yes
-  bunx create-gb-app my-gb-app --yes
-  npx create-gb-app my-gb-app --yes --preset nest
-  npx create-gb-app my-gb-app --yes --preset g1… --frontend tanstack-start
+  bunx --bun create-gb-app my-gb-app
+  bunx --bun create-gb-app my-gb-app --preset nest
+  bunx --bun create-gb-app my-gb-app --preset g1…
 
 Flags
   --help, -h

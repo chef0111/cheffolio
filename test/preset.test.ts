@@ -37,6 +37,7 @@ test("golden nest builds a FileMap", () => {
     packageManager: "pnpm",
   });
   expect(files["turbo.json"]).toBeDefined();
+  expect(files["README.md"]).toContain("nest-app");
 });
 
 test("golden start builds a FileMap", () => {

@@ -1,6 +1,11 @@
 #!/usr/bin/env bun
 
-import { parseArgs, ParseError, USAGE } from "./cli/parse-args.ts";
+import {
+  parseArgs,
+  ParseError,
+  shouldGenerateHeadless,
+  USAGE,
+} from "./cli/parse-args.ts";
 import { VERSION } from "./cli/version.ts";
 import { inferPackageManager } from "./cli/package-manager.ts";
 import { generateApp } from "./generate/run.ts";
@@ -10,10 +15,6 @@ import type { RawFlags } from "./stack/types.ts";
 
 function isInteractive(): boolean {
   return Boolean(process.stdin.isTTY && process.stdout.isTTY);
-}
-
-function shouldGenerateHeadless(flags: RawFlags): boolean {
-  return Boolean(flags.yes) || !isInteractive();
 }
 
 export async function main(argv: string[]): Promise<void> {
@@ -39,7 +40,7 @@ export async function main(argv: string[]): Promise<void> {
     return;
   }
 
-  if (!shouldGenerateHeadless(flags)) {
+  if (!shouldGenerateHeadless(flags, isInteractive())) {
     const { mountWizard } = await import("./tui/mount.ts");
     await mountWizard(flags);
     return;

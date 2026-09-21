@@ -48,9 +48,6 @@ export function formatCommand(flags: RawFlags): string {
   for (const [flag, value] of definedEntries(flags)) {
     parts.push(flag, shellQuote(value));
   }
-  if (flags.yes) {
-    parts.push("--yes");
-  }
   if (flags.noGit) {
     parts.push("--no-git");
   }

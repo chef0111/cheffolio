@@ -4,12 +4,14 @@ import {
   resolveStack,
   YES_DEFAULTS,
 } from "../src/generate/public.ts";
+import type { RawFlags } from "../src/generate/public.ts";
 import * as generate from "../src/generate/public.ts";
 
 const YES_PATHS = [
   ".env",
   ".env.example",
   ".gitignore",
+  "README.md",
   "app/api/auth/[...all]/route.ts",
   "app/globals.css",
   "app/layout.tsx",
@@ -41,13 +43,21 @@ const YES_PATHS = [
 ];
 
 test("public generate still emits YES paths", () => {
-  const files = buildTree(resolveStack({ yes: true }), {
+  const flags: RawFlags = { yes: true };
+  const files = buildTree(resolveStack(flags), {
     projectName: "yes-app",
     packageManager: "bun",
   });
   expect(Object.keys(files).sort()).toEqual(YES_PATHS);
   expect(YES_DEFAULTS.frontend).toBe("next");
   expect(YES_DEFAULTS.backend).toBe("self");
+});
+
+test("public generate exports stack and tree entry points", () => {
+  expect(generate.encodePreset(YES_DEFAULTS)).toBeNull();
+  expect(generate.decodePreset("g111")).toEqual({ backend: "nest" });
+  expect(typeof generate.CompatError).toBe("function");
+  expect(typeof generate.GenerateError).toBe("function");
 });
 
 test("public generate does not export CLI or goldens", () => {

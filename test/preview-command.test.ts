@@ -7,7 +7,7 @@ test("quotes directory names with spaces", () => {
 
 test("omits default flags", () => {
   expect(formatCommand({ projectName: "my-gb-app", yes: true })).toBe(
-    "create-gb-app my-gb-app --yes",
+    "create-gb-app my-gb-app",
   );
 });
 
@@ -21,7 +21,7 @@ test("prints --preset token and overlay flags only", () => {
       linter: "biome",
       frontend: "tanstack-start",
     }),
-  ).toBe("create-gb-app my-gb-app --preset nest --frontend tanstack-start --yes");
+  ).toBe("create-gb-app my-gb-app --preset nest --frontend tanstack-start");
 });
 
 test("keeps the preset token and omits expanded defaults", () => {
@@ -33,5 +33,5 @@ test("keeps the preset token and omits expanded defaults", () => {
       backend: "nest",
       linter: "biome",
     }),
-  ).toBe("create-gb-app my-gb-app --preset nest --yes");
+  ).toBe("create-gb-app my-gb-app --preset nest");
 });

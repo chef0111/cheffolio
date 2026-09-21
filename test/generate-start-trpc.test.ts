@@ -16,6 +16,7 @@ const GOLDEN2_PATHS = [
   ".env.example",
   ".gitignore",
   ".oxlintrc.json",
+  "README.md",
   "package.json",
   "prisma/schema.prisma",
   "src/components/providers.tsx",

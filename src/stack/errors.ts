@@ -34,6 +34,7 @@ export class CompatError extends Error {
   constructor(ruleId: RuleId) {
     super(`${RULE_MESSAGES[ruleId]} (${ruleId})`);
     this.name = "CompatError";
+    this.ruleId = ruleId;
     Object.defineProperty(this, "ruleId", {
       value: ruleId,
       writable: false,
