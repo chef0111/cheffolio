@@ -1,6 +1,6 @@
 'use client';
 
-import 'pdfjs-dist/webpack.mjs';
+import '@/lib/pdf-worker';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 import '../../styles/pdf-text-layer.css';
@@ -16,7 +16,7 @@ import {
 const PAGE_GAP_PX = 16;
 const MAX_PAGE_WIDTH_PX = 900;
 const WIDTH_SNAP_PX = 4;
-const A4_ASPECT = '210 / 297';
+const ASPECT_RATIO = '210 / 297'; // A4 paper size
 
 function useStableWidth(elementRef: React.RefObject<HTMLElement | null>) {
   const [width, setWidth] = React.useState(0);
@@ -115,7 +115,7 @@ function PdfDocument({
                   data-slot="resume-viewer-page"
                   data-page-number={pageNumber}
                   className="bg-white shadow-sm"
-                  style={{ width: pageWidth, aspectRatio: A4_ASPECT }}
+                  style={{ width: pageWidth, aspectRatio: ASPECT_RATIO }}
                 >
                   <Page
                     pageNumber={pageNumber}
