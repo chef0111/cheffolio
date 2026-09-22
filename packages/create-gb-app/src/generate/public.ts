@@ -14,7 +14,6 @@ export type {
   PresetFields,
   RawFlags,
   Stack,
-  Ui,
 } from "#/stack/types";
 export {
   APIS,
@@ -27,7 +26,6 @@ export {
   LINTERS,
   ORMS,
   PAYMENTS,
-  UIS,
 } from "#/stack/vocab";
 export { decodePreset, encodePreset, rawFlagsFromPreset } from "#/preset";
 export type { PresetCode } from "#/preset";

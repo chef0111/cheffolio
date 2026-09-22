@@ -1,5 +1,10 @@
 'use client';
 
+import {
+  type CreateFlags,
+  FLAG_GROUPS,
+  type FlagGroup,
+} from 'create-gb-app/preset';
 import { useId } from 'react';
 
 import { Card, CardContent } from '@/components/ui/card';
@@ -23,7 +28,6 @@ import {
 } from '../data/options';
 import { isSelectable } from '../lib/command';
 import { disabledReason, isGroupVisible } from '../lib/compat';
-import { type CreateFlags, FLAG_GROUPS, type FlagGroup } from '../types/stack';
 import { useCreate } from './create-provider';
 
 export function CreateBuilder() {

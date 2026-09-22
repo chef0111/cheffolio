@@ -6,7 +6,6 @@ const CONVEX_FLAGS = {
   frontend: "tanstack-start",
   backend: "convex",
   auth: "clerk",
-  ui: "shadcn",
   linter: "eslint",
 } as const;
 

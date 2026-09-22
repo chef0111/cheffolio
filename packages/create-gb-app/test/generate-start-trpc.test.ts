@@ -7,7 +7,6 @@ const GOLDEN2_FLAGS = {
   backend: "self",
   api: "trpc",
   auth: "none",
-  ui: "none",
   linter: "oxlint",
 } as const;
 
@@ -17,12 +16,17 @@ const GOLDEN2_PATHS = [
   ".gitignore",
   ".oxlintrc.json",
   "README.md",
+  "components.json",
   "package.json",
   "prisma/schema.prisma",
   "src/components/providers.tsx",
+  "src/components/ui/button.tsx",
+  "src/components/ui/card.tsx",
+  "src/components/ui/input.tsx",
   "src/lib/db.ts",
   "src/lib/query-client.ts",
   "src/lib/trpc.ts",
+  "src/lib/utils.ts",
   "src/routes/__root.tsx",
   "src/routes/api/trpc.$.ts",
   "src/routes/index.tsx",
@@ -59,6 +63,7 @@ test("buildTree golden 2 emits Start tRPC public notes with oxlint", () => {
   expect(files["eslint.config.mjs"]).toBeUndefined();
   expect(files["app/login/page.tsx"]).toBeUndefined();
   expect(files["components/ui/button.tsx"]).toBeUndefined();
+  expect(files["src/components/ui/button.tsx"]).toBeDefined();
 
   const pkg = JSON.parse(files["package.json"]) as {
     dependencies: Record<string, string>;
@@ -79,13 +84,12 @@ test("buildTree golden 2 emits Start tRPC public notes with oxlint", () => {
   expect(files["prisma/schema.prisma"]).not.toContain("model User");
 });
 
-test("flags after --yes override ui and linter", () => {
+test("flags after --yes override linter", () => {
   const stack = resolveStack({
     yes: true,
     frontend: "tanstack-start",
     api: "trpc",
     auth: "none",
-    ui: "none",
     linter: "oxlint",
   });
   expect(stack.frontend).toBe("tanstack-start");
@@ -95,12 +99,14 @@ test("flags after --yes override ui and linter", () => {
   }
   expect(stack.api).toBe("trpc");
   expect(stack.auth).toBe("none");
-  expect(stack.ui).toBe("none");
   expect(stack.linter).toBe("oxlint");
 });
 
-test("resolver still rejects Nest plus tRPC", () => {
-  expect(() => resolveStack({ backend: "nest", api: "trpc" })).toThrow(
-    "nest-requires-orpc",
-  );
+test("buildTree rejects Nest plus tRPC", () => {
+  expect(() =>
+    buildTree(resolveStack({ backend: "nest", api: "trpc", linter: "biome" }), {
+      projectName: "nest-trpc",
+      packageManager: "npm",
+    }),
+  ).toThrow("nest trpc generate is not implemented yet");
 });

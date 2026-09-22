@@ -12,7 +12,7 @@ test("wizard generate reports CompatError instead of rejecting", async () => {
     await runWizardGenerate({ backend: "nest", api: "trpc" });
     expect(process.exitCode).toBe(1);
     expect(chunks.join("")).toContain("error:");
-    expect(chunks.join("")).toContain("nest-requires-orpc");
+    expect(chunks.join("")).toContain("nest trpc generate is not implemented yet");
   } finally {
     process.stderr.write = stderr;
     process.exitCode = 0;

@@ -8,7 +8,6 @@
     "dbSetup": "none",
     "auth": "better-auth",
     "payments": "none",
-    "ui": "shadcn",
     "linter": "eslint",
     "monorepo": false
   },
@@ -25,7 +24,6 @@
         "dbSetup": "none",
         "auth": "better-auth",
         "payments": "none",
-        "ui": "shadcn",
         "linter": "eslint",
         "monorepo": true
       }
@@ -38,7 +36,6 @@
         "backend": "convex",
         "auth": "better-auth",
         "payments": "none",
-        "ui": "shadcn",
         "linter": "eslint",
         "monorepo": false
       }
@@ -46,9 +43,9 @@
   ],
   "illegal": [
     {
-      "name": "Nest without oRPC",
+      "name": "Nest tRPC",
       "flags": { "backend": "nest", "api": "trpc" },
-      "ruleId": "nest-requires-orpc"
+      "ruleId": "nest-trpc"
     },
     {
       "name": "Polar without Better Auth",
@@ -99,6 +96,26 @@
       "name": "Clerk plus Polar",
       "flags": { "auth": "clerk", "payments": "polar" },
       "ruleId": "clerk-polar-forbidden"
+    },
+    {
+      "name": "Better Auth without a database",
+      "flags": { "database": "none", "auth": "better-auth" },
+      "ruleId": "better-auth-requires-database"
+    },
+    {
+      "name": "ORM none with Postgres",
+      "flags": { "orm": "none" },
+      "ruleId": "database-requires-orm"
+    },
+    {
+      "name": "Prisma without a database",
+      "flags": { "database": "none", "orm": "prisma" },
+      "ruleId": "orm-requires-database"
+    },
+    {
+      "name": "Docker without a database",
+      "flags": { "database": "none", "dbSetup": "docker" },
+      "ruleId": "db-setup-requires-database"
     }
   ]
 }

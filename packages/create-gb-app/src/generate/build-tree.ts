@@ -23,6 +23,10 @@ import { GenerateError } from "#/generate/errors";
 import type { FileMap, GenerateContext, PackageJsonShape } from "#/generate/types";
 
 function emitDatabase(stack: Extract<Stack, { backend: "self" | "nest" }>, ctx: Parameters<typeof emitNext>[0]) {
+  if (stack.database === "none") {
+    return;
+  }
+
   switch (stack.database) {
     case "sqlite":
     case "mysql":
@@ -42,6 +46,8 @@ function emitDatabase(stack: Extract<Stack, { backend: "self" | "nest" }>, ctx: 
     case "drizzle":
       emitDrizzle(ctx);
       break;
+    case "none":
+      throw new Error("orm none requires database none");
     default: {
       const _exhaustive: never = stack.orm;
       throw new Error(`unhandled orm: ${_exhaustive}`);
@@ -68,18 +74,8 @@ function emitAuth(stack: Stack, ctx: Parameters<typeof emitNext>[0]) {
   }
 }
 
-function emitUi(stack: Stack, ctx: Parameters<typeof emitNext>[0]) {
-  switch (stack.ui) {
-    case "shadcn":
-      emitShadcn(ctx);
-      break;
-    case "none":
-      break;
-    default: {
-      const _exhaustive: never = stack.ui;
-      throw new Error(`unhandled ui: ${_exhaustive}`);
-    }
-  }
+function emitUi(_stack: Stack, ctx: Parameters<typeof emitNext>[0]) {
+  emitShadcn(ctx);
 }
 
 function emitLinter(stack: Stack, ctx: Parameters<typeof emitNext>[0]) {
@@ -145,6 +141,8 @@ function emitApi(stack: Extract<Stack, { backend: "self" }>, ctx: Parameters<typ
     case "trpc":
       emitTrpc(ctx);
       break;
+    case "none":
+      break;
     default: {
       const _exhaustive: never = stack.api;
       throw new Error(`unhandled api: ${_exhaustive}`);
@@ -168,8 +166,12 @@ export function buildTree(stack: Stack, ctx: GenerateContext): FileMap {
     case "self": {
       emitSelf(emitCtx);
       emitFrontend(stack, emitCtx);
-      emitApi(stack, emitCtx);
-      emitDatabase(stack, emitCtx);
+      if (stack.database !== "none") {
+        if (stack.api !== "none") {
+          emitApi(stack, emitCtx);
+        }
+        emitDatabase(stack, emitCtx);
+      }
       break;
     }
     case "nest":
@@ -190,7 +192,9 @@ export function buildTree(stack: Stack, ctx: GenerateContext): FileMap {
     emitPayments(stack, emitCtx);
     emitUi(stack, emitCtx);
     emitLinter(stack, emitCtx);
-    emitNotes(emitCtx);
+    if (stack.backend === "convex" || stack.database !== "none") {
+      emitNotes(emitCtx);
+    }
   } else {
     if (stack.auth === "clerk") {
       emitClerk(emitCtx);

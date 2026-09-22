@@ -69,7 +69,6 @@ test("Start plus tRPC preview lists src/routes", async () => {
         backend: "self",
         api: "trpc",
         auth: "none",
-        ui: "none",
         linter: "oxlint",
       },
     }),

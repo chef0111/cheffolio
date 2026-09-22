@@ -1,28 +1,34 @@
 import { expect, test } from 'bun:test';
+import { decodePreset, YES_DEFAULTS } from 'create-gb-app/preset';
 
 import { convertNpmCommand } from '@/lib/convert-npm-command';
 
 import { buildCommand, encodePreset, isSelectable } from '../command';
-import { applyFlagChange, YES_DEFAULTS } from '../compat';
+import { applyFlagChange, normalizeFlags } from '../compat';
 
-test('default command omits --yes and --preset', () => {
-  expect(buildCommand(YES_DEFAULTS)).toBe('npx create-gb-app my-gb-app');
-  expect(encodePreset(YES_DEFAULTS)).toBeNull();
+test('default command copies --preset gb0', () => {
+  expect(buildCommand(YES_DEFAULTS)).toBe(
+    'npx create-gb-app my-gb-app --preset gb0'
+  );
+  expect(encodePreset(YES_DEFAULTS)).toBe('gb0');
+  expect(decodePreset('gb0')).toEqual(YES_DEFAULTS);
 });
 
 test('custom project name is quoted in the command', () => {
   expect(buildCommand(YES_DEFAULTS, 'my app')).toBe(
-    "npx create-gb-app 'my app'"
+    "npx create-gb-app 'my app' --preset gb0"
   );
 });
 
 test('convertNpmCommand maps the default command', () => {
-  expect(convertNpmCommand('npx create-gb-app my-gb-app')).toEqual({
-    pnpm: 'pnpm create gb-app my-gb-app',
-    yarn: 'yarn create gb-app my-gb-app',
-    npm: 'npx create-gb-app my-gb-app',
-    bun: 'bunx --bun create-gb-app my-gb-app',
-  });
+  expect(convertNpmCommand('npx create-gb-app my-gb-app --preset gb0')).toEqual(
+    {
+      pnpm: 'pnpm create gb-app my-gb-app --preset gb0',
+      yarn: 'yarn create gb-app my-gb-app --preset gb0',
+      npm: 'npx create-gb-app my-gb-app --preset gb0',
+      bun: 'bunx --bun create-gb-app my-gb-app --preset gb0',
+    }
+  );
 });
 
 test('polar plus clerk is not selectable', () => {
@@ -36,23 +42,30 @@ test('polar plus clerk is not selectable', () => {
 
 test('tanstack-start copies a packed --preset', () => {
   expect(buildCommand({ ...YES_DEFAULTS, frontend: 'tanstack-start' })).toBe(
-    'npx create-gb-app my-gb-app --preset g101'
+    'npx create-gb-app my-gb-app --preset gb1'
   );
+  expect(decodePreset('gb1').frontend).toBe('tanstack-start');
 });
 
 test('nest copies a packed --preset', () => {
-  expect(buildCommand(applyFlagChange(YES_DEFAULTS, 'backend', 'nest'))).toBe(
-    'npx create-gb-app my-gb-app --preset g11191'
+  const flags = applyFlagChange(YES_DEFAULTS, 'backend', 'nest');
+  expect(buildCommand(flags)).toBe(
+    'npx create-gb-app my-gb-app --preset gb8wy'
   );
+  expect(decodePreset('gb8wy')).toEqual(flags);
 });
 
-test('convex copies a packed --preset without relational flags', () => {
-  expect(
-    buildCommand({
-      ...YES_DEFAULTS,
-      backend: 'convex',
-      database: 'mysql',
-      api: 'trpc',
-    })
-  ).toBe('npx create-gb-app my-gb-app --preset g112');
+test('convex copies a packed --preset with relational groups forced to none', () => {
+  const flags = normalizeFlags({
+    ...YES_DEFAULTS,
+    backend: 'convex',
+    database: 'mysql',
+    api: 'trpc',
+  });
+  expect(flags.api).toBe('none');
+  expect(flags.database).toBe('none');
+  expect(flags.orm).toBe('none');
+  expect(flags.dbSetup).toBe('none');
+  expect(buildCommand(flags)).toBe('npx create-gb-app my-gb-app --preset gb60');
+  expect(decodePreset('gb60')).toEqual(flags);
 });

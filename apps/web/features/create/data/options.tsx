@@ -1,3 +1,4 @@
+import type { CreateFlags, FlagGroup } from 'create-gb-app/preset';
 import type { ComponentType } from 'react';
 
 import {
@@ -17,7 +18,6 @@ import {
   PolarIcon,
   PostgresIcon,
   PrismaIcon,
-  ShadcnIcon,
   SqliteIcon,
   StripeIcon,
   SupabaseIcon,
@@ -25,8 +25,6 @@ import {
   TrpcIcon,
 } from '@/components/icons';
 import type { IconProps } from '@/components/icons/type';
-
-import type { CreateFlags, FlagGroup } from '../types/stack';
 
 export const FLAG_GROUP_LABELS: Record<FlagGroup, string> = {
   frontend: 'Frontend',
@@ -37,7 +35,6 @@ export const FLAG_GROUP_LABELS: Record<FlagGroup, string> = {
   dbSetup: 'Database setup',
   auth: 'Auth',
   payments: 'Payments',
-  ui: 'UI',
   linter: 'Linter',
 };
 
@@ -96,6 +93,11 @@ export const FLAG_OPTIONS: { [K in FlagGroup]: readonly FlagOption<K>[] } = {
       description: 'End-to-end type-safe APIs',
       icon: TrpcIcon,
     },
+    {
+      value: 'none',
+      label: 'None',
+      description: 'No RPC layer',
+    },
   ],
   database: [
     {
@@ -116,6 +118,11 @@ export const FLAG_OPTIONS: { [K in FlagGroup]: readonly FlagOption<K>[] } = {
       description: 'Relational SQL',
       icon: MysqlIcon,
     },
+    {
+      value: 'none',
+      label: 'None',
+      description: 'No database',
+    },
   ],
   orm: [
     {
@@ -129,6 +136,11 @@ export const FLAG_OPTIONS: { [K in FlagGroup]: readonly FlagOption<K>[] } = {
       label: 'Drizzle',
       description: 'SQL-first ORM',
       icon: DrizzleIcon,
+    },
+    {
+      value: 'none',
+      label: 'None',
+      description: 'No ORM',
     },
   ],
   dbSetup: [
@@ -158,11 +170,6 @@ export const FLAG_OPTIONS: { [K in FlagGroup]: readonly FlagOption<K>[] } = {
   ],
   auth: [
     {
-      value: 'none',
-      label: 'None',
-      description: 'No sign-in',
-    },
-    {
       value: 'better-auth',
       label: 'Better Auth',
       description: 'TypeScript auth',
@@ -173,6 +180,11 @@ export const FLAG_OPTIONS: { [K in FlagGroup]: readonly FlagOption<K>[] } = {
       label: 'Clerk',
       description: 'Hosted auth',
       icon: ClerkIcon,
+    },
+    {
+      value: 'none',
+      label: 'None',
+      description: 'No sign-in',
     },
   ],
   payments: [
@@ -192,19 +204,6 @@ export const FLAG_OPTIONS: { [K in FlagGroup]: readonly FlagOption<K>[] } = {
       label: 'Polar',
       description: 'OSS billing',
       icon: PolarIcon,
-    },
-  ],
-  ui: [
-    {
-      value: 'shadcn',
-      label: 'shadcn',
-      description: 'Component kit',
-      icon: ShadcnIcon,
-    },
-    {
-      value: 'none',
-      label: 'None',
-      description: 'No UI kit',
     },
   ],
   linter: [

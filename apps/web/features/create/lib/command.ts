@@ -1,6 +1,6 @@
+import type { CreateFlags, FlagGroup } from 'create-gb-app/preset';
 import { encodePreset } from 'create-gb-app/preset';
 
-import type { CreateFlags, FlagGroup } from '../types/stack';
 import { isOptionEnabled } from './compat';
 
 export const DEFAULT_PROJECT_NAME = 'my-gb-app';

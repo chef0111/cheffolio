@@ -1,5 +1,6 @@
 'use client';
 
+import { type CreateFlags, FLAG_GROUPS } from 'create-gb-app/preset';
 import { startTransition, useEffect, useMemo, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -16,7 +17,6 @@ import { defaultSelectedPath, type FileMap } from '../data/file-map';
 import { generatePreview } from '../lib/actions/generate-preview';
 import { resolveProjectName } from '../lib/command';
 import { treeFromPaths } from '../lib/tree-from-paths';
-import { type CreateFlags, FLAG_GROUPS } from '../types/stack';
 import { CreateFilePreview } from './create-file-preview';
 import { useCreate } from './create-provider';
 import { CreateTree } from './create-tree';

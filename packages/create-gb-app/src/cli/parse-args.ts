@@ -12,7 +12,6 @@ import {
   LINTERS,
   ORMS,
   PAYMENTS,
-  UIS,
 } from "#/stack/vocab";
 import type { RawFlags } from "#/stack/types";
 import { ParseError } from "#/stack/parse-error";
@@ -151,12 +150,6 @@ export function parseArgs(argv: string[]): RawFlags {
         i += consumed;
         break;
       }
-      case "--ui": {
-        const { value, consumed } = takeValue(argv, i, name);
-        flags.ui = oneOf("ui", value, UIS);
-        i += consumed;
-        break;
-      }
       case "--linter": {
         const { value, consumed } = takeValue(argv, i, name);
         flags.linter = oneOf("linter", value, LINTERS);
@@ -203,22 +196,21 @@ export const USAGE = `create-gb-app [dir] [flags]
 
   bunx --bun create-gb-app my-gb-app
   bunx --bun create-gb-app my-gb-app --preset nest
-  bunx --bun create-gb-app my-gb-app --preset g1…
+  bunx --bun create-gb-app my-gb-app --preset gb0
 
 Flags
   --help, -h
   --version, -v
   --yes, -y
-  --preset <nest|start|convex|g1…>
+  --preset <nest|start|convex|gb…>
   --frontend next|tanstack-start
   --backend self|nest|convex
-  --api orpc|trpc
-  --database postgres|sqlite|mysql
-  --orm prisma|drizzle
+  --api orpc|trpc|none
+  --database postgres|sqlite|mysql|none
+  --orm prisma|drizzle|none
   --db-setup none|docker|neon|supabase
-  --auth none|better-auth|clerk
+  --auth better-auth|clerk|none
   --payments none|stripe|polar
-  --ui shadcn|none
   --linter eslint|biome|oxlint
   --no-git
   --no-install

@@ -1,6 +1,7 @@
 import { expect, test } from 'bun:test';
+import { YES_DEFAULTS } from 'create-gb-app/preset';
 
-import { YES_DEFAULTS } from '../compat';
+import { normalizeFlags } from '../compat';
 import {
   buildCreateFileMap,
   flagsToRaw,
@@ -13,22 +14,57 @@ test('isCreateFlags rejects incomplete payloads', () => {
   expect(isCreateFlags(null)).toBe(false);
 });
 
-test('flagsToRaw omits convex relational groups', () => {
-  expect(
-    flagsToRaw({
-      ...YES_DEFAULTS,
-      backend: 'convex',
-      database: 'mysql',
-      api: 'trpc',
-    })
-  ).toEqual({
+test('convex preview keeps relational none and is not convex-database-off', () => {
+  const flags = normalizeFlags({ ...YES_DEFAULTS, backend: 'convex' });
+  expect(flagsToRaw(flags)).toEqual({
     frontend: 'next',
     backend: 'convex',
+    api: 'none',
+    database: 'none',
+    orm: 'none',
+    dbSetup: 'none',
     auth: 'better-auth',
     payments: 'none',
-    ui: 'shadcn',
     linter: 'eslint',
   });
+  const result = buildCreateFileMap(flags, 'convex-app');
+  expect(result.ok).toBe(true);
+  if (!result.ok) {
+    return;
+  }
+  expect(result.files['convex/schema.ts']).toBeDefined();
+  expect(
+    result.files['components/ui/button.tsx'] ??
+      result.files['src/components/ui/button.tsx']
+  ).toBeDefined();
+});
+
+test('database none is a shell without notes', () => {
+  const flags = normalizeFlags({
+    ...YES_DEFAULTS,
+    database: 'none',
+    api: 'none',
+  });
+  const result = buildCreateFileMap(flags, 'shell-app');
+  expect(result.ok).toBe(true);
+  if (!result.ok) {
+    return;
+  }
+  expect(result.files['package.json']).toContain('"name": "shell-app"');
+  expect(result.files['components/ui/button.tsx']).toBeDefined();
+  expect(result.files['app/notes/page.tsx']).toBeUndefined();
+  expect(result.files['prisma/schema.prisma']).toBeUndefined();
+});
+
+test('api none emits notes without an RPC router', () => {
+  const flags = normalizeFlags({ ...YES_DEFAULTS, api: 'none' });
+  const result = buildCreateFileMap(flags, 'actions-app');
+  expect(result.ok).toBe(true);
+  if (!result.ok) {
+    return;
+  }
+  expect(result.files['app/notes/actions.ts']).toContain('"use server"');
+  expect(result.files['router.ts']).toBeUndefined();
 });
 
 test('default generate includes package.json', () => {

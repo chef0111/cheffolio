@@ -2,6 +2,7 @@ export const GENERATE_GAPS = [
   "nest-eslint",
   "nest-oxlint",
   "nest-start",
+  "nest-trpc",
   "biome",
   "start-orpc",
 ] as const;
