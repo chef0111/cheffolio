@@ -2,8 +2,8 @@ import { expect, test } from 'bun:test';
 
 import { convertNpmCommand } from '@/lib/convert-npm-command';
 
-import { buildCommand, encodePreset, isSelectable } from './command';
-import { applyFlagChange, YES_DEFAULTS } from './compat';
+import { buildCommand, encodePreset, isSelectable } from '../command';
+import { applyFlagChange, YES_DEFAULTS } from '../compat';
 
 test('default command omits --yes and --preset', () => {
   expect(buildCommand(YES_DEFAULTS)).toBe('npx create-gb-app my-gb-app');

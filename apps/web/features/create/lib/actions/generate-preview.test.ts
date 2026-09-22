@@ -1,10 +1,10 @@
 import { expect, test } from 'bun:test';
 
-import { YES_DEFAULTS } from './compat';
-import { generateCreateFiles } from './generate-create-files';
+import { YES_DEFAULTS } from '../compat';
+import { generatePreview } from './generate-preview';
 
-test('generateCreateFiles rejects invalid flags', async () => {
-  const result = await generateCreateFiles(
+test('generatePreview rejects invalid flags', async () => {
+  const result = await generatePreview(
     { frontend: 'next' } as never,
     'my-gb-app'
   );
@@ -15,8 +15,8 @@ test('generateCreateFiles rejects invalid flags', async () => {
   });
 });
 
-test('generateCreateFiles returns the YES tree', async () => {
-  const result = await generateCreateFiles(YES_DEFAULTS, 'my-gb-app');
+test('generatePreview returns the YES tree', async () => {
+  const result = await generatePreview(YES_DEFAULTS, 'my-gb-app');
   expect(result.ok).toBe(true);
   if (!result.ok) {
     return;

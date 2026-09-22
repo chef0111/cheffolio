@@ -1,11 +1,11 @@
 import { expect, test } from 'bun:test';
 
-import { YES_DEFAULTS } from './compat';
+import { YES_DEFAULTS } from '../compat';
 import {
   buildCreateFileMap,
   flagsToRaw,
   isCreateFlags,
-} from './generate-files';
+} from '../generate-files';
 
 test('isCreateFlags rejects incomplete payloads', () => {
   expect(isCreateFlags(YES_DEFAULTS)).toBe(true);

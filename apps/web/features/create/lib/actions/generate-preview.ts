@@ -1,14 +1,14 @@
 'use server';
 
-import type { CreateFlags } from '../types/stack';
-import { normalizeFlags } from './compat';
+import type { CreateFlags } from '../../types/stack';
+import { normalizeFlags } from '../compat';
 import {
   buildCreateFileMap,
   type CreateFileMapResult,
   isCreateFlags,
-} from './generate-files';
+} from '../generate-files';
 
-export async function generateCreateFiles(
+export async function generatePreview(
   flags: CreateFlags,
   projectName: string
 ): Promise<CreateFileMapResult> {

@@ -1,8 +1,12 @@
 import { expect, test } from 'bun:test';
 
-import compat from '../data/compat.json';
-import { type CreateFlags, FLAG_GROUPS, type FlagGroup } from '../types/stack';
-import { buildCommand } from './command';
+import compat from '../../data/compat.json';
+import {
+  type CreateFlags,
+  FLAG_GROUPS,
+  type FlagGroup,
+} from '../../types/stack';
+import { buildCommand } from '../command';
 import {
   applyFlagChange,
   disabledRuleId,
@@ -11,7 +15,7 @@ import {
   normalizeFlags,
   type RuleId,
   YES_DEFAULTS,
-} from './compat';
+} from '../compat';
 
 test('vendored yesDefault is the picker default', () => {
   const { monorepo, ...flags } = compat.yesDefault;

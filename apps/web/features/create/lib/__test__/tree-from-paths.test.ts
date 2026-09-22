@@ -1,7 +1,11 @@
 import { expect, test } from 'bun:test';
 
-import { defaultSelectedPath } from '../data/file-map';
-import { collectFolderIds, treeFromPaths, treeNodeId } from './tree-from-paths';
+import { defaultSelectedPath } from '../../data/file-map';
+import {
+  collectFolderIds,
+  treeFromPaths,
+  treeNodeId,
+} from '../tree-from-paths';
 
 test('treeFromPaths nests folders from literal paths', () => {
   const tree = treeFromPaths(

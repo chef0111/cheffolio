@@ -13,8 +13,8 @@ import {
 import { cn } from '@/lib/utils';
 
 import { defaultSelectedPath, type FileMap } from '../data/file-map';
+import { generatePreview } from '../lib/actions/generate-preview';
 import { resolveProjectName } from '../lib/command';
-import { generateCreateFiles } from '../lib/generate-create-files';
 import { treeFromPaths } from '../lib/tree-from-paths';
 import { type CreateFlags, FLAG_GROUPS } from '../types/stack';
 import { CreateFilePreview } from './create-file-preview';
@@ -22,11 +22,11 @@ import { useCreate } from './create-provider';
 import { CreateTree } from './create-tree';
 
 type NarrowPane = 'tree' | 'code';
-type PreviewResult = Awaited<ReturnType<typeof generateCreateFiles>>;
+type PreviewResult = Awaited<ReturnType<typeof generatePreview>>;
 
 const EMPTY_FILES: FileMap = {};
 
-const previewCache = new Map<string, ReturnType<typeof generateCreateFiles>>();
+const previewCache = new Map<string, ReturnType<typeof generatePreview>>();
 
 export function CreatePreview() {
   const { flags, projectName } = useCreate();
@@ -169,7 +169,7 @@ function previewResult(flags: CreateFlags, projectName: string) {
   if (cached) {
     return cached;
   }
-  const next = generateCreateFiles(flags, projectName);
+  const next = generatePreview(flags, projectName);
   previewCache.set(key, next);
   return next;
 }
