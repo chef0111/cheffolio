@@ -38,6 +38,7 @@ const FRONTEND_OPTIONS = [
 const API_OPTIONS = [
   { name: "oRPC", description: "Router-first procedures", value: "orpc" },
   { name: "tRPC", description: "Router type from this app", value: "trpc" },
+  { name: "None", description: "No RPC layer", value: "none" },
 ];
 
 const AUTH_OPTIONS = [
@@ -90,7 +91,6 @@ function wizardFlags(initialFlags: RawFlags): RawFlags {
     backend,
     auth: initialFlags.auth ?? "better-auth",
     payments: initialFlags.payments ?? "none",
-    ui: initialFlags.ui ?? "shadcn",
     linter: initialFlags.linter ?? "eslint",
     projectName: initialFlags.projectName ?? "my-gb-app",
   };
@@ -104,7 +104,7 @@ function wizardFlags(initialFlags: RawFlags): RawFlags {
   } else if (flags.api === undefined) {
     flags.api = "orpc";
   }
-  if (backend === "nest") {
+  if (backend === "nest" && flags.api === "trpc") {
     flags.api = "orpc";
   }
   return flags;
@@ -147,7 +147,7 @@ export function App({ initialFlags = {}, onExit, onGenerate }: AppProps) {
         merged.orm = undefined;
         merged.dbSetup = undefined;
       }
-      if (merged.backend === "nest") {
+      if (merged.backend === "nest" && merged.api === "trpc") {
         merged.api = "orpc";
       }
       if (merged.auth === "none") {
@@ -201,11 +201,11 @@ export function App({ initialFlags = {}, onExit, onGenerate }: AppProps) {
               <text>API</text>
               <select
                 focused={focus === "api"}
-                height={2}
+            height={flags.backend === "nest" ? 2 : 3}
                 showDescription={false}
                 options={
                   flags.backend === "nest"
-                    ? API_OPTIONS.filter((option) => option.value === "orpc")
+                    ? API_OPTIONS.filter((option) => option.value !== "trpc")
                     : API_OPTIONS
                 }
                 selectedIndex={indexOfValue(API_OPTIONS, flags.api)}

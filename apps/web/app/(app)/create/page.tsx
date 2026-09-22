@@ -53,7 +53,7 @@ export default function CreatePage() {
       />
 
       <div className="mx-auto flex w-full flex-1 flex-col">
-        <PageHeading className="pt-26">
+        <PageHeading className="pt-12">
           <PageHeadingTitle className="decor-t screen-line-bottom-none pt-2 pb-0">
             {title}
           </PageHeadingTitle>

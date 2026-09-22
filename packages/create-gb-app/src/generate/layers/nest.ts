@@ -22,6 +22,12 @@ export function emitNest(ctx: EmitCtx): void {
       "nest Start generate is not implemented yet",
     );
   }
+  if (ctx.stack.api === "trpc") {
+    throw new GenerateError(
+      "nest-trpc",
+      "nest trpc generate is not implemented yet",
+    );
+  }
 
   const dep = proto(ctx);
   ctx.pkg.private = true;
@@ -32,20 +38,24 @@ export function emitNest(ctx: EmitCtx): void {
   ctx.pkg.devDependencies.typescript = "^5.9.2";
   ctx.pkg.workspaces = ["apps/*", "packages/*"];
 
-  emitPostgres(ctx);
-  switch (ctx.stack.orm) {
-    case "prisma":
-      emitPrisma(ctx);
-      break;
-    case "drizzle":
-      emitDrizzle(ctx);
-      break;
-    default: {
-      const _exhaustive: never = ctx.stack.orm;
-      throw new Error(`unhandled orm: ${_exhaustive}`);
+  if (ctx.stack.database !== "none") {
+    emitPostgres(ctx);
+    switch (ctx.stack.orm) {
+      case "prisma":
+        emitPrisma(ctx);
+        break;
+      case "drizzle":
+        emitDrizzle(ctx);
+        break;
+      case "none":
+        throw new Error("orm none requires database none");
+      default: {
+        const _exhaustive: never = ctx.stack.orm;
+        throw new Error(`unhandled orm: ${_exhaustive}`);
+      }
     }
+    emitDbSetup(ctx);
   }
-  emitDbSetup(ctx);
 
   setFile(
     ctx.files,
@@ -68,11 +78,17 @@ export function emitNest(ctx: EmitCtx): void {
   );
 
   emitTypescriptConfig(ctx, dep);
-  emitContract(ctx, dep);
-  if (ctx.stack.ui === "shadcn") {
-    emitUiPackage(ctx, dep);
+  if (ctx.stack.api === "orpc") {
+    emitContract(ctx, dep);
   }
-  emitServer(ctx, dep);
+  emitUiPackage(ctx, dep);
+  if (ctx.stack.database === "none") {
+    emitShellServer(ctx, dep);
+  } else if (ctx.stack.api === "none") {
+    emitRestServer(ctx, dep);
+  } else {
+    emitServer(ctx, dep);
+  }
   emitWeb(ctx, dep);
 
   switch (ctx.stack.linter) {
@@ -318,6 +334,257 @@ export function Card({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
   );
 }
 
+function emitShellServer(ctx: EmitCtx, dep: string): void {
+  setFile(
+    ctx.files,
+    "apps/server/package.json",
+    JSON.stringify(
+      {
+        name: "server",
+        version: "0.0.0",
+        private: true,
+        type: "module",
+        scripts: {
+          dev: "tsx watch src/main.ts",
+          start: "node dist/main.js",
+          build: "tsc",
+        },
+        dependencies: {
+          "@nestjs/common": "^11.1.6",
+          "@nestjs/core": "^11.1.6",
+          "@nestjs/platform-express": "^11.1.6",
+          "reflect-metadata": "^0.2.2",
+          rxjs: "^7.8.2",
+        },
+        devDependencies: {
+          "@repo/typescript-config": dep,
+          "@types/express": "^5.0.3",
+          "@types/node": "^24.3.1",
+          tsx: "^4.20.5",
+          typescript: "^5.9.2",
+        },
+      },
+      null,
+      2,
+    ),
+  );
+
+  setFile(
+    ctx.files,
+    "apps/server/src/main.ts",
+    `import "reflect-metadata";
+import { NestFactory } from "@nestjs/core";
+import { AppModule } from "./app.module";
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  await app.listen(3333);
+}
+
+void bootstrap();
+`,
+  );
+
+  setFile(
+    ctx.files,
+    "apps/server/src/app.module.ts",
+    `import { Module } from "@nestjs/common";
+
+@Module({})
+export class AppModule {}
+`,
+  );
+}
+
+function emitRestServer(ctx: EmitCtx, dep: string): void {
+  if (ctx.stack.backend !== "nest") {
+    throw new Error("emitRestServer requires nest");
+  }
+  const authed = ctx.stack.auth === "better-auth";
+  const dependencies: Record<string, string> = {
+    "@nestjs/common": "^11.1.6",
+    "@nestjs/core": "^11.1.6",
+    "@nestjs/platform-express": "^11.1.6",
+    "@prisma/client": "^6.16.1",
+    "reflect-metadata": "^0.2.2",
+    rxjs: "^7.8.2",
+  };
+  if (authed) {
+    dependencies["@thallesp/nestjs-better-auth"] = "^2.2.0";
+    dependencies["better-auth"] = "^1.3.8";
+  }
+
+  setFile(
+    ctx.files,
+    "apps/server/package.json",
+    JSON.stringify(
+      {
+        name: "server",
+        version: "0.0.0",
+        private: true,
+        type: "module",
+        scripts: {
+          dev: "tsx watch src/main.ts",
+          start: "node dist/main.js",
+          build: "tsc",
+        },
+        dependencies,
+        devDependencies: {
+          "@repo/typescript-config": dep,
+          "@types/express": "^5.0.3",
+          "@types/node": "^24.3.1",
+          prisma: "^6.16.1",
+          tsx: "^4.20.5",
+          typescript: "^5.9.2",
+        },
+      },
+      null,
+      2,
+    ),
+  );
+
+  setFile(
+    ctx.files,
+    "apps/server/src/main.ts",
+    `import "reflect-metadata";
+import { NestFactory } from "@nestjs/core";
+import { AppModule } from "./app.module";
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule, {
+    bodyParser: false,
+  });
+
+  app.enableCors({
+    origin: ["http://localhost:3000"],
+    credentials: true,
+  });
+
+  await app.listen(3333);
+}
+
+void bootstrap();
+`,
+  );
+
+  setFile(
+    ctx.files,
+    "apps/server/src/app.module.ts",
+    authed
+      ? `import { Module } from "@nestjs/common";
+import { AuthModule } from "@thallesp/nestjs-better-auth";
+import { auth } from "./auth";
+import { NotesController } from "./notes.controller";
+
+@Module({
+  imports: [
+    AuthModule.forRoot({
+      auth,
+      bodyParser: {
+        json: { limit: "2mb" },
+        urlencoded: { limit: "2mb", extended: true },
+      },
+    }),
+  ],
+  controllers: [NotesController],
+})
+export class AppModule {}
+`
+      : `import { Module } from "@nestjs/common";
+import { NotesController } from "./notes.controller";
+
+@Module({
+  controllers: [NotesController],
+})
+export class AppModule {}
+`,
+  );
+
+  if (authed) {
+    setFile(
+      ctx.files,
+      "apps/server/src/auth.ts",
+      `import { betterAuth } from "better-auth";
+import { prismaAdapter } from "better-auth/adapters/prisma";
+import { prisma } from "./db";
+
+export const auth = betterAuth({
+  database: prismaAdapter(prisma, { provider: "postgresql" }),
+  emailAndPassword: { enabled: true },
+  trustedOrigins: ["http://localhost:3000"],
+});
+`,
+    );
+  }
+
+  const sessionLookup = authed
+    ? `import { fromNodeHeaders } from "better-auth/node";
+import type { Request } from "express";
+import { auth } from "./auth";
+import { prisma } from "./db";
+
+async function requireUserId(request: Request) {
+  const session = await auth.api.getSession({
+    headers: fromNodeHeaders(request.headers),
+  });
+  if (!session) {
+    throw new Error("UNAUTHORIZED");
+  }
+  return session.user.id;
+}
+`
+    : `import { prisma } from "./db";
+`;
+
+  setFile(
+    ctx.files,
+    "apps/server/src/notes.controller.ts",
+    `import { Body, Controller, Delete, Get, Param, Patch, Post${authed ? ", Req" : ""} } from "@nestjs/common";
+${authed ? `import type { Request } from "express";\n` : ""}${sessionLookup}
+@Controller("notes")
+export class NotesController {
+  @Get()
+  async list(${authed ? "@Req() request: Request" : ""}) {
+    ${authed ? "const userId = await requireUserId(request);" : ""}
+    return prisma.note.findMany({
+      ${authed ? "where: { userId }," : ""}
+      orderBy: { createdAt: "desc" },
+    });
+  }
+
+  @Post()
+  async create(${authed ? "@Req() request: Request, " : ""}@Body() body: { title: string; body: string }) {
+    ${authed ? "const userId = await requireUserId(request);" : ""}
+    return prisma.note.create({
+      data: {
+        title: body.title,
+        body: body.body,
+        ${authed ? "userId," : ""}
+      },
+    });
+  }
+
+  @Patch(":id")
+  async update(
+    ${authed ? "@Req() request: Request, " : ""}@Param("id") id: string,
+    @Body() body: { title: string; body: string },
+  ) {
+    ${authed ? "const userId = await requireUserId(request);\n    const note = await prisma.note.findFirst({ where: { id, userId } });\n    if (!note) {\n      throw new Error(\"NOT_FOUND\");\n    }\n    " : ""}return prisma.note.update({
+      where: { id${authed ? ": note.id" : ""} },
+      data: { title: body.title, body: body.body },
+    });
+  }
+
+  @Delete(":id")
+  async remove(${authed ? "@Req() request: Request, " : ""}@Param("id") id: string) {
+    ${authed ? "const userId = await requireUserId(request);\n    const note = await prisma.note.findFirst({ where: { id, userId } });\n    if (!note) {\n      throw new Error(\"NOT_FOUND\");\n    }\n    " : ""}await prisma.note.delete({ where: { id${authed ? ": note.id" : ""} } });
+    return { ok: true };
+  }
+}
+`,
+  );
+}
+
 function emitServer(ctx: EmitCtx, dep: string): void {
   setFile(
     ctx.files,
@@ -549,11 +816,202 @@ export class NotesController {
   );
 }
 
+function emitWebShell(ctx: EmitCtx, dep: string): void {
+  if (ctx.stack.backend !== "nest") {
+    throw new Error("emitWebShell requires nest");
+  }
+  const notes = ctx.stack.database !== "none" && ctx.stack.api === "none";
+  const authClient = ctx.stack.auth === "better-auth";
+
+  setFile(
+    ctx.files,
+    "apps/web/package.json",
+    JSON.stringify(
+      {
+        name: "web",
+        version: "0.0.0",
+        private: true,
+        type: "module",
+        scripts: {
+          dev: "next dev --port 3000",
+          build: "next build",
+          start: "next start",
+        },
+        dependencies: {
+          "@repo/ui": dep,
+          ...(authClient ? { "better-auth": "^1.3.8" } : {}),
+          next: "^15.5.4",
+          react: "^19.1.1",
+          "react-dom": "^19.1.1",
+        },
+        devDependencies: {
+          "@repo/typescript-config": dep,
+          "@tailwindcss/postcss": "^4.1.13",
+          "@types/node": "^24.3.1",
+          "@types/react": "^19.1.12",
+          "@types/react-dom": "^19.1.9",
+          tailwindcss: "^4.1.13",
+          typescript: "^5.9.2",
+        },
+      },
+      null,
+      2,
+    ),
+  );
+
+  setFile(
+    ctx.files,
+    "apps/web/next.config.ts",
+    `import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {};
+
+export default nextConfig;
+`,
+  );
+
+  setFile(
+    ctx.files,
+    "apps/web/app/globals.css",
+    `@import "tailwindcss";
+`,
+  );
+
+  setFile(
+    ctx.files,
+    "apps/web/app/layout.tsx",
+    `import type { Metadata } from "next";
+import "./globals.css";
+
+export const metadata: Metadata = { title: "${ctx.projectName}" };
+
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  );
+}
+`,
+  );
+
+  setFile(
+    ctx.files,
+    "apps/web/app/page.tsx",
+    `${notes ? `import Link from "next/link";\n\n` : ""}export default function HomePage() {
+  return (
+    <main className="mx-auto flex min-h-screen max-w-xl flex-col gap-4 p-8">
+      <h1 className="text-2xl font-semibold">${ctx.projectName}</h1>
+      ${
+        notes
+          ? `<p>
+        <Link className="underline" href="/notes">
+          Open notes
+        </Link>
+      </p>`
+          : ""
+      }
+    </main>
+  );
+}
+`,
+  );
+
+  if (!notes) {
+    return;
+  }
+
+  setFile(
+    ctx.files,
+    "apps/web/app/notes/notes-client.tsx",
+    `"use client";
+
+import { useState } from "react";
+import { Button } from "@repo/ui/button";
+import { Card } from "@repo/ui/card";
+import { Input } from "@repo/ui/input";
+
+const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL ?? "http://localhost:3333";
+
+type Note = { id: string; title: string; body: string };
+
+export function NotesClient() {
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [notes, setNotes] = useState<Note[]>([]);
+
+  return (
+    <div className="flex flex-col gap-6">
+      <form
+        className="flex flex-col gap-3"
+        onSubmit={(event) => {
+          event.preventDefault();
+          void fetch(serverUrl + "/notes", {
+            method: "POST",
+            credentials: "include",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ title, body }),
+          }).then(async () => {
+            setTitle("");
+            setBody("");
+            const response = await fetch(serverUrl + "/notes", { credentials: "include" });
+            setNotes(await response.json());
+          });
+        }}
+      >
+        <Input name="title" placeholder="Title" value={title} onChange={(event) => setTitle(event.target.value)} required />
+        <Input name="body" placeholder="Body" value={body} onChange={(event) => setBody(event.target.value)} />
+        <Button type="submit">Add note</Button>
+      </form>
+      <ul className="flex flex-col gap-3">
+        {notes.map((note) => (
+          <li key={note.id}>
+            <Card className="p-4">
+              <h2 className="font-medium">{note.title}</h2>
+              <p className="text-sm opacity-80">{note.body}</p>
+            </Card>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+`,
+  );
+
+  setFile(
+    ctx.files,
+    "apps/web/app/notes/page.tsx",
+    `import Link from "next/link";
+import { NotesClient } from "./notes-client";
+
+export default function NotesPage() {
+  return (
+    <main className="mx-auto flex min-h-screen max-w-xl flex-col gap-6 p-8">
+      <h1 className="text-2xl font-semibold">Notes</h1>
+      <Link className="text-sm underline" href="/">
+        Home
+      </Link>
+      <NotesClient />
+    </main>
+  );
+}
+`,
+  );
+}
+
 function emitWeb(ctx: EmitCtx, dep: string): void {
-  const uiDeps =
-    ctx.stack.ui === "shadcn"
-      ? { "@repo/ui": dep }
-      : {};
+  if (ctx.stack.backend !== "nest") {
+    throw new Error("emitWeb requires nest");
+  }
+  if (ctx.stack.api !== "orpc" || ctx.stack.database === "none") {
+    emitWebShell(ctx, dep);
+    return;
+  }
+
+  const uiDeps = { "@repo/ui": dep };
 
   setFile(
     ctx.files,
@@ -764,32 +1222,18 @@ export const authClient = createAuthClient({
 `,
   );
 
-  const buttonImport =
-    ctx.stack.ui === "shadcn"
-      ? `import { Button } from "@repo/ui/button";
+  const buttonImport = `import { Button } from "@repo/ui/button";
 import { Card } from "@repo/ui/card";
-import { Input } from "@repo/ui/input";`
-      : "";
+import { Input } from "@repo/ui/input";`;
 
-  const formControls =
-    ctx.stack.ui === "shadcn"
-      ? `<Input name="title" placeholder="Title" value={title} onChange={(event) => setTitle(event.target.value)} required />
+  const formControls = `<Input name="title" placeholder="Title" value={title} onChange={(event) => setTitle(event.target.value)} required />
         <Input name="body" placeholder="Body" value={body} onChange={(event) => setBody(event.target.value)} />
-        <Button type="submit" disabled={create.isPending}>Add note</Button>`
-      : `<input name="title" value={title} onChange={(event) => setTitle(event.target.value)} required />
-        <input name="body" value={body} onChange={(event) => setBody(event.target.value)} />
-        <button type="submit" disabled={create.isPending}>Add note</button>`;
+        <Button type="submit" disabled={create.isPending}>Add note</Button>`;
 
-  const noteItem =
-    ctx.stack.ui === "shadcn"
-      ? `<Card className="p-4">
+  const noteItem = `<Card className="p-4">
               <h2 className="font-medium">{note.title}</h2>
               <p className="text-sm opacity-80">{note.body}</p>
-            </Card>`
-      : `<article>
-              <h2>{note.title}</h2>
-              <p>{note.body}</p>
-            </article>`;
+            </Card>`;
 
   setFile(
     ctx.files,

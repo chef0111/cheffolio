@@ -8,7 +8,6 @@ import {
   LINTERS,
   ORMS,
   PAYMENTS,
-  UIS,
 } from "#/stack/vocab";
 
 export type Frontend = (typeof FRONTENDS)[number];
@@ -19,7 +18,6 @@ export type Orm = (typeof ORMS)[number];
 export type DbSetup = (typeof DB_SETUPS)[number];
 export type Auth = (typeof AUTHS)[number];
 export type Payments = (typeof PAYMENTS)[number];
-export type Ui = (typeof UIS)[number];
 export type Linter = (typeof LINTERS)[number];
 
 export type PresetFields = {
@@ -31,7 +29,6 @@ export type PresetFields = {
   dbSetup: DbSetup;
   auth: Auth;
   payments: Payments;
-  ui: Ui;
   linter: Linter;
 };
 
@@ -48,7 +45,6 @@ export type RawFlags = {
   dbSetup?: DbSetup;
   auth?: Auth;
   payments?: Payments;
-  ui?: Ui;
   linter?: Linter;
   noGit?: boolean;
   noInstall?: boolean;
@@ -59,7 +55,6 @@ type Shared = {
   frontend: Frontend;
   auth: Auth;
   payments: Payments;
-  ui: Ui;
   linter: Linter;
 };
 
@@ -79,7 +74,7 @@ export type SelfStack = Shared &
 export type NestStack = Shared &
   Relational & {
     backend: "nest";
-    api: "orpc";
+    api: Api;
     monorepo: true;
   };
 

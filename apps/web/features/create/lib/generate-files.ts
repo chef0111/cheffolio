@@ -7,7 +7,6 @@ import {
   type RawFlags,
   resolveStack,
 } from 'create-gb-app/generate';
-
 import {
   APIS,
   AUTHS,
@@ -21,8 +20,8 @@ import {
   LINTERS,
   ORMS,
   PAYMENTS,
-  UIS,
-} from '../types/stack';
+} from 'create-gb-app/preset';
+
 import { resolveProjectName } from './command';
 
 const VOCAB: Record<FlagGroup, ReadonlySet<string>> = {
@@ -34,7 +33,6 @@ const VOCAB: Record<FlagGroup, ReadonlySet<string>> = {
   dbSetup: new Set(DB_SETUPS),
   auth: new Set(AUTHS),
   payments: new Set(PAYMENTS),
-  ui: new Set(UIS),
   linter: new Set(LINTERS),
 };
 
@@ -57,24 +55,17 @@ export type CreateFileMapResult =
   | { ok: false; message: string; code: string };
 
 export function flagsToRaw(flags: CreateFlags): RawFlags {
-  const raw: RawFlags = {
+  return {
     frontend: flags.frontend,
     backend: flags.backend,
+    api: flags.api,
+    database: flags.database,
+    orm: flags.orm,
+    dbSetup: flags.dbSetup,
     auth: flags.auth,
     payments: flags.payments,
-    ui: flags.ui,
     linter: flags.linter,
   };
-
-  if (flags.backend === 'convex') {
-    return raw;
-  }
-
-  raw.api = flags.api;
-  raw.database = flags.database;
-  raw.orm = flags.orm;
-  raw.dbSetup = flags.dbSetup;
-  return raw;
 }
 
 export function buildCreateFileMap(

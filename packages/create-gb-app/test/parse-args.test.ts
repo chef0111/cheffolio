@@ -40,12 +40,12 @@ test("--preset nest expands to a generatable overlay", () => {
 test("explicit flags overlay the preset", () => {
   const raw = parseArgs([
     "--preset",
-    "g111",
+    "gb2",
     "--frontend",
     "tanstack-start",
   ]);
   expect(raw.frontend).toBe("tanstack-start");
-  expect(raw.preset).toBe("g111");
+  expect(raw.preset).toBe("gb2");
   expect(raw.backend).toBe("nest");
 });
 
@@ -54,9 +54,9 @@ test("unknown --preset fails closed", () => {
 });
 
 test("copied preset command keeps directory and token without --yes", () => {
-  const raw = parseArgs(["my-gb-app", "--preset", "g111"]);
+  const raw = parseArgs(["my-gb-app", "--preset", "gb2"]);
   expect(raw.projectName).toBe("my-gb-app");
-  expect(raw.preset).toBe("g111");
+  expect(raw.preset).toBe("gb2");
   expect(raw.yes).toBeUndefined();
   expect(raw.backend).toBe("nest");
 });
@@ -68,7 +68,7 @@ test("USAGE Flags list still includes --preset", () => {
 
 test("shouldGenerateHeadless is true for preset, directory, yes, or non-TTY", () => {
   expect(
-    shouldGenerateHeadless(parseArgs(["my-gb-app", "--preset", "g111"]), true),
+    shouldGenerateHeadless(parseArgs(["my-gb-app", "--preset", "gb2"]), true),
   ).toBe(true);
   expect(shouldGenerateHeadless(parseArgs(["my-gb-app"]), true)).toBe(true);
   expect(shouldGenerateHeadless(parseArgs(["--yes"]), true)).toBe(true);

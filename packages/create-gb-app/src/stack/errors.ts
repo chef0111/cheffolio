@@ -1,5 +1,4 @@
 export const RULE_IDS = {
-  nestRequiresOrpc: "nest-requires-orpc",
   polarRequiresBetterAuth: "polar-requires-better-auth",
   paymentsRequireAuth: "payments-require-auth",
   convexDatabaseOff: "convex-database-off",
@@ -10,12 +9,15 @@ export const RULE_IDS = {
   neonRequiresPostgres: "neon-requires-postgres",
   supabaseRequiresPostgres: "supabase-requires-postgres",
   clerkPolarForbidden: "clerk-polar-forbidden",
+  betterAuthRequiresDatabase: "better-auth-requires-database",
+  databaseRequiresOrm: "database-requires-orm",
+  ormRequiresDatabase: "orm-requires-database",
+  dbSetupRequiresDatabase: "db-setup-requires-database",
 } as const;
 
 export type RuleId = (typeof RULE_IDS)[keyof typeof RULE_IDS];
 
 const RULE_MESSAGES: Record<RuleId, string> = {
-  "nest-requires-orpc": "Nest requires oRPC",
   "polar-requires-better-auth": "Polar requires Better Auth",
   "payments-require-auth": "Payments require auth",
   "convex-database-off": "Convex cannot use a database",
@@ -26,6 +28,10 @@ const RULE_MESSAGES: Record<RuleId, string> = {
   "neon-requires-postgres": "Neon requires Postgres",
   "supabase-requires-postgres": "Supabase requires Postgres",
   "clerk-polar-forbidden": "Clerk cannot be used with Polar",
+  "better-auth-requires-database": "Better Auth requires a database",
+  "database-requires-orm": "A database requires an ORM",
+  "orm-requires-database": "An ORM requires a database",
+  "db-setup-requires-database": "Database setup requires a database",
 };
 
 export class CompatError extends Error {

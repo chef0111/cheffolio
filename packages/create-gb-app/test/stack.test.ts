@@ -38,7 +38,6 @@ describe("parse then resolve", () => {
       dbSetup: "none",
       auth: "better-auth",
       payments: "none",
-      ui: "shadcn",
       linter: "eslint",
       monorepo: false,
     });
@@ -54,7 +53,7 @@ test("convex with explicit db-setup none", () => {
 });
 
 test("CompatError ruleId is not writable", () => {
-  const error = new CompatError("nest-requires-orpc");
+  const error = new CompatError("clerk-polar-forbidden");
   expect(Object.getOwnPropertyDescriptor(error, "ruleId")?.writable).toBe(
     false,
   );

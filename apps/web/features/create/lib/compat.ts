@@ -7,10 +7,14 @@ import {
   FLAG_GROUPS,
   type FlagGroup,
   type Payments,
-} from '../types/stack';
+  VOCAB_BY_GROUP,
+  YES_DEFAULTS,
+} from 'create-gb-app/preset';
+
+export { YES_DEFAULTS };
 
 export const RULE_IDS = {
-  nestRequiresOrpc: 'nest-requires-orpc',
+  nestTrpc: 'nest-trpc',
   nestEslint: 'nest-eslint',
   nestOxlint: 'nest-oxlint',
   polarRequiresBetterAuth: 'polar-requires-better-auth',
@@ -23,12 +27,16 @@ export const RULE_IDS = {
   neonRequiresPostgres: 'neon-requires-postgres',
   supabaseRequiresPostgres: 'supabase-requires-postgres',
   clerkPolarForbidden: 'clerk-polar-forbidden',
+  betterAuthRequiresDatabase: 'better-auth-requires-database',
+  databaseRequiresOrm: 'database-requires-orm',
+  ormRequiresDatabase: 'orm-requires-database',
+  dbSetupRequiresDatabase: 'db-setup-requires-database',
 } as const;
 
 export type RuleId = (typeof RULE_IDS)[keyof typeof RULE_IDS];
 
 export const RULE_MESSAGES: Record<RuleId, string> = {
-  'nest-requires-orpc': 'Nest requires oRPC',
+  'nest-trpc': 'Nest tRPC generate is not implemented yet',
   'nest-eslint': 'Nest ESLint generate is not implemented yet',
   'nest-oxlint': 'Nest Oxlint generate is not implemented yet',
   'polar-requires-better-auth': 'Polar requires Better Auth',
@@ -41,19 +49,10 @@ export const RULE_MESSAGES: Record<RuleId, string> = {
   'neon-requires-postgres': 'Neon requires Postgres',
   'supabase-requires-postgres': 'Supabase requires Postgres',
   'clerk-polar-forbidden': 'Clerk cannot be used with Polar',
-};
-
-export const YES_DEFAULTS: CreateFlags = {
-  frontend: 'next',
-  backend: 'self',
-  api: 'orpc',
-  database: 'postgres',
-  orm: 'prisma',
-  dbSetup: 'none',
-  auth: 'better-auth',
-  payments: 'none',
-  ui: 'shadcn',
-  linter: 'eslint',
+  'better-auth-requires-database': 'Better Auth requires a database',
+  'database-requires-orm': 'A database requires an ORM',
+  'orm-requires-database': 'An ORM requires a database',
+  'db-setup-requires-database': 'Database setup requires a database',
 };
 
 const RELATIONAL_GROUPS = new Set<FlagGroup>([
@@ -68,10 +67,7 @@ export function isRelationalGroup(group: FlagGroup): boolean {
 }
 
 export function isGroupVisible(flags: CreateFlags, group: FlagGroup): boolean {
-  if (flags.backend === 'convex' && isRelationalGroup(group)) {
-    return false;
-  }
-  return true;
+  return Object.hasOwn(flags, group);
 }
 
 export function disabledRuleId(
@@ -113,7 +109,6 @@ function convexRelationalRule(group: FlagGroup): RuleId | null {
     case 'backend':
     case 'auth':
     case 'payments':
-    case 'ui':
     case 'linter':
       return null;
     default: {
@@ -128,7 +123,7 @@ function disabledRule(
   group: FlagGroup,
   value: string
 ): RuleId | null {
-  if (flags.backend === 'convex') {
+  if (flags.backend === 'convex' && value !== 'none') {
     const convexRule = convexRelationalRule(group);
     if (convexRule) {
       return convexRule;
@@ -136,7 +131,7 @@ function disabledRule(
   }
 
   if (group === 'api' && flags.backend === 'nest' && value === 'trpc') {
-    return RULE_IDS.nestRequiresOrpc;
+    return RULE_IDS.nestTrpc;
   }
 
   if (group === 'linter' && flags.backend === 'nest') {
@@ -148,7 +143,38 @@ function disabledRule(
     }
   }
 
-  if (group === 'dbSetup') {
+  if (
+    group === 'orm' &&
+    flags.backend !== 'convex' &&
+    flags.database !== 'none' &&
+    value === 'none'
+  ) {
+    return RULE_IDS.databaseRequiresOrm;
+  }
+
+  if (
+    group === 'orm' &&
+    flags.backend !== 'convex' &&
+    flags.database === 'none' &&
+    value !== 'none'
+  ) {
+    return RULE_IDS.ormRequiresDatabase;
+  }
+
+  if (
+    group === 'auth' &&
+    value === 'better-auth' &&
+    flags.backend !== 'convex' &&
+    flags.database === 'none'
+  ) {
+    return RULE_IDS.betterAuthRequiresDatabase;
+  }
+
+  if (group === 'dbSetup' && flags.database === 'none' && value !== 'none') {
+    return RULE_IDS.dbSetupRequiresDatabase;
+  }
+
+  if (group === 'dbSetup' && flags.database !== 'none') {
     if (value === 'docker' && flags.database === 'sqlite') {
       return RULE_IDS.sqliteDockerForbidden;
     }
@@ -160,7 +186,7 @@ function disabledRule(
     }
   }
 
-  if (group === 'database') {
+  if (group === 'database' && value !== 'none') {
     if (
       (flags.dbSetup === 'neon' || flags.dbSetup === 'supabase') &&
       value !== 'postgres'
@@ -219,7 +245,6 @@ export function applyFlagChange<K extends FlagGroup>(
     case 'frontend':
     case 'api':
     case 'orm':
-    case 'ui':
     case 'linter':
       return next;
     default: {
@@ -229,6 +254,29 @@ export function applyFlagChange<K extends FlagGroup>(
   }
 }
 
+function enabledFallback(
+  flags: CreateFlags,
+  group: FlagGroup
+): CreateFlags[FlagGroup] {
+  const preferred = YES_DEFAULTS[group];
+  if (isOptionEnabled(flags, group, preferred)) {
+    return preferred;
+  }
+  const vocab = VOCAB_BY_GROUP[group];
+  if (
+    (vocab as readonly string[]).includes('none') &&
+    isOptionEnabled(flags, group, 'none')
+  ) {
+    return 'none' as CreateFlags[FlagGroup];
+  }
+  for (const value of vocab) {
+    if (isOptionEnabled(flags, group, value)) {
+      return value as CreateFlags[FlagGroup];
+    }
+  }
+  return preferred;
+}
+
 export function normalizeFlags(flags: CreateFlags): CreateFlags {
   let next = flags;
 
@@ -236,33 +284,7 @@ export function normalizeFlags(flags: CreateFlags): CreateFlags {
     if (isOptionEnabled(next, group, next[group])) {
       continue;
     }
-    next = applyFlagChange(next, group, YES_DEFAULTS[group]);
-  }
-
-  if (next.backend === 'nest') {
-    if (next.api !== 'orpc') {
-      next = { ...next, api: 'orpc' };
-    }
-    if (next.linter !== 'biome') {
-      next = { ...next, linter: 'biome' };
-    }
-  }
-
-  if (next.backend === 'convex') {
-    if (
-      next.api !== YES_DEFAULTS.api ||
-      next.database !== YES_DEFAULTS.database ||
-      next.orm !== YES_DEFAULTS.orm ||
-      next.dbSetup !== YES_DEFAULTS.dbSetup
-    ) {
-      next = {
-        ...next,
-        api: YES_DEFAULTS.api,
-        database: YES_DEFAULTS.database,
-        orm: YES_DEFAULTS.orm,
-        dbSetup: YES_DEFAULTS.dbSetup,
-      };
-    }
+    next = applyFlagChange(next, group, enabledFallback(next, group));
   }
 
   return next;
@@ -274,14 +296,14 @@ function applyBackendSideEffects(
 ): CreateFlags {
   switch (backend) {
     case 'nest':
-      return { ...flags, api: 'orpc', linter: 'biome' };
+      return { ...flags, linter: 'biome' };
     case 'convex':
       return {
         ...flags,
-        api: YES_DEFAULTS.api,
-        database: YES_DEFAULTS.database,
-        orm: YES_DEFAULTS.orm,
-        dbSetup: YES_DEFAULTS.dbSetup,
+        api: 'none',
+        database: 'none',
+        orm: 'none',
+        dbSetup: 'none',
       };
     case 'self':
       return flags;
@@ -296,6 +318,13 @@ function applyDatabaseSideEffects(
   flags: CreateFlags,
   database: Database
 ): CreateFlags {
+  if (database === 'none') {
+    const next: CreateFlags = { ...flags, orm: 'none', dbSetup: 'none' };
+    if (next.backend !== 'convex' && next.auth === 'better-auth') {
+      return { ...next, auth: 'none', payments: 'none' };
+    }
+    return next;
+  }
   if (database === 'sqlite' && flags.dbSetup === 'docker') {
     return { ...flags, dbSetup: 'none' };
   }
@@ -304,6 +333,9 @@ function applyDatabaseSideEffects(
     (flags.dbSetup === 'neon' || flags.dbSetup === 'supabase')
   ) {
     return { ...flags, dbSetup: 'none' };
+  }
+  if (flags.orm === 'none') {
+    return { ...flags, orm: 'prisma' };
   }
   return flags;
 }
@@ -335,6 +367,9 @@ function applyDbSetupSideEffects(
   flags: CreateFlags,
   dbSetup: DbSetup
 ): CreateFlags {
+  if (flags.database === 'none' && dbSetup !== 'none') {
+    return { ...flags, dbSetup: 'none' };
+  }
   if (dbSetup === 'docker' && flags.database === 'sqlite') {
     return { ...flags, dbSetup: 'none' };
   }

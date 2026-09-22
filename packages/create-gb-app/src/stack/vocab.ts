@@ -1,12 +1,11 @@
 export const FRONTENDS = ["next", "tanstack-start"] as const;
 export const BACKENDS = ["self", "nest", "convex"] as const;
-export const APIS = ["orpc", "trpc"] as const;
-export const DATABASES = ["postgres", "sqlite", "mysql"] as const;
-export const ORMS = ["prisma", "drizzle"] as const;
+export const APIS = ["orpc", "trpc", "none"] as const;
+export const DATABASES = ["postgres", "sqlite", "mysql", "none"] as const;
+export const ORMS = ["prisma", "drizzle", "none"] as const;
 export const DB_SETUPS = ["none", "docker", "neon", "supabase"] as const;
-export const AUTHS = ["none", "better-auth", "clerk"] as const;
+export const AUTHS = ["better-auth", "clerk", "none"] as const;
 export const PAYMENTS = ["none", "stripe", "polar"] as const;
-export const UIS = ["shadcn", "none"] as const;
 export const LINTERS = ["eslint", "biome", "oxlint"] as const;
 
 export const FLAG_GROUPS = [
@@ -18,7 +17,6 @@ export const FLAG_GROUPS = [
   "dbSetup",
   "auth",
   "payments",
-  "ui",
   "linter",
 ] as const;
 
@@ -33,7 +31,6 @@ export const VOCAB_BY_GROUP = {
   dbSetup: DB_SETUPS,
   auth: AUTHS,
   payments: PAYMENTS,
-  ui: UIS,
   linter: LINTERS,
 } as const satisfies Record<FlagGroup, readonly string[]>;
 
@@ -48,6 +45,5 @@ export const STACK_CLI_FLAGS: { key: FlagGroup; flag: string }[] = [
   { key: "dbSetup", flag: "--db-setup" },
   { key: "auth", flag: "--auth" },
   { key: "payments", flag: "--payments" },
-  { key: "ui", flag: "--ui" },
   { key: "linter", flag: "--linter" },
 ];

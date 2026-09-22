@@ -1,15 +1,5 @@
 'use client';
 
-import { parseAsString, parseAsStringLiteral, useQueryStates } from 'nuqs';
-import { createContext, type ReactNode, use, useCallback } from 'react';
-
-import { buildCommand, DEFAULT_PROJECT_NAME } from '../lib/command';
-import {
-  applyFlagChange,
-  isOptionEnabled,
-  normalizeFlags,
-  YES_DEFAULTS,
-} from '../lib/compat';
 import {
   APIS,
   AUTHS,
@@ -22,8 +12,17 @@ import {
   LINTERS,
   ORMS,
   PAYMENTS,
-  UIS,
-} from '../types/stack';
+  YES_DEFAULTS,
+} from 'create-gb-app/preset';
+import { parseAsString, parseAsStringLiteral, useQueryStates } from 'nuqs';
+import { createContext, type ReactNode, use, useCallback } from 'react';
+
+import { buildCommand, DEFAULT_PROJECT_NAME } from '../lib/command';
+import {
+  applyFlagChange,
+  isOptionEnabled,
+  normalizeFlags,
+} from '../lib/compat';
 
 type CreateContextValue = {
   flags: CreateFlags;
@@ -45,7 +44,6 @@ const createSearchParams = {
   dbSetup: parseAsStringLiteral(DB_SETUPS).withDefault(YES_DEFAULTS.dbSetup),
   auth: parseAsStringLiteral(AUTHS).withDefault(YES_DEFAULTS.auth),
   payments: parseAsStringLiteral(PAYMENTS).withDefault(YES_DEFAULTS.payments),
-  ui: parseAsStringLiteral(UIS).withDefault(YES_DEFAULTS.ui),
   linter: parseAsStringLiteral(LINTERS).withDefault(YES_DEFAULTS.linter),
 };
 

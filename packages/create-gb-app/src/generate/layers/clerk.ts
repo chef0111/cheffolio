@@ -87,6 +87,10 @@ void bootstrap();
 `,
   );
 
+  if (ctx.stack.backend === "nest" && ctx.stack.api !== "orpc") {
+    return;
+  }
+
   setFile(
     ctx.files,
     "apps/server/src/app.module.ts",

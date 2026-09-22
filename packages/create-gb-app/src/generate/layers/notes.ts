@@ -6,6 +6,17 @@ export function emitNotes(ctx: EmitCtx): void {
     emitConvexNotes(ctx);
     return;
   }
+  if (ctx.stack.database === "none") {
+    return;
+  }
+  if (ctx.stack.api === "none") {
+    if (ctx.stack.frontend === "tanstack-start") {
+      emitStartServerFnNotes(ctx);
+      return;
+    }
+    emitNextServerActionNotes(ctx);
+    return;
+  }
   if (
     ctx.stack.frontend === "tanstack-start" &&
     ctx.stack.backend === "self" &&
@@ -307,8 +318,206 @@ function NotesPage() {
   );
 }
 
+function emitNextServerActionNotes(ctx: EmitCtx): void {
+  const authed = ctx.stack.auth !== "none";
+  const sessionHelpers = authed
+    ? `import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/db";
+
+async function requireUserId() {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session) {
+    throw new Error("UNAUTHORIZED");
+  }
+  return session.user.id;
+}
+`
+    : `import { prisma } from "@/lib/db";
+`;
+
+  setFile(
+    ctx.files,
+    "app/notes/actions.ts",
+    `"use server";
+
+${sessionHelpers}
+export async function listNotes() {
+  ${authed ? "const userId = await requireUserId();" : ""}
+  return prisma.note.findMany({
+    ${authed ? "where: { userId }," : ""}
+    orderBy: { createdAt: "desc" },
+  });
+}
+
+export async function createNote(input: { title: string; body: string }) {
+  ${authed ? "const userId = await requireUserId();" : ""}
+  return prisma.note.create({
+    data: {
+      title: input.title,
+      body: input.body,
+      ${authed ? "userId," : ""}
+    },
+  });
+}
+`,
+  );
+
+  setFile(
+    ctx.files,
+    "app/notes/notes-client.tsx",
+    `"use client";
+
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { createNote, listNotes } from "./actions";
+
+export function NotesClient() {
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [notes, setNotes] = useState<Array<{ id: string; title: string; body: string }>>([]);
+
+  return (
+    <div className="flex flex-col gap-6">
+      <form
+        className="flex flex-col gap-3"
+        action={async (formData) => {
+          await createNote({
+            title: String(formData.get("title") ?? ""),
+            body: String(formData.get("body") ?? ""),
+          });
+          setTitle("");
+          setBody("");
+          setNotes(await listNotes());
+        }}
+      >
+        <Input name="title" placeholder="Title" value={title} onChange={(event) => setTitle(event.target.value)} required />
+        <Input name="body" placeholder="Body" value={body} onChange={(event) => setBody(event.target.value)} />
+        <Button type="submit">Add note</Button>
+      </form>
+      <ul className="flex flex-col gap-3">
+        {notes.map((note) => (
+          <li key={note.id}>
+            <Card className="p-4">
+              <h2 className="font-medium">{note.title}</h2>
+              <p className="text-sm opacity-80">{note.body}</p>
+            </Card>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+`,
+  );
+
+  setFile(
+    ctx.files,
+    "app/notes/page.tsx",
+    `import Link from "next/link";
+import { NotesClient } from "./notes-client";
+
+export default function NotesPage() {
+  return (
+    <main className="mx-auto flex min-h-screen max-w-xl flex-col gap-6 p-8">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-semibold">Notes</h1>
+        <Link className="text-sm underline" href="/login">
+          Login
+        </Link>
+      </div>
+      <NotesClient />
+    </main>
+  );
+}
+`,
+  );
+}
+
+function emitStartServerFnNotes(ctx: EmitCtx): void {
+  const authed = ctx.stack.auth !== "none";
+  const createData = authed
+    ? `{ title: data.title, body: data.body, userId: data.userId }`
+    : `{ title: data.title, body: data.body }`;
+  const inputType = authed
+    ? `{ title: string; body: string; userId: string }`
+    : `{ title: string; body: string }`;
+
+  setFile(
+    ctx.files,
+    "src/server/notes.ts",
+    `import { createServerFn } from "@tanstack/react-start";
+import { prisma } from "../lib/db";
+
+export const listNotes = createServerFn({ method: "GET" }).handler(async () => {
+  return prisma.note.findMany({ orderBy: { createdAt: "desc" } });
+});
+
+export const createNote = createServerFn({ method: "POST" })
+  .validator((input: ${inputType}) => input)
+  .handler(async ({ data }) => {
+    return prisma.note.create({ data: ${createData} });
+  });
+`,
+  );
+
+  setFile(
+    ctx.files,
+    "src/routes/notes.tsx",
+    `import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+import { Button } from "../components/ui/button";
+import { Card } from "../components/ui/card";
+import { Input } from "../components/ui/input";
+import { createNote, listNotes } from "../server/notes";
+
+export const Route = createFileRoute("/notes")({
+  component: NotesPage,
+});
+
+function NotesPage() {
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [notes, setNotes] = useState<Array<{ id: string; title: string; body: string }>>([]);
+
+  return (
+    <main className="mx-auto flex min-h-screen max-w-xl flex-col gap-6 p-8">
+      <h1 className="text-2xl font-semibold">Notes</h1>
+      <form
+        className="flex flex-col gap-3"
+        onSubmit={(event) => {
+          event.preventDefault();
+          void createNote({ data: { title, body } }).then(async () => {
+            setTitle("");
+            setBody("");
+            setNotes(await listNotes());
+          });
+        }}
+      >
+        <Input name="title" value={title} onChange={(event) => setTitle(event.target.value)} required />
+        <Input name="body" value={body} onChange={(event) => setBody(event.target.value)} />
+        <Button type="submit">Add note</Button>
+      </form>
+      <ul className="flex flex-col gap-3">
+        {notes.map((note) => (
+          <li key={note.id}>
+            <Card className="p-4">
+              <h2 className="font-medium">{note.title}</h2>
+              <p className="text-sm opacity-80">{note.body}</p>
+            </Card>
+          </li>
+        ))}
+      </ul>
+    </main>
+  );
+}
+`,
+  );
+}
+
 function emitConvexNotes(ctx: EmitCtx): void {
-  const ui = ctx.stack.ui === "shadcn";
   setFile(
     ctx.files,
     "src/routes/notes.tsx",
@@ -316,9 +525,9 @@ function emitConvexNotes(ctx: EmitCtx): void {
 import { useMutation, useQuery } from "convex/react";
 import { useState } from "react";
 import { api } from "../../convex/_generated/api";
-${ui ? `import { Button } from "../components/ui/button";
+import { Button } from "../components/ui/button";
 import { Card } from "../components/ui/card";
-import { Input } from "../components/ui/input";` : ""}
+import { Input } from "../components/ui/input";
 
 export const Route = createFileRoute("/notes")({
   component: NotesPage,
@@ -341,24 +550,14 @@ function NotesPage() {
           setBody("");
         }}
       >
-        ${
-          ui
-            ? `<Input name="title" value={title} onChange={(event) => setTitle(event.target.value)} required />
+        <Input name="title" value={title} onChange={(event) => setTitle(event.target.value)} required />
         <Input name="body" value={body} onChange={(event) => setBody(event.target.value)} />
-        <Button type="submit">Add note</Button>`
-            : `<input name="title" value={title} onChange={(event) => setTitle(event.target.value)} required />
-        <input name="body" value={body} onChange={(event) => setBody(event.target.value)} />
-        <button type="submit">Add note</button>`
-        }
+        <Button type="submit">Add note</Button>
       </form>
       <ul>
         {(notes ?? []).map((note) => (
           <li key={note._id}>
-            ${
-              ui
-                ? `<Card className="p-4"><h2 className="font-medium">{note.title}</h2><p>{note.body}</p></Card>`
-                : `<article><h2>{note.title}</h2><p>{note.body}</p></article>`
-            }
+            <Card className="p-4"><h2 className="font-medium">{note.title}</h2><p>{note.body}</p></Card>
           </li>
         ))}
       </ul>

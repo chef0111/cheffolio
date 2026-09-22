@@ -142,11 +142,15 @@ function HomePage() {
   return (
     <main className="mx-auto flex min-h-screen max-w-xl flex-col gap-4 p-8">
       <h1 className="text-2xl font-semibold">${ctx.projectName}</h1>
-      <p>
+      ${
+        ctx.stack.backend === "convex" || ctx.stack.database !== "none"
+          ? `<p>
         <Link className="underline" to="/notes">
           Open notes
         </Link>
-      </p>
+      </p>`
+          : ""
+      }
     </main>
   );
 }

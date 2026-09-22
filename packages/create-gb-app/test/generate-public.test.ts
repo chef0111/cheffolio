@@ -54,8 +54,8 @@ test("public generate still emits YES paths", () => {
 });
 
 test("public generate exports stack and tree entry points", () => {
-  expect(generate.encodePreset(YES_DEFAULTS)).toBeNull();
-  expect(generate.decodePreset("g111")).toEqual({ backend: "nest" });
+  expect(generate.encodePreset(YES_DEFAULTS)).toBe("gb0");
+  expect(generate.decodePreset("gb0")).toEqual(YES_DEFAULTS);
   expect(typeof generate.CompatError).toBe("function");
   expect(typeof generate.GenerateError).toBe("function");
 });

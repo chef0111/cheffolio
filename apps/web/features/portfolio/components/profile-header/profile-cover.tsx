@@ -8,15 +8,16 @@ import { CanvasReveal } from '@/components/cheffolio/canvas-reveal';
 import { PanelContent } from '@/components/cheffolio/panel';
 import { Label } from '@/components/ui/label';
 import { useMediaQuery } from '@/hooks/use-media-query';
+import { cn } from '@/lib/utils';
 
 export function ProfileCover() {
   return (
-    <CanvasHover>
+    <CanvasHover className="-mt-8">
       <div className="z-20">
-        <div className="flex flex-col items-center gap-4">
+        <div className="-mt-8 flex flex-col items-center gap-4">
           <BrandMark
             id="js-cover-mark"
-            className="ease-out-cubic h-auto w-28 translate-y-5.5 transition duration-500 group-hover/canvas:translate-y-0 group-data-[expanded=true]/canvas:translate-y-0 sm:w-32"
+            className="ease-out-cubic h-auto w-28 translate-y-6 transition duration-500 group-hover/canvas:translate-y-0 group-data-[expanded=true]/canvas:translate-y-0 sm:w-32"
           />
           <Label className="ease-out-cubic font-pixel text-lg opacity-0 transition duration-500 group-hover/canvas:opacity-100 group-data-[expanded=true]/canvas:opacity-100 sm:text-xl">
             giabao.dev
@@ -27,7 +28,13 @@ export function ProfileCover() {
   );
 }
 
-function CanvasHover({ children }: { children: React.ReactNode }) {
+function CanvasHover({
+  className,
+  children,
+}: {
+  className?: string;
+  children: React.ReactNode;
+}) {
   const [isActive, setIsActive] = useState(false);
   const isTouchDevice = useMediaQuery('(pointer: coarse)');
   const isExpanded = isTouchDevice && isActive;
@@ -41,7 +48,10 @@ function CanvasHover({ children }: { children: React.ReactNode }) {
         setIsActive(false);
       }}
       data-expanded={isExpanded ? 'true' : 'false'}
-      className="group/canvas cover-background decor-t flex flex-col p-0"
+      className={cn(
+        'group/canvas cover-background flex flex-col p-0',
+        className
+      )}
     >
       <div className="h-12 w-full" />
       <AnimatePresence>

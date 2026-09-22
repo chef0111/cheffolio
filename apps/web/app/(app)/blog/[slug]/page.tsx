@@ -161,7 +161,7 @@ export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
       />
 
       <DocPageRoot className="flex flex-1 flex-col">
-        <div className="mx-auto h-26 w-full max-w-4xl border-x" />
+        <div className="mx-auto h-12 w-full max-w-4xl border-x" />
         <DocContainer>
           <Panel className="decor-t screen-line-bottom-none flex items-center justify-between p-2">
             <Button

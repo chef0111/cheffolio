@@ -1,6 +1,7 @@
 'use server';
 
-import type { CreateFlags } from '../../types/stack';
+import type { CreateFlags } from 'create-gb-app/preset';
+
 import { normalizeFlags } from '../compat';
 import {
   buildCreateFileMap,

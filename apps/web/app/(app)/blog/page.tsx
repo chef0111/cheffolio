@@ -85,7 +85,7 @@ export default function BlogsPage() {
       />
 
       <div className="mx-auto flex flex-1 flex-col md:max-w-4xl">
-        <PageHeading className="pt-24">
+        <PageHeading className="pt-12">
           <PageHeadingTagline>{title}</PageHeadingTagline>
           <PageHeadingTitle className="decor-t screen-line-bottom-none">
             {description}

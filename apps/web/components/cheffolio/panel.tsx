@@ -198,11 +198,7 @@ function PanelContent({
   return (
     <div
       data-slot="panel-body"
-      className={cn(
-        'p-4',
-        getPanelDecorPositions(className).length > 0 && 'relative',
-        className
-      )}
+      className={cn('relative p-4', className)}
       {...props}
     >
       {children}
