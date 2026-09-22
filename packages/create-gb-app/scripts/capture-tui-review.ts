@@ -2,8 +2,8 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { testRender } from "@opentui/react/test-utils";
 import { createElement } from "react";
-import { App } from "../src/tui/app";
-import type { RawFlags } from "../src/stack/types";
+import { App } from "#/tui/app";
+import type { RawFlags } from "#/stack/types";
 
 const media = join(import.meta.dir, "..", "media");
 mkdirSync(media, { recursive: true });

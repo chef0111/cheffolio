@@ -9,7 +9,7 @@ import {
   ORMS,
   PAYMENTS,
   UIS,
-} from "./vocab";
+} from "#/stack/vocab";
 
 export type Frontend = (typeof FRONTENDS)[number];
 export type Backend = (typeof BACKENDS)[number];

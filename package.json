@@ -2,10 +2,13 @@
   "name": "cheffolio",
   "private": true,
   "packageManager": "bun@1.3.4",
-  "workspaces": ["apps/*", "packages/*"],
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "turbo run dev --filter=web",
-    "build": "turbo run build --filter=web",
+    "dev": "turbo run dev --filter web",
+    "build": "turbo run build --filter web",
     "start": "bun run --filter web start",
     "next": "bun run --filter web next",
     "lint": "turbo run lint",
@@ -28,6 +31,9 @@
     "lint-staged": "^16.4.0",
     "prettier": "^3.8.3",
     "prettier-plugin-tailwindcss": "^0.8.1",
-    "turbo": "^2.5.8"
+    "turbo": "^2.11.2"
+  },
+  "dependencies": {
+    "pdfjs-dist": "^6.3.289"
   }
 }

@@ -1,14 +1,14 @@
 import { expect, test } from "bun:test";
-import { GenerateError } from "../src/generate/errors";
-import { buildTree } from "../src/generate/build-tree";
+import { GenerateError } from "#/generate/errors";
+import { buildTree } from "#/generate/build-tree";
 import {
   decodePreset,
   encodePreset,
   GOLDEN_PRESETS,
   rawFlagsFromPreset,
-} from "../src/preset";
-import { resolveStack, YES_DEFAULTS } from "../src/stack/resolve";
-import type { PresetFields } from "../src/stack/types";
+} from "#/preset";
+import { resolveStack, YES_DEFAULTS } from "#/stack/resolve";
+import type { PresetFields } from "#/stack/types";
 
 test("encodePreset of --yes defaults is null", () => {
   expect(encodePreset(YES_DEFAULTS)).toBeNull();

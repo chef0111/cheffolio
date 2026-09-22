@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
-import { CompatError, type RuleId } from "../src/stack/errors";
-import { resolveStack } from "../src/stack/resolve";
-import type { RawFlags, Stack } from "../src/stack/types";
+import { CompatError, type RuleId } from "#/stack/errors";
+import { resolveStack } from "#/stack/resolve";
+import type { RawFlags, Stack } from "#/stack/types";
 import compat from "./fixtures/compat.json";
 
 test("--yes default", () => {

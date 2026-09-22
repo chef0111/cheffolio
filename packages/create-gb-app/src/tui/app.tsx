@@ -1,9 +1,9 @@
 import { useKeyboard, useTerminalDimensions } from "@opentui/react";
 import { useMemo, useState } from "react";
-import { formatCommand } from "../preview/command";
-import { previewTree } from "../preview/tree";
-import { CompatError } from "../stack/errors";
-import { resolveStack } from "../stack/resolve";
+import { formatCommand } from "#/preview/command";
+import { previewTree } from "#/preview/tree";
+import { CompatError } from "#/stack/errors";
+import { resolveStack } from "#/stack/resolve";
 import type {
   Api,
   Auth,
@@ -11,7 +11,7 @@ import type {
   Frontend,
   Payments,
   RawFlags,
-} from "../stack/types";
+} from "#/stack/types";
 
 type FocusId = "backend" | "frontend" | "api" | "auth" | "payments" | "confirm";
 

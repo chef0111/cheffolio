@@ -3,9 +3,9 @@ import {
   buildTree,
   resolveStack,
   YES_DEFAULTS,
-} from "../src/generate/public";
-import type { RawFlags } from "../src/generate/public";
-import * as generate from "../src/generate/public";
+} from "#/generate/public";
+import type { RawFlags } from "#/generate/public";
+import * as generate from "#/generate/public";
 
 const YES_PATHS = [
   ".env",

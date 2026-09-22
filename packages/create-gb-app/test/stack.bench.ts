@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test";
-import { CompatError } from "../src/stack/errors";
-import { resolveStack } from "../src/stack/resolve";
-import type { RawFlags } from "../src/stack/types";
+import { CompatError } from "#/stack/errors";
+import { resolveStack } from "#/stack/resolve";
+import type { RawFlags } from "#/stack/types";
 import compat from "./fixtures/compat.json";
 
 test("resolveStack 1000 mixed calls stay under 50ms", () => {

@@ -7,6 +7,9 @@
     "./generate": "./src/generate/public.ts",
     "./preset": "./src/preset.ts"
   },
+  "imports": {
+    "#/*": "./src/*"
+  },
   "bin": {
     "create-gb-app": "./src/index.ts"
   },
@@ -14,7 +17,10 @@
     "dev": "bun src/index.ts",
     "test": "bun test",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint .",
+    "lint": "eslint . --cache --cache-location .eslintcache",
+    "lint:fix": "eslint --fix . --cache --cache-location .eslintcache",
+    "format": "prettier --write \"**/*.{ts,tsx,md,mdx}\" --cache",
+    "format:check": "prettier --check \"**/*.{ts,tsx,md,mdx}\" --cache",
     "build": "bun script/build.ts",
     "publish:prepare": "bun script/publish.ts"
   },

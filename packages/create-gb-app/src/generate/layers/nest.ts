@@ -1,12 +1,12 @@
-import { GenerateError } from "../errors";
-import { workspaceProtocol } from "../workspace-protocol";
-import { setFile } from "../files";
-import type { EmitCtx } from "../types";
-import { emitBiome } from "./biome";
-import { emitDbSetup } from "./db-setup";
-import { emitDrizzle } from "./drizzle";
-import { emitPostgres } from "./postgres";
-import { emitPrisma } from "./prisma";
+import { GenerateError } from "#/generate/errors";
+import { workspaceProtocol } from "#/generate/workspace-protocol";
+import { setFile } from "#/generate/files";
+import type { EmitCtx } from "#/generate/types";
+import { emitBiome } from "#/generate/layers/biome";
+import { emitDbSetup } from "#/generate/layers/db-setup";
+import { emitDrizzle } from "#/generate/layers/drizzle";
+import { emitPostgres } from "#/generate/layers/postgres";
+import { emitPrisma } from "#/generate/layers/prisma";
 
 function proto(ctx: EmitCtx): string {
   return workspaceProtocol(ctx.packageManager);

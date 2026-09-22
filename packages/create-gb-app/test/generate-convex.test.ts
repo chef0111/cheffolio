@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
-import { buildTree } from "../src/generate/build-tree";
-import { resolveStack } from "../src/stack/resolve";
+import { buildTree } from "#/generate/build-tree";
+import { resolveStack } from "#/stack/resolve";
 
 const CONVEX_FLAGS = {
   frontend: "tanstack-start",

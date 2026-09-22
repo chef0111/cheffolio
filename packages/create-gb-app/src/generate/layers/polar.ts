@@ -1,6 +1,6 @@
-import { setFile } from "../files";
-import { isStart } from "../paths";
-import type { EmitCtx } from "../types";
+import { setFile } from "#/generate/files";
+import { isStart } from "#/generate/paths";
+import type { EmitCtx } from "#/generate/types";
 
 const POLAR_PLUGIN = `polar({
       createCustomerOnSignUp: true,

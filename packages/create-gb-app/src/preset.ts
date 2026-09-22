@@ -1,12 +1,12 @@
-import { ParseError } from "./stack/parse-error";
-import { YES_DEFAULTS } from "./stack/resolve";
-import type { FlagGroup } from "./stack/vocab";
+import { ParseError } from "#/stack/parse-error";
+import { YES_DEFAULTS } from "#/stack/resolve";
+import type { FlagGroup } from "#/stack/vocab";
 import {
   FLAG_GROUPS,
   RELATIONAL_GROUPS,
   VOCAB_BY_GROUP,
-} from "./stack/vocab";
-import type { PresetFields, RawFlags } from "./stack/types";
+} from "#/stack/vocab";
+import type { PresetFields, RawFlags } from "#/stack/types";
 
 export type PresetCode = string & { readonly __presetVersion: "g1" };
 

@@ -1,5 +1,5 @@
-import { setFile } from "../files";
-import type { EmitCtx } from "../types";
+import { setFile } from "#/generate/files";
+import type { EmitCtx } from "#/generate/types";
 
 export function emitShadcn(ctx: EmitCtx): void {
   ctx.pkg.dependencies.clsx = "^2.1.1";

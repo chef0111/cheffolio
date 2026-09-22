@@ -2,10 +2,10 @@ import { expect, test } from "bun:test";
 import { mkdir, mkdtemp, readdir, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { buildTree } from "../src/generate/build-tree";
-import { writeTree } from "../src/generate/write-tree";
-import { CompatError } from "../src/stack/errors";
-import { resolveStack } from "../src/stack/resolve";
+import { buildTree } from "#/generate/build-tree";
+import { writeTree } from "#/generate/write-tree";
+import { CompatError } from "#/stack/errors";
+import { resolveStack } from "#/stack/resolve";
 
 test("drizzle on Self writes drizzle schema not prisma", () => {
   const files = buildTree(

@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { setFileIfAbsent } from "../src/generate/files";
+import { setFileIfAbsent } from "#/generate/files";
 
 test("setFileIfAbsent writes when the path is missing", () => {
   const files: Record<string, string> = {};

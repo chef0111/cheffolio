@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test";
-import { buildTree } from "../src/generate/build-tree";
-import { GenerateError } from "../src/generate/errors";
-import { resolveStack } from "../src/stack/resolve";
+import { buildTree } from "#/generate/build-tree";
+import { GenerateError } from "#/generate/errors";
+import { resolveStack } from "#/stack/resolve";
 
 const NEST_FLAGS = {
   backend: "nest",

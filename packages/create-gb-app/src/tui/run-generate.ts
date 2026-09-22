@@ -1,7 +1,7 @@
-import { inferPackageManager } from "../cli/package-manager";
-import { generateApp } from "../generate/run";
-import { resolveStack } from "../stack/resolve";
-import type { RawFlags } from "../stack/types";
+import { inferPackageManager } from "#/cli/package-manager";
+import { generateApp } from "#/generate/run";
+import { resolveStack } from "#/stack/resolve";
+import type { RawFlags } from "#/stack/types";
 
 export async function runWizardGenerate(flags: RawFlags): Promise<void> {
   const dest = flags.projectName ?? "my-gb-app";

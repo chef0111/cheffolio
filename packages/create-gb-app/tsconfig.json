@@ -14,7 +14,7 @@
     "isolatedModules": true,
     "resolveJsonModule": true,
     "paths": {
-      "@/*": ["./*"]
+      "#/*": ["./src/*"]
     },
     "types": ["bun"]
   },

@@ -1,6 +1,6 @@
-import { setFile } from "../files";
-import { joinPath, libDir } from "../paths";
-import type { EmitCtx } from "../types";
+import { setFile } from "#/generate/files";
+import { joinPath, libDir } from "#/generate/paths";
+import type { EmitCtx } from "#/generate/types";
 
 export function emitDrizzle(ctx: EmitCtx): void {
   ctx.pkg.dependencies["drizzle-orm"] = "^0.44.5";

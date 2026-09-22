@@ -1,7 +1,7 @@
 import { beforeAll, expect, test } from "bun:test";
 import { testRender } from "@opentui/react/test-utils";
 import { createElement } from "react";
-import { App } from "../src/tui/app";
+import { App } from "#/tui/app";
 
 beforeAll(async () => {
   const setup = await testRender(createElement(App, { initialFlags: {} }), {

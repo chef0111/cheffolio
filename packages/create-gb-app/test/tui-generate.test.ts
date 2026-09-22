@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { runWizardGenerate } from "../src/tui/run-generate";
+import { runWizardGenerate } from "#/tui/run-generate";
 
 test("wizard generate reports CompatError instead of rejecting", async () => {
   const stderr = process.stderr.write;

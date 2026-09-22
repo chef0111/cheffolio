@@ -1,5 +1,5 @@
-import { setFile } from "../files";
-import type { EmitCtx } from "../types";
+import { setFile } from "#/generate/files";
+import type { EmitCtx } from "#/generate/types";
 
 export function emitNotes(ctx: EmitCtx): void {
   if (ctx.stack.backend === "convex") {

@@ -2,10 +2,10 @@ import { expect, test } from "bun:test";
 import { mkdir, mkdtemp, readdir, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { inferPackageManager } from "../src/cli/package-manager";
-import { buildTree } from "../src/generate/build-tree";
-import { writeTree } from "../src/generate/write-tree";
-import { resolveStack } from "../src/stack/resolve";
+import { inferPackageManager } from "#/cli/package-manager";
+import { buildTree } from "#/generate/build-tree";
+import { writeTree } from "#/generate/write-tree";
+import { resolveStack } from "#/stack/resolve";
 import {
   buildTree as publicBuildTree,
   resolveStack as publicResolveStack,
