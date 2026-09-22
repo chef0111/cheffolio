@@ -1,0 +1,6 @@
+PASS trees match
+src files=43 bin files=43
+src: done: wrote 31 files to D:\tmp\cga-gb8-live\src-yes
+
+bin: done: wrote 31 files to D:\tmp\cga-gb8-live\bin-yes
+

@@ -1,0 +1,4 @@
+gb6 bun test: 1718ms code=0
+head bun test: 895ms code=0
+ratio: 0.521
+PASS

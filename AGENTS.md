@@ -6,25 +6,27 @@ Next.js 16 (App Router) portfolio, blog, and shadcn registry website.
 
 ## Project structure
 
-| Directory                  | Purpose                                                  |
+| Directory | Purpose |
 | -------------------------- | -------------------------------------------------------- |
-| `app/`                     | App Router pages, layouts, API routes                    |
-| `components/cheffolio/`    | Shared UI components                                     |
-| `features/`                | Feature modules: `blog`, `portfolio`, `create`, `resume` |
-| `config/`                  | Site (`site.ts`), JSON-LD config                         |
-| `scripts/`                 | Build scripts (capture) run with Bun                     |
-| `hooks/`, `lib/`, `utils/` | Hooks, libraries, utilities                              |
-| `docs/`                    | Documentation content (blog, resume)                     |
+| `apps/web/` | Next.js site (App Router, blog, Create, resume) |
+| `packages/create-gb-app/` | CLI and generate/preset source the site imports |
+| `apps/web/app/` | App Router pages, layouts, API routes |
+| `apps/web/components/cheffolio/` | Shared UI components |
+| `apps/web/features/` | Feature modules: `blog`, `portfolio`, `create`, `resume` |
+| `apps/web/config/` | Site (`site.ts`), JSON-LD config |
+| `apps/web/scripts/` | Build scripts (capture) run with Bun |
+| `apps/web/hooks/`, `lib/`, `utils/` | Hooks, libraries, utilities |
+| `apps/web/docs/` | Documentation content (blog, resume) |
 
 ## Content system
 
-All content lives in `docs/blog/` and `docs/resume/` as MDX files.
+All content lives in `apps/web/docs/blog/` and `apps/web/docs/resume/` as MDX files.
 
-- **Data layer**: `features/blog/lib/data.ts` (`getAllDocs`, `getDocBySlug`)
-- **Blog UI**: `features/blog/components/`
-- **Portfolio UI**: `features/portfolio/components/`
-- **Create UI**: `features/create/components/`
-- **Resume UI**: `features/resume/components/`
+- **Data layer**: `apps/web/features/blog/lib/data.ts` (`getAllDocs`, `getDocBySlug`)
+- **Blog UI**: `apps/web/features/blog/components/`
+- **Portfolio UI**: `apps/web/features/portfolio/components/`
+- **Create UI**: `apps/web/features/create/components/`
+- **Resume UI**: `apps/web/features/resume/components/`
 
 ## Coding guidelines
 
@@ -44,8 +46,8 @@ All content lives in `docs/blog/` and `docs/resume/` as MDX files.
 ## Commands
 
 ```bash
-bun run dev                 # Dev server
-bun run build               # Production build
+bun run dev                 # Dev server (`turbo run dev --filter=web`)
+bun run build               # Production build (`turbo run build --filter=web`)
 bun run lint                # ESLint
 bun run lint:fix            # ESLint with --fix
 bun run format              # Prettier
@@ -57,16 +59,8 @@ bun run capture:sync        # Capture screenshots of components and sync to R2
 bun run render:resume       # Render resume PDF
 ```
 
+Website scripts also run with `bun run --filter web <script>`.
+
 ### Local dev URL
 
-A dev server is usually already running behind `https://cheffolio.localhost` (see `allowedDevOrigins` in `next.config.ts` and `NEXT_PUBLIC_APP_URL` in `.env.local`). Use that origin to test pages and routes, never `http://localhost:3000` or a raw port. It also makes generated absolute URLs match what the code produces.
-
-<!-- BEGIN:nextjs-agent-rules -->
-
-# This is NOT the Next.js you know
-
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
-
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
-
-<!-- END:nextjs-agent-rules -->
+A dev server is usually already running behind `https://cheffolio.localhost` (see Portless `"cheffolio"` on the `web` package and `NEXT_PUBLIC_APP_URL` in `apps/web/.env.local`). Use that origin to test pages and routes, never `http://localhost:3000` or a raw port. It also makes generated absolute URLs match what the code produces.

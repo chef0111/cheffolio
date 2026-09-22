@@ -1,0 +1,2 @@
+Windows host has no tmux. Binary uses createCliRenderer screenMode alternate-screen and exitOnCtrlC. Headless (non-TTY) never loads OpenTUI.
+PASS documented Windows TTY gap; unit TUI tests still cover Backend on first frame.

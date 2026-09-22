@@ -1,0 +1,21 @@
+polar better-auth
+PASS
+import { betterAuth } from "better-auth";
+import { polar } from "@polar-sh/better-auth";
+import { prismaAdapter } from "better-auth/adapters/prisma";
+import { prisma } from "./db";
+import { nextCookies } from "better-auth/next-js";
+
+export const auth = betterAuth({
+  database: prismaAdapter(prisma, {
+    provider: "postgresql",
+  }),
+  emailAndPassword: {
+    enabled: true,
+  },
+  plugins: [
+    polar({
+      createCustomerOnSignUp: true,
+      products: [{ slug: "pro", name: "Pro" }],
+    }), nextCookies()],
+});

@@ -1,0 +1,3 @@
+sqlite no docker
+PASS compose=false
+DATABASE_URL="file:./dev.db"

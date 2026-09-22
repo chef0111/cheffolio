@@ -1,0 +1,4 @@
+PASS
+compile=dist/create-gb-app-windows-x64/bin/create-gb-app.exe
+wrapper-bin=./bin/create-gb-app.mjs
+--yes --no-install --no-git wrote 31 files

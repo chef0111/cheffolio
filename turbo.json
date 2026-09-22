@@ -1,0 +1,20 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+    "build": {
+      "outputs": [".next/**", "!.next/cache/**", "public/resume.pdf"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "lint": {},
+    "lint:fix": {
+      "cache": false
+    },
+    "test": {
+      "cache": false
+    },
+    "typecheck": {}
+  }
+}

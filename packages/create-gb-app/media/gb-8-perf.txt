@@ -1,0 +1,3 @@
+src --help 190ms
+binary --help 232ms
+PASS under 1.5s

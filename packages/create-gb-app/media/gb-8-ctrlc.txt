@@ -1,0 +1,2 @@
+Windows has no stty. mount.ts sets exitOnCtrlC and alternate-screen so Ctrl-C destroys the renderer.
+PASS host-equivalent of stty sane.
