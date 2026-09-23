@@ -102,10 +102,10 @@ export function resolveStack(raw: RawFlags): Stack {
     throw new CompatError(RULE_IDS.betterAuthRequiresDatabase);
   }
 
-  if (backend === "nest") {
+  if (backend === "nest" || backend === "hono") {
     return {
       frontend,
-      backend: "nest",
+      backend,
       api,
       database,
       orm,

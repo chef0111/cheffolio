@@ -1,23 +1,23 @@
 import { setFile } from "#/generate/files";
-import { isStart } from "#/generate/paths";
+import { isAppsLayout, isStart } from "#/generate/paths";
 import type { EmitCtx } from "#/generate/types";
 
 export function emitStripe(ctx: EmitCtx): void {
   ctx.pkg.dependencies.stripe = "^18.5.0";
-  const webhookPath = isStart(ctx.stack)
-    ? "src/routes/api/stripe/webhook.ts"
-    : ctx.stack.backend === "nest"
-      ? "apps/server/src/stripe.webhook.ts"
+  const webhookPath = isAppsLayout(ctx.stack)
+    ? "apps/server/src/stripe.webhook.ts"
+    : isStart(ctx.stack)
+      ? "src/routes/api/stripe/webhook.ts"
       : "app/api/stripe/webhook/route.ts";
-  const portalPath = isStart(ctx.stack)
-    ? "src/routes/portal.tsx"
-    : ctx.stack.backend === "nest"
-      ? "apps/web/app/portal/page.tsx"
+  const portalPath = isAppsLayout(ctx.stack)
+    ? "apps/web/app/portal/page.tsx"
+    : isStart(ctx.stack)
+      ? "src/routes/portal.tsx"
       : "app/portal/page.tsx";
-  const checkoutPath = isStart(ctx.stack)
-    ? "src/routes/api/stripe/checkout.ts"
-    : ctx.stack.backend === "nest"
-      ? "apps/server/src/stripe.checkout.ts"
+  const checkoutPath = isAppsLayout(ctx.stack)
+    ? "apps/server/src/stripe.checkout.ts"
+    : isStart(ctx.stack)
+      ? "src/routes/api/stripe/checkout.ts"
       : "app/api/stripe/checkout/route.ts";
 
   setFile(

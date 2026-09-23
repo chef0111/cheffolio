@@ -1,5 +1,5 @@
 export const FRONTENDS = ["next", "tanstack-start"] as const;
-export const BACKENDS = ["self", "nest", "convex"] as const;
+export const BACKENDS = ["self", "nest", "convex", "hono"] as const;
 export const APIS = ["orpc", "trpc", "none"] as const;
 export const DATABASES = ["postgres", "sqlite", "mysql", "none"] as const;
 export const ORMS = ["prisma", "drizzle", "none"] as const;

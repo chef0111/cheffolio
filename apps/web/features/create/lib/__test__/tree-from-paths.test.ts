@@ -3,6 +3,7 @@ import { expect, test } from 'bun:test';
 import { defaultSelectedPath } from '../../data/file-map';
 import {
   collectFolderIds,
+  countTreeEntries,
   treeFromPaths,
   treeNodeId,
 } from '../tree-from-paths';
@@ -67,6 +68,22 @@ test('collectFolderIds expands every folder with children', () => {
   const tree = treeFromPaths(['src/lib/utils.ts', 'package.json'], 'demo');
 
   expect(collectFolderIds(tree)).toEqual(['root:demo', 'src', 'src/lib']);
+});
+
+test('countTreeEntries counts nested folders and files, excluding root', () => {
+  const tree = treeFromPaths(
+    ['package.json', 'app/page.tsx', 'app/layout.tsx', 'lib/utils.ts'],
+    'my-gb-app'
+  );
+
+  expect(countTreeEntries(tree)).toEqual({ folders: 2, files: 4 });
+});
+
+test('countTreeEntries is zero for an empty project root', () => {
+  expect(countTreeEntries(treeFromPaths([], 'empty'))).toEqual({
+    folders: 0,
+    files: 0,
+  });
 });
 
 test('default selected path prefers package.json', () => {

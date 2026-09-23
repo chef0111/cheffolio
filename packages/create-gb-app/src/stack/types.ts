@@ -78,9 +78,16 @@ export type NestStack = Shared &
     monorepo: true;
   };
 
+export type HonoStack = Shared &
+  Relational & {
+    backend: "hono";
+    api: Api;
+    monorepo: true;
+  };
+
 export type ConvexStack = Shared & {
   backend: "convex";
   monorepo: false;
 };
 
-export type Stack = SelfStack | NestStack | ConvexStack;
+export type Stack = SelfStack | NestStack | HonoStack | ConvexStack;

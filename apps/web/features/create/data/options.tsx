@@ -9,7 +9,8 @@ import {
   DockerIcon,
   DrizzleIcon,
   EslintIcon,
-  MysqlIcon,
+  HonoIcon,
+  MySql,
   NeonIcon,
   NestIcon,
   NextIcon,
@@ -76,8 +77,14 @@ export const FLAG_OPTIONS: { [K in FlagGroup]: readonly FlagOption<K>[] } = {
     {
       value: 'convex',
       label: 'Convex',
-      description: 'Reactive backend-as-a-service',
+      description: 'Reactive backend-as-a-service with TypeScript',
       icon: ConvexIcon,
+    },
+    {
+      value: 'hono',
+      label: 'Hono',
+      description: 'Web framework built on Web Standards',
+      icon: HonoIcon,
     },
   ],
   api: [
@@ -103,44 +110,39 @@ export const FLAG_OPTIONS: { [K in FlagGroup]: readonly FlagOption<K>[] } = {
     {
       value: 'postgres',
       label: 'PostgreSQL',
-      description: 'Advanced Open Source Relational Database',
+      description: 'Advanced open-source Relational Database',
       icon: PostgresIcon,
     },
     {
       value: 'sqlite',
       label: 'SQLite',
-      description: 'Small, fast, and reliable embedded database',
+      description: 'Small, fast, and reliable Embedded Database',
       icon: SqliteIcon,
     },
     {
       value: 'mysql',
       label: 'MySQL',
-      description: 'Relational SQL',
-      icon: MysqlIcon,
+      description: 'Most popular open-source Relational Database',
+      icon: MySql,
     },
     {
       value: 'none',
       label: 'None',
-      description: 'No database',
+      description: 'Skip database integration',
     },
   ],
   orm: [
     {
       value: 'prisma',
       label: 'Prisma',
-      description: 'Typed ORM',
+      description: 'Type-safe ORM for TypeScript and Node.js',
       icon: PrismaIcon,
     },
     {
       value: 'drizzle',
       label: 'Drizzle',
-      description: 'SQL-first ORM',
+      description: 'Next gen headless TypeScript ORM',
       icon: DrizzleIcon,
-    },
-    {
-      value: 'none',
-      label: 'None',
-      description: 'No ORM',
     },
   ],
   dbSetup: [

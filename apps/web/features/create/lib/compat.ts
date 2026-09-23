@@ -41,10 +41,10 @@ export const RULE_MESSAGES: Record<RuleId, string> = {
   'nest-oxlint': 'Nest Oxlint generate is not implemented yet',
   'polar-requires-better-auth': 'Polar requires Better Auth',
   'payments-require-auth': 'Payments require auth',
-  'convex-database-off': 'Convex cannot use a database',
+  'convex-database-off': 'Convex provides its own database',
   'convex-api-off': 'Convex cannot use an API layer',
   'convex-orm-off': 'Convex cannot use an ORM',
-  'convex-db-setup-off': 'Convex cannot use db-setup',
+  'convex-db-setup-off': 'Convex rolls its own database setup',
   'sqlite-docker-forbidden': 'SQLite cannot use docker',
   'neon-requires-postgres': 'Neon requires Postgres',
   'supabase-requires-postgres': 'Supabase requires Postgres',
@@ -306,6 +306,7 @@ function applyBackendSideEffects(
         dbSetup: 'none',
       };
     case 'self':
+    case 'hono':
       return flags;
     default: {
       const _exhaustive: never = backend;

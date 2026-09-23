@@ -1,5 +1,5 @@
 import { setFile } from "#/generate/files";
-import { joinPath, libDir } from "#/generate/paths";
+import { isAppsLayout, joinPath, libDir } from "#/generate/paths";
 import type { EmitCtx } from "#/generate/types";
 
 export function emitDrizzle(ctx: EmitCtx): void {
@@ -8,18 +8,18 @@ export function emitDrizzle(ctx: EmitCtx): void {
   ctx.pkg.scripts["db:generate"] = "drizzle-kit generate";
   ctx.pkg.scripts["db:push"] = "drizzle-kit push";
 
-  const schemaPath =
-    ctx.stack.backend === "nest"
-      ? "apps/server/src/schema.ts"
-      : joinPath(libDir(ctx.stack), "schema.ts");
-  const clientPath =
-    ctx.stack.backend === "nest"
-      ? "apps/server/src/db.ts"
-      : joinPath(libDir(ctx.stack), "db.ts");
+  const schemaPath = isAppsLayout(ctx.stack)
+    ? "apps/server/src/schema.ts"
+    : joinPath(libDir(ctx.stack), "schema.ts");
+  const clientPath = isAppsLayout(ctx.stack)
+    ? "apps/server/src/db.ts"
+    : joinPath(libDir(ctx.stack), "db.ts");
   const driver =
     ctx.stack.backend === "convex"
       ? "postgresql"
-      : ctx.stack.backend === "self" || ctx.stack.backend === "nest"
+      : ctx.stack.backend === "self" ||
+          ctx.stack.backend === "nest" ||
+          ctx.stack.backend === "hono"
         ? ctx.stack.database
         : "postgres";
 
@@ -63,7 +63,7 @@ export const db = drizzle(process.env.DATABASE_URL as string, { schema });
 
   setFile(
     ctx.files,
-    ctx.stack.backend === "nest" ? "apps/server/drizzle.config.ts" : "drizzle.config.ts",
+    isAppsLayout(ctx.stack) ? "apps/server/drizzle.config.ts" : "drizzle.config.ts",
     `import { defineConfig } from "drizzle-kit";
 
 export default defineConfig({

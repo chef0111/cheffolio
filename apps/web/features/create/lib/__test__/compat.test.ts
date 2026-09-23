@@ -36,6 +36,16 @@ test('nest plus default eslint side-effects to biome', () => {
   expect(disabledRuleId(next, 'linter', 'oxlint')).toBe('nest-oxlint');
 });
 
+test('hono keeps eslint and leaves tRPC enabled', () => {
+  const next = applyFlagChange(YES_DEFAULTS, 'backend', 'hono');
+  expect(next).toEqual({ ...YES_DEFAULTS, backend: 'hono' });
+  expect(disabledRuleId(next, 'api', 'trpc')).toBeNull();
+  expect(disabledRuleId(next, 'linter', 'eslint')).toBeNull();
+  expect(
+    disabledRuleId({ ...YES_DEFAULTS, backend: 'nest' }, 'api', 'trpc')
+  ).toBe('nest-trpc');
+});
+
 test('nest plus oxlint side-effects to biome', () => {
   const next = applyFlagChange(
     { ...YES_DEFAULTS, linter: 'oxlint' },

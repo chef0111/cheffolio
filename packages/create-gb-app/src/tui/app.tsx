@@ -28,6 +28,7 @@ const BACKEND_OPTIONS = [
   { name: "Self", description: "API in the same app", value: "self" },
   { name: "Nest", description: "apps/web, apps/server, packages/contract", value: "nest" },
   { name: "Convex", description: "convex/ directory", value: "convex" },
+  { name: "Hono", description: "apps/web, apps/server, @hono/node-server", value: "hono" },
 ];
 
 const FRONTEND_OPTIONS = [
@@ -173,7 +174,7 @@ export function App({ initialFlags = {}, onExit, onGenerate }: AppProps) {
           <text>Backend</text>
           <select
             focused={focus === "backend"}
-            height={3}
+            height={4}
             showDescription={false}
             options={BACKEND_OPTIONS}
             selectedIndex={indexOfValue(BACKEND_OPTIONS, flags.backend)}

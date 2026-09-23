@@ -48,6 +48,31 @@ export function collectFolderIds(node: TreeNode): string[] {
   return ids;
 }
 
+/** Counts nested folders and files under `node`. The root folder itself is excluded. */
+export function countTreeEntries(node: TreeNode): {
+  folders: number;
+  files: number;
+} {
+  let folders = 0;
+  let files = 0;
+
+  const walk = (current: TreeNode, isRoot: boolean) => {
+    if (current.kind === 'file') {
+      files += 1;
+      return;
+    }
+    if (!isRoot) {
+      folders += 1;
+    }
+    for (const child of current.children ?? []) {
+      walk(child, false);
+    }
+  };
+
+  walk(node, true);
+  return { folders, files };
+}
+
 function insertFile(folders: Map<string, TreeNode>, filePath: string): void {
   const segments = filePath.split('/').filter(Boolean);
   if (segments.length === 0) {
