@@ -15,8 +15,6 @@ export { YES_DEFAULTS };
 
 export const RULE_IDS = {
   nestTrpc: 'nest-trpc',
-  nestEslint: 'nest-eslint',
-  nestOxlint: 'nest-oxlint',
   polarRequiresBetterAuth: 'polar-requires-better-auth',
   paymentsRequireAuth: 'payments-require-auth',
   convexDatabaseOff: 'convex-database-off',
@@ -37,8 +35,6 @@ export type RuleId = (typeof RULE_IDS)[keyof typeof RULE_IDS];
 
 export const RULE_MESSAGES: Record<RuleId, string> = {
   'nest-trpc': 'Nest tRPC generate is not implemented yet',
-  'nest-eslint': 'Nest ESLint generate is not implemented yet',
-  'nest-oxlint': 'Nest Oxlint generate is not implemented yet',
   'polar-requires-better-auth': 'Polar requires Better Auth',
   'payments-require-auth': 'Payments require auth',
   'convex-database-off': 'Convex provides its own database',
@@ -132,15 +128,6 @@ function disabledRule(
 
   if (group === 'api' && flags.backend === 'nest' && value === 'trpc') {
     return RULE_IDS.nestTrpc;
-  }
-
-  if (group === 'linter' && flags.backend === 'nest') {
-    if (value === 'eslint') {
-      return RULE_IDS.nestEslint;
-    }
-    if (value === 'oxlint') {
-      return RULE_IDS.nestOxlint;
-    }
   }
 
   if (
@@ -296,7 +283,9 @@ function applyBackendSideEffects(
 ): CreateFlags {
   switch (backend) {
     case 'nest':
-      return { ...flags, linter: 'biome' };
+    case 'self':
+    case 'hono':
+      return flags;
     case 'convex':
       return {
         ...flags,
@@ -305,9 +294,6 @@ function applyBackendSideEffects(
         orm: 'none',
         dbSetup: 'none',
       };
-    case 'self':
-    case 'hono':
-      return flags;
     default: {
       const _exhaustive: never = backend;
       throw new Error(`unhandled backend: ${_exhaustive}`);

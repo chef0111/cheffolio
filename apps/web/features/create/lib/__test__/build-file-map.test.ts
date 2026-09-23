@@ -132,14 +132,84 @@ test('hono api none preview has no packages/contract', () => {
   expect(result.files['apps/server/src/index.ts']).toContain('"/notes"');
 });
 
-test('nest plus eslint is a generate gap', () => {
+test('nest plus start returns a FileMap', () => {
+  const flags = normalizeFlags({
+    ...YES_DEFAULTS,
+    backend: 'nest',
+    frontend: 'tanstack-start',
+  });
+  const result = buildCreateFileMap(flags, 'nest-start');
+  expect(result.ok).toBe(true);
+  if (!result.ok) {
+    return;
+  }
+  expect(result.files['apps/server/package.json']).toContain('@nestjs/core');
+  expect(result.files['apps/web/vite.config.ts']).toContain('tanstackStart');
+  expect(result.files['apps/web/src/routes/__root.tsx']).toBeDefined();
+  expect(result.files['apps/web/src/components/providers.tsx']).toBeDefined();
+  expect(result.files['package.json']).toContain('"dev": "turbo dev"');
+  expect(result.files['vite.config.ts']).toBeUndefined();
+  expect(result.files['src/routes/__root.tsx']).toBeUndefined();
+  expect(result.files['packages/contract/package.json']).toBeDefined();
+});
+
+test('nest plus start with api none omits the contract', () => {
+  const flags = normalizeFlags({
+    ...YES_DEFAULTS,
+    backend: 'nest',
+    frontend: 'tanstack-start',
+    api: 'none',
+  });
+  const result = buildCreateFileMap(flags, 'nest-start-rest');
+  expect(result.ok).toBe(true);
+  if (!result.ok) {
+    return;
+  }
+  expect(
+    Object.keys(result.files).some((path) =>
+      path.startsWith('packages/contract/')
+    )
+  ).toBe(false);
+  expect(result.files['apps/server/src/notes.controller.ts']).toContain(
+    '@Controller("notes")'
+  );
+  expect(result.files['apps/web/src/routes/notes.tsx']).toBeDefined();
+});
+
+test('nest plus start with trpc stays disabled', () => {
+  const flags = normalizeFlags({
+    ...YES_DEFAULTS,
+    backend: 'nest',
+    frontend: 'tanstack-start',
+    api: 'trpc',
+  });
+  expect(flags.api).not.toBe('trpc');
   const result = buildCreateFileMap(
-    { ...YES_DEFAULTS, backend: 'nest' },
-    'nest-app'
+    {
+      ...YES_DEFAULTS,
+      backend: 'nest',
+      frontend: 'tanstack-start',
+      api: 'trpc',
+      linter: 'biome',
+    },
+    'nest-start-trpc'
   );
   expect(result.ok).toBe(false);
   if (result.ok) {
     return;
   }
-  expect(result.code).toBe('nest-eslint');
+  expect(result.code).toBe('nest-trpc');
+});
+
+test('nest plus eslint returns a FileMap', () => {
+  const result = buildCreateFileMap(
+    { ...YES_DEFAULTS, backend: 'nest' },
+    'nest-app'
+  );
+  expect(result.ok).toBe(true);
+  if (!result.ok) {
+    return;
+  }
+  expect(result.files['eslint.config.mjs']).toBeDefined();
+  expect(result.files['apps/server/package.json']).toContain('@nestjs/core');
 });

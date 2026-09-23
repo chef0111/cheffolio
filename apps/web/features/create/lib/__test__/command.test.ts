@@ -4,7 +4,7 @@ import { decodePreset, YES_DEFAULTS } from 'create-gb-app/preset';
 import { convertNpmCommand } from '@/lib/convert-npm-command';
 
 import { buildCommand, encodePreset, isSelectable } from '../command';
-import { applyFlagChange, normalizeFlags } from '../compat';
+import { applyFlagChange, disabledRuleId, normalizeFlags } from '../compat';
 
 test('default command copies --preset gb0', () => {
   expect(buildCommand(YES_DEFAULTS)).toBe(
@@ -47,12 +47,28 @@ test('tanstack-start copies a packed --preset', () => {
   expect(decodePreset('gb1').frontend).toBe('tanstack-start');
 });
 
+test('nest plus start copies a packed --preset', () => {
+  const flags = applyFlagChange(
+    applyFlagChange(YES_DEFAULTS, 'backend', 'nest'),
+    'frontend',
+    'tanstack-start'
+  );
+  expect(flags.linter).toBe('eslint');
+  expect(flags.frontend).toBe('tanstack-start');
+  expect(disabledRuleId(flags, 'api', 'trpc')).toBe('nest-trpc');
+  const command = buildCommand(flags);
+  expect(command.startsWith('npx create-gb-app my-gb-app --preset ')).toBe(
+    true
+  );
+  const code = command.slice('npx create-gb-app my-gb-app --preset '.length);
+  expect(decodePreset(code)).toEqual(flags);
+});
+
 test('nest copies a packed --preset', () => {
   const flags = applyFlagChange(YES_DEFAULTS, 'backend', 'nest');
-  expect(buildCommand(flags)).toBe(
-    'npx create-gb-app my-gb-app --preset gb8wy'
-  );
-  expect(decodePreset('gb8wy')).toEqual(flags);
+  expect(flags.linter).toBe('eslint');
+  expect(buildCommand(flags)).toBe('npx create-gb-app my-gb-app --preset gb2');
+  expect(decodePreset('gb2')).toEqual(flags);
 });
 
 test('hono copies a packed --preset and leaves gb0 alone', () => {
