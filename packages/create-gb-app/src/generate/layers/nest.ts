@@ -1,54 +1,52 @@
-import { GenerateError } from "#/generate/errors";
-import { workspaceProtocol } from "#/generate/workspace-protocol";
-import { setFile } from "#/generate/files";
-import type { EmitCtx } from "#/generate/types";
-import { emitBiome } from "#/generate/layers/biome";
-import { emitDbSetup } from "#/generate/layers/db-setup";
-import { emitDrizzle } from "#/generate/layers/drizzle";
-import { emitPostgres } from "#/generate/layers/postgres";
-import { emitPrisma } from "#/generate/layers/prisma";
+import { GenerateError } from '#/generate/errors';
+import { workspaceProtocol } from '#/generate/workspace-protocol';
+import { setFile } from '#/generate/files';
+import type { EmitCtx } from '#/generate/types';
+import { emitBiome } from '#/generate/layers/biome';
+import { emitDbSetup } from '#/generate/layers/db-setup';
+import { emitDrizzle } from '#/generate/layers/drizzle';
+import { emitPostgres } from '#/generate/layers/postgres';
+import { emitPrisma } from '#/generate/layers/prisma';
+import {
+  emitStartWebApp,
+  startPassthroughProviders,
+} from '#/generate/layers/start';
 
 function proto(ctx: EmitCtx): string {
   return workspaceProtocol(ctx.packageManager);
 }
 
 export function emitNest(ctx: EmitCtx): void {
-  if (ctx.stack.backend !== "nest") {
-    throw new Error("emitNest requires nest");
+  if (ctx.stack.backend !== 'nest') {
+    throw new Error('emitNest requires nest');
   }
-  if (ctx.stack.frontend !== "next") {
+  if (ctx.stack.api === 'trpc') {
     throw new GenerateError(
-      "nest-start",
-      "nest Start generate is not implemented yet",
-    );
-  }
-  if (ctx.stack.api === "trpc") {
-    throw new GenerateError(
-      "nest-trpc",
-      "nest trpc generate is not implemented yet",
+      'nest-trpc',
+      'nest trpc generate is not implemented yet'
     );
   }
 
   const dep = proto(ctx);
   ctx.pkg.private = true;
-  ctx.pkg.scripts.dev = "turbo dev";
-  ctx.pkg.scripts.build = "turbo build";
-  ctx.pkg.scripts.lint = "turbo lint";
-  ctx.pkg.devDependencies.turbo = "^2.5.6";
-  ctx.pkg.devDependencies.typescript = "^5.9.2";
-  ctx.pkg.workspaces = ["apps/*", "packages/*"];
+  ctx.pkg.scripts.dev = 'turbo dev';
+  ctx.pkg.scripts.build = 'turbo build';
+  ctx.pkg.scripts.lint = 'turbo lint';
+  ctx.pkg.devDependencies.turbo = '^2.5.6';
+  ctx.pkg.devDependencies.typescript = '^5.9.2';
+  ctx.pkg.workspaces = ['apps/*', 'packages/*'];
 
-  if (ctx.stack.database !== "none") {
+  if (ctx.stack.database !== 'none') {
     emitPostgres(ctx);
     switch (ctx.stack.orm) {
-      case "prisma":
+      case 'prisma':
         emitPrisma(ctx);
         break;
-      case "drizzle":
+      case 'drizzle':
         emitDrizzle(ctx);
         break;
-      case "none":
-        throw new Error("orm none requires database none");
+      case 'none':
+        throw new Error('orm none requires database none');
       default: {
         const _exhaustive: never = ctx.stack.orm;
         throw new Error(`unhandled orm: ${_exhaustive}`);
@@ -59,32 +57,48 @@ export function emitNest(ctx: EmitCtx): void {
 
   setFile(
     ctx.files,
-    "turbo.json",
+    'turbo.json',
     JSON.stringify(
       {
-        $schema: "https://turborepo.dev/schema.json",
+        $schema: 'https://turborepo.dev/schema.json',
         tasks: {
           build: {
-            dependsOn: ["^build"],
-            outputs: ["dist/**", ".next/**", "!.next/cache/**"],
+            dependsOn: ['^build'],
+            outputs: turboBuildOutputs(ctx.stack.frontend),
           },
           dev: { cache: false, persistent: true },
-          lint: { dependsOn: ["^lint"] },
+          lint: { dependsOn: ['^lint'] },
         },
       },
       null,
-      2,
-    ),
+      2
+    )
   );
 
+  if (ctx.stack.frontend === 'tanstack-start') {
+    setFile(
+      ctx.files,
+      '.gitignore',
+      `node_modules
+.turbo
+.next
+.output
+.vinxi
+dist
+.env
+*.log
+`
+    );
+  }
+
   emitTypescriptConfig(ctx, dep);
-  if (ctx.stack.api === "orpc") {
+  if (ctx.stack.api === 'orpc') {
     emitContract(ctx, dep);
   }
   emitUiPackage(ctx, dep);
-  if (ctx.stack.database === "none") {
+  if (ctx.stack.database === 'none') {
     emitShellServer(ctx, dep);
-  } else if (ctx.stack.api === "none") {
+  } else if (ctx.stack.api === 'none') {
     emitRestServer(ctx, dep);
   } else {
     emitServer(ctx, dep);
@@ -92,18 +106,18 @@ export function emitNest(ctx: EmitCtx): void {
   emitWeb(ctx, dep);
 
   switch (ctx.stack.linter) {
-    case "biome":
+    case 'biome':
       emitBiome(ctx);
       break;
-    case "eslint":
+    case 'eslint':
       throw new GenerateError(
-        "nest-eslint",
-        "nest eslint generate is not implemented yet",
+        'nest-eslint',
+        'nest eslint generate is not implemented yet'
       );
-    case "oxlint":
+    case 'oxlint':
       throw new GenerateError(
-        "nest-oxlint",
-        "nest oxlint generate is not implemented yet",
+        'nest-oxlint',
+        'nest oxlint generate is not implemented yet'
       );
     default: {
       const _exhaustive: never = ctx.stack.linter;
@@ -115,72 +129,72 @@ export function emitNest(ctx: EmitCtx): void {
 function emitTypescriptConfig(ctx: EmitCtx, _dep: string): void {
   setFile(
     ctx.files,
-    "packages/typescript-config/package.json",
+    'packages/typescript-config/package.json',
     JSON.stringify(
       {
-        name: "@repo/typescript-config",
-        version: "0.0.0",
+        name: '@repo/typescript-config',
+        version: '0.0.0',
         private: true,
-        files: ["base.json"],
+        files: ['base.json'],
       },
       null,
-      2,
-    ),
+      2
+    )
   );
   setFile(
     ctx.files,
-    "packages/typescript-config/base.json",
+    'packages/typescript-config/base.json',
     JSON.stringify(
       {
         compilerOptions: {
           strict: true,
-          target: "ES2022",
-          module: "ESNext",
-          moduleResolution: "bundler",
+          target: 'ES2022',
+          module: 'ESNext',
+          moduleResolution: 'bundler',
           skipLibCheck: true,
         },
       },
       null,
-      2,
-    ),
+      2
+    )
   );
 }
 
 function emitContract(ctx: EmitCtx, dep: string): void {
   setFile(
     ctx.files,
-    "packages/contract/package.json",
+    'packages/contract/package.json',
     JSON.stringify(
       {
-        name: "@repo/contract",
-        version: "0.0.0",
+        name: '@repo/contract',
+        version: '0.0.0',
         private: true,
-        type: "module",
-        exports: { ".": "./src/index.ts" },
+        type: 'module',
+        exports: { '.': './src/index.ts' },
         dependencies: {
-          "@orpc/contract": "beta",
-          "@orpc/openapi": "beta",
-          zod: "^4.1.5",
+          '@orpc/contract': 'beta',
+          '@orpc/openapi': 'beta',
+          zod: '^4.1.5',
         },
         devDependencies: {
-          "@repo/typescript-config": dep,
+          '@repo/typescript-config': dep,
         },
       },
       null,
-      2,
-    ),
+      2
+    )
   );
 
   setFile(
     ctx.files,
-    "packages/contract/src/index.ts",
+    'packages/contract/src/index.ts',
     `export { contract } from "./contract";
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "packages/contract/src/contract.ts",
+    'packages/contract/src/contract.ts',
     `import { oc } from "@orpc/contract";
 import { openapi } from "@orpc/openapi";
 import { z } from "zod";
@@ -227,54 +241,54 @@ export const contract = {
       .output(z.object({ ok: z.literal(true) })),
   },
 };
-`,
+`
   );
 }
 
 function emitUiPackage(ctx: EmitCtx, dep: string): void {
   setFile(
     ctx.files,
-    "packages/ui/package.json",
+    'packages/ui/package.json',
     JSON.stringify(
       {
-        name: "@repo/ui",
-        version: "0.0.0",
+        name: '@repo/ui',
+        version: '0.0.0',
         private: true,
-        type: "module",
+        type: 'module',
         exports: {
-          "./button": "./src/button.tsx",
-          "./input": "./src/input.tsx",
-          "./card": "./src/card.tsx",
-          "./utils": "./src/utils.ts",
+          './button': './src/button.tsx',
+          './input': './src/input.tsx',
+          './card': './src/card.tsx',
+          './utils': './src/utils.ts',
         },
         dependencies: {
-          clsx: "^2.1.1",
-          "tailwind-merge": "^3.3.1",
-          react: "^19.1.1",
+          clsx: '^2.1.1',
+          'tailwind-merge': '^3.3.1',
+          react: '^19.1.1',
         },
         devDependencies: {
-          "@repo/typescript-config": dep,
-          "@types/react": "^19.1.12",
+          '@repo/typescript-config': dep,
+          '@types/react': '^19.1.12',
         },
       },
       null,
-      2,
-    ),
+      2
+    )
   );
   setFile(
     ctx.files,
-    "packages/ui/src/utils.ts",
+    'packages/ui/src/utils.ts',
     `import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
-`,
+`
   );
   setFile(
     ctx.files,
-    "packages/ui/src/button.tsx",
+    'packages/ui/src/button.tsx',
     `import type { ButtonHTMLAttributes } from "react";
 import { cn } from "./utils";
 
@@ -292,11 +306,11 @@ export function Button({
     />
   );
 }
-`,
+`
   );
   setFile(
     ctx.files,
-    "packages/ui/src/input.tsx",
+    'packages/ui/src/input.tsx',
     `import type { InputHTMLAttributes } from "react";
 import { cn } from "./utils";
 
@@ -314,11 +328,11 @@ export function Input({
     />
   );
 }
-`,
+`
   );
   setFile(
     ctx.files,
-    "packages/ui/src/card.tsx",
+    'packages/ui/src/card.tsx',
     `import type { HTMLAttributes } from "react";
 import { cn } from "./utils";
 
@@ -330,48 +344,48 @@ export function Card({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
     />
   );
 }
-`,
+`
   );
 }
 
 function emitShellServer(ctx: EmitCtx, dep: string): void {
   setFile(
     ctx.files,
-    "apps/server/package.json",
+    'apps/server/package.json',
     JSON.stringify(
       {
-        name: "server",
-        version: "0.0.0",
+        name: 'server',
+        version: '0.0.0',
         private: true,
-        type: "module",
+        type: 'module',
         scripts: {
-          dev: "tsx watch src/main.ts",
-          start: "node dist/main.js",
-          build: "tsc",
+          dev: 'tsx watch src/main.ts',
+          start: 'node dist/main.js',
+          build: 'tsc',
         },
         dependencies: {
-          "@nestjs/common": "^11.1.6",
-          "@nestjs/core": "^11.1.6",
-          "@nestjs/platform-express": "^11.1.6",
-          "reflect-metadata": "^0.2.2",
-          rxjs: "^7.8.2",
+          '@nestjs/common': '^11.1.6',
+          '@nestjs/core': '^11.1.6',
+          '@nestjs/platform-express': '^11.1.6',
+          'reflect-metadata': '^0.2.2',
+          rxjs: '^7.8.2',
         },
         devDependencies: {
-          "@repo/typescript-config": dep,
-          "@types/express": "^5.0.3",
-          "@types/node": "^24.3.1",
-          tsx: "^4.20.5",
-          typescript: "^5.9.2",
+          '@repo/typescript-config': dep,
+          '@types/express': '^5.0.3',
+          '@types/node': '^24.3.1',
+          tsx: '^4.20.5',
+          typescript: '^5.9.2',
         },
       },
       null,
-      2,
-    ),
+      2
+    )
   );
 
   setFile(
     ctx.files,
-    "apps/server/src/main.ts",
+    'apps/server/src/main.ts',
     `import "reflect-metadata";
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
@@ -382,70 +396,70 @@ async function bootstrap() {
 }
 
 void bootstrap();
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "apps/server/src/app.module.ts",
+    'apps/server/src/app.module.ts',
     `import { Module } from "@nestjs/common";
 
 @Module({})
 export class AppModule {}
-`,
+`
   );
 }
 
 function emitRestServer(ctx: EmitCtx, dep: string): void {
-  if (ctx.stack.backend !== "nest") {
-    throw new Error("emitRestServer requires nest");
+  if (ctx.stack.backend !== 'nest') {
+    throw new Error('emitRestServer requires nest');
   }
-  const authed = ctx.stack.auth === "better-auth";
+  const authed = ctx.stack.auth === 'better-auth';
   const dependencies: Record<string, string> = {
-    "@nestjs/common": "^11.1.6",
-    "@nestjs/core": "^11.1.6",
-    "@nestjs/platform-express": "^11.1.6",
-    "@prisma/client": "^6.16.1",
-    "reflect-metadata": "^0.2.2",
-    rxjs: "^7.8.2",
+    '@nestjs/common': '^11.1.6',
+    '@nestjs/core': '^11.1.6',
+    '@nestjs/platform-express': '^11.1.6',
+    '@prisma/client': '^6.16.1',
+    'reflect-metadata': '^0.2.2',
+    rxjs: '^7.8.2',
   };
   if (authed) {
-    dependencies["@thallesp/nestjs-better-auth"] = "^2.2.0";
-    dependencies["better-auth"] = "^1.3.8";
+    dependencies['@thallesp/nestjs-better-auth'] = '^2.2.0';
+    dependencies['better-auth'] = '^1.3.8';
   }
 
   setFile(
     ctx.files,
-    "apps/server/package.json",
+    'apps/server/package.json',
     JSON.stringify(
       {
-        name: "server",
-        version: "0.0.0",
+        name: 'server',
+        version: '0.0.0',
         private: true,
-        type: "module",
+        type: 'module',
         scripts: {
-          dev: "tsx watch src/main.ts",
-          start: "node dist/main.js",
-          build: "tsc",
+          dev: 'tsx watch src/main.ts',
+          start: 'node dist/main.js',
+          build: 'tsc',
         },
         dependencies,
         devDependencies: {
-          "@repo/typescript-config": dep,
-          "@types/express": "^5.0.3",
-          "@types/node": "^24.3.1",
-          prisma: "^6.16.1",
-          tsx: "^4.20.5",
-          typescript: "^5.9.2",
+          '@repo/typescript-config': dep,
+          '@types/express': '^5.0.3',
+          '@types/node': '^24.3.1',
+          prisma: '^6.16.1',
+          tsx: '^4.20.5',
+          typescript: '^5.9.2',
         },
       },
       null,
-      2,
-    ),
+      2
+    )
   );
 
   setFile(
     ctx.files,
-    "apps/server/src/main.ts",
+    'apps/server/src/main.ts',
     `import "reflect-metadata";
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
@@ -464,12 +478,12 @@ async function bootstrap() {
 }
 
 void bootstrap();
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "apps/server/src/app.module.ts",
+    'apps/server/src/app.module.ts',
     authed
       ? `import { Module } from "@nestjs/common";
 import { AuthModule } from "@thallesp/nestjs-better-auth";
@@ -497,13 +511,13 @@ import { NotesController } from "./notes.controller";
   controllers: [NotesController],
 })
 export class AppModule {}
-`,
+`
   );
 
   if (authed) {
     setFile(
       ctx.files,
-      "apps/server/src/auth.ts",
+      'apps/server/src/auth.ts',
       `import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./db";
@@ -513,7 +527,7 @@ export const auth = betterAuth({
   emailAndPassword: { enabled: true },
   trustedOrigins: ["http://localhost:3000"],
 });
-`,
+`
     );
   }
 
@@ -538,99 +552,99 @@ async function requireUserId(request: Request) {
 
   setFile(
     ctx.files,
-    "apps/server/src/notes.controller.ts",
-    `import { Body, Controller, Delete, Get, Param, Patch, Post${authed ? ", Req" : ""} } from "@nestjs/common";
-${authed ? `import type { Request } from "express";\n` : ""}${sessionLookup}
+    'apps/server/src/notes.controller.ts',
+    `import { Body, Controller, Delete, Get, Param, Patch, Post${authed ? ', Req' : ''} } from "@nestjs/common";
+${authed ? `import type { Request } from "express";\n` : ''}${sessionLookup}
 @Controller("notes")
 export class NotesController {
   @Get()
-  async list(${authed ? "@Req() request: Request" : ""}) {
-    ${authed ? "const userId = await requireUserId(request);" : ""}
+  async list(${authed ? '@Req() request: Request' : ''}) {
+    ${authed ? 'const userId = await requireUserId(request);' : ''}
     return prisma.note.findMany({
-      ${authed ? "where: { userId }," : ""}
+      ${authed ? 'where: { userId },' : ''}
       orderBy: { createdAt: "desc" },
     });
   }
 
   @Post()
-  async create(${authed ? "@Req() request: Request, " : ""}@Body() body: { title: string; body: string }) {
-    ${authed ? "const userId = await requireUserId(request);" : ""}
+  async create(${authed ? '@Req() request: Request, ' : ''}@Body() body: { title: string; body: string }) {
+    ${authed ? 'const userId = await requireUserId(request);' : ''}
     return prisma.note.create({
       data: {
         title: body.title,
         body: body.body,
-        ${authed ? "userId," : ""}
+        ${authed ? 'userId,' : ''}
       },
     });
   }
 
   @Patch(":id")
   async update(
-    ${authed ? "@Req() request: Request, " : ""}@Param("id") id: string,
+    ${authed ? '@Req() request: Request, ' : ''}@Param("id") id: string,
     @Body() body: { title: string; body: string },
   ) {
-    ${authed ? "const userId = await requireUserId(request);\n    const note = await prisma.note.findFirst({ where: { id, userId } });\n    if (!note) {\n      throw new Error(\"NOT_FOUND\");\n    }\n    " : ""}return prisma.note.update({
-      where: { id${authed ? ": note.id" : ""} },
+    ${authed ? 'const userId = await requireUserId(request);\n    const note = await prisma.note.findFirst({ where: { id, userId } });\n    if (!note) {\n      throw new Error("NOT_FOUND");\n    }\n    ' : ''}return prisma.note.update({
+      where: { id${authed ? ': note.id' : ''} },
       data: { title: body.title, body: body.body },
     });
   }
 
   @Delete(":id")
-  async remove(${authed ? "@Req() request: Request, " : ""}@Param("id") id: string) {
-    ${authed ? "const userId = await requireUserId(request);\n    const note = await prisma.note.findFirst({ where: { id, userId } });\n    if (!note) {\n      throw new Error(\"NOT_FOUND\");\n    }\n    " : ""}await prisma.note.delete({ where: { id${authed ? ": note.id" : ""} } });
+  async remove(${authed ? '@Req() request: Request, ' : ''}@Param("id") id: string) {
+    ${authed ? 'const userId = await requireUserId(request);\n    const note = await prisma.note.findFirst({ where: { id, userId } });\n    if (!note) {\n      throw new Error("NOT_FOUND");\n    }\n    ' : ''}await prisma.note.delete({ where: { id${authed ? ': note.id' : ''} } });
     return { ok: true };
   }
 }
-`,
+`
   );
 }
 
 function emitServer(ctx: EmitCtx, dep: string): void {
   setFile(
     ctx.files,
-    "apps/server/package.json",
+    'apps/server/package.json',
     JSON.stringify(
       {
-        name: "server",
-        version: "0.0.0",
+        name: 'server',
+        version: '0.0.0',
         private: true,
-        type: "module",
+        type: 'module',
         scripts: {
-          dev: "tsx watch src/main.ts",
-          start: "node dist/main.js",
-          build: "tsc",
+          dev: 'tsx watch src/main.ts',
+          start: 'node dist/main.js',
+          build: 'tsc',
         },
         dependencies: {
-          "@nestjs/common": "^11.1.6",
-          "@nestjs/core": "^11.1.6",
-          "@nestjs/platform-express": "^11.1.6",
-          "@orpc/nest": "beta",
-          "@orpc/openapi": "beta",
-          "@orpc/server": "beta",
-          "@prisma/client": "^6.16.1",
-          "@repo/contract": dep,
-          "@thallesp/nestjs-better-auth": "^2.2.0",
-          "better-auth": "^1.3.8",
-          "reflect-metadata": "^0.2.2",
-          rxjs: "^7.8.2",
+          '@nestjs/common': '^11.1.6',
+          '@nestjs/core': '^11.1.6',
+          '@nestjs/platform-express': '^11.1.6',
+          '@orpc/nest': 'beta',
+          '@orpc/openapi': 'beta',
+          '@orpc/server': 'beta',
+          '@prisma/client': '^6.16.1',
+          '@repo/contract': dep,
+          '@thallesp/nestjs-better-auth': '^2.2.0',
+          'better-auth': '^1.3.8',
+          'reflect-metadata': '^0.2.2',
+          rxjs: '^7.8.2',
         },
         devDependencies: {
-          "@repo/typescript-config": dep,
-          "@types/express": "^5.0.3",
-          "@types/node": "^24.3.1",
-          prisma: "^6.16.1",
-          tsx: "^4.20.5",
-          typescript: "^5.9.2",
+          '@repo/typescript-config': dep,
+          '@types/express': '^5.0.3',
+          '@types/node': '^24.3.1',
+          prisma: '^6.16.1',
+          tsx: '^4.20.5',
+          typescript: '^5.9.2',
         },
       },
       null,
-      2,
-    ),
+      2
+    )
   );
 
   setFile(
     ctx.files,
-    "apps/server/src/main.ts",
+    'apps/server/src/main.ts',
     `import "reflect-metadata";
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
@@ -649,12 +663,12 @@ async function bootstrap() {
 }
 
 void bootstrap();
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "apps/server/src/app.module.ts",
+    'apps/server/src/app.module.ts',
     `import { type ExecutionContext, Module } from "@nestjs/common";
 import { ORPCModule } from "@orpc/nest";
 import { AuthModule } from "@thallesp/nestjs-better-auth";
@@ -680,12 +694,12 @@ import { NotesController } from "./notes.controller";
   controllers: [NotesController],
 })
 export class AppModule {}
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "apps/server/src/auth.ts",
+    'apps/server/src/auth.ts',
     `import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./db";
@@ -695,12 +709,12 @@ export const auth = betterAuth({
   emailAndPassword: { enabled: true },
   trustedOrigins: ["http://localhost:3000"],
 });
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "apps/server/src/notes.controller.ts",
+    'apps/server/src/notes.controller.ts',
     `import { Controller } from "@nestjs/common";
 import { Implement } from "@orpc/nest";
 import { ORPCError, implement } from "@orpc/server";
@@ -812,74 +826,400 @@ export class NotesController {
       });
   }
 }
-`,
+`
   );
 }
 
-function emitWebShell(ctx: EmitCtx, dep: string): void {
-  if (ctx.stack.backend !== "nest") {
-    throw new Error("emitWebShell requires nest");
+const SERVER_URL = 'http://localhost:3333';
+
+function turboBuildOutputs(frontend: 'next' | 'tanstack-start'): string[] {
+  switch (frontend) {
+    case 'next':
+      return ['dist/**', '.next/**', '!.next/cache/**'];
+    case 'tanstack-start':
+      return [
+        'dist/**',
+        '.next/**',
+        '!.next/cache/**',
+        '.output/**',
+        '.vinxi/**',
+      ];
+    default: {
+      const _exhaustive: never = frontend;
+      throw new Error(`unhandled frontend: ${_exhaustive}`);
+    }
   }
-  const notes = ctx.stack.database !== "none" && ctx.stack.api === "none";
-  const authClient = ctx.stack.auth === "better-auth";
+}
+
+function emitNestStartWeb(ctx: EmitCtx, dep: string): void {
+  if (ctx.stack.backend !== 'nest') {
+    throw new Error('emitNestStartWeb requires nest');
+  }
+
+  const orpcWeb = ctx.stack.api === 'orpc' && ctx.stack.database !== 'none';
+  const restNotes = ctx.stack.api === 'none' && ctx.stack.database !== 'none';
+  const dependencies: Record<string, string> = {
+    '@repo/ui': dep,
+    '@tanstack/react-router': '^1.132.0',
+    '@tanstack/react-router-devtools': '^1.132.0',
+    '@tanstack/react-start': '^1.132.0',
+    react: '^19.1.1',
+    'react-dom': '^19.1.1',
+  };
+  if (orpcWeb || ctx.stack.auth === 'better-auth') {
+    dependencies['better-auth'] = '^1.3.8';
+  }
+  if (orpcWeb) {
+    dependencies['@orpc/client'] = 'beta';
+    dependencies['@orpc/contract'] = 'beta';
+    dependencies['@orpc/openapi'] = 'beta';
+    dependencies['@orpc/tanstack-query'] = 'beta';
+    dependencies['@repo/contract'] = dep;
+    dependencies['@tanstack/react-query'] = '^5.89.0';
+  }
+
+  emitStartWebApp(ctx, {
+    dependencies,
+    devDependencies: {
+      '@repo/typescript-config': dep,
+      '@tailwindcss/vite': '^4.1.13',
+      '@types/node': '^24.3.1',
+      '@types/react': '^19.1.12',
+      '@types/react-dom': '^19.1.9',
+      '@vitejs/plugin-react': '^5.0.2',
+      tailwindcss: '^4.1.13',
+      typescript: '^5.9.2',
+      vite: '^7.1.5',
+      'vite-tsconfig-paths': '^5.1.4',
+    },
+    providers: orpcWeb ? nestStartOrpcProviders() : startPassthroughProviders(),
+    notesLink: ctx.stack.database !== 'none',
+  });
+
+  if (orpcWeb || ctx.stack.auth === 'better-auth') {
+    setFile(
+      ctx.files,
+      'apps/web/src/lib/auth-client.ts',
+      `import { createAuthClient } from "better-auth/react";
+
+export const authClient = createAuthClient({
+  baseURL: import.meta.env.VITE_SERVER_URL ?? "${SERVER_URL}",
+});
+`
+    );
+  }
+
+  if (orpcWeb) {
+    setFile(
+      ctx.files,
+      'apps/web/src/lib/orpc-link.ts',
+      `import { OpenAPILink } from "@orpc/openapi/fetch";
+import { contract } from "@repo/contract";
+
+export function createOrpcLink(getHeaders?: () => Promise<Record<string, string>>) {
+  return new OpenAPILink(contract, {
+    url: import.meta.env.VITE_SERVER_URL ?? "${SERVER_URL}",
+    fetch: (url, init) =>
+      globalThis.fetch(url, {
+        ...init,
+        credentials: "include",
+      }),
+    ...(getHeaders ? { headers: getHeaders } : {}),
+  });
+}
+`
+    );
+    setFile(
+      ctx.files,
+      'apps/web/src/lib/orpc.ts',
+      `import { createORPCClient } from "@orpc/client";
+import type { RouterContractClient } from "@orpc/contract";
+import { createTanstackQueryUtils } from "@orpc/tanstack-query";
+import type { contract } from "@repo/contract";
+import { createOrpcLink } from "./orpc-link";
+
+export const client: RouterContractClient<typeof contract> = createORPCClient(
+  createOrpcLink(),
+);
+
+export const orpc = createTanstackQueryUtils(client);
+`
+    );
+    setFile(
+      ctx.files,
+      'apps/web/src/lib/query-client.ts',
+      `import { QueryClient } from "@tanstack/react-query";
+
+export function getQueryClient() {
+  return new QueryClient();
+}
+`
+    );
+    setFile(
+      ctx.files,
+      'apps/web/src/routes/notes.tsx',
+      nestStartOrpcNotesRoute()
+    );
+    setFile(ctx.files, 'apps/web/src/routes/login.tsx', nestStartLoginRoute());
+    return;
+  }
+
+  if (restNotes) {
+    setFile(
+      ctx.files,
+      'apps/web/src/routes/notes.tsx',
+      nestStartRestNotesRoute()
+    );
+  }
+}
+
+function nestStartOrpcProviders(): string {
+  return `import type { ReactNode } from "react";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { getQueryClient } from "../lib/query-client";
+
+export function Providers(props: { children: ReactNode }) {
+  const queryClient = getQueryClient();
+  return (
+    <QueryClientProvider client={queryClient}>
+      {props.children}
+    </QueryClientProvider>
+  );
+}
+`;
+}
+
+function nestStartOrpcNotesRoute(): string {
+  return `import { useState } from "react";
+import { Link, createFileRoute } from "@tanstack/react-router";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { orpc } from "@/lib/orpc";
+import { Button } from "@repo/ui/button";
+import { Card } from "@repo/ui/card";
+import { Input } from "@repo/ui/input";
+
+export const Route = createFileRoute("/notes")({
+  component: NotesPage,
+});
+
+function NotesPage() {
+  const queryClient = useQueryClient();
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const notes = useQuery(orpc.notes.list.queryOptions());
+  const create = useMutation(
+    orpc.notes.create.mutationOptions({
+      onSuccess: async () => {
+        setTitle("");
+        setBody("");
+        await queryClient.invalidateQueries();
+      },
+    }),
+  );
+
+  return (
+    <main className="mx-auto flex min-h-screen max-w-xl flex-col gap-6 p-8">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-semibold">Notes</h1>
+        <Link className="text-sm underline" to="/login">
+          Login
+        </Link>
+      </div>
+      <form
+        className="flex flex-col gap-3"
+        onSubmit={(event) => {
+          event.preventDefault();
+          create.mutate({ title, body });
+        }}
+      >
+        <Input name="title" placeholder="Title" value={title} onChange={(event) => setTitle(event.target.value)} required />
+        <Input name="body" placeholder="Body" value={body} onChange={(event) => setBody(event.target.value)} />
+        <Button type="submit" disabled={create.isPending}>Add note</Button>
+      </form>
+      <ul className="flex flex-col gap-3">
+        {(notes.data ?? []).map((note) => (
+          <li key={note.id}>
+            <Card className="p-4">
+              <h2 className="font-medium">{note.title}</h2>
+              <p className="text-sm opacity-80">{note.body}</p>
+            </Card>
+          </li>
+        ))}
+      </ul>
+    </main>
+  );
+}
+`;
+}
+
+function nestStartLoginRoute(): string {
+  return `import { useState } from "react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { authClient } from "@/lib/auth-client";
+
+export const Route = createFileRoute("/login")({
+  component: LoginPage,
+});
+
+function LoginPage() {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [mode, setMode] = useState<"signin" | "signup">("signin");
+
+  async function onSubmit(event: React.FormEvent) {
+    event.preventDefault();
+    const result =
+      mode === "signup"
+        ? await authClient.signUp.email({ email, password, name })
+        : await authClient.signIn.email({ email, password });
+    if (result.error) {
+      return;
+    }
+    void navigate({ to: "/notes" });
+  }
+
+  return (
+    <main className="mx-auto flex min-h-screen max-w-sm flex-col justify-center p-8">
+      <form className="flex flex-col gap-3" onSubmit={onSubmit}>
+        {mode === "signup" ? (
+          <input name="name" value={name} onChange={(event) => setName(event.target.value)} required />
+        ) : null}
+        <input name="email" type="email" value={email} onChange={(event) => setEmail(event.target.value)} required />
+        <input name="password" type="password" value={password} onChange={(event) => setPassword(event.target.value)} required />
+        <button type="submit">{mode === "signin" ? "Sign in" : "Sign up"}</button>
+      </form>
+    </main>
+  );
+}
+`;
+}
+
+function nestStartRestNotesRoute(): string {
+  return `import { useState } from "react";
+import { createFileRoute } from "@tanstack/react-router";
+import { Button } from "@repo/ui/button";
+import { Card } from "@repo/ui/card";
+import { Input } from "@repo/ui/input";
+
+const serverUrl = import.meta.env.VITE_SERVER_URL ?? "${SERVER_URL}";
+
+type Note = { id: string; title: string; body: string };
+
+export const Route = createFileRoute("/notes")({
+  component: NotesPage,
+});
+
+function NotesPage() {
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [notes, setNotes] = useState<Note[]>([]);
+
+  return (
+    <main className="mx-auto flex min-h-screen max-w-xl flex-col gap-6 p-8">
+      <h1 className="text-2xl font-semibold">Notes</h1>
+      <form
+        className="flex flex-col gap-3"
+        onSubmit={(event) => {
+          event.preventDefault();
+          void fetch(serverUrl + "/notes", {
+            method: "POST",
+            credentials: "include",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ title, body }),
+          }).then(async () => {
+            setTitle("");
+            setBody("");
+            const response = await fetch(serverUrl + "/notes", { credentials: "include" });
+            setNotes(await response.json());
+          });
+        }}
+      >
+        <Input name="title" placeholder="Title" value={title} onChange={(event) => setTitle(event.target.value)} required />
+        <Input name="body" placeholder="Body" value={body} onChange={(event) => setBody(event.target.value)} />
+        <Button type="submit">Add note</Button>
+      </form>
+      <ul className="flex flex-col gap-3">
+        {notes.map((note) => (
+          <li key={note.id}>
+            <Card className="p-4">
+              <h2 className="font-medium">{note.title}</h2>
+              <p className="text-sm opacity-80">{note.body}</p>
+            </Card>
+          </li>
+        ))}
+      </ul>
+    </main>
+  );
+}
+`;
+}
+
+function emitWebShell(ctx: EmitCtx, dep: string): void {
+  if (ctx.stack.backend !== 'nest') {
+    throw new Error('emitWebShell requires nest');
+  }
+  const notes = ctx.stack.database !== 'none' && ctx.stack.api === 'none';
+  const authClient = ctx.stack.auth === 'better-auth';
 
   setFile(
     ctx.files,
-    "apps/web/package.json",
+    'apps/web/package.json',
     JSON.stringify(
       {
-        name: "web",
-        version: "0.0.0",
+        name: 'web',
+        version: '0.0.0',
         private: true,
-        type: "module",
+        type: 'module',
         scripts: {
-          dev: "next dev --port 3000",
-          build: "next build",
-          start: "next start",
+          dev: 'next dev --port 3000',
+          build: 'next build',
+          start: 'next start',
         },
         dependencies: {
-          "@repo/ui": dep,
-          ...(authClient ? { "better-auth": "^1.3.8" } : {}),
-          next: "^15.5.4",
-          react: "^19.1.1",
-          "react-dom": "^19.1.1",
+          '@repo/ui': dep,
+          ...(authClient ? { 'better-auth': '^1.3.8' } : {}),
+          next: '^15.5.4',
+          react: '^19.1.1',
+          'react-dom': '^19.1.1',
         },
         devDependencies: {
-          "@repo/typescript-config": dep,
-          "@tailwindcss/postcss": "^4.1.13",
-          "@types/node": "^24.3.1",
-          "@types/react": "^19.1.12",
-          "@types/react-dom": "^19.1.9",
-          tailwindcss: "^4.1.13",
-          typescript: "^5.9.2",
+          '@repo/typescript-config': dep,
+          '@tailwindcss/postcss': '^4.1.13',
+          '@types/node': '^24.3.1',
+          '@types/react': '^19.1.12',
+          '@types/react-dom': '^19.1.9',
+          tailwindcss: '^4.1.13',
+          typescript: '^5.9.2',
         },
       },
       null,
-      2,
-    ),
+      2
+    )
   );
 
   setFile(
     ctx.files,
-    "apps/web/next.config.ts",
+    'apps/web/next.config.ts',
     `import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {};
 
 export default nextConfig;
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "apps/web/app/globals.css",
+    'apps/web/app/globals.css',
     `@import "tailwindcss";
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "apps/web/app/layout.tsx",
+    'apps/web/app/layout.tsx',
     `import type { Metadata } from "next";
 import "./globals.css";
 
@@ -894,13 +1234,13 @@ export default function RootLayout({
     </html>
   );
 }
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "apps/web/app/page.tsx",
-    `${notes ? `import Link from "next/link";\n\n` : ""}export default function HomePage() {
+    'apps/web/app/page.tsx',
+    `${notes ? `import Link from "next/link";\n\n` : ''}export default function HomePage() {
   return (
     <main className="mx-auto flex min-h-screen max-w-xl flex-col gap-4 p-8">
       <h1 className="text-2xl font-semibold">${ctx.projectName}</h1>
@@ -911,12 +1251,12 @@ export default function RootLayout({
           Open notes
         </Link>
       </p>`
-          : ""
+          : ''
       }
     </main>
   );
 }
-`,
+`
   );
 
   if (!notes) {
@@ -925,7 +1265,7 @@ export default function RootLayout({
 
   setFile(
     ctx.files,
-    "apps/web/app/notes/notes-client.tsx",
+    'apps/web/app/notes/notes-client.tsx',
     `"use client";
 
 import { useState } from "react";
@@ -978,12 +1318,12 @@ export function NotesClient() {
     </div>
   );
 }
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "apps/web/app/notes/page.tsx",
+    'apps/web/app/notes/page.tsx',
     `import Link from "next/link";
 import { NotesClient } from "./notes-client";
 
@@ -998,86 +1338,97 @@ export default function NotesPage() {
     </main>
   );
 }
-`,
+`
   );
 }
 
 function emitWeb(ctx: EmitCtx, dep: string): void {
-  if (ctx.stack.backend !== "nest") {
-    throw new Error("emitWeb requires nest");
+  if (ctx.stack.backend !== 'nest') {
+    throw new Error('emitWeb requires nest');
   }
-  if (ctx.stack.api !== "orpc" || ctx.stack.database === "none") {
+  switch (ctx.stack.frontend) {
+    case 'tanstack-start':
+      emitNestStartWeb(ctx, dep);
+      return;
+    case 'next':
+      break;
+    default: {
+      const _exhaustive: never = ctx.stack.frontend;
+      throw new Error(`unhandled frontend: ${_exhaustive}`);
+    }
+  }
+  if (ctx.stack.api !== 'orpc' || ctx.stack.database === 'none') {
     emitWebShell(ctx, dep);
     return;
   }
 
-  const uiDeps = { "@repo/ui": dep };
+  const uiDeps = { '@repo/ui': dep };
 
   setFile(
     ctx.files,
-    "apps/web/package.json",
+    'apps/web/package.json',
     JSON.stringify(
       {
-        name: "web",
-        version: "0.0.0",
+        name: 'web',
+        version: '0.0.0',
         private: true,
-        type: "module",
+        type: 'module',
         scripts: {
-          dev: "next dev --port 3000",
-          build: "next build",
-          start: "next start",
+          dev: 'next dev --port 3000',
+          build: 'next build',
+          start: 'next start',
         },
         dependencies: {
-          "@orpc/client": "beta",
-          "@orpc/contract": "beta",
-          "@orpc/openapi": "beta",
-          "@orpc/tanstack-query": "beta",
-          "@repo/contract": dep,
+          '@orpc/client': 'beta',
+          '@orpc/contract': 'beta',
+          '@orpc/openapi': 'beta',
+          '@orpc/tanstack-query': 'beta',
+          '@repo/contract': dep,
           ...uiDeps,
-          "@tanstack/react-query": "^5.89.0",
-          "@tanstack/react-query-next-experimental": "^5.89.0",
-          "better-auth": "^1.3.8",
-          next: "^15.5.4",
-          react: "^19.1.1",
-          "react-dom": "^19.1.1",
-          "server-only": "^0.0.1",
+          '@tanstack/react-query': '^5.89.0',
+          '@tanstack/react-query-next-experimental': '^5.89.0',
+          'better-auth': '^1.3.8',
+          next: '^15.5.4',
+          react: '^19.1.1',
+          'react-dom': '^19.1.1',
+          'server-only': '^0.0.1',
         },
         devDependencies: {
-          "@repo/typescript-config": dep,
-          "@tailwindcss/postcss": "^4.1.13",
-          "@types/node": "^24.3.1",
-          "@types/react": "^19.1.12",
-          "@types/react-dom": "^19.1.9",
-          tailwindcss: "^4.1.13",
-          typescript: "^5.9.2",
+          '@repo/typescript-config': dep,
+          '@tailwindcss/postcss': '^4.1.13',
+          '@types/node': '^24.3.1',
+          '@types/react': '^19.1.12',
+          '@types/react-dom': '^19.1.9',
+          tailwindcss: '^4.1.13',
+          typescript: '^5.9.2',
         },
       },
       null,
-      2,
-    ),
+      2
+    )
   );
 
   setFile(
     ctx.files,
-    "apps/web/next.config.ts",
+    'apps/web/next.config.ts',
     `import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {};
 
 export default nextConfig;
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "apps/web/app/globals.css",
+    'apps/web/app/globals.css',
     `@import "tailwindcss";
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "apps/web/app/layout.tsx",
+    'apps/web/app/layout.tsx',
     `import type { Metadata } from "next";
 import { Providers } from "./providers";
 import "./globals.css";
@@ -1095,12 +1446,12 @@ export default function RootLayout({
     </html>
   );
 }
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "apps/web/app/page.tsx",
+    'apps/web/app/page.tsx',
     `import Link from "next/link";
 
 export default function HomePage() {
@@ -1115,12 +1466,12 @@ export default function HomePage() {
     </main>
   );
 }
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "apps/web/lib/orpc-link.ts",
+    'apps/web/lib/orpc-link.ts',
     `import { OpenAPILink } from "@orpc/openapi/fetch";
 import { contract } from "@repo/contract";
 
@@ -1135,12 +1486,12 @@ export function createOrpcLink(getHeaders?: () => Promise<Record<string, string>
     ...(getHeaders ? { headers: getHeaders } : {}),
   });
 }
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "apps/web/lib/orpc.ts",
+    'apps/web/lib/orpc.ts',
     `"use client";
 
 import { createORPCClient } from "@orpc/client";
@@ -1154,12 +1505,12 @@ export const client: RouterContractClient<typeof contract> = createORPCClient(
 );
 
 export const orpc = createTanstackQueryUtils(client);
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "apps/web/lib/orpc.server.ts",
+    'apps/web/lib/orpc.server.ts',
     `import "server-only";
 
 import { createORPCClient } from "@orpc/client";
@@ -1178,23 +1529,23 @@ export const client: RouterContractClient<typeof contract> = createORPCClient(
 );
 
 export const orpc = createTanstackQueryUtils(client);
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "apps/web/lib/query-client.ts",
+    'apps/web/lib/query-client.ts',
     `import { QueryClient } from "@tanstack/react-query";
 
 export function getQueryClient() {
   return new QueryClient();
 }
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "apps/web/app/providers.tsx",
+    'apps/web/app/providers.tsx',
     `"use client";
 
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -1208,18 +1559,18 @@ export function Providers(props: { children: React.ReactNode }) {
     </QueryClientProvider>
   );
 }
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "apps/web/lib/auth-client.ts",
+    'apps/web/lib/auth-client.ts',
     `import { createAuthClient } from "better-auth/react";
 
 export const authClient = createAuthClient({
   baseURL: process.env.NEXT_PUBLIC_SERVER_URL ?? "http://localhost:3333",
 });
-`,
+`
   );
 
   const buttonImport = `import { Button } from "@repo/ui/button";
@@ -1237,7 +1588,7 @@ import { Input } from "@repo/ui/input";`;
 
   setFile(
     ctx.files,
-    "apps/web/app/notes/notes-client.tsx",
+    'apps/web/app/notes/notes-client.tsx',
     `"use client";
 
 import { useState } from "react";
@@ -1281,12 +1632,12 @@ export function NotesClient() {
     </div>
   );
 }
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "apps/web/app/notes/page.tsx",
+    'apps/web/app/notes/page.tsx',
     `import Link from "next/link";
 import { NotesClient } from "./notes-client";
 
@@ -1303,12 +1654,12 @@ export default function NotesPage() {
     </main>
   );
 }
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "apps/web/app/login/page.tsx",
+    'apps/web/app/login/page.tsx',
     `"use client";
 
 import { useState } from "react";
@@ -1347,6 +1698,6 @@ export default function LoginPage() {
     </main>
   );
 }
-`,
+`
   );
 }
