@@ -1,5 +1,5 @@
 import { setFile } from "#/generate/files";
-import { isStart } from "#/generate/paths";
+import { isAppsLayout, isStart } from "#/generate/paths";
 import type { EmitCtx } from "#/generate/types";
 
 const POLAR_PLUGIN = `polar({
@@ -9,10 +9,10 @@ const POLAR_PLUGIN = `polar({
 
 export function emitPolar(ctx: EmitCtx): void {
   ctx.pkg.dependencies["@polar-sh/better-auth"] = "^1.4.0";
-  const portalPath = isStart(ctx.stack)
-    ? "src/routes/portal.tsx"
-    : ctx.stack.backend === "nest"
-      ? "apps/web/app/portal/page.tsx"
+  const portalPath = isAppsLayout(ctx.stack)
+    ? "apps/web/app/portal/page.tsx"
+    : isStart(ctx.stack)
+      ? "src/routes/portal.tsx"
       : "app/portal/page.tsx";
   setFile(
     ctx.files,
@@ -27,12 +27,11 @@ export function emitPolar(ctx: EmitCtx): void {
 }
 `,
   );
-  const authPath =
-    ctx.stack.backend === "nest"
-      ? "apps/server/src/auth.ts"
-      : isStart(ctx.stack)
-        ? "src/lib/auth.ts"
-        : "lib/auth.ts";
+  const authPath = isAppsLayout(ctx.stack)
+    ? "apps/server/src/auth.ts"
+    : isStart(ctx.stack)
+      ? "src/lib/auth.ts"
+      : "lib/auth.ts";
   const current = ctx.files[authPath] ?? "";
   if (!current || current.includes("@polar-sh/better-auth")) {
     return;

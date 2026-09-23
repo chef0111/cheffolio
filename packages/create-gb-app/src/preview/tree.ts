@@ -2,7 +2,8 @@ import type { Stack } from "#/stack/types";
 
 export function previewTree(stack: Stack): string {
   switch (stack.backend) {
-    case "nest": {
+    case "nest":
+    case "hono": {
       const rows = ["apps/web", "apps/server"];
       if (stack.api !== "none") {
         rows.push("packages/contract");

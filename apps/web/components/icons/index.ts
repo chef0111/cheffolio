@@ -10,6 +10,7 @@ export * from './drizzle';
 export * from './eslint';
 export * from './facebook';
 export * from './github';
+export * from './hono';
 export * from './javascript';
 export * from './linkedin';
 export * from './markdown';

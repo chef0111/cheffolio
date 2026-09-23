@@ -6,9 +6,10 @@ import { emitConvex } from "#/generate/layers/convex";
 import { emitDbSetup } from "#/generate/layers/db-setup";
 import { emitDrizzle } from "#/generate/layers/drizzle";
 import { emitEslintPrettier } from "#/generate/layers/eslint";
+import { emitHono } from "#/generate/layers/hono";
+import { emitNest } from "#/generate/layers/nest";
 import { emitPolar } from "#/generate/layers/polar";
 import { emitStripe } from "#/generate/layers/stripe";
-import { emitNest } from "#/generate/layers/nest";
 import { emitNext } from "#/generate/layers/next";
 import { emitNotes } from "#/generate/layers/notes";
 import { emitOrpc } from "#/generate/layers/orpc";
@@ -177,6 +178,9 @@ export function buildTree(stack: Stack, ctx: GenerateContext): FileMap {
     case "nest":
       emitNest(emitCtx);
       break;
+    case "hono":
+      emitHono(emitCtx);
+      break;
     case "convex":
       emitFrontend(stack, emitCtx);
       emitConvex(emitCtx);
@@ -187,7 +191,7 @@ export function buildTree(stack: Stack, ctx: GenerateContext): FileMap {
     }
   }
 
-  if (stack.backend !== "nest") {
+  if (stack.backend !== "nest" && stack.backend !== "hono") {
     emitAuth(stack, emitCtx);
     emitPayments(stack, emitCtx);
     emitUi(stack, emitCtx);
@@ -195,7 +199,7 @@ export function buildTree(stack: Stack, ctx: GenerateContext): FileMap {
     if (stack.backend === "convex" || stack.database !== "none") {
       emitNotes(emitCtx);
     }
-  } else {
+  } else if (stack.backend === "nest") {
     if (stack.auth === "clerk") {
       emitClerk(emitCtx);
     }

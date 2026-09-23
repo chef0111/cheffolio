@@ -55,6 +55,17 @@ test('nest copies a packed --preset', () => {
   expect(decodePreset('gb8wy')).toEqual(flags);
 });
 
+test('hono copies a packed --preset and leaves gb0 alone', () => {
+  const flags = applyFlagChange(YES_DEFAULTS, 'backend', 'hono');
+  expect(flags.linter).toBe('eslint');
+  expect(flags.api).toBe('orpc');
+  expect(buildCommand(flags)).toBe('npx create-gb-app my-gb-app --preset gb6');
+  expect(decodePreset('gb6')).toEqual(flags);
+  expect(buildCommand(YES_DEFAULTS)).toBe(
+    'npx create-gb-app my-gb-app --preset gb0'
+  );
+});
+
 test('convex copies a packed --preset with relational groups forced to none', () => {
   const flags = normalizeFlags({
     ...YES_DEFAULTS,

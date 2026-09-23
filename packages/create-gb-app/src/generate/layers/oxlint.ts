@@ -1,4 +1,5 @@
 import { setFile } from "#/generate/files";
+import { isAppsLayout } from "#/generate/paths";
 import type { EmitCtx } from "#/generate/types";
 
 export function emitOxlint(ctx: EmitCtx): void {
@@ -8,11 +9,9 @@ export function emitOxlint(ctx: EmitCtx): void {
   ctx.pkg.devDependencies.oxfmt = "^0.5.0";
 
   const nextRoot =
-    ctx.stack.backend === "nest"
-      ? { next: { rootDir: "apps/web" } }
-      : ctx.stack.frontend === "next"
-        ? { next: { rootDir: "." } }
-        : {};
+    ctx.stack.frontend === "next"
+      ? { next: { rootDir: isAppsLayout(ctx.stack) ? "apps/web" : "." } }
+      : {};
 
   setFile(
     ctx.files,

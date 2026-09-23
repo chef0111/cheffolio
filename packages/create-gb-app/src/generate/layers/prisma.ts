@@ -1,5 +1,5 @@
 import { setFile } from "#/generate/files";
-import { joinPath, libDir } from "#/generate/paths";
+import { isAppsLayout, joinPath, libDir } from "#/generate/paths";
 import type { EmitCtx } from "#/generate/types";
 
 export function emitPrisma(ctx: EmitCtx): void {
@@ -8,14 +8,12 @@ export function emitPrisma(ctx: EmitCtx): void {
   ctx.pkg.scripts["db:generate"] = "prisma generate";
   ctx.pkg.scripts["db:push"] = "prisma db push";
 
-  const dbPath =
-    ctx.stack.backend === "nest"
-      ? "apps/server/src/db.ts"
-      : joinPath(libDir(ctx.stack), "db.ts");
-  const schemaPath =
-    ctx.stack.backend === "nest"
-      ? "apps/server/prisma/schema.prisma"
-      : "prisma/schema.prisma";
+  const dbPath = isAppsLayout(ctx.stack)
+    ? "apps/server/src/db.ts"
+    : joinPath(libDir(ctx.stack), "db.ts");
+  const schemaPath = isAppsLayout(ctx.stack)
+    ? "apps/server/prisma/schema.prisma"
+    : "prisma/schema.prisma";
   const noteUser =
     ctx.stack.auth === "none"
       ? ""
@@ -98,7 +96,9 @@ model Verification {
   const provider =
     ctx.stack.backend === "convex"
       ? "postgresql"
-      : ctx.stack.backend === "self" || ctx.stack.backend === "nest"
+      : ctx.stack.backend === "self" ||
+          ctx.stack.backend === "nest" ||
+          ctx.stack.backend === "hono"
         ? ctx.stack.database === "mysql"
           ? "mysql"
           : ctx.stack.database === "sqlite"

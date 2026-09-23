@@ -79,6 +79,59 @@ test('default generate includes package.json', () => {
   expect(Object.keys(result.files).length).toBe(32);
 });
 
+test('hono next preview lists apps/server and @hono/node-server', () => {
+  const flags = normalizeFlags({ ...YES_DEFAULTS, backend: 'hono' });
+  const result = buildCreateFileMap(flags, 'hono-app');
+  expect(result.ok).toBe(true);
+  if (!result.ok) {
+    return;
+  }
+  expect(result.files['apps/server/package.json']).toContain(
+    '@hono/node-server'
+  );
+  expect(result.files['apps/web/package.json']).toBeDefined();
+  expect(result.files['README.md']).toContain(
+    'https://hono.dev/docs/getting-started/nodejs'
+  );
+});
+
+test('hono start preview lists apps/server', () => {
+  const flags = normalizeFlags({
+    ...YES_DEFAULTS,
+    backend: 'hono',
+    frontend: 'tanstack-start',
+  });
+  const result = buildCreateFileMap(flags, 'hono-start');
+  expect(result.ok).toBe(true);
+  if (!result.ok) {
+    return;
+  }
+  expect(result.files['apps/server/package.json']).toContain(
+    '@hono/node-server'
+  );
+  expect(result.files['apps/web/vite.config.ts']).toBeDefined();
+  expect(result.files['vite.config.ts']).toBeUndefined();
+});
+
+test('hono api none preview has no packages/contract', () => {
+  const flags = normalizeFlags({
+    ...YES_DEFAULTS,
+    backend: 'hono',
+    api: 'none',
+  });
+  const result = buildCreateFileMap(flags, 'hono-rest');
+  expect(result.ok).toBe(true);
+  if (!result.ok) {
+    return;
+  }
+  expect(
+    Object.keys(result.files).some((path) =>
+      path.startsWith('packages/contract/')
+    )
+  ).toBe(false);
+  expect(result.files['apps/server/src/index.ts']).toContain('"/notes"');
+});
+
 test('nest plus eslint is a generate gap', () => {
   const result = buildCreateFileMap(
     { ...YES_DEFAULTS, backend: 'nest' },
