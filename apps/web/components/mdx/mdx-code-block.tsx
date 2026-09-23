@@ -129,11 +129,11 @@ export function MDXCodeBlock({
       </Figcaption>
       {html ? (
         <div
-          className="bg-code [&_pre]:no-scrollbar min-h-0 flex-1 overflow-hidden rounded-[9px] border [&_pre]:h-full [&_pre]:overflow-y-auto [&_pre]:bg-transparent"
+          className="bg-code [&_pre]:no-scrollbar min-h-0 flex-1 overflow-hidden rounded-lg border [&_pre]:h-full [&_pre]:overflow-y-auto [&_pre]:bg-transparent"
           dangerouslySetInnerHTML={{ __html: html }}
         />
       ) : (
-        <div className="group/pre bg-code relative min-h-0 flex-1 overflow-auto rounded-[9px] border">
+        <div className="group/pre bg-code relative min-h-0 flex-1 overflow-auto rounded-lg border">
           <pre className="no-scrollbar h-full overflow-auto p-4 font-mono text-sm [--code-padding-right:6rem]">
             <code>{raw}</code>
           </pre>

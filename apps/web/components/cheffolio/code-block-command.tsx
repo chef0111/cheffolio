@@ -124,7 +124,7 @@ export function CodeBlockCommand({
               <code
                 data-slot="code-block"
                 data-language="bash"
-                className="text-muted-foreground flex items-center gap-1 p-4 font-mono text-sm/none not-group-data-[pm=prompt]/tabs-content-pre:overflow-x-auto group-data-[pm=prompt]/tabs-content-pre:whitespace-normal"
+                className="text-muted-foreground scroll-fade-x no-scrollbar flex items-center gap-1 p-4 font-mono text-sm/none not-group-data-[pm=prompt]/tabs-content-pre:overflow-x-auto group-data-[pm=prompt]/tabs-content-pre:whitespace-normal"
               >
                 <span className="select-none group-data-[pm=prompt]/tabs-content-pre:hidden">
                   <span className="select-none!">$ </span>

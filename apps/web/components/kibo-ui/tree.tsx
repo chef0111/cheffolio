@@ -153,14 +153,7 @@ export const TreeProvider = ({
         animateExpand,
       }}
     >
-      <motion.div
-        animate={{ opacity: 1, y: 0 }}
-        className={cn('w-full', className)}
-        initial={{ opacity: 0, y: 10 }}
-        transition={{ duration: 0.3, ease: 'easeOut' }}
-      >
-        {children}
-      </motion.div>
+      <div className={cn('w-full', className)}>{children}</div>
     </TreeContext.Provider>
   );
 };
@@ -168,7 +161,7 @@ export const TreeProvider = ({
 export type TreeViewProps = HTMLAttributes<HTMLDivElement>;
 
 export const TreeView = ({ className, children, ...props }: TreeViewProps) => (
-  <div className={cn('p-2', className)} role="tree" {...props}>
+  <div className={cn('w-full p-1.5', className)} role="tree" {...props}>
     {children}
   </div>
 );
@@ -222,7 +215,7 @@ export const TreeNode = ({
       <div
         aria-expanded={hasChildren ? isExpanded : undefined}
         aria-selected={isSelected}
-        className={cn('select-none', className)}
+        className={cn('w-full min-w-0 select-none', className)}
         role="treeitem"
         {...props}
       >
@@ -232,7 +225,7 @@ export const TreeNode = ({
   );
 };
 
-export type TreeNodeTriggerProps = ComponentProps<typeof motion.button>;
+export type TreeNodeTriggerProps = ComponentProps<'button'>;
 
 export const TreeNodeTrigger = ({
   children,
@@ -245,11 +238,12 @@ export const TreeNodeTrigger = ({
   const isSelected = selectedIds.includes(nodeId);
 
   return (
-    <motion.button
+    <button
       type="button"
+      {...props}
       className={cn(
-        'group relative mx-1 flex w-full cursor-pointer items-center rounded-md border-0 bg-transparent px-3 py-2 text-left transition-all duration-200',
-        'hover:bg-accent/50',
+        'group relative flex w-full min-w-0 cursor-pointer items-center rounded-md border-0 bg-transparent py-2 pr-3 text-left transition-colors duration-200',
+        'hover:bg-accent/50 active:bg-accent/60',
         isSelected && 'bg-accent/80',
         className
       )}
@@ -258,13 +252,14 @@ export const TreeNodeTrigger = ({
         handleSelection(nodeId, e.ctrlKey || e.metaKey);
         onClick?.(e);
       }}
-      style={{ paddingLeft: level * (indent ?? 0) + 8 }}
-      whileTap={{ scale: 0.98, transition: { duration: 0.1 } }}
-      {...props}
+      style={{
+        ...props.style,
+        paddingLeft: level * (indent ?? 0) + 8,
+      }}
     >
       <TreeLines />
-      {children as ReactNode}
-    </motion.button>
+      {children}
+    </button>
   );
 };
 
@@ -321,7 +316,7 @@ export const TreeLines = () => {
   );
 };
 
-export type TreeNodeContentProps = ComponentProps<typeof motion.div> & {
+export type TreeNodeContentProps = HTMLAttributes<HTMLDivElement> & {
   hasChildren?: boolean;
 };
 
@@ -336,7 +331,7 @@ export const TreeNodeContent = ({
   const isExpanded = expandedIds.has(nodeId);
 
   return (
-    <AnimatePresence>
+    <AnimatePresence initial={false}>
       {hasChildren && isExpanded && (
         <motion.div
           animate={{ height: 'auto', opacity: 1 }}
@@ -348,20 +343,13 @@ export const TreeNodeContent = ({
             ease: 'easeInOut',
           }}
         >
-          <motion.div
-            animate={{ y: 0 }}
-            className={className}
-            exit={{ y: -10 }}
-            initial={{ y: -10 }}
+          <div
+            className={cn('w-full min-w-0', className)}
             role="group"
-            transition={{
-              duration: animateExpand ? 0.2 : 0,
-              delay: animateExpand ? 0.1 : 0,
-            }}
             {...props}
           >
             {children}
-          </motion.div>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>
@@ -448,5 +436,8 @@ export const TreeIcon = ({
 export type TreeLabelProps = HTMLAttributes<HTMLSpanElement>;
 
 export const TreeLabel = ({ className, ...props }: TreeLabelProps) => (
-  <span className={cn('font flex-1 truncate text-sm', className)} {...props} />
+  <span
+    className={cn('min-w-0 flex-1 truncate text-sm', className)}
+    {...props}
+  />
 );

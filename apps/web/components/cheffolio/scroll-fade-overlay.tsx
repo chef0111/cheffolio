@@ -37,8 +37,8 @@ export function ScrollFadeOverlay({
         className={cn(
           'to-background from-transparent backdrop-blur-[1px]',
           isTop
-            ? 'h-(--fade-top-height) bg-linear-to-t mask-linear-[to_bottom,var(--background)_25%,transparent]'
-            : 'h-(--fade-bottom-height) bg-linear-to-b mask-linear-[to_top,var(--background)_25%,transparent]'
+            ? 'h-(--top-height) bg-linear-to-t mask-linear-[to_bottom,var(--background)_25%,transparent]'
+            : 'h-(--bottom-height) bg-linear-to-b mask-linear-[to_top,var(--background)_25%,transparent]'
         )}
       />
       <div

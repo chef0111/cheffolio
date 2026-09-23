@@ -2,6 +2,7 @@ import { FolderTree, Settings2Icon } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 
+import { Spinner } from '@/components/ui/spinner';
 import {
   Tabs,
   TabsContent,
@@ -22,16 +23,16 @@ const CreatePreview = dynamic(() =>
 export function CreateWorkspace() {
   return (
     <CreateProvider>
-      <div className="grid flex-1 grid-cols-1 border-x p-0 xl:grid-cols-3">
+      <div className="grid flex-1 grid-cols-1 border-x p-0 [--builder-height:calc(100svh-var(--top-height)-var(--bottom-height))] xl:grid-cols-3">
         <div className="gap-0 rounded-none bg-transparent ring-0 xl:col-span-1">
           <CreateNameField />
           <div className="border-b px-4 pb-3">
             <CreateCommand />
           </div>
         </div>
-        <div className="border-border xl:col-span-2 xl:border-l">
+        <div className="border-border h-(--builder-height) min-h-0 overflow-hidden xl:col-span-2 xl:border-l">
           <Tabs defaultValue="config" className="h-full gap-0">
-            <div className="flex items-center border-b px-4 py-0">
+            <div className="flex items-center border-b">
               <TabsList className="h-10 rounded-none inset-ring-0 dark:bg-transparent">
                 <TabsTrigger value="config">
                   <Settings2Icon /> Configure
@@ -45,8 +46,18 @@ export function CreateWorkspace() {
             <TabsContent value="config" className="overflow-auto">
               <CreateBuilder />
             </TabsContent>
-            <TabsContent value="preview" className="min-h-0 overflow-hidden">
-              <Suspense>
+            <TabsContent
+              value="preview"
+              className="h-full min-h-0 overflow-x-hidden"
+            >
+              <Suspense
+                fallback={
+                  <div className="rounded-mg flex h-full items-center justify-center gap-2 p-4">
+                    <Spinner className="size-4" />
+                    Loading…
+                  </div>
+                }
+              >
                 <CreatePreview />
               </Suspense>
             </TabsContent>

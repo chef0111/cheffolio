@@ -1,28 +1,33 @@
 'use client';
 
 import { type CreateFlags, FLAG_GROUPS } from 'create-gb-app/preset';
+import {
+  ChevronLeftIcon,
+  FilesIcon,
+  FoldersIcon,
+  InfoIcon,
+} from 'lucide-react';
 import { startTransition, useEffect, useMemo, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
-import { ButtonGroup } from '@/components/ui/button-group';
-import { Label } from '@/components/ui/label';
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from '@/components/ui/resizable';
-import { cn } from '@/lib/utils';
 
 import { defaultSelectedPath, type FileMap } from '../data/file-map';
 import { generatePreview } from '../lib/actions/generate-preview';
 import { resolveProjectName } from '../lib/command';
-import { treeFromPaths } from '../lib/tree-from-paths';
+import { countTreeEntries, treeFromPaths } from '../lib/tree-from-paths';
 import { CreateFilePreview } from './create-file-preview';
 import { useCreate } from './create-provider';
 import { CreateTree } from './create-tree';
 
 type NarrowPane = 'tree' | 'code';
 type PreviewResult = Awaited<ReturnType<typeof generatePreview>>;
+type PreviewTree = ReturnType<typeof treeFromPaths>;
+type PreviewFile = { path: string; contents: string };
 
 const EMPTY_FILES: FileMap = {};
 
@@ -73,88 +78,126 @@ export function CreatePreview() {
     );
   }
 
+  const onSelectPath = (path: string) => {
+    if (!(path in files)) {
+      return;
+    }
+    setSelectedPath(path);
+    setNarrowPane('code');
+  };
+
   return (
-    <div className="flex min-h-112 flex-col">
-      <CreatePreviewNarrowToggle
-        pane={narrowPane}
-        onPaneChange={setNarrowPane}
-      />
-      <ResizablePanelGroup
-        orientation="horizontal"
-        className="min-h-0 flex-1 max-lg:block"
-      >
-        <ResizablePanel
-          defaultSize={34}
-          minSize={18}
-          className={cn('min-h-0', narrowPane === 'code' && 'max-lg:hidden')}
+    <div className="flex h-full min-h-0 flex-col">
+      <div className="min-h-0 flex-1 overflow-hidden md:hidden">
+        {narrowPane === 'tree' ? (
+          <CreatePreviewTreePane
+            tree={tree}
+            selectedPath={resolvedPath}
+            onSelectPath={onSelectPath}
+          />
+        ) : (
+          <CreatePreviewCodePane
+            file={file}
+            onBack={() => {
+              setNarrowPane('tree');
+            }}
+          />
+        )}
+      </div>
+      <div className="hidden min-h-0 flex-1 md:flex">
+        <ResizablePanelGroup
+          orientation="horizontal"
+          className="min-h-0 flex-1"
         >
-          <div className="flex h-full min-h-0 flex-col">
-            <Label className="text-muted-foreground flex h-10 shrink-0 items-center px-4 text-sm">
-              Files
-            </Label>
-            <div className="bg-background min-h-0 flex-1 overflow-auto">
-              <CreateTree
-                tree={tree}
-                selectedPath={resolvedPath}
-                onSelectPath={(path) => {
-                  if (!(path in files)) {
-                    return;
-                  }
-                  setSelectedPath(path);
-                  setNarrowPane('code');
-                }}
-              />
-            </div>
-          </div>
-        </ResizablePanel>
-        <ResizableHandle withHandle className="max-lg:hidden" />
-        <ResizablePanel
-          defaultSize={66}
-          minSize={30}
-          className={cn('min-h-0', narrowPane === 'tree' && 'max-lg:hidden')}
-        >
-          <div className="h-full min-h-0 overflow-hidden p-1">
-            {file ? <CreateFilePreview key={file.path} file={file} /> : null}
-          </div>
-        </ResizablePanel>
-      </ResizablePanelGroup>
+          <ResizablePanel
+            defaultSize="32%"
+            minSize="28%"
+            className="min-h-0 overflow-y-auto"
+          >
+            <CreatePreviewTreePane
+              tree={tree}
+              selectedPath={resolvedPath}
+              onSelectPath={onSelectPath}
+            />
+          </ResizablePanel>
+          <ResizableHandle />
+          <ResizablePanel defaultSize="66%" minSize="50%" className="min-h-0">
+            <CreatePreviewCodePane file={file} />
+          </ResizablePanel>
+        </ResizablePanelGroup>
+      </div>
     </div>
   );
 }
 
-function CreatePreviewNarrowToggle({
-  pane,
-  onPaneChange,
+function CreatePreviewTreePane({
+  tree,
+  selectedPath,
+  onSelectPath,
 }: {
-  pane: NarrowPane;
-  onPaneChange: (pane: NarrowPane) => void;
+  tree: PreviewTree;
+  selectedPath: string;
+  onSelectPath: (path: string) => void;
+}) {
+  const { folders, files } = countTreeEntries(tree);
+
+  return (
+    <div className="flex h-full min-h-0 flex-col">
+      <div className="text-muted-foreground flex h-10 shrink-0 items-center justify-between border-b px-4 md:h-11.5">
+        <div className="flex items-center gap-4 text-xs [&_svg]:size-3.5">
+          <span className="flex items-center gap-1">
+            <FoldersIcon />
+            {folders} {folders === 1 ? 'folder' : 'folders'}
+          </span>
+          <span className="flex items-center gap-1">
+            <FilesIcon />
+            {files} {files === 1 ? 'file' : 'files'}
+          </span>
+        </div>
+        <InfoIcon className="size-4" />
+      </div>
+      <div className="bg-background scroll-fade min-h-0 flex-1 overflow-auto">
+        <CreateTree
+          tree={tree}
+          selectedPath={selectedPath}
+          onSelectPath={onSelectPath}
+        />
+      </div>
+    </div>
+  );
+}
+
+function CreatePreviewCodePane({
+  file,
+  onBack,
+}: {
+  file: PreviewFile | null;
+  onBack?: () => void;
 }) {
   return (
-    <div className="flex border-b px-3 py-2 lg:hidden">
-      <ButtonGroup>
-        <Button
-          type="button"
-          size="sm"
-          variant={pane === 'tree' ? 'secondary' : 'outline'}
-          aria-pressed={pane === 'tree'}
-          onClick={() => {
-            onPaneChange('tree');
-          }}
-        >
-          Tree
-        </Button>
-        <Button
-          type="button"
-          size="sm"
-          variant={pane === 'code' ? 'secondary' : 'outline'}
-          aria-pressed={pane === 'code'}
-          onClick={() => {
-            onPaneChange('code');
-          }}
-        >
-          Code
-        </Button>
-      </ButtonGroup>
+    <div className="flex h-full min-h-0 flex-col overflow-hidden">
+      {onBack && (
+        <div className="flex shrink-0 items-center gap-1 border-b px-2 py-1">
+          <Button
+            type="button"
+            size="sm"
+            variant="ghost"
+            onClick={onBack}
+            aria-label="Back to files"
+          >
+            <ChevronLeftIcon data-icon="inline-start" />
+            Files
+          </Button>
+          {file && (
+            <span className="text-muted-foreground truncate text-[0.8rem]">
+              {file.path}
+            </span>
+          )}
+        </div>
+      )}
+      <div className="min-h-0 flex-1 overflow-hidden p-1">
+        {file && <CreateFilePreview key={file.path} file={file} />}
+      </div>
     </div>
   );
 }

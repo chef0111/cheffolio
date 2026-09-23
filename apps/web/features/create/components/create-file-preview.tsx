@@ -105,12 +105,17 @@ export function CreateFilePreview({
   return (
     <MDXCodeBlock
       language={languageFromPath(file.path)}
-      title={file.path}
+      title={fileName(file.path)}
       html={markup}
       raw={file.contents}
       className="my-0 h-full min-h-0"
     />
   );
+}
+
+function fileName(path: string) {
+  const slash = Math.max(path.lastIndexOf('/'), path.lastIndexOf('\\'));
+  return slash === -1 ? path : path.slice(slash + 1);
 }
 
 function langFromPath(path: string): BundledLanguage | null {
