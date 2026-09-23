@@ -3,6 +3,8 @@ import { workspaceProtocol } from '#/generate/workspace-protocol';
 import { setFile } from '#/generate/files';
 import type { EmitCtx } from '#/generate/types';
 import { emitBiome } from '#/generate/layers/biome';
+import { emitEslintPrettier } from '#/generate/layers/eslint';
+import { emitOxlint } from '#/generate/layers/oxlint';
 import { emitDbSetup } from '#/generate/layers/db-setup';
 import { emitDrizzle } from '#/generate/layers/drizzle';
 import { emitPostgres } from '#/generate/layers/postgres';
@@ -110,15 +112,11 @@ dist
       emitBiome(ctx);
       break;
     case 'eslint':
-      throw new GenerateError(
-        'nest-eslint',
-        'nest eslint generate is not implemented yet'
-      );
+      emitEslintPrettier(ctx);
+      break;
     case 'oxlint':
-      throw new GenerateError(
-        'nest-oxlint',
-        'nest oxlint generate is not implemented yet'
-      );
+      emitOxlint(ctx);
+      break;
     default: {
       const _exhaustive: never = ctx.stack.linter;
       throw new Error(`unhandled linter: ${_exhaustive}`);

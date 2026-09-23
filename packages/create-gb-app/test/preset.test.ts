@@ -1,5 +1,4 @@
 import { expect, test } from "bun:test";
-import { GenerateError } from "#/generate/errors";
 import { buildTree } from "#/generate/build-tree";
 import {
   decodePreset,
@@ -71,20 +70,13 @@ test("golden convex builds a FileMap", () => {
   expect(files["convex/schema.ts"]).toBeDefined();
 });
 
-test("nest plus default eslint throws GenerateError nest-eslint", () => {
-  try {
-    buildTree(resolveStack({ backend: "nest" }), {
-      projectName: "nest-app",
-      packageManager: "npm",
-    });
-    throw new Error("expected GenerateError");
-  } catch (error) {
-    expect(error).toBeInstanceOf(GenerateError);
-    expect((error as GenerateError).code).toBe("nest-eslint");
-    expect((error as GenerateError).message).toBe(
-      "nest eslint generate is not implemented yet",
-    );
-  }
+test("nest plus default eslint builds a FileMap", () => {
+  const files = buildTree(resolveStack({ backend: "nest" }), {
+    projectName: "nest-app",
+    packageManager: "npm",
+  });
+  expect(files["eslint.config.mjs"]).toBeDefined();
+  expect(files["apps/server/package.json"]).toContain("@nestjs/core");
 });
 
 test("database none is an app shell", () => {

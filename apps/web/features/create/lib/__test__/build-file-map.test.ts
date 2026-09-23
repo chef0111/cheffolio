@@ -201,14 +201,15 @@ test('nest plus start with trpc stays disabled', () => {
   expect(result.code).toBe('nest-trpc');
 });
 
-test('nest plus eslint is a generate gap', () => {
+test('nest plus eslint returns a FileMap', () => {
   const result = buildCreateFileMap(
     { ...YES_DEFAULTS, backend: 'nest' },
     'nest-app'
   );
-  expect(result.ok).toBe(false);
-  if (result.ok) {
+  expect(result.ok).toBe(true);
+  if (!result.ok) {
     return;
   }
-  expect(result.code).toBe('nest-eslint');
+  expect(result.files['eslint.config.mjs']).toBeDefined();
+  expect(result.files['apps/server/package.json']).toContain('@nestjs/core');
 });

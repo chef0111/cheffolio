@@ -129,18 +129,18 @@ test('nest plus start with trpc stays a gap', () => {
   }
 });
 
-test('nest plus default eslint has no FileMap', () => {
-  try {
-    buildTree(resolveStack({ backend: 'nest' }), {
-      projectName: 'nest-app',
-      packageManager: 'npm',
-    });
-    throw new Error('expected GenerateError');
-  } catch (error) {
-    expect(error).toBeInstanceOf(GenerateError);
-    expect((error as GenerateError).code).toBe('nest-eslint');
-    expect((error as GenerateError).message).toBe(
-      'nest eslint generate is not implemented yet'
-    );
-  }
+test('nest plus eslint and oxlint return a FileMap', () => {
+  const eslintFiles = buildTree(resolveStack({ backend: 'nest' }), {
+    projectName: 'nest-app',
+    packageManager: 'npm',
+  });
+  expect(eslintFiles['eslint.config.mjs']).toContain('next/core-web-vitals');
+  expect(eslintFiles['apps/server/package.json']).toContain('@nestjs/core');
+
+  const oxlintFiles = buildTree(
+    resolveStack({ backend: 'nest', linter: 'oxlint' }),
+    { projectName: 'nest-app', packageManager: 'npm' }
+  );
+  expect(oxlintFiles['.oxlintrc.json']).toContain('typescript');
+  expect(oxlintFiles['apps/server/src/main.ts']).toContain('NestFactory');
 });

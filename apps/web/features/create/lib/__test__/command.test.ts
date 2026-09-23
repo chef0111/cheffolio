@@ -53,7 +53,7 @@ test('nest plus start copies a packed --preset', () => {
     'frontend',
     'tanstack-start'
   );
-  expect(flags.linter).toBe('biome');
+  expect(flags.linter).toBe('eslint');
   expect(flags.frontend).toBe('tanstack-start');
   expect(disabledRuleId(flags, 'api', 'trpc')).toBe('nest-trpc');
   const command = buildCommand(flags);
@@ -66,10 +66,9 @@ test('nest plus start copies a packed --preset', () => {
 
 test('nest copies a packed --preset', () => {
   const flags = applyFlagChange(YES_DEFAULTS, 'backend', 'nest');
-  expect(buildCommand(flags)).toBe(
-    'npx create-gb-app my-gb-app --preset gb8wy'
-  );
-  expect(decodePreset('gb8wy')).toEqual(flags);
+  expect(flags.linter).toBe('eslint');
+  expect(buildCommand(flags)).toBe('npx create-gb-app my-gb-app --preset gb2');
+  expect(decodePreset('gb2')).toEqual(flags);
 });
 
 test('hono copies a packed --preset and leaves gb0 alone', () => {

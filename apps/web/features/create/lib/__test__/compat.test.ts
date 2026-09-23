@@ -23,17 +23,17 @@ test('vendored yesDefault is the picker default', () => {
   expect(flags).toEqual(YES_DEFAULTS);
 });
 
-test('nest plus default eslint side-effects to biome', () => {
+test('nest keeps the selected linter', () => {
   const next = applyFlagChange(YES_DEFAULTS, 'backend', 'nest');
   expect(next).toEqual({
     ...YES_DEFAULTS,
     backend: 'nest',
-    linter: 'biome',
   });
+  expect(next.linter).toBe('eslint');
   expect(normalizeFlags({ ...YES_DEFAULTS, backend: 'nest' })).toEqual(next);
-  expect(disabledRuleId(next, 'linter', 'eslint')).toBe('nest-eslint');
+  expect(disabledRuleId(next, 'linter', 'eslint')).toBeNull();
   expect(disabledRuleId(next, 'linter', 'biome')).toBeNull();
-  expect(disabledRuleId(next, 'linter', 'oxlint')).toBe('nest-oxlint');
+  expect(disabledRuleId(next, 'linter', 'oxlint')).toBeNull();
 });
 
 test('hono keeps eslint and leaves tRPC enabled', () => {
@@ -46,13 +46,13 @@ test('hono keeps eslint and leaves tRPC enabled', () => {
   ).toBe('nest-trpc');
 });
 
-test('nest plus oxlint side-effects to biome', () => {
+test('nest plus oxlint stays oxlint', () => {
   const next = applyFlagChange(
     { ...YES_DEFAULTS, linter: 'oxlint' },
     'backend',
     'nest'
   );
-  expect(next.linter).toBe('biome');
+  expect(next.linter).toBe('oxlint');
   expect(
     normalizeFlags({ ...YES_DEFAULTS, backend: 'nest', linter: 'oxlint' })
   ).toEqual(next);
