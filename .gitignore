@@ -17,7 +17,7 @@ coverage
 .next/
 out/
 
-# generated at build by scripts/render-resume-pdf.ts
+# generated
 public/resume.pdf
 apps/web/public/resume.pdf
 

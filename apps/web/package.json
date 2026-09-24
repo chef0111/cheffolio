@@ -55,8 +55,8 @@
     "nuqs": "^2.10.1",
     "p5": "^1.9.4",
     "pdfjs-dist": "6.3.289",
-    "react": "19.3.0",
-    "react-dom": "19.3.0",
+    "react": "catalog:",
+    "react-dom": "catalog:",
     "react-hotkeys-hook": "^5.3.3",
     "react-markdown": "^10.1.0",
     "react-medium-image-zoom": "^5.4.9",
@@ -87,10 +87,10 @@
     "@toolwind/corner-shape": "^0.0.8-3",
     "@types/bun": "^1.4.0",
     "@types/mdast": "^4.0.4",
-    "@types/node": "^25.6.0",
+    "@types/node": "catalog:",
     "@types/p5": "^1.7.7",
-    "@types/react": "19.3.0",
-    "@types/react-dom": "19.3.0",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
     "@types/three": "^0.184.0",
     "babel-plugin-react-compiler": "^1.0.0",
     "eslint": "10.10.0",
@@ -107,12 +107,12 @@
     "shadcn": "4.21.0",
     "sharp": "^0.35.4",
     "tailwindcss": "^4.3.3",
-    "typescript": "npm:typescript@6.0.3",
-    "typescript-7": "npm:typescript@^7",
+    "typescript": "catalog:",
+    "typescript-7": "catalog:",
     "unist-builder": "3.0.0"
   },
   "resolutions": {
-    "@types/react": "19.3.0",
-    "@types/react-dom": "19.3.0"
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:"
   }
 }
