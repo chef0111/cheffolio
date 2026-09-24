@@ -22,11 +22,11 @@
     }
   },
   "scripts": {
-    "dev": "turbo run dev --cwd apps/web",
-    "dev:cli": "turbo run dev --cwd packages/create-gb-app",
+    "dev": "turbo run dev --filter web",
+    "dev:cli": "turbo run dev --filter create-gb-app",
     "build": "turbo run build",
-    "start": "turbo run start --cwd apps/web",
-    "next": "turbo run next --cwd apps/web",
+    "start": "turbo run start --filter web",
+    "next": "turbo run next --filter web",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
     "format": "turbo run format",
