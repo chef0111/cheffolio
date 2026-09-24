@@ -1,10 +1,10 @@
 #!/usr/bin/env bun
 
-import { readdir, readFile, writeFile } from "node:fs/promises";
-import { join } from "node:path";
+import { readdir, readFile, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 
-const ROOT = join(import.meta.dir, "..");
-const SKIP_DIRS = new Set(["node_modules", "dist", ".git", "media"]);
+const ROOT = join(import.meta.dir, '..');
+const SKIP_DIRS = new Set(['node_modules', 'dist', '.git', 'media']);
 const SOURCE = /\.(ts|tsx|mts)$/;
 const SPECIFIER =
   /(\bfrom\s+|import\s*\(|(?:^|\n)import\s+)\s*(['"])([^'"]+)\.(ts|tsx)\2/g;
@@ -31,8 +31,8 @@ async function walk(dir: string): Promise<string[]> {
 const files = await walk(ROOT);
 let changed = 0;
 for (const file of files) {
-  const before = await readFile(file, "utf8");
-  const after = before.replace(SPECIFIER, "$1$2$3$2");
+  const before = await readFile(file, 'utf8');
+  const after = before.replace(SPECIFIER, '$1$2$3$2');
   if (after === before) {
     continue;
   }

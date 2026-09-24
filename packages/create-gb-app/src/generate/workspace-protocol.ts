@@ -1,7 +1,7 @@
-import type { PackageManager } from "#/generate/types";
+import type { PackageManager } from '#/types/generate';
 
 export function workspaceProtocol(
-  packageManager: PackageManager,
-): "workspace:*" | "*" {
-  return packageManager === "npm" ? "*" : "workspace:*";
+  packageManager: PackageManager
+): 'workspace:*' | '*' {
+  return packageManager === 'npm' ? '*' : 'workspace:*';
 }

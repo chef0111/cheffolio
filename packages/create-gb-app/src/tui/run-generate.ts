@@ -1,10 +1,10 @@
-import { inferPackageManager } from "#/cli/package-manager";
-import { generateApp } from "#/generate/run";
-import { resolveStack } from "#/stack/resolve";
-import type { RawFlags } from "#/stack/types";
+import { inferPackageManager } from '#/cli/package-manager';
+import { generateApp } from '#/generate/run';
+import { resolveStack } from '#/stack/resolve';
+import type { RawFlags } from '#/types/stack';
 
 export async function runWizardGenerate(flags: RawFlags): Promise<void> {
-  const dest = flags.projectName ?? "my-gb-app";
+  const dest = flags.projectName ?? 'my-gb-app';
   try {
     const stack = resolveStack(flags);
     const result = await generateApp({
@@ -14,7 +14,7 @@ export async function runWizardGenerate(flags: RawFlags): Promise<void> {
       packageManager: inferPackageManager(),
     });
     process.stdout.write(
-      `done: wrote ${result.fileCount} files to ${result.dest}\n`,
+      `done: wrote ${result.fileCount} files to ${result.dest}\n`
     );
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);

@@ -1,16 +1,16 @@
-import { setFile } from "#/generate/files";
-import type { EmitCtx } from "#/generate/types";
+import type { EmitCtx } from '../../types/generate';
+import { setFile } from '../files';
 
 export function emitNotes(ctx: EmitCtx): void {
-  if (ctx.stack.backend === "convex") {
+  if (ctx.stack.backend === 'convex') {
     emitConvexNotes(ctx);
     return;
   }
-  if (ctx.stack.database === "none") {
+  if (ctx.stack.database === 'none') {
     return;
   }
-  if (ctx.stack.api === "none") {
-    if (ctx.stack.frontend === "tanstack-start") {
+  if (ctx.stack.api === 'none') {
+    if (ctx.stack.frontend === 'tanstack-start') {
       emitStartServerFnNotes(ctx);
       return;
     }
@@ -18,9 +18,9 @@ export function emitNotes(ctx: EmitCtx): void {
     return;
   }
   if (
-    ctx.stack.frontend === "tanstack-start" &&
-    ctx.stack.backend === "self" &&
-    ctx.stack.api === "trpc"
+    ctx.stack.frontend === 'tanstack-start' &&
+    ctx.stack.backend === 'self' &&
+    ctx.stack.api === 'trpc'
   ) {
     emitStartTrpcNotes(ctx);
     return;
@@ -28,7 +28,7 @@ export function emitNotes(ctx: EmitCtx): void {
 
   setFile(
     ctx.files,
-    "router.ts",
+    'router.ts',
     `import { ORPCError, os } from "@orpc/server";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
@@ -98,12 +98,12 @@ export const router = {
       }),
   },
 };
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "app/notes/page.tsx",
+    'app/notes/page.tsx',
     `import Link from "next/link";
 import { NotesClient } from "./notes-client";
 
@@ -120,12 +120,12 @@ export default function NotesPage() {
     </main>
   );
 }
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "app/notes/notes-client.tsx",
+    'app/notes/notes-client.tsx',
     `"use client";
 
 import { useState } from "react";
@@ -194,15 +194,14 @@ export function NotesClient() {
     </div>
   );
 }
-`,
+`
   );
 }
 
 function emitStartTrpcNotes(ctx: EmitCtx): void {
-
   setFile(
     ctx.files,
-    "src/server/router.ts",
+    'src/server/router.ts',
     `import { z } from "zod";
 import { prisma } from "../lib/db";
 import { publicProcedure, router } from "./trpc";
@@ -243,12 +242,12 @@ export const appRouter = router({
 });
 
 export type AppRouter = typeof appRouter;
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "src/routes/notes.tsx",
+    'src/routes/notes.tsx',
     `import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { trpc } from "../lib/trpc";
@@ -314,12 +313,12 @@ function NotesPage() {
     </main>
   );
 }
-`,
+`
   );
 }
 
 function emitNextServerActionNotes(ctx: EmitCtx): void {
-  const authed = ctx.stack.auth !== "none";
+  const authed = ctx.stack.auth !== 'none';
   const sessionHelpers = authed
     ? `import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
@@ -338,34 +337,34 @@ async function requireUserId() {
 
   setFile(
     ctx.files,
-    "app/notes/actions.ts",
+    'app/notes/actions.ts',
     `"use server";
 
 ${sessionHelpers}
 export async function listNotes() {
-  ${authed ? "const userId = await requireUserId();" : ""}
+  ${authed ? 'const userId = await requireUserId();' : ''}
   return prisma.note.findMany({
-    ${authed ? "where: { userId }," : ""}
+    ${authed ? 'where: { userId },' : ''}
     orderBy: { createdAt: "desc" },
   });
 }
 
 export async function createNote(input: { title: string; body: string }) {
-  ${authed ? "const userId = await requireUserId();" : ""}
+  ${authed ? 'const userId = await requireUserId();' : ''}
   return prisma.note.create({
     data: {
       title: input.title,
       body: input.body,
-      ${authed ? "userId," : ""}
+      ${authed ? 'userId,' : ''}
     },
   });
 }
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "app/notes/notes-client.tsx",
+    'app/notes/notes-client.tsx',
     `"use client";
 
 import { useState } from "react";
@@ -410,12 +409,12 @@ export function NotesClient() {
     </div>
   );
 }
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "app/notes/page.tsx",
+    'app/notes/page.tsx',
     `import Link from "next/link";
 import { NotesClient } from "./notes-client";
 
@@ -432,12 +431,12 @@ export default function NotesPage() {
     </main>
   );
 }
-`,
+`
   );
 }
 
 function emitStartServerFnNotes(ctx: EmitCtx): void {
-  const authed = ctx.stack.auth !== "none";
+  const authed = ctx.stack.auth !== 'none';
   const createData = authed
     ? `{ title: data.title, body: data.body, userId: data.userId }`
     : `{ title: data.title, body: data.body }`;
@@ -447,7 +446,7 @@ function emitStartServerFnNotes(ctx: EmitCtx): void {
 
   setFile(
     ctx.files,
-    "src/server/notes.ts",
+    'src/server/notes.ts',
     `import { createServerFn } from "@tanstack/react-start";
 import { prisma } from "../lib/db";
 
@@ -460,12 +459,12 @@ export const createNote = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     return prisma.note.create({ data: ${createData} });
   });
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "src/routes/notes.tsx",
+    'src/routes/notes.tsx',
     `import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Button } from "../components/ui/button";
@@ -513,14 +512,14 @@ function NotesPage() {
     </main>
   );
 }
-`,
+`
   );
 }
 
 function emitConvexNotes(ctx: EmitCtx): void {
   setFile(
     ctx.files,
-    "src/routes/notes.tsx",
+    'src/routes/notes.tsx',
     `import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import { useState } from "react";
@@ -564,8 +563,6 @@ function NotesPage() {
     </main>
   );
 }
-`,
+`
   );
 }
-
-

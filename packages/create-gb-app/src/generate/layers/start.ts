@@ -1,6 +1,7 @@
-import { setFile } from '#/generate/files';
-import type { EmitCtx } from '#/generate/types';
-import type { Stack } from '#/stack/types';
+import type { Stack } from '#/types/stack';
+
+import type { EmitCtx } from '../../types/generate';
+import { setFile } from '../files';
 
 export type StartWebAppOptions = {
   dependencies: Record<string, string>;

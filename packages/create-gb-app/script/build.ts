@@ -1,45 +1,44 @@
 #!/usr/bin/env bun
 
-import { mkdir, rm } from "node:fs/promises";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
-import pkg from "../package.json" with { type: "json" };
+import { mkdir, rm } from 'node:fs/promises';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import pkg from '../package.json' with { type: 'json' };
 import {
   ALL_TARGETS,
   binaryFileName,
   bunCompileTarget,
+  type CompileTarget,
   hostTarget,
   platformPackageName,
-  type CompileTarget,
-} from "./targets";
+} from './targets';
 
 const dir = dirname(fileURLToPath(import.meta.url));
-const root = join(dir, "..");
+const root = join(dir, '..');
 process.chdir(root);
 
-const allFlag = process.argv.includes("--all");
-const skipInstall = process.argv.includes("--skip-install");
+const allFlag = process.argv.includes('--all');
+const skipInstall = process.argv.includes('--skip-install');
 
-const targets: CompileTarget[] = allFlag
-  ? ALL_TARGETS
-  : [hostTarget()];
+const targets: CompileTarget[] = allFlag ? ALL_TARGETS : [hostTarget()];
 
-await rm(join(root, "dist"), { recursive: true, force: true });
+await rm(join(root, 'dist'), { recursive: true, force: true });
 
 if (!skipInstall) {
   const proc = Bun.spawn(
     [
-      "bun",
-      "install",
-      "--os=*",
-      "--cpu=*",
-      `@opentui/core@${pkg.optionalDependencies["@opentui/core"]}`,
+      'bun',
+      'install',
+      '--os=*',
+      '--cpu=*',
+      `@opentui/core@${pkg.optionalDependencies['@opentui/core']}`,
     ],
-    { cwd: root, stdout: "inherit", stderr: "inherit" },
+    { cwd: root, stdout: 'inherit', stderr: 'inherit' }
   );
   const code = await proc.exited;
   if (code !== 0) {
-    throw new Error("failed to install OpenTUI native packages");
+    throw new Error('failed to install OpenTUI native packages');
   }
 }
 
@@ -48,20 +47,20 @@ const host = hostTarget();
 
 for (const item of targets) {
   const name = platformPackageName(item, pkg.name);
-  const outDir = join(root, "dist", name, "bin");
+  const outDir = join(root, 'dist', name, 'bin');
   await mkdir(outDir, { recursive: true });
   console.log(`building ${name}`);
 
   const define: Record<string, string> = {
     CREATE_GB_APP_VERSION: JSON.stringify(pkg.version),
   };
-  if (item.os === "linux") {
-    define["process.env.OPENTUI_LIBC"] = JSON.stringify(item.abi ?? "glibc");
+  if (item.os === 'linux') {
+    define['process.env.OPENTUI_LIBC'] = JSON.stringify(item.abi ?? 'glibc');
   }
 
   const outfileName = binaryFileName(item.os);
   const result = await Bun.build({
-    entrypoints: ["./src/index.ts"],
+    entrypoints: ['./src/index.ts'],
     minify: true,
     compile: {
       target: bunCompileTarget(item) as never,
@@ -84,14 +83,14 @@ for (const item of targets) {
     item.avx2 === host.avx2;
   if (isHostBuild) {
     const binaryPath = join(outDir, outfileName);
-    const smoke = Bun.spawn([binaryPath, "--help"], {
-      stdout: "pipe",
-      stderr: "pipe",
+    const smoke = Bun.spawn([binaryPath, '--help'], {
+      stdout: 'pipe',
+      stderr: 'pipe',
     });
     const stdout = await new Response(smoke.stdout).text();
     const stderr = await new Response(smoke.stderr).text();
     const code = await smoke.exited;
-    if (code !== 0 || !stdout.includes("create-gb-app")) {
+    if (code !== 0 || !stdout.includes('create-gb-app')) {
       console.error(stdout, stderr);
       throw new Error(`smoke test failed for ${name}`);
     }
@@ -99,7 +98,7 @@ for (const item of targets) {
   }
 
   await Bun.write(
-    join(root, "dist", name, "package.json"),
+    join(root, 'dist', name, 'package.json'),
     `${JSON.stringify(
       {
         name,
@@ -110,8 +109,8 @@ for (const item of targets) {
         ...(item.abi ? { libc: [item.abi] } : {}),
       },
       null,
-      2,
-    )}\n`,
+      2
+    )}\n`
   );
   binaries[name] = pkg.version;
 }

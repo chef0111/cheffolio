@@ -8,6 +8,16 @@
       "cache": false,
       "persistent": true
     },
+    "start": {
+      "cache": false,
+      "persistent": true
+    },
+    "next": {
+      "cache": false,
+      "persistent": true
+    },
+    "format": {},
+    "format:check": {},
     "lint": {},
     "lint:fix": {
       "cache": false

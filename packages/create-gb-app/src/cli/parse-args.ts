@@ -1,7 +1,5 @@
-import {
-  overlayRawFlags,
-  parsePresetToken,
-} from "#/preset";
+import { overlayRawFlags, parsePresetToken } from '#/preset';
+import { ParseError } from '#/stack/parse-error';
 import {
   APIS,
   AUTHS,
@@ -12,31 +10,34 @@ import {
   LINTERS,
   ORMS,
   PAYMENTS,
-} from "#/stack/vocab";
-import type { RawFlags } from "#/stack/types";
-import { ParseError } from "#/stack/parse-error";
+} from '#/stack/vocab';
+import type { RawFlags } from '#/types/stack';
 
 export { ParseError };
 
 function oneOf<T extends string>(
   name: string,
   value: string,
-  allowed: readonly T[],
+  allowed: readonly T[]
 ): T {
   if ((allowed as readonly string[]).includes(value)) {
     return value as T;
   }
   throw new ParseError(
-    `invalid ${name} "${value}". expected ${allowed.join("|")}`,
+    `invalid ${name} "${value}". expected ${allowed.join('|')}`
   );
 }
 
-function takeValue(argv: string[], index: number, name: string): {
+function takeValue(
+  argv: string[],
+  index: number,
+  name: string
+): {
   value: string;
   consumed: number;
 } {
   const current = argv[index];
-  const eq = current.indexOf("=");
+  const eq = current.indexOf('=');
   if (eq >= 0) {
     const value = current.slice(eq + 1);
     if (!value) {
@@ -45,7 +46,7 @@ function takeValue(argv: string[], index: number, name: string): {
     return { value, consumed: 0 };
   }
   const next = argv[index + 1];
-  if (!next || next.startsWith("-")) {
+  if (!next || next.startsWith('-')) {
     throw new ParseError(`missing value for ${name}`);
   }
   return { value: next, consumed: 1 };
@@ -53,7 +54,7 @@ function takeValue(argv: string[], index: number, name: string): {
 
 export function shouldGenerateHeadless(
   flags: RawFlags,
-  interactive: boolean,
+  interactive: boolean
 ): boolean {
   return (
     Boolean(flags.yes) ||
@@ -69,90 +70,90 @@ export function parseArgs(argv: string[]): RawFlags {
 
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
-    if (arg === "--help" || arg === "-h") {
+    if (arg === '--help' || arg === '-h') {
       flags.help = true;
       continue;
     }
-    if (arg === "--version" || arg === "-v") {
+    if (arg === '--version' || arg === '-v') {
       flags.version = true;
       continue;
     }
-    if (arg === "--yes" || arg === "-y") {
+    if (arg === '--yes' || arg === '-y') {
       flags.yes = true;
       continue;
     }
-    if (arg === "--no-git") {
+    if (arg === '--no-git') {
       flags.noGit = true;
       continue;
     }
-    if (arg === "--no-install") {
+    if (arg === '--no-install') {
       flags.noInstall = true;
       continue;
     }
-    if (!arg.startsWith("-")) {
+    if (!arg.startsWith('-')) {
       positionals.push(arg);
       continue;
     }
 
-    const name = arg.includes("=") ? arg.slice(0, arg.indexOf("=")) : arg;
+    const name = arg.includes('=') ? arg.slice(0, arg.indexOf('=')) : arg;
     switch (name) {
-      case "--preset": {
+      case '--preset': {
         const { value, consumed } = takeValue(argv, i, name);
         flags.preset = value;
         i += consumed;
         break;
       }
-      case "--frontend": {
+      case '--frontend': {
         const { value, consumed } = takeValue(argv, i, name);
-        flags.frontend = oneOf("frontend", value, FRONTENDS);
+        flags.frontend = oneOf('frontend', value, FRONTENDS);
         i += consumed;
         break;
       }
-      case "--backend": {
+      case '--backend': {
         const { value, consumed } = takeValue(argv, i, name);
-        flags.backend = oneOf("backend", value, BACKENDS);
+        flags.backend = oneOf('backend', value, BACKENDS);
         i += consumed;
         break;
       }
-      case "--api": {
+      case '--api': {
         const { value, consumed } = takeValue(argv, i, name);
-        flags.api = oneOf("api", value, APIS);
+        flags.api = oneOf('api', value, APIS);
         i += consumed;
         break;
       }
-      case "--database": {
+      case '--database': {
         const { value, consumed } = takeValue(argv, i, name);
-        flags.database = oneOf("database", value, DATABASES);
+        flags.database = oneOf('database', value, DATABASES);
         i += consumed;
         break;
       }
-      case "--orm": {
+      case '--orm': {
         const { value, consumed } = takeValue(argv, i, name);
-        flags.orm = oneOf("orm", value, ORMS);
+        flags.orm = oneOf('orm', value, ORMS);
         i += consumed;
         break;
       }
-      case "--db-setup": {
+      case '--db-setup': {
         const { value, consumed } = takeValue(argv, i, name);
-        flags.dbSetup = oneOf("db-setup", value, DB_SETUPS);
+        flags.dbSetup = oneOf('db-setup', value, DB_SETUPS);
         i += consumed;
         break;
       }
-      case "--auth": {
+      case '--auth': {
         const { value, consumed } = takeValue(argv, i, name);
-        flags.auth = oneOf("auth", value, AUTHS);
+        flags.auth = oneOf('auth', value, AUTHS);
         i += consumed;
         break;
       }
-      case "--payments": {
+      case '--payments': {
         const { value, consumed } = takeValue(argv, i, name);
-        flags.payments = oneOf("payments", value, PAYMENTS);
+        flags.payments = oneOf('payments', value, PAYMENTS);
         i += consumed;
         break;
       }
-      case "--linter": {
+      case '--linter': {
         const { value, consumed } = takeValue(argv, i, name);
-        flags.linter = oneOf("linter", value, LINTERS);
+        flags.linter = oneOf('linter', value, LINTERS);
         i += consumed;
         break;
       }
@@ -163,7 +164,7 @@ export function parseArgs(argv: string[]): RawFlags {
 
   if (positionals.length > 1) {
     throw new ParseError(
-      `unexpected extra arguments: ${positionals.slice(1).join(" ")}`,
+      `unexpected extra arguments: ${positionals.slice(1).join(' ')}`
     );
   }
   if (positionals[0]) {
@@ -180,14 +181,14 @@ export function parseArgs(argv: string[]): RawFlags {
     void _token;
     return overlayRawFlags(
       { ...parsePresetToken(token), preset: token },
-      explicit,
+      explicit
     );
   } catch (error) {
     if (error instanceof ParseError) {
       throw error;
     }
     throw new ParseError(
-      error instanceof Error ? error.message : `invalid --preset ${token}`,
+      error instanceof Error ? error.message : `invalid --preset ${token}`
     );
   }
 }

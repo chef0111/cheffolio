@@ -1,17 +1,17 @@
-import { setFile } from "#/generate/files";
-import type { EmitCtx } from "#/generate/types";
+import type { EmitCtx } from '../../types/generate';
+import { setFile } from '../files';
 
 export function emitOrpc(ctx: EmitCtx): void {
-  ctx.pkg.dependencies["@orpc/server"] = "beta";
-  ctx.pkg.dependencies["@orpc/client"] = "beta";
-  ctx.pkg.dependencies["@orpc/tanstack-query"] = "beta";
-  ctx.pkg.dependencies["@tanstack/react-query"] = "^5.89.0";
-  ctx.pkg.dependencies["@tanstack/react-query-next-experimental"] = "^5.89.0";
-  ctx.pkg.dependencies.zod = "^4.1.5";
+  ctx.pkg.dependencies['@orpc/server'] = 'beta';
+  ctx.pkg.dependencies['@orpc/client'] = 'beta';
+  ctx.pkg.dependencies['@orpc/tanstack-query'] = 'beta';
+  ctx.pkg.dependencies['@tanstack/react-query'] = '^5.89.0';
+  ctx.pkg.dependencies['@tanstack/react-query-next-experimental'] = '^5.89.0';
+  ctx.pkg.dependencies.zod = '^4.1.5';
 
   setFile(
     ctx.files,
-    "app/rpc/[[...rest]]/route.ts",
+    'app/rpc/[[...rest]]/route.ts',
     `import { RPCHandler } from "@orpc/server/fetch";
 import { router } from "@/router";
 
@@ -32,12 +32,12 @@ export const POST = handleRequest;
 export const PUT = handleRequest;
 export const PATCH = handleRequest;
 export const DELETE = handleRequest;
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "lib/orpc.ts",
+    'lib/orpc.ts',
     `import type { RouterClient } from "@orpc/server";
 import { createORPCClient } from "@orpc/client";
 import { RPCLink } from "@orpc/client/fetch";
@@ -59,12 +59,12 @@ const link = new RPCLink({
 export const client: RouterClient<typeof router> = createORPCClient(link);
 
 export const orpc = createTanstackQueryUtils(client);
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "lib/query-client.ts",
+    'lib/query-client.ts',
     `import { QueryClient } from "@tanstack/react-query";
 
 function makeQueryClient() {
@@ -86,12 +86,12 @@ export function getQueryClient() {
   browserQueryClient ??= makeQueryClient();
   return browserQueryClient;
 }
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "app/providers.tsx",
+    'app/providers.tsx',
     `"use client";
 
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -109,6 +109,6 @@ export function Providers(props: { children: React.ReactNode }) {
     </QueryClientProvider>
   );
 }
-`,
+`
   );
 }

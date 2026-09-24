@@ -1,23 +1,23 @@
-import { setFile } from "#/generate/files";
-import type { EmitCtx } from "#/generate/types";
+import type { EmitCtx } from '../../types/generate';
+import { setFile } from '../files';
 
 export function emitDbSetup(ctx: EmitCtx): void {
-  if (ctx.stack.backend === "convex") {
+  if (ctx.stack.backend === 'convex') {
     return;
   }
   const setup = ctx.stack.dbSetup;
   const database = ctx.stack.database;
-  const dbName = ctx.projectName.replace(/[^a-zA-Z0-9_]/g, "_") || "app";
+  const dbName = ctx.projectName.replace(/[^a-zA-Z0-9_]/g, '_') || 'app';
 
   switch (setup) {
-    case "none":
+    case 'none':
       return;
-    case "docker": {
-      if (database === "sqlite") {
-        throw new Error("sqlite docker is forbidden");
+    case 'docker': {
+      if (database === 'sqlite') {
+        throw new Error('sqlite docker is forbidden');
       }
       const service =
-        database === "mysql"
+        database === 'mysql'
           ? `mysql:
     image: mysql:8
     environment:
@@ -36,22 +36,22 @@ export function emitDbSetup(ctx: EmitCtx): void {
 `;
       setFile(
         ctx.files,
-        "docker-compose.yml",
+        'docker-compose.yml',
         `services:
-  ${service}`,
+  ${service}`
       );
       return;
     }
-    case "neon":
+    case 'neon':
       patchEnv(
         ctx,
-        `DATABASE_URL="postgres://USER:PASSWORD@ep-xxx.region.aws.neon.tech/${dbName}?sslmode=require"`,
+        `DATABASE_URL="postgres://USER:PASSWORD@ep-xxx.region.aws.neon.tech/${dbName}?sslmode=require"`
       );
       return;
-    case "supabase":
+    case 'supabase':
       patchEnv(
         ctx,
-        `DATABASE_URL="postgres://postgres:PASSWORD@db.${dbName}.supabase.co:5432/postgres"`,
+        `DATABASE_URL="postgres://postgres:PASSWORD@db.${dbName}.supabase.co:5432/postgres"`
       );
       return;
     default: {
@@ -62,10 +62,10 @@ export function emitDbSetup(ctx: EmitCtx): void {
 }
 
 function patchEnv(ctx: EmitCtx, databaseUrlLine: string): void {
-  const current = ctx.files[".env"] ?? "";
-  const next = current.includes("DATABASE_URL=")
+  const current = ctx.files['.env'] ?? '';
+  const next = current.includes('DATABASE_URL=')
     ? current.replace(/DATABASE_URL=".*"/, databaseUrlLine)
     : `${databaseUrlLine}\n${current}`;
-  setFile(ctx.files, ".env", next);
-  setFile(ctx.files, ".env.example", next);
+  setFile(ctx.files, '.env', next);
+  setFile(ctx.files, '.env.example', next);
 }

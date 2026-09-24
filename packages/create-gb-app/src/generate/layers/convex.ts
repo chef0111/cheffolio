@@ -1,14 +1,14 @@
-import { setFile } from "#/generate/files";
-import type { EmitCtx } from "#/generate/types";
+import type { EmitCtx } from '../../types/generate';
+import { setFile } from '../files';
 
 export function emitConvex(ctx: EmitCtx): void {
-  ctx.pkg.dependencies.convex = "^1.27.0";
-  ctx.pkg.scripts.dev = "convex dev --once && vite dev";
-  ctx.pkg.scripts["convex:dev"] = "convex dev";
+  ctx.pkg.dependencies.convex = '^1.27.0';
+  ctx.pkg.scripts.dev = 'convex dev --once && vite dev';
+  ctx.pkg.scripts['convex:dev'] = 'convex dev';
 
   setFile(
     ctx.files,
-    "convex/schema.ts",
+    'convex/schema.ts',
     `import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
@@ -19,12 +19,12 @@ export default defineSchema({
     userId: v.string(),
   }).index("by_user", ["userId"]),
 });
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "convex/notes.ts",
+    'convex/notes.ts',
     `import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 
@@ -57,12 +57,12 @@ export const create = mutation({
     });
   },
 });
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "convex/auth.config.ts",
+    'convex/auth.config.ts',
     `export default {
   providers: [
     {
@@ -71,25 +71,25 @@ export const create = mutation({
     },
   ],
 };
-`,
+`
   );
 
   setFile(
     ctx.files,
-    ".env",
+    '.env',
     `VITE_CONVEX_URL="https://your-deployment.convex.cloud"
 VITE_CLERK_PUBLISHABLE_KEY="pk_test_replace_me"
 CLERK_SECRET_KEY="sk_test_replace_me"
 CLERK_JWT_ISSUER_DOMAIN="https://your-clerk-domain"
-`,
+`
   );
   setFile(
     ctx.files,
-    ".env.example",
+    '.env.example',
     `VITE_CONVEX_URL="https://your-deployment.convex.cloud"
 VITE_CLERK_PUBLISHABLE_KEY="pk_test_replace_me"
 CLERK_SECRET_KEY="sk_test_replace_me"
 CLERK_JWT_ISSUER_DOMAIN="https://your-clerk-domain"
-`,
+`
   );
 }

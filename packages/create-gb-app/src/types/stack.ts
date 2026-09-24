@@ -1,4 +1,4 @@
-import {
+import type {
   APIS,
   AUTHS,
   BACKENDS,
@@ -8,7 +8,7 @@ import {
   LINTERS,
   ORMS,
   PAYMENTS,
-} from "#/stack/vocab";
+} from '#/stack/vocab';
 
 export type Frontend = (typeof FRONTENDS)[number];
 export type Backend = (typeof BACKENDS)[number];
@@ -66,27 +66,27 @@ type Relational = {
 
 export type SelfStack = Shared &
   Relational & {
-    backend: "self";
+    backend: 'self';
     api: Api;
     monorepo: false;
   };
 
 export type NestStack = Shared &
   Relational & {
-    backend: "nest";
+    backend: 'nest';
     api: Api;
     monorepo: true;
   };
 
 export type HonoStack = Shared &
   Relational & {
-    backend: "hono";
+    backend: 'hono';
     api: Api;
     monorepo: true;
   };
 
 export type ConvexStack = Shared & {
-  backend: "convex";
+  backend: 'convex';
   monorepo: false;
 };
 

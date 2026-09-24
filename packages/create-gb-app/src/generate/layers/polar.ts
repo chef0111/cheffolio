@@ -1,6 +1,6 @@
-import { setFile } from "#/generate/files";
-import { isAppsLayout, isStart } from "#/generate/paths";
-import type { EmitCtx } from "#/generate/types";
+import type { EmitCtx } from '../../types/generate';
+import { setFile } from '../files';
+import { isAppsLayout, isStart } from '../paths';
 
 const POLAR_PLUGIN = `polar({
       createCustomerOnSignUp: true,
@@ -8,12 +8,12 @@ const POLAR_PLUGIN = `polar({
     })`;
 
 export function emitPolar(ctx: EmitCtx): void {
-  ctx.pkg.dependencies["@polar-sh/better-auth"] = "^1.4.0";
+  ctx.pkg.dependencies['@polar-sh/better-auth'] = '^1.4.0';
   const portalPath = isAppsLayout(ctx.stack)
-    ? "apps/web/app/portal/page.tsx"
+    ? 'apps/web/app/portal/page.tsx'
     : isStart(ctx.stack)
-      ? "src/routes/portal.tsx"
-      : "app/portal/page.tsx";
+      ? 'src/routes/portal.tsx'
+      : 'app/portal/page.tsx';
   setFile(
     ctx.files,
     portalPath,
@@ -25,15 +25,15 @@ export function emitPolar(ctx: EmitCtx): void {
     </main>
   );
 }
-`,
+`
   );
   const authPath = isAppsLayout(ctx.stack)
-    ? "apps/server/src/auth.ts"
+    ? 'apps/server/src/auth.ts'
     : isStart(ctx.stack)
-      ? "src/lib/auth.ts"
-      : "lib/auth.ts";
-  const current = ctx.files[authPath] ?? "";
-  if (!current || current.includes("@polar-sh/better-auth")) {
+      ? 'src/lib/auth.ts'
+      : 'lib/auth.ts';
+  const current = ctx.files[authPath] ?? '';
+  if (!current || current.includes('@polar-sh/better-auth')) {
     return;
   }
   setFile(ctx.files, authPath, injectPolarPlugin(current));
@@ -45,18 +45,18 @@ function injectPolarPlugin(source: string): string {
     : source.replace(
         'from "better-auth";',
         `from "better-auth";
-import { polar } from "@polar-sh/better-auth";`,
+import { polar } from "@polar-sh/better-auth";`
       );
 
-  if (next.includes("plugins: [")) {
-    return next.replace("plugins: [", `plugins: [\n    ${POLAR_PLUGIN}, `);
+  if (next.includes('plugins: [')) {
+    return next.replace('plugins: [', `plugins: [\n    ${POLAR_PLUGIN}, `);
   }
 
   return next.replace(
-    "betterAuth({",
+    'betterAuth({',
     `betterAuth({
   plugins: [
     ${POLAR_PLUGIN},
-  ],`,
+  ],`
   );
 }

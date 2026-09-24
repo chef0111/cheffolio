@@ -1,29 +1,29 @@
-import { setFile } from "#/generate/files";
-import { isAppsLayout, joinPath, libDir } from "#/generate/paths";
-import type { EmitCtx } from "#/generate/types";
+import type { EmitCtx } from '../../types/generate';
+import { setFile } from '../files';
+import { isAppsLayout, joinPath, libDir } from '../paths';
 
 export function emitPrisma(ctx: EmitCtx): void {
-  ctx.pkg.dependencies["@prisma/client"] = "^6.16.1";
-  ctx.pkg.devDependencies.prisma = "^6.16.1";
-  ctx.pkg.scripts["db:generate"] = "prisma generate";
-  ctx.pkg.scripts["db:push"] = "prisma db push";
+  ctx.pkg.dependencies['@prisma/client'] = '^6.16.1';
+  ctx.pkg.devDependencies.prisma = '^6.16.1';
+  ctx.pkg.scripts['db:generate'] = 'prisma generate';
+  ctx.pkg.scripts['db:push'] = 'prisma db push';
 
   const dbPath = isAppsLayout(ctx.stack)
-    ? "apps/server/src/db.ts"
-    : joinPath(libDir(ctx.stack), "db.ts");
+    ? 'apps/server/src/db.ts'
+    : joinPath(libDir(ctx.stack), 'db.ts');
   const schemaPath = isAppsLayout(ctx.stack)
-    ? "apps/server/prisma/schema.prisma"
-    : "prisma/schema.prisma";
+    ? 'apps/server/prisma/schema.prisma'
+    : 'prisma/schema.prisma';
   const noteUser =
-    ctx.stack.auth === "none"
-      ? ""
+    ctx.stack.auth === 'none'
+      ? ''
       : `
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 `;
-  const noteIndex = ctx.stack.auth === "none" ? "" : "\n  @@index([userId])";
+  const noteIndex = ctx.stack.auth === 'none' ? '' : '\n  @@index([userId])';
   const authModels =
-    ctx.stack.auth === "better-auth"
+    ctx.stack.auth === 'better-auth'
       ? `
 model User {
   id            String    @id
@@ -89,22 +89,22 @@ model Verification {
   @@map("verification")
 }
 `
-      : ctx.stack.auth === "clerk"
-        ? ""
-        : "";
+      : ctx.stack.auth === 'clerk'
+        ? ''
+        : '';
 
   const provider =
-    ctx.stack.backend === "convex"
-      ? "postgresql"
-      : ctx.stack.backend === "self" ||
-          ctx.stack.backend === "nest" ||
-          ctx.stack.backend === "hono"
-        ? ctx.stack.database === "mysql"
-          ? "mysql"
-          : ctx.stack.database === "sqlite"
-            ? "sqlite"
-            : "postgresql"
-        : "postgresql";
+    ctx.stack.backend === 'convex'
+      ? 'postgresql'
+      : ctx.stack.backend === 'self' ||
+          ctx.stack.backend === 'nest' ||
+          ctx.stack.backend === 'hono'
+        ? ctx.stack.database === 'mysql'
+          ? 'mysql'
+          : ctx.stack.database === 'sqlite'
+            ? 'sqlite'
+            : 'postgresql'
+        : 'postgresql';
 
   setFile(
     ctx.files,
@@ -118,7 +118,7 @@ export const prisma = globalForPrisma.prisma ?? new PrismaClient();
 if (process.env.NODE_ENV !== "production") {
   globalForPrisma.prisma = prisma;
 }
-`,
+`
   );
 
   setFile(
@@ -140,7 +140,6 @@ model Note {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt${noteIndex}
 }
-`,
+`
   );
 }
-

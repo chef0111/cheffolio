@@ -1,24 +1,24 @@
-import { setFile } from "#/generate/files";
-import { isAppsLayout, isStart } from "#/generate/paths";
-import type { EmitCtx } from "#/generate/types";
+import type { EmitCtx } from '../../types/generate';
+import { setFile } from '../files';
+import { isAppsLayout, isStart } from '../paths';
 
 export function emitStripe(ctx: EmitCtx): void {
-  ctx.pkg.dependencies.stripe = "^18.5.0";
+  ctx.pkg.dependencies.stripe = '^18.5.0';
   const webhookPath = isAppsLayout(ctx.stack)
-    ? "apps/server/src/stripe.webhook.ts"
+    ? 'apps/server/src/stripe.webhook.ts'
     : isStart(ctx.stack)
-      ? "src/routes/api/stripe/webhook.ts"
-      : "app/api/stripe/webhook/route.ts";
+      ? 'src/routes/api/stripe/webhook.ts'
+      : 'app/api/stripe/webhook/route.ts';
   const portalPath = isAppsLayout(ctx.stack)
-    ? "apps/web/app/portal/page.tsx"
+    ? 'apps/web/app/portal/page.tsx'
     : isStart(ctx.stack)
-      ? "src/routes/portal.tsx"
-      : "app/portal/page.tsx";
+      ? 'src/routes/portal.tsx'
+      : 'app/portal/page.tsx';
   const checkoutPath = isAppsLayout(ctx.stack)
-    ? "apps/server/src/stripe.checkout.ts"
+    ? 'apps/server/src/stripe.checkout.ts'
     : isStart(ctx.stack)
-      ? "src/routes/api/stripe/checkout.ts"
-      : "app/api/stripe/checkout/route.ts";
+      ? 'src/routes/api/stripe/checkout.ts'
+      : 'app/api/stripe/checkout/route.ts';
 
   setFile(
     ctx.files,
@@ -33,7 +33,7 @@ export function emitStripe(ctx: EmitCtx): void {
   stripe.webhooks.constructEvent(body, signature, process.env.STRIPE_WEBHOOK_SECRET as string);
   return new Response("ok");
 }
-`,
+`
   );
   setFile(
     ctx.files,
@@ -48,7 +48,7 @@ export function emitStripe(ctx: EmitCtx): void {
     </main>
   );
 }
-`,
+`
   );
   setFile(
     ctx.files,
@@ -63,14 +63,18 @@ export function emitStripe(ctx: EmitCtx): void {
   });
   return Response.redirect(session.url ?? "/notes", 303);
 }
-`,
+`
   );
 
-  const env = ctx.files[".env"] ?? "";
+  const env = ctx.files['.env'] ?? '';
   const extra = `STRIPE_SECRET_KEY="sk_test_replace_me"
 STRIPE_WEBHOOK_SECRET="whsec_replace_me"
 STRIPE_PRO_PRICE_ID="price_pro"
 `;
-  setFile(ctx.files, ".env", `${env}${extra}`);
-  setFile(ctx.files, ".env.example", `${ctx.files[".env.example"] ?? env}${extra}`);
+  setFile(ctx.files, '.env', `${env}${extra}`);
+  setFile(
+    ctx.files,
+    '.env.example',
+    `${ctx.files['.env.example'] ?? env}${extra}`
+  );
 }

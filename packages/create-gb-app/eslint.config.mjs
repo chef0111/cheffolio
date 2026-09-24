@@ -1,28 +1,50 @@
-import tsParser from "@typescript-eslint/parser";
+import { defineConfig, globalIgnores } from 'eslint/config';
+import prettier from 'eslint-config-prettier/flat';
+import simpleImportSort from 'eslint-plugin-simple-import-sort';
+import tseslint from 'typescript-eslint';
 
-const tsSpecifier = {
-  selector:
-    ":matches(ImportDeclaration, ExportNamedDeclaration, ExportAllDeclaration, ImportExpression)[source.value=/\\.(ts|tsx)$/]",
-  message: "Import without a .ts specifier.",
-};
-
-export default [
+const eslintConfig = defineConfig([
+  prettier,
+  // Override default ignores of eslint-config-next.
+  globalIgnores([
+    // Default ignores of eslint-config-next:
+    '.turbo/**',
+    'bin/**',
+    'dist/**',
+    'node_modules/**',
+  ]),
   {
-    files: [
-      "src/generate/**/*.{ts,tsx}",
-      "src/preset.ts",
-      "src/stack/**/*.{ts,tsx}",
-      "test/**/*.{ts,tsx}",
-    ],
-    languageOptions: {
-      parser: tsParser,
-      parserOptions: {
-        ecmaVersion: "latest",
-        sourceType: "module",
-      },
-    },
-    rules: {
-      "no-restricted-syntax": ["error", tsSpecifier],
+    // ESLint 10 removed context.getFilename(); eslint-plugin-react still uses it
+    // for React version auto-detection. Pinning the version skips that path.
+    settings: {
+      react: { version: '19' },
     },
   },
-];
+  {
+    languageOptions: {
+      parser: tseslint.parser,
+      parserOptions: {
+        projectService: true,
+      },
+    },
+    plugins: {
+      '@typescript-eslint': tseslint.plugin,
+    },
+    files: ['**/*.{ts,tsx}'],
+    rules: {
+      '@typescript-eslint/consistent-type-imports': 'error',
+      '@typescript-eslint/no-import-type-side-effects': 'error',
+    },
+  },
+  {
+    plugins: {
+      'simple-import-sort': simpleImportSort,
+    },
+    rules: {
+      'simple-import-sort/imports': 'error',
+      'simple-import-sort/exports': 'error',
+    },
+  },
+]);
+
+export default eslintConfig;

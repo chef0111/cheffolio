@@ -1,13 +1,14 @@
 #!/usr/bin/env bun
 
-import { mkdir } from "node:fs/promises";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
-import pkg from "../package.json" with { type: "json" };
-import { ALL_TARGETS, platformPackageName } from "./targets";
+import { mkdir } from 'node:fs/promises';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import pkg from '../package.json' with { type: 'json' };
+import { ALL_TARGETS, platformPackageName } from './targets';
 
 const dir = dirname(fileURLToPath(import.meta.url));
-const root = join(dir, "..");
+const root = join(dir, '..');
 
 export type WrapperManifest = {
   name: string;
@@ -22,25 +23,27 @@ export type WrapperManifest = {
 
 export function wrapperPackageJson(
   binaries: Record<string, string>,
-  version = pkg.version,
+  version = pkg.version
 ): WrapperManifest {
   return {
     name: pkg.name,
     version,
     license: pkg.license,
     bin: {
-      "create-gb-app": "./bin/create-gb-app.mjs",
+      'create-gb-app': './bin/create-gb-app.mjs',
     },
     scripts: {
-      postinstall: "node ./postinstall.mjs",
+      postinstall: 'node ./postinstall.mjs',
     },
-    os: ["darwin", "linux", "win32"],
-    cpu: ["arm64", "x64"],
+    os: ['darwin', 'linux', 'win32'],
+    cpu: ['arm64', 'x64'],
     optionalDependencies: binaries,
   };
 }
 
-export function defaultBinaryVersions(version = pkg.version): Record<string, string> {
+export function defaultBinaryVersions(
+  version = pkg.version
+): Record<string, string> {
   const binaries: Record<string, string> = {};
   for (const target of ALL_TARGETS) {
     binaries[platformPackageName(target, pkg.name)] = version;
@@ -48,20 +51,31 @@ export function defaultBinaryVersions(version = pkg.version): Record<string, str
   return binaries;
 }
 
-export async function writeWrapper(dest = join(root, "dist", pkg.name)): Promise<WrapperManifest> {
+export async function writeWrapper(
+  dest = join(root, 'dist', pkg.name)
+): Promise<WrapperManifest> {
   const binaries = defaultBinaryVersions();
   const manifest = wrapperPackageJson(binaries);
-  await mkdir(join(dest, "bin"), { recursive: true });
-  await Bun.write(join(dest, "package.json"), `${JSON.stringify(manifest, null, 2)}\n`);
-  await Bun.write(join(dest, "postinstall.mjs"), Bun.file(join(root, "script/postinstall.mjs")));
-  await Bun.write(join(dest, "bin/create-gb-app.mjs"), Bun.file(join(root, "script/run.mjs")));
+  await mkdir(join(dest, 'bin'), { recursive: true });
+  await Bun.write(
+    join(dest, 'package.json'),
+    `${JSON.stringify(manifest, null, 2)}\n`
+  );
+  await Bun.write(
+    join(dest, 'postinstall.mjs'),
+    Bun.file(join(root, 'script/postinstall.mjs'))
+  );
+  await Bun.write(
+    join(dest, 'bin/create-gb-app.mjs'),
+    Bun.file(join(root, 'script/run.mjs'))
+  );
   return manifest;
 }
 
 if (import.meta.main) {
   const manifest = await writeWrapper();
   console.log(`wrote wrapper ${manifest.name}@${manifest.version}`);
-  if (process.argv.includes("--publish")) {
-    throw new Error("npm publish is waiting for an explicit operator command");
+  if (process.argv.includes('--publish')) {
+    throw new Error('npm publish is waiting for an explicit operator command');
   }
 }

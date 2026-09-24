@@ -1,6 +1,7 @@
-import { mkdir, readdir, writeFile } from "node:fs/promises";
-import { dirname, join, resolve } from "node:path";
-import type { FileMap } from "#/generate/types";
+import { mkdir, readdir, writeFile } from 'node:fs/promises';
+import { dirname, join, resolve } from 'node:path';
+
+import type { FileMap } from '#/types/generate';
 
 export async function writeTree(dest: string, files: FileMap): Promise<void> {
   const root = resolve(dest);
@@ -13,6 +14,6 @@ export async function writeTree(dest: string, files: FileMap): Promise<void> {
   for (const [rel, content] of Object.entries(files)) {
     const abs = join(root, rel);
     await mkdir(dirname(abs), { recursive: true });
-    await writeFile(abs, content, "utf8");
+    await writeFile(abs, content, 'utf8');
   }
 }

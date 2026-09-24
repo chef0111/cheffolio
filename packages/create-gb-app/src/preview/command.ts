@@ -1,8 +1,8 @@
-import { parsePresetToken } from "#/preset";
-import { YES_DEFAULTS } from "#/stack/resolve";
-import type { RawFlags } from "#/stack/types";
-import type { FlagGroup } from "#/stack/vocab";
-import { RELATIONAL_GROUPS, STACK_CLI_FLAGS } from "#/stack/vocab";
+import { parsePresetToken } from '#/preset';
+import { YES_DEFAULTS } from '#/stack/resolve';
+import type { FlagGroup } from '#/stack/vocab';
+import { RELATIONAL_GROUPS, STACK_CLI_FLAGS } from '#/stack/vocab';
+import type { RawFlags } from '#/types/stack';
 
 function shellQuote(value: string): string {
   if (/^[A-Za-z0-9._@/=+-]+$/.test(value)) {
@@ -14,7 +14,7 @@ function shellQuote(value: string): string {
 function impliedValue(baseline: RawFlags, key: FlagGroup): string | undefined {
   const backend = baseline.backend ?? YES_DEFAULTS.backend;
   if (
-    backend === "convex" &&
+    backend === 'convex' &&
     (RELATIONAL_GROUPS as readonly FlagGroup[]).includes(key)
   ) {
     return undefined;
@@ -40,19 +40,19 @@ function definedEntries(flags: RawFlags): Array<[string, string]> {
 }
 
 export function formatCommand(flags: RawFlags): string {
-  const dir = shellQuote(flags.projectName ?? "my-gb-app");
-  const parts = ["create-gb-app", dir];
+  const dir = shellQuote(flags.projectName ?? 'my-gb-app');
+  const parts = ['create-gb-app', dir];
   if (flags.preset) {
-    parts.push("--preset", shellQuote(flags.preset));
+    parts.push('--preset', shellQuote(flags.preset));
   }
   for (const [flag, value] of definedEntries(flags)) {
     parts.push(flag, shellQuote(value));
   }
   if (flags.noGit) {
-    parts.push("--no-git");
+    parts.push('--no-git');
   }
   if (flags.noInstall) {
-    parts.push("--no-install");
+    parts.push('--no-install');
   }
-  return parts.join(" ");
+  return parts.join(' ');
 }

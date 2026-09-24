@@ -1,14 +1,16 @@
-import { setFile } from "#/generate/files";
-import type { EmitCtx } from "#/generate/types";
+import type { EmitCtx } from '../../types/generate';
+import { setFile } from '../files';
 
 export function emitShadcn(ctx: EmitCtx): void {
-  ctx.pkg.dependencies.clsx = "^2.1.1";
-  ctx.pkg.dependencies["tailwind-merge"] = "^3.3.1";
-  ctx.pkg.dependencies["class-variance-authority"] = "^0.7.1";
+  ctx.pkg.dependencies.clsx = '^2.1.1';
+  ctx.pkg.dependencies['tailwind-merge'] = '^3.3.1';
+  ctx.pkg.dependencies['class-variance-authority'] = '^0.7.1';
 
-  const root = ctx.stack.frontend === "tanstack-start" ? "src/" : "";
+  const root = ctx.stack.frontend === 'tanstack-start' ? 'src/' : '';
   const css =
-    ctx.stack.frontend === "tanstack-start" ? "src/styles.css" : "app/globals.css";
+    ctx.stack.frontend === 'tanstack-start'
+      ? 'src/styles.css'
+      : 'app/globals.css';
 
   setFile(
     ctx.files,
@@ -19,33 +21,33 @@ import { twMerge } from "tailwind-merge";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "components.json",
+    'components.json',
     JSON.stringify(
       {
-        $schema: "https://ui.shadcn.com/schema.json",
-        style: "new-york",
+        $schema: 'https://ui.shadcn.com/schema.json',
+        style: 'new-york',
         rsc: true,
         tsx: true,
         tailwind: {
-          config: "",
+          config: '',
           css,
-          baseColor: "neutral",
+          baseColor: 'neutral',
           cssVariables: false,
         },
         aliases: {
-          components: "@/components",
-          utils: "@/lib/utils",
-          ui: "@/components/ui",
+          components: '@/components',
+          utils: '@/lib/utils',
+          ui: '@/components/ui',
         },
       },
       null,
-      2,
-    ),
+      2
+    )
   );
 
   setFile(
@@ -68,7 +70,7 @@ export function Button({
     />
   );
 }
-`,
+`
   );
 
   setFile(
@@ -91,7 +93,7 @@ export function Input({
     />
   );
 }
-`,
+`
   );
 
   setFile(
@@ -111,6 +113,6 @@ export function Card({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
     />
   );
 }
-`,
+`
   );
 }

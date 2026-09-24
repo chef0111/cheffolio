@@ -1,29 +1,29 @@
-import { setFile } from "#/generate/files";
-import { isStart } from "#/generate/paths";
-import type { EmitCtx } from "#/generate/types";
+import type { EmitCtx } from '../../types/generate';
+import { setFile } from '../files';
+import { isStart } from '../paths';
 
 export function emitClerk(ctx: EmitCtx): void {
-  if (ctx.stack.backend === "convex") {
-    ctx.pkg.dependencies["@clerk/clerk-react"] = "^5.46.1";
-    ctx.pkg.dependencies["convex"] = ctx.pkg.dependencies.convex ?? "^1.27.0";
+  if (ctx.stack.backend === 'convex') {
+    ctx.pkg.dependencies['@clerk/clerk-react'] = '^5.46.1';
+    ctx.pkg.dependencies['convex'] = ctx.pkg.dependencies.convex ?? '^1.27.0';
     emitStartClerkConvexProviders(ctx);
     return;
   }
 
-  if (ctx.stack.backend === "nest") {
+  if (ctx.stack.backend === 'nest') {
     emitNestClerk(ctx);
     return;
   }
 
-  if (isStart(ctx.stack) && ctx.stack.backend === "self") {
-    ctx.pkg.dependencies["@clerk/tanstack-react-start"] = "^0.25.0";
+  if (isStart(ctx.stack) && ctx.stack.backend === 'self') {
+    ctx.pkg.dependencies['@clerk/tanstack-react-start'] = '^0.25.0';
     return;
   }
 
-  ctx.pkg.dependencies["@clerk/nextjs"] = "^6.31.5";
+  ctx.pkg.dependencies['@clerk/nextjs'] = '^6.31.5';
   setFile(
     ctx.files,
-    "middleware.ts",
+    'middleware.ts',
     `import { clerkMiddleware } from "@clerk/nextjs/server";
 
 export default clerkMiddleware();
@@ -31,27 +31,31 @@ export default clerkMiddleware();
 export const config = {
   matcher: ["/((?!_next|[^?]*\\\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)", "/(api|trpc)(.*)"],
 };
-`,
+`
   );
 }
 
 function emitNestClerk(ctx: EmitCtx): void {
-  ctx.pkg.dependencies["@clerk/express"] = "^1.7.19";
-  const serverPkgPath = "apps/server/package.json";
+  ctx.pkg.dependencies['@clerk/express'] = '^1.7.19';
+  const serverPkgPath = 'apps/server/package.json';
   const serverPkgRaw = ctx.files[serverPkgPath];
   if (serverPkgRaw) {
     const serverPkg = JSON.parse(serverPkgRaw) as {
       dependencies: Record<string, string>;
     };
-    serverPkg.dependencies["@clerk/express"] = "^1.7.19";
-    delete serverPkg.dependencies["@thallesp/nestjs-better-auth"];
-    delete serverPkg.dependencies["better-auth"];
-    setFile(ctx.files, serverPkgPath, `${JSON.stringify(serverPkg, null, 2)}\n`);
+    serverPkg.dependencies['@clerk/express'] = '^1.7.19';
+    delete serverPkg.dependencies['@thallesp/nestjs-better-auth'];
+    delete serverPkg.dependencies['better-auth'];
+    setFile(
+      ctx.files,
+      serverPkgPath,
+      `${JSON.stringify(serverPkg, null, 2)}\n`
+    );
   }
 
   setFile(
     ctx.files,
-    "apps/server/src/clerk.ts",
+    'apps/server/src/clerk.ts',
     `import { clerkMiddleware, getAuth } from "@clerk/express";
 import type { Request } from "express";
 
@@ -60,12 +64,12 @@ export { clerkMiddleware, getAuth };
 export function clerkUserId(request: Request) {
   return getAuth(request).userId;
 }
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "apps/server/src/main.ts",
+    'apps/server/src/main.ts',
     `import "reflect-metadata";
 import { NestFactory } from "@nestjs/core";
 import { clerkMiddleware } from "@clerk/express";
@@ -84,16 +88,16 @@ async function bootstrap() {
 }
 
 void bootstrap();
-`,
+`
   );
 
-  if (ctx.stack.backend === "nest" && ctx.stack.api !== "orpc") {
+  if (ctx.stack.backend === 'nest' && ctx.stack.api !== 'orpc') {
     return;
   }
 
   setFile(
     ctx.files,
-    "apps/server/src/app.module.ts",
+    'apps/server/src/app.module.ts',
     `import { type ExecutionContext, Module } from "@nestjs/common";
 import { ORPCModule } from "@orpc/nest";
 import type { Request } from "express";
@@ -110,12 +114,12 @@ import { NotesController } from "./notes.controller";
   controllers: [NotesController],
 })
 export class AppModule {}
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "apps/server/src/notes.controller.ts",
+    'apps/server/src/notes.controller.ts',
     `import { Controller } from "@nestjs/common";
 import { Implement } from "@orpc/nest";
 import { ORPCError, implement } from "@orpc/server";
@@ -208,14 +212,14 @@ export class NotesController {
       });
   }
 }
-`,
+`
   );
 }
 
 function emitStartClerkConvexProviders(ctx: EmitCtx): void {
   setFile(
     ctx.files,
-    "src/components/providers.tsx",
+    'src/components/providers.tsx',
     `"use client";
 
 import { ClerkProvider, useAuth } from "@clerk/clerk-react";
@@ -234,6 +238,6 @@ export function Providers(props: { children: ReactNode }) {
     </ClerkProvider>
   );
 }
-`,
+`
   );
 }

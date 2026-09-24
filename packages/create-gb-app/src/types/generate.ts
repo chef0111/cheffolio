@@ -1,8 +1,8 @@
-import type { Stack } from "#/stack/types";
+import type { Stack } from '#/types/stack';
 
 export type FileMap = Record<string, string>;
 
-export type PackageManager = "npm" | "pnpm" | "yarn" | "bun";
+export type PackageManager = 'npm' | 'pnpm' | 'yarn' | 'bun';
 
 export type GenerateContext = {
   projectName: string;
@@ -12,7 +12,7 @@ export type GenerateContext = {
 export type PackageJsonShape = {
   name: string;
   private: true;
-  type: "module";
+  type: 'module';
   scripts: Record<string, string>;
   dependencies: Record<string, string>;
   devDependencies: Record<string, string>;

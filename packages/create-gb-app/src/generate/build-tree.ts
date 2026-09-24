@@ -1,37 +1,45 @@
-import type { Stack } from "#/stack/types";
-import { setFile, setFileIfAbsent, sortRecord } from "#/generate/files";
-import { emitBetterAuth } from "#/generate/layers/better-auth";
-import { emitClerk } from "#/generate/layers/clerk";
-import { emitConvex } from "#/generate/layers/convex";
-import { emitDbSetup } from "#/generate/layers/db-setup";
-import { emitDrizzle } from "#/generate/layers/drizzle";
-import { emitEslintPrettier } from "#/generate/layers/eslint";
-import { emitHono } from "#/generate/layers/hono";
-import { emitNest } from "#/generate/layers/nest";
-import { emitPolar } from "#/generate/layers/polar";
-import { emitStripe } from "#/generate/layers/stripe";
-import { emitNext } from "#/generate/layers/next";
-import { emitNotes } from "#/generate/layers/notes";
-import { emitOrpc } from "#/generate/layers/orpc";
-import { emitOxlint } from "#/generate/layers/oxlint";
-import { emitPostgres } from "#/generate/layers/postgres";
-import { emitPrisma } from "#/generate/layers/prisma";
-import { emitSelf } from "#/generate/layers/self";
-import { emitShadcn } from "#/generate/layers/shadcn";
-import { emitStart } from "#/generate/layers/start";
-import { emitTrpc } from "#/generate/layers/trpc";
-import { GenerateError } from "#/generate/errors";
-import type { FileMap, GenerateContext, PackageJsonShape } from "#/generate/types";
+import type { Stack } from '#/types/stack';
 
-function emitDatabase(stack: Extract<Stack, { backend: "self" | "nest" }>, ctx: Parameters<typeof emitNext>[0]) {
-  if (stack.database === "none") {
+import type {
+  FileMap,
+  GenerateContext,
+  PackageJsonShape,
+} from '../types/generate';
+import { GenerateError } from './errors';
+import { setFile, setFileIfAbsent, sortRecord } from './files';
+import { emitBetterAuth } from './layers/better-auth';
+import { emitClerk } from './layers/clerk';
+import { emitConvex } from './layers/convex';
+import { emitDbSetup } from './layers/db-setup';
+import { emitDrizzle } from './layers/drizzle';
+import { emitEslintPrettier } from './layers/eslint';
+import { emitHono } from './layers/hono';
+import { emitNest } from './layers/nest';
+import { emitNext } from './layers/next';
+import { emitNotes } from './layers/notes';
+import { emitOrpc } from './layers/orpc';
+import { emitOxlint } from './layers/oxlint';
+import { emitPolar } from './layers/polar';
+import { emitPostgres } from './layers/postgres';
+import { emitPrisma } from './layers/prisma';
+import { emitSelf } from './layers/self';
+import { emitShadcn } from './layers/shadcn';
+import { emitStart } from './layers/start';
+import { emitStripe } from './layers/stripe';
+import { emitTrpc } from './layers/trpc';
+
+function emitDatabase(
+  stack: Extract<Stack, { backend: 'self' | 'nest' }>,
+  ctx: Parameters<typeof emitNext>[0]
+) {
+  if (stack.database === 'none') {
     return;
   }
 
   switch (stack.database) {
-    case "sqlite":
-    case "mysql":
-    case "postgres":
+    case 'sqlite':
+    case 'mysql':
+    case 'postgres':
       emitPostgres(ctx);
       break;
     default: {
@@ -41,14 +49,14 @@ function emitDatabase(stack: Extract<Stack, { backend: "self" | "nest" }>, ctx: 
   }
 
   switch (stack.orm) {
-    case "prisma":
+    case 'prisma':
       emitPrisma(ctx);
       break;
-    case "drizzle":
+    case 'drizzle':
       emitDrizzle(ctx);
       break;
-    case "none":
-      throw new Error("orm none requires database none");
+    case 'none':
+      throw new Error('orm none requires database none');
     default: {
       const _exhaustive: never = stack.orm;
       throw new Error(`unhandled orm: ${_exhaustive}`);
@@ -60,12 +68,12 @@ function emitDatabase(stack: Extract<Stack, { backend: "self" | "nest" }>, ctx: 
 
 function emitAuth(stack: Stack, ctx: Parameters<typeof emitNext>[0]) {
   switch (stack.auth) {
-    case "better-auth":
+    case 'better-auth':
       emitBetterAuth(ctx);
       break;
-    case "none":
+    case 'none':
       break;
-    case "clerk":
+    case 'clerk':
       emitClerk(ctx);
       break;
     default: {
@@ -81,14 +89,14 @@ function emitUi(_stack: Stack, ctx: Parameters<typeof emitNext>[0]) {
 
 function emitLinter(stack: Stack, ctx: Parameters<typeof emitNext>[0]) {
   switch (stack.linter) {
-    case "eslint":
+    case 'eslint':
       emitEslintPrettier(ctx);
       break;
-    case "oxlint":
+    case 'oxlint':
       emitOxlint(ctx);
       break;
-    case "biome":
-      throw new GenerateError("biome", "biome generate is not implemented yet");
+    case 'biome':
+      throw new GenerateError('biome', 'biome generate is not implemented yet');
     default: {
       const _exhaustive: never = stack.linter;
       throw new Error(`unhandled linter: ${_exhaustive}`);
@@ -98,12 +106,12 @@ function emitLinter(stack: Stack, ctx: Parameters<typeof emitNext>[0]) {
 
 function emitPayments(stack: Stack, ctx: Parameters<typeof emitNext>[0]) {
   switch (stack.payments) {
-    case "none":
+    case 'none':
       break;
-    case "stripe":
+    case 'stripe':
       emitStripe(ctx);
       break;
-    case "polar":
+    case 'polar':
       emitPolar(ctx);
       break;
     default: {
@@ -115,10 +123,10 @@ function emitPayments(stack: Stack, ctx: Parameters<typeof emitNext>[0]) {
 
 function emitFrontend(stack: Stack, ctx: Parameters<typeof emitNext>[0]) {
   switch (stack.frontend) {
-    case "next":
+    case 'next':
       emitNext(ctx);
       break;
-    case "tanstack-start":
+    case 'tanstack-start':
       emitStart(ctx);
       break;
     default: {
@@ -128,21 +136,24 @@ function emitFrontend(stack: Stack, ctx: Parameters<typeof emitNext>[0]) {
   }
 }
 
-function emitApi(stack: Extract<Stack, { backend: "self" }>, ctx: Parameters<typeof emitNext>[0]) {
+function emitApi(
+  stack: Extract<Stack, { backend: 'self' }>,
+  ctx: Parameters<typeof emitNext>[0]
+) {
   switch (stack.api) {
-    case "orpc":
-      if (stack.frontend !== "next") {
+    case 'orpc':
+      if (stack.frontend !== 'next') {
         throw new GenerateError(
-          "start-orpc",
-          "start oRPC generate is not implemented yet",
+          'start-orpc',
+          'start oRPC generate is not implemented yet'
         );
       }
       emitOrpc(ctx);
       break;
-    case "trpc":
+    case 'trpc':
       emitTrpc(ctx);
       break;
-    case "none":
+    case 'none':
       break;
     default: {
       const _exhaustive: never = stack.api;
@@ -156,7 +167,7 @@ export function buildTree(stack: Stack, ctx: GenerateContext): FileMap {
   const pkg: PackageJsonShape = {
     name: ctx.projectName,
     private: true,
-    type: "module",
+    type: 'module',
     scripts: {},
     dependencies: {},
     devDependencies: {},
@@ -164,24 +175,24 @@ export function buildTree(stack: Stack, ctx: GenerateContext): FileMap {
   const emitCtx = { ...ctx, files, pkg, stack };
 
   switch (stack.backend) {
-    case "self": {
+    case 'self': {
       emitSelf(emitCtx);
       emitFrontend(stack, emitCtx);
-      if (stack.database !== "none") {
-        if (stack.api !== "none") {
+      if (stack.database !== 'none') {
+        if (stack.api !== 'none') {
           emitApi(stack, emitCtx);
         }
         emitDatabase(stack, emitCtx);
       }
       break;
     }
-    case "nest":
+    case 'nest':
       emitNest(emitCtx);
       break;
-    case "hono":
+    case 'hono':
       emitHono(emitCtx);
       break;
-    case "convex":
+    case 'convex':
       emitFrontend(stack, emitCtx);
       emitConvex(emitCtx);
       break;
@@ -191,16 +202,16 @@ export function buildTree(stack: Stack, ctx: GenerateContext): FileMap {
     }
   }
 
-  if (stack.backend !== "nest" && stack.backend !== "hono") {
+  if (stack.backend !== 'nest' && stack.backend !== 'hono') {
     emitAuth(stack, emitCtx);
     emitPayments(stack, emitCtx);
     emitUi(stack, emitCtx);
     emitLinter(stack, emitCtx);
-    if (stack.backend === "convex" || stack.database !== "none") {
+    if (stack.backend === 'convex' || stack.database !== 'none') {
       emitNotes(emitCtx);
     }
-  } else if (stack.backend === "nest") {
-    if (stack.auth === "clerk") {
+  } else if (stack.backend === 'nest') {
+    if (stack.auth === 'clerk') {
       emitClerk(emitCtx);
     }
     emitPayments(stack, emitCtx);
@@ -209,11 +220,11 @@ export function buildTree(stack: Stack, ctx: GenerateContext): FileMap {
   pkg.dependencies = sortRecord(pkg.dependencies);
   pkg.devDependencies = sortRecord(pkg.devDependencies);
   pkg.scripts = sortRecord(pkg.scripts);
-  setFile(files, "package.json", JSON.stringify(pkg, null, 2));
+  setFile(files, 'package.json', JSON.stringify(pkg, null, 2));
   setFileIfAbsent(
     files,
-    "README.md",
-    `# ${ctx.projectName}\n\nGenerated by create-gb-app.\n`,
+    'README.md',
+    `# ${ctx.projectName}\n\nGenerated by create-gb-app.\n`
   );
   return files;
 }

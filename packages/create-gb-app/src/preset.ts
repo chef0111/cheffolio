@@ -1,24 +1,11 @@
-import { ParseError } from "#/stack/parse-error";
-import { YES_DEFAULTS } from "#/stack/resolve";
-import type { FlagGroup } from "#/stack/vocab";
-import { FLAG_GROUPS, VOCAB_BY_GROUP } from "#/stack/vocab";
-import type { PresetFields, RawFlags } from "#/stack/types";
+import { ParseError } from '#/stack/parse-error';
+import { YES_DEFAULTS } from '#/stack/resolve';
+import type { FlagGroup } from '#/stack/vocab';
+import { FLAG_GROUPS, VOCAB_BY_GROUP } from '#/stack/vocab';
+import type { PresetFields, RawFlags } from '#/types/stack';
 
-export type { PresetFields as CreateFlags } from "#/stack/types";
-export type {
-  Api,
-  Auth,
-  Backend,
-  Database,
-  DbSetup,
-  Frontend,
-  Linter,
-  Orm,
-  Payments,
-  PresetFields,
-  RawFlags,
-} from "#/stack/types";
-export { YES_DEFAULTS } from "#/stack/resolve";
+export { YES_DEFAULTS } from '#/stack/resolve';
+export type { FlagGroup } from '#/stack/vocab';
 export {
   APIS,
   AUTHS,
@@ -32,34 +19,47 @@ export {
   PAYMENTS,
   RELATIONAL_GROUPS,
   VOCAB_BY_GROUP,
-} from "#/stack/vocab";
-export type { FlagGroup } from "#/stack/vocab";
+} from '#/stack/vocab';
+export type { PresetFields as CreateFlags } from '#/types/stack';
+export type {
+  Api,
+  Auth,
+  Backend,
+  Database,
+  DbSetup,
+  Frontend,
+  Linter,
+  Orm,
+  Payments,
+  PresetFields,
+  RawFlags,
+} from '#/types/stack';
 
 export type PresetCode = string;
 
-const PRESET_PREFIX = "gb";
-const BASE62 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const PRESET_PREFIX = 'gb';
+const BASE62 = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 export const GOLDEN_PRESETS = {
   nest: {
     ...YES_DEFAULTS,
-    backend: "nest",
-    api: "orpc",
-    linter: "biome",
+    backend: 'nest',
+    api: 'orpc',
+    linter: 'biome',
   },
   start: {
     ...YES_DEFAULTS,
-    frontend: "tanstack-start",
-    api: "trpc",
-    linter: "oxlint",
+    frontend: 'tanstack-start',
+    api: 'trpc',
+    linter: 'oxlint',
   },
   convex: {
     ...YES_DEFAULTS,
-    backend: "convex",
-    api: "none",
-    database: "none",
-    orm: "none",
-    dbSetup: "none",
+    backend: 'convex',
+    api: 'none',
+    database: 'none',
+    orm: 'none',
+    dbSetup: 'none',
   },
 } as const satisfies Record<string, PresetFields>;
 
@@ -75,15 +75,15 @@ function fieldBits(length: number): number {
 
 function encodeBase62(value: bigint): string {
   if (value === ZERO) {
-    return "0";
+    return '0';
   }
   const digits: string[] = [];
   let current = value;
   while (current > ZERO) {
-    digits.push(BASE62[Number(current % BASE)] ?? "");
+    digits.push(BASE62[Number(current % BASE)] ?? '');
     current /= BASE;
   }
-  return digits.reverse().join("");
+  return digits.reverse().join('');
 }
 
 function decodeBase62(payload: string): bigint {
@@ -141,7 +141,7 @@ export function decodePreset(code: string): PresetFields {
 
   const totalBits = FLAG_GROUPS.reduce(
     (sum, group) => sum + fieldBits(VOCAB_BY_GROUP[group].length),
-    0,
+    0
   );
   const packed = decodeBase62(payload);
   if (packed >= ONE << BigInt(totalBits)) {
@@ -179,7 +179,7 @@ export function parsePresetToken(token: string): RawFlags {
 export function overlayRawFlags(base: RawFlags, explicit: RawFlags): RawFlags {
   const next: RawFlags = { ...base };
   for (const key of Object.keys(explicit) as Array<keyof RawFlags>) {
-    if (key === "preset") {
+    if (key === 'preset') {
       continue;
     }
     const value = explicit[key];
@@ -196,7 +196,7 @@ export function overlayRawFlags(base: RawFlags, explicit: RawFlags): RawFlags {
 function assignRaw(
   raw: RawFlags,
   group: FlagGroup,
-  value: PresetFields[FlagGroup],
+  value: PresetFields[FlagGroup]
 ): void {
   assignField(raw, group, value);
 }
@@ -204,35 +204,35 @@ function assignRaw(
 function assignField(
   target: PresetFields | RawFlags,
   group: FlagGroup,
-  value: string,
+  value: string
 ): void {
   switch (group) {
-    case "frontend":
-      target.frontend = value as PresetFields["frontend"];
+    case 'frontend':
+      target.frontend = value as PresetFields['frontend'];
       return;
-    case "backend":
-      target.backend = value as PresetFields["backend"];
+    case 'backend':
+      target.backend = value as PresetFields['backend'];
       return;
-    case "api":
-      target.api = value as PresetFields["api"];
+    case 'api':
+      target.api = value as PresetFields['api'];
       return;
-    case "database":
-      target.database = value as PresetFields["database"];
+    case 'database':
+      target.database = value as PresetFields['database'];
       return;
-    case "orm":
-      target.orm = value as PresetFields["orm"];
+    case 'orm':
+      target.orm = value as PresetFields['orm'];
       return;
-    case "dbSetup":
-      target.dbSetup = value as PresetFields["dbSetup"];
+    case 'dbSetup':
+      target.dbSetup = value as PresetFields['dbSetup'];
       return;
-    case "auth":
-      target.auth = value as PresetFields["auth"];
+    case 'auth':
+      target.auth = value as PresetFields['auth'];
       return;
-    case "payments":
-      target.payments = value as PresetFields["payments"];
+    case 'payments':
+      target.payments = value as PresetFields['payments'];
       return;
-    case "linter":
-      target.linter = value as PresetFields["linter"];
+    case 'linter':
+      target.linter = value as PresetFields['linter'];
       return;
     default: {
       const _exhaustive: never = group;

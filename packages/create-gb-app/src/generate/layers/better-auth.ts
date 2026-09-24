@@ -1,32 +1,32 @@
-import { setFile } from "#/generate/files";
-import type { EmitCtx } from "#/generate/types";
+import type { EmitCtx } from '../../types/generate';
+import { setFile } from '../files';
 
 export function emitBetterAuth(ctx: EmitCtx): void {
-  ctx.pkg.dependencies["better-auth"] = "^1.3.8";
+  ctx.pkg.dependencies['better-auth'] = '^1.3.8';
 
-  if (ctx.stack.backend === "convex") {
-    ctx.pkg.dependencies["@convex-dev/better-auth"] = "^0.9.6";
+  if (ctx.stack.backend === 'convex') {
+    ctx.pkg.dependencies['@convex-dev/better-auth'] = '^0.9.6';
     setFile(
       ctx.files,
-      "convex/betterAuth.ts",
+      'convex/betterAuth.ts',
       `import { betterAuth } from "better-auth";
 import { convex } from "@convex-dev/better-auth/plugins";
 
 export const auth = betterAuth({
   plugins: [convex()],
 });
-`,
+`
     );
     return;
   }
 
-  const start = ctx.stack.frontend === "tanstack-start";
-  const authPath = start ? "src/lib/auth.ts" : "lib/auth.ts";
+  const start = ctx.stack.frontend === 'tanstack-start';
+  const authPath = start ? 'src/lib/auth.ts' : 'lib/auth.ts';
   const pluginImport = start
     ? `import { tanstackStartCookies } from "better-auth/tanstack-start";`
     : `import { nextCookies } from "better-auth/next-js";`;
-  const pluginCall = start ? "tanstackStartCookies()" : "nextCookies()";
-  const drizzle = ctx.stack.orm === "drizzle";
+  const pluginCall = start ? 'tanstackStartCookies()' : 'nextCookies()';
+  const drizzle = ctx.stack.orm === 'drizzle';
   const adapterImport = drizzle
     ? `import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "./db";`
@@ -54,43 +54,43 @@ export const auth = betterAuth({
   },
   plugins: [${pluginCall}],
 });
-`,
+`
   );
 
   if (start) {
     setFile(
       ctx.files,
-      "src/lib/auth-client.ts",
+      'src/lib/auth-client.ts',
       `import { createAuthClient } from "better-auth/react";
 
 export const authClient = createAuthClient();
-`,
+`
     );
     return;
   }
 
   setFile(
     ctx.files,
-    "lib/auth-client.ts",
+    'lib/auth-client.ts',
     `import { createAuthClient } from "better-auth/react";
 
 export const authClient = createAuthClient();
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "app/api/auth/[...all]/route.ts",
+    'app/api/auth/[...all]/route.ts',
     `import { auth } from "@/lib/auth";
 import { toNextJsHandler } from "better-auth/next-js";
 
 export const { GET, POST } = toNextJsHandler(auth);
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "app/login/page.tsx",
+    'app/login/page.tsx',
     `"use client";
 
 import { useState } from "react";
@@ -173,6 +173,6 @@ export default function LoginPage() {
     </main>
   );
 }
-`,
+`
   );
 }

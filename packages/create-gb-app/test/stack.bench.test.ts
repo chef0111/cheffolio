@@ -1,1 +1,1 @@
-import "./stack.bench";
+import './stack.bench';

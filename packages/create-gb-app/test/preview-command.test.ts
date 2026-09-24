@@ -1,37 +1,40 @@
-import { expect, test } from "bun:test";
-import { formatCommand } from "#/preview/command";
+import { expect, test } from 'bun:test';
 
-test("quotes directory names with spaces", () => {
-  expect(formatCommand({ projectName: "my app" })).toBe("create-gb-app 'my app'");
-});
+import { formatCommand } from '#/preview/command';
 
-test("omits default flags", () => {
-  expect(formatCommand({ projectName: "my-gb-app", yes: true })).toBe(
-    "create-gb-app my-gb-app",
+test('quotes directory names with spaces', () => {
+  expect(formatCommand({ projectName: 'my app' })).toBe(
+    "create-gb-app 'my app'"
   );
 });
 
-test("prints --preset token and overlay flags only", () => {
-  expect(
-    formatCommand({
-      projectName: "my-gb-app",
-      yes: true,
-      preset: "nest",
-      backend: "nest",
-      linter: "biome",
-      frontend: "tanstack-start",
-    }),
-  ).toBe("create-gb-app my-gb-app --preset nest --frontend tanstack-start");
+test('omits default flags', () => {
+  expect(formatCommand({ projectName: 'my-gb-app', yes: true })).toBe(
+    'create-gb-app my-gb-app'
+  );
 });
 
-test("keeps the preset token and omits expanded defaults", () => {
+test('prints --preset token and overlay flags only', () => {
   expect(
     formatCommand({
-      projectName: "my-gb-app",
+      projectName: 'my-gb-app',
       yes: true,
-      preset: "nest",
-      backend: "nest",
-      linter: "biome",
-    }),
-  ).toBe("create-gb-app my-gb-app --preset nest");
+      preset: 'nest',
+      backend: 'nest',
+      linter: 'biome',
+      frontend: 'tanstack-start',
+    })
+  ).toBe('create-gb-app my-gb-app --preset nest --frontend tanstack-start');
+});
+
+test('keeps the preset token and omits expanded defaults', () => {
+  expect(
+    formatCommand({
+      projectName: 'my-gb-app',
+      yes: true,
+      preset: 'nest',
+      backend: 'nest',
+      linter: 'biome',
+    })
+  ).toBe('create-gb-app my-gb-app --preset nest');
 });

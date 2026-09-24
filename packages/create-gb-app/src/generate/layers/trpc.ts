@@ -1,22 +1,22 @@
-import { setFile } from "#/generate/files";
-import type { EmitCtx } from "#/generate/types";
+import type { EmitCtx } from '../../types/generate';
+import { setFile } from '../files';
 
 export function emitTrpc(ctx: EmitCtx): void {
-  ctx.pkg.dependencies["@trpc/server"] = "^11.5.1";
-  ctx.pkg.dependencies["@trpc/client"] = "^11.5.1";
-  ctx.pkg.dependencies["@trpc/react-query"] = "^11.5.1";
-  ctx.pkg.dependencies["@tanstack/react-query"] = "^5.89.0";
-  ctx.pkg.dependencies.zod = "^4.1.5";
-  ctx.pkg.dependencies.superjson = "^2.2.2";
+  ctx.pkg.dependencies['@trpc/server'] = '^11.5.1';
+  ctx.pkg.dependencies['@trpc/client'] = '^11.5.1';
+  ctx.pkg.dependencies['@trpc/react-query'] = '^11.5.1';
+  ctx.pkg.dependencies['@tanstack/react-query'] = '^5.89.0';
+  ctx.pkg.dependencies.zod = '^4.1.5';
+  ctx.pkg.dependencies.superjson = '^2.2.2';
 
-  if (ctx.stack.frontend === "next") {
+  if (ctx.stack.frontend === 'next') {
     emitTrpcNext(ctx);
     return;
   }
 
   setFile(
     ctx.files,
-    "src/server/trpc.ts",
+    'src/server/trpc.ts',
     `import { initTRPC } from "@trpc/server";
 import superjson from "superjson";
 
@@ -26,12 +26,12 @@ const t = initTRPC.create({
 
 export const router = t.router;
 export const publicProcedure = t.procedure;
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "src/routes/api/trpc.$.ts",
+    'src/routes/api/trpc.$.ts',
     `import { createFileRoute } from "@tanstack/react-router";
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 import { appRouter } from "../../server/router";
@@ -53,22 +53,22 @@ export const Route = createFileRoute("/api/trpc/$")({
     },
   },
 });
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "src/lib/trpc.ts",
+    'src/lib/trpc.ts',
     `import { createTRPCReact } from "@trpc/react-query";
 import type { AppRouter } from "../server/router";
 
 export const trpc = createTRPCReact<AppRouter>();
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "src/lib/query-client.ts",
+    'src/lib/query-client.ts',
     `import { QueryClient } from "@tanstack/react-query";
 
 function makeQueryClient() {
@@ -90,12 +90,12 @@ export function getQueryClient() {
   browserQueryClient ??= makeQueryClient();
   return browserQueryClient;
 }
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "src/components/providers.tsx",
+    'src/components/providers.tsx',
     `"use client";
 
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -126,15 +126,15 @@ export function Providers(props: { children: ReactNode }) {
     </trpc.Provider>
   );
 }
-`,
+`
   );
 }
 
 function emitTrpcNext(ctx: EmitCtx): void {
-  const clerk = ctx.stack.auth === "clerk";
+  const clerk = ctx.stack.auth === 'clerk';
   setFile(
     ctx.files,
-    "server/trpc.ts",
+    'server/trpc.ts',
     clerk
       ? `import { initTRPC, TRPCError } from "@trpc/server";
 import { auth } from "@clerk/nextjs/server";
@@ -168,12 +168,12 @@ const t = initTRPC.context<typeof createContext>().create({
 
 export const router = t.router;
 export const publicProcedure = t.procedure;
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "server/router.ts",
+    'server/router.ts',
     `import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { publicProcedure, router } from "./trpc";
@@ -192,12 +192,12 @@ export const appRouter = router({
 });
 
 export type AppRouter = typeof appRouter;
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "app/api/trpc/[trpc]/route.ts",
+    'app/api/trpc/[trpc]/route.ts',
     `import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 import { appRouter } from "@/server/router";
 import { createContext } from "@/server/trpc";
@@ -211,28 +211,28 @@ const handler = (req: Request) =>
   });
 
 export { handler as GET, handler as POST };
-`,
+`
   );
 
   setFile(
     ctx.files,
-    "lib/trpc.ts",
+    'lib/trpc.ts',
     `import { createTRPCReact } from "@trpc/react-query";
 import type { AppRouter } from "@/server/router";
 
 export const trpc = createTRPCReact<AppRouter>();
-`,
+`
   );
 
-  const clerkWrap = ctx.stack.auth === "clerk";
+  const clerkWrap = ctx.stack.auth === 'clerk';
   setFile(
     ctx.files,
-    "app/providers.tsx",
+    'app/providers.tsx',
     `"use client";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink } from "@trpc/client";
-${clerkWrap ? `import { ClerkProvider } from "@clerk/nextjs";` : ""}
+${clerkWrap ? `import { ClerkProvider } from "@clerk/nextjs";` : ''}
 import { useState, type ReactNode } from "react";
 import superjson from "superjson";
 import { trpc } from "@/lib/trpc";
@@ -251,9 +251,8 @@ export function Providers(props: { children: ReactNode }) {
     </trpc.Provider>
   );
 
-  return ${clerkWrap ? "<ClerkProvider>{tree}</ClerkProvider>" : "tree"};
+  return ${clerkWrap ? '<ClerkProvider>{tree}</ClerkProvider>' : 'tree'};
 }
-`,
+`
   );
 }
-

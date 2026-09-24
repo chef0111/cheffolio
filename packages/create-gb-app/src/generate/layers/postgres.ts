@@ -1,6 +1,6 @@
-import { setFile } from '#/generate/files';
-import { isAppsLayout, isStart } from '#/generate/paths';
-import type { EmitCtx } from '#/generate/types';
+import type { EmitCtx } from '../../types/generate';
+import { setFile } from '../files';
+import { isAppsLayout, isStart } from '../paths';
 
 export function emitPostgres(ctx: EmitCtx): void {
   const dbName = ctx.projectName.replace(/[^a-zA-Z0-9_]/g, '_') || 'app';

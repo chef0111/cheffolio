@@ -1,15 +1,16 @@
-import { createElement } from "react";
-import type { RawFlags } from "#/stack/types";
-import { runWizardGenerate } from "#/tui/run-generate";
+import { createElement } from 'react';
+
+import { runWizardGenerate } from '#/tui/run-generate';
+import type { RawFlags } from '#/types/stack';
 
 export async function mountWizard(initialFlags: RawFlags): Promise<void> {
-  const { createCliRenderer } = await import("@opentui/core");
-  const { createRoot } = await import("@opentui/react");
-  const { App } = await import("#/tui/app");
+  const { createCliRenderer } = await import('@opentui/core');
+  const { createRoot } = await import('@opentui/react');
+  const { App } = await import('#/tui/app');
 
   const renderer = await createCliRenderer({
     exitOnCtrlC: true,
-    screenMode: "alternate-screen",
+    screenMode: 'alternate-screen',
   });
 
   let shuttingDown = false;
@@ -33,6 +34,6 @@ export async function mountWizard(initialFlags: RawFlags): Promise<void> {
           shutdown();
         }
       },
-    }),
+    })
   );
 }
