@@ -30,11 +30,11 @@ import type { IconProps } from '@/components/icons/type';
 export const FLAG_GROUP_LABELS: Record<FlagGroup, string> = {
   frontend: 'Frontend',
   backend: 'Backend',
-  api: 'API',
+  api: 'API layer',
   database: 'Database',
   orm: 'ORM',
   dbSetup: 'Database setup',
-  auth: 'Auth',
+  auth: 'Authentication',
   payments: 'Payments',
   linter: 'Linter',
 };
@@ -128,7 +128,7 @@ export const FLAG_OPTIONS: { [K in FlagGroup]: readonly FlagOption<K>[] } = {
     {
       value: 'none',
       label: 'None',
-      description: 'Skip database integration',
+      description: 'No database integration',
     },
   ],
   orm: [
@@ -149,7 +149,7 @@ export const FLAG_OPTIONS: { [K in FlagGroup]: readonly FlagOption<K>[] } = {
     {
       value: 'none',
       label: 'None',
-      description: 'Skip hosted DB',
+      description: 'Skip hosted database setup',
     },
     {
       value: 'docker',
@@ -174,37 +174,37 @@ export const FLAG_OPTIONS: { [K in FlagGroup]: readonly FlagOption<K>[] } = {
     {
       value: 'better-auth',
       label: 'Better Auth',
-      description: 'TypeScript auth',
+      description: 'Open-source comprehensive authentication framework',
       icon: BetterAuthIcon,
     },
     {
       value: 'clerk',
       label: 'Clerk',
-      description: 'Hosted auth',
+      description: 'Authentication and User Management service',
       icon: ClerkIcon,
     },
     {
       value: 'none',
       label: 'None',
-      description: 'No sign-in',
+      description: 'No authentication setup',
     },
   ],
   payments: [
     {
       value: 'none',
       label: 'None',
-      description: 'No billing',
+      description: 'No payment integration',
     },
     {
       value: 'stripe',
       label: 'Stripe',
-      description: 'Payments API',
+      description: 'Global payment processing platform',
       icon: StripeIcon,
     },
     {
       value: 'polar',
       label: 'Polar',
-      description: 'OSS billing',
+      description: 'Billing platform for intelligence era',
       icon: PolarIcon,
     },
   ],
@@ -212,19 +212,19 @@ export const FLAG_OPTIONS: { [K in FlagGroup]: readonly FlagOption<K>[] } = {
     {
       value: 'eslint',
       label: 'ESLint',
-      description: 'JS linter',
+      description: 'Most well-known JavaScript linter',
       icon: EslintIcon,
     },
     {
       value: 'biome',
       label: 'Biome',
-      description: 'Fast toolchain',
+      description: 'One toolchain for your web project',
       icon: BiomeIcon,
     },
     {
       value: 'oxlint',
       label: 'Oxlint',
-      description: 'Rust linter',
+      description: 'High-performance linter for JS and TS',
       icon: OxlintIcon,
     },
   ],

@@ -27,7 +27,6 @@ const PDF_LEAVES = new Set<unknown>([
   FlushList,
   FlushItem,
 ]);
-
 function isSectionHeading(node: ReactNode) {
   return isValidElement(node) && node.type === SectionHeading;
 }

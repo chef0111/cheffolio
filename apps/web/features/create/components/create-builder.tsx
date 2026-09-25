@@ -5,6 +5,7 @@ import {
   FLAG_GROUPS,
   type FlagGroup,
 } from 'create-gb-app/preset';
+import { TerminalIcon } from 'lucide-react';
 import { useId } from 'react';
 
 import { Card, CardContent } from '@/components/ui/card';
@@ -55,7 +56,10 @@ function FlagRadioGroup({ group }: { group: FlagGroup }) {
 
   return (
     <FieldSet>
-      <FieldLegend variant="label">{FLAG_GROUP_LABELS[group]}</FieldLegend>
+      <FieldLegend variant="label" className="flex w-full items-center gap-2">
+        <TerminalIcon className="text-muted-foreground size-3.5" />
+        {FLAG_GROUP_LABELS[group]}
+      </FieldLegend>
       <RadioGroup
         value={selected}
         onValueChange={(value) => {
@@ -85,7 +89,7 @@ function FlagRadioGroup({ group }: { group: FlagGroup }) {
                   value={option.value}
                   disabled={!enabled}
                 />
-                <FieldContent className="pr-8">
+                <FieldContent className="pr-12">
                   <FieldTitle>{option.label}</FieldTitle>
                   {enabled ? (
                     <FieldDescription className="text-balance">
