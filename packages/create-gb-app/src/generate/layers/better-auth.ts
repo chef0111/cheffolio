@@ -1,11 +1,13 @@
 import type { EmitCtx } from '../../types/generate';
+import { DEPENDENCY_VERSIONS } from '../dependency-versions';
 import { setFile } from '../files';
 
 export function emitBetterAuth(ctx: EmitCtx): void {
-  ctx.pkg.dependencies['better-auth'] = '^1.3.8';
+  ctx.pkg.dependencies['better-auth'] = DEPENDENCY_VERSIONS['better-auth'];
 
   if (ctx.stack.backend === 'convex') {
-    ctx.pkg.dependencies['@convex-dev/better-auth'] = '^0.9.6';
+    ctx.pkg.dependencies['@convex-dev/better-auth'] =
+      DEPENDENCY_VERSIONS['@convex-dev/better-auth'];
     setFile(
       ctx.files,
       'convex/betterAuth.ts',
@@ -29,15 +31,17 @@ export const auth = betterAuth({
   const drizzle = ctx.stack.orm === 'drizzle';
   const adapterImport = drizzle
     ? `import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { db } from "./db";`
+import { db } from "./db";
+import * as schema from "./schema";`
     : `import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./db";`;
   const adapterCall = drizzle
     ? `drizzleAdapter(db, {
-    provider: "pg",
+    schema,
+    provider: "${ctx.stack.database === 'sqlite' ? 'sqlite' : ctx.stack.database === 'mysql' ? 'mysql' : 'pg'}",
   })`
     : `prismaAdapter(prisma, {
-    provider: "postgresql",
+    provider: "${ctx.stack.database === 'sqlite' ? 'sqlite' : ctx.stack.database === 'mysql' ? 'mysql' : 'postgresql'}",
   })`;
 
   setFile(

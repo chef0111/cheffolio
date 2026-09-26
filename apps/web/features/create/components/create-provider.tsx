@@ -1,5 +1,6 @@
 'use client';
 
+import type { PackageManager } from 'create-gb-app/generate';
 import {
   APIS,
   AUTHS,
@@ -18,6 +19,8 @@ import {
 import { parseAsString, parseAsStringLiteral, useQueryStates } from 'nuqs';
 import { createContext, type ReactNode, use, useCallback } from 'react';
 
+import { usePackageManager } from '@/components/cheffolio/code-block-command';
+
 import { buildCommand, DEFAULT_PROJECT_NAME } from '../lib/command';
 import {
   applyFlagChange,
@@ -31,6 +34,7 @@ type CreateContextValue = {
   projectName: string;
   setProjectName: (name: string) => void;
   command: string;
+  packageManager: PackageManager;
 };
 
 const CreateContext = createContext<CreateContextValue | null>(null);
@@ -56,6 +60,8 @@ const CREATE_URL_KEYS = {
 } as const;
 
 export function CreateProvider({ children }: { children: ReactNode }) {
+  const [selectedManager] = usePackageManager();
+  const packageManager = selectedManager === 'prompt' ? 'bun' : selectedManager;
   const [params, setParams] = useQueryStates(createSearchParams, {
     history: 'replace',
     urlKeys: CREATE_URL_KEYS,
@@ -95,6 +101,7 @@ export function CreateProvider({ children }: { children: ReactNode }) {
         projectName,
         setProjectName,
         command,
+        packageManager,
       }}
     >
       {children}

@@ -87,15 +87,15 @@ test('nest plus start returns a FileMap with a Nest server and Start web', () =>
   expect(files['apps/web/app/page.tsx']).toBeUndefined();
   expect(files['vite.config.ts']).toBeUndefined();
   expect(files['src/routes/__root.tsx']).toBeUndefined();
-  expect(files['package.json']).toContain('"dev": "turbo dev"');
+  expect(files['package.json']).toContain('"dev": "turbo run dev"');
   expect(files['package.json']).not.toContain('vite dev');
   expect(files['turbo.json']).toContain('.output/**');
   expect(files['turbo.json']).toContain('.vinxi/**');
   expect(files['.gitignore']).toContain('.output');
   expect(files['.env']).toContain('VITE_SERVER_URL="http://localhost:3333"');
-  expect(previewTree(stack)).toContain('apps/web/src/routes');
+  expect(previewTree(stack)).toContain('apps/web');
   expect(previewTree(stack)).toContain('apps/server');
-  expect(previewTree(stack).split('\n')[0]).toBe('apps/web/src/routes');
+  expect(previewTree(stack).split('\n')[0]).toBe('apps/web');
 });
 
 test('nest plus start with api none keeps REST and omits the contract', () => {

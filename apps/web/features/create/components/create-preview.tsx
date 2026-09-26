@@ -1,5 +1,6 @@
 'use client';
 
+import type { PackageManager } from 'create-gb-app/generate';
 import { type CreateFlags, FLAG_GROUPS } from 'create-gb-app/preset';
 import {
   ChevronLeftIcon,
@@ -34,27 +35,31 @@ const EMPTY_FILES: FileMap = {};
 const previewCache = new Map<string, ReturnType<typeof generatePreview>>();
 
 export function CreatePreview() {
-  const { flags, projectName } = useCreate();
+  const { flags, projectName, packageManager } = useCreate();
   const rootName = resolveProjectName(projectName);
-  const requestKey = previewKey(flags, projectName);
-  const [result, setResult] = useState<PreviewResult | null>(null);
+  const requestKey = previewKey(flags, projectName, packageManager);
+  const [response, setResponse] = useState<{
+    key: string;
+    result: PreviewResult;
+  } | null>(null);
+  const result = response?.key === requestKey ? response.result : null;
   const [selectedPath, setSelectedPath] = useState('');
   const [narrowPane, setNarrowPane] = useState<NarrowPane>('tree');
 
   useEffect(() => {
     let cancelled = false;
-    void previewResult(flags, projectName).then((next) => {
+    void previewResult(flags, projectName, packageManager).then((next) => {
       if (cancelled) {
         return;
       }
       startTransition(() => {
-        setResult(next);
+        setResponse({ key: requestKey, result: next });
       });
     });
     return () => {
       cancelled = true;
     };
-  }, [flags, projectName, requestKey]);
+  }, [flags, projectName, packageManager, requestKey]);
 
   const files: FileMap = result?.ok ? result.files : EMPTY_FILES;
   const paths = Object.keys(files);
@@ -202,17 +207,25 @@ function CreatePreviewCodePane({
   );
 }
 
-function previewKey(flags: CreateFlags, projectName: string) {
-  return `${projectName}:${FLAG_GROUPS.map((group) => flags[group]).join(',')}`;
+function previewKey(
+  flags: CreateFlags,
+  projectName: string,
+  packageManager: PackageManager
+) {
+  return `${packageManager}:${projectName}:${FLAG_GROUPS.map((group) => flags[group]).join(',')}`;
 }
 
-function previewResult(flags: CreateFlags, projectName: string) {
-  const key = previewKey(flags, projectName);
+function previewResult(
+  flags: CreateFlags,
+  projectName: string,
+  packageManager: PackageManager
+) {
+  const key = previewKey(flags, projectName, packageManager);
   const cached = previewCache.get(key);
   if (cached) {
     return cached;
   }
-  const next = generatePreview(flags, projectName);
+  const next = generatePreview(flags, projectName, packageManager);
   previewCache.set(key, next);
   return next;
 }

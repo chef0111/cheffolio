@@ -4,6 +4,7 @@ import {
   buildTree,
   CompatError,
   GenerateError,
+  type PackageManager,
   type RawFlags,
   resolveStack,
 } from 'create-gb-app/generate';
@@ -73,12 +74,13 @@ export function flagsToRaw(flags: CreateFlags): RawFlags {
 
 export function buildCreateFileMap(
   flags: CreateFlags,
-  projectName: string
+  projectName: string,
+  packageManager: PackageManager = 'bun'
 ): CreateFileMapResult {
   try {
     const files = buildTree(resolveStack(flagsToRaw(flags)), {
       projectName: resolveProjectName(projectName),
-      packageManager: 'bun',
+      packageManager,
     });
     return { ok: true, files };
   } catch (error) {

@@ -26,3 +26,21 @@ test('generatePreview returns the YES tree', async () => {
   expect(result.files['app/layout.tsx']).toBeDefined();
   expect(result.files['apps/web/package.json']).toBeUndefined();
 });
+
+test('preview follows the command package manager for workspace configuration', async () => {
+  for (const manager of ['bun', 'pnpm', 'yarn', 'npm'] as const) {
+    const result = await generatePreview(
+      { ...YES_DEFAULTS, backend: 'hono', structure: 'turborepo' },
+      'manager-app',
+      manager
+    );
+    expect(result.ok).toBe(true);
+    if (!result.ok) continue;
+    const root = JSON.parse(result.files['package.json']);
+    expect(root.packageManager).toStartWith(`${manager}@`);
+    expect(result.files['pnpm-workspace.yaml'] !== undefined).toBe(
+      manager === 'pnpm'
+    );
+    expect(result.files['.yarnrc.yml'] !== undefined).toBe(manager === 'yarn');
+  }
+});

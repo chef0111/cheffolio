@@ -1,10 +1,11 @@
 import type { EmitCtx } from '../../types/generate';
+import { DEPENDENCY_VERSIONS } from '../dependency-versions';
 import { setFile } from '../files';
 import { isAppsLayout, joinPath, libDir } from '../paths';
 
 export function emitDrizzle(ctx: EmitCtx): void {
-  ctx.pkg.dependencies['drizzle-orm'] = '^0.44.5';
-  ctx.pkg.devDependencies['drizzle-kit'] = '^0.31.4';
+  ctx.pkg.dependencies['drizzle-orm'] = DEPENDENCY_VERSIONS['drizzle-orm'];
+  ctx.pkg.devDependencies['drizzle-kit'] = DEPENDENCY_VERSIONS['drizzle-kit'];
   ctx.pkg.scripts['db:generate'] = 'drizzle-kit generate';
   ctx.pkg.scripts['db:push'] = 'drizzle-kit push';
 
@@ -26,9 +27,9 @@ export function emitDrizzle(ctx: EmitCtx): void {
   if (driver === 'sqlite') {
     ctx.pkg.dependencies['better-sqlite3'] = '^12.2.0';
   } else if (driver === 'mysql') {
-    ctx.pkg.dependencies.mysql2 = '^3.14.3';
+    ctx.pkg.dependencies.mysql2 = DEPENDENCY_VERSIONS['mysql2'];
   } else {
-    ctx.pkg.dependencies.pg = '^8.16.3';
+    ctx.pkg.dependencies.pg = DEPENDENCY_VERSIONS['pg'];
   }
 
   const pgImport =

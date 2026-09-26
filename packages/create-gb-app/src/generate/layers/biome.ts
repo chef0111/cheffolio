@@ -1,10 +1,12 @@
 import type { EmitCtx } from '../../types/generate';
+import { DEPENDENCY_VERSIONS } from '../dependency-versions';
 import { setFile } from '../files';
 
 export function emitBiome(ctx: EmitCtx): void {
   ctx.pkg.scripts.lint = 'biome check .';
   ctx.pkg.scripts.format = 'biome check --write .';
-  ctx.pkg.devDependencies['@biomejs/biome'] = '^2.2.4';
+  ctx.pkg.devDependencies['@biomejs/biome'] =
+    DEPENDENCY_VERSIONS['@biomejs/biome'];
 
   const nestDecorators = ctx.stack.backend === 'nest';
 

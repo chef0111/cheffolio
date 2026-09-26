@@ -1,10 +1,12 @@
 import type { EmitCtx } from '../../types/generate';
+import { DEPENDENCY_VERSIONS } from '../dependency-versions';
 import { setFile } from '../files';
 import { isAppsLayout, joinPath, libDir } from '../paths';
 
 export function emitPrisma(ctx: EmitCtx): void {
-  ctx.pkg.dependencies['@prisma/client'] = '^6.16.1';
-  ctx.pkg.devDependencies.prisma = '^6.16.1';
+  ctx.pkg.dependencies['@prisma/client'] =
+    DEPENDENCY_VERSIONS['@prisma/client'];
+  ctx.pkg.devDependencies.prisma = DEPENDENCY_VERSIONS['prisma'];
   ctx.pkg.scripts['db:generate'] = 'prisma generate';
   ctx.pkg.scripts['db:push'] = 'prisma db push';
 

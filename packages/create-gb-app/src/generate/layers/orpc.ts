@@ -1,13 +1,17 @@
 import type { EmitCtx } from '../../types/generate';
+import { DEPENDENCY_VERSIONS } from '../dependency-versions';
 import { setFile } from '../files';
 
 export function emitOrpc(ctx: EmitCtx): void {
-  ctx.pkg.dependencies['@orpc/server'] = 'beta';
-  ctx.pkg.dependencies['@orpc/client'] = 'beta';
-  ctx.pkg.dependencies['@orpc/tanstack-query'] = 'beta';
-  ctx.pkg.dependencies['@tanstack/react-query'] = '^5.89.0';
-  ctx.pkg.dependencies['@tanstack/react-query-next-experimental'] = '^5.89.0';
-  ctx.pkg.dependencies.zod = '^4.1.5';
+  ctx.pkg.dependencies['@orpc/server'] = DEPENDENCY_VERSIONS['@orpc/server'];
+  ctx.pkg.dependencies['@orpc/client'] = DEPENDENCY_VERSIONS['@orpc/client'];
+  ctx.pkg.dependencies['@orpc/tanstack-query'] =
+    DEPENDENCY_VERSIONS['@orpc/tanstack-query'];
+  ctx.pkg.dependencies['@tanstack/react-query'] =
+    DEPENDENCY_VERSIONS['@tanstack/react-query'];
+  ctx.pkg.dependencies['@tanstack/react-query-next-experimental'] =
+    DEPENDENCY_VERSIONS['@tanstack/react-query-next-experimental'];
+  ctx.pkg.dependencies.zod = DEPENDENCY_VERSIONS['zod'];
 
   setFile(
     ctx.files,

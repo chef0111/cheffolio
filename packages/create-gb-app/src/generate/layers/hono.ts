@@ -1,6 +1,7 @@
 import type { HonoStack } from '#/types/stack';
 
 import type { EmitCtx } from '../../types/generate';
+import { DEPENDENCY_VERSIONS } from '../dependency-versions';
 import { setFile } from '../files';
 import { workspaceProtocol } from '../workspace-protocol';
 import { emitBiome } from './biome';
@@ -31,8 +32,8 @@ export function emitHono(ctx: EmitCtx): void {
   ctx.pkg.scripts.dev = 'turbo dev';
   ctx.pkg.scripts.build = 'turbo build';
   ctx.pkg.scripts.lint = 'turbo lint';
-  ctx.pkg.devDependencies.turbo = '^2.5.6';
-  ctx.pkg.devDependencies.typescript = '^5.9.2';
+  ctx.pkg.devDependencies.turbo = DEPENDENCY_VERSIONS['turbo'];
+  ctx.pkg.devDependencies.typescript = DEPENDENCY_VERSIONS['typescript'];
   ctx.pkg.workspaces = ['apps/*', 'packages/*'];
 
   setFile(
@@ -201,9 +202,9 @@ function emitOrpcContract(ctx: EmitCtx, dep: string): void {
         type: 'module',
         exports: { '.': './src/index.ts' },
         dependencies: {
-          '@orpc/contract': 'beta',
-          '@orpc/openapi': 'beta',
-          zod: '^4.1.5',
+          '@orpc/contract': DEPENDENCY_VERSIONS['@orpc/contract'],
+          '@orpc/openapi': DEPENDENCY_VERSIONS['@orpc/openapi'],
+          zod: DEPENDENCY_VERSIONS['zod'],
         },
         devDependencies: {
           '@repo/typescript-config': dep,
@@ -284,8 +285,8 @@ function emitTrpcContract(ctx: EmitCtx, dep: string): void {
         type: 'module',
         exports: { '.': './src/index.ts' },
         dependencies: {
-          '@trpc/server': '^11.5.1',
-          zod: '^4.1.5',
+          '@trpc/server': DEPENDENCY_VERSIONS['@trpc/server'],
+          zod: DEPENDENCY_VERSIONS['zod'],
         },
         devDependencies: {
           '@repo/typescript-config': dep,
@@ -365,13 +366,13 @@ function emitUiPackage(ctx: EmitCtx, dep: string): void {
           './utils': './src/utils.ts',
         },
         dependencies: {
-          clsx: '^2.1.1',
-          'tailwind-merge': '^3.3.1',
-          react: '^19.1.1',
+          clsx: DEPENDENCY_VERSIONS['clsx'],
+          'tailwind-merge': DEPENDENCY_VERSIONS['tailwind-merge'],
+          react: DEPENDENCY_VERSIONS['react'],
         },
         devDependencies: {
           '@repo/typescript-config': dep,
-          '@types/react': '^19.1.12',
+          '@types/react': DEPENDENCY_VERSIONS['@types/react'],
         },
       },
       null,
@@ -453,39 +454,40 @@ export function Card({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
 
 function emitServer(ctx: EmitCtx, stack: HonoStack, dep: string): void {
   const dependencies: Record<string, string> = {
-    '@hono/node-server': '^2.1.1',
-    hono: '^4.13.7',
+    '@hono/node-server': DEPENDENCY_VERSIONS['@hono/node-server'],
+    hono: DEPENDENCY_VERSIONS['hono'],
   };
   const devDependencies: Record<string, string> = {
     '@repo/typescript-config': dep,
-    '@types/node': '^24.3.1',
-    tsx: '^4.20.5',
-    typescript: '^5.9.2',
+    '@types/node': DEPENDENCY_VERSIONS['@types/node'],
+    tsx: DEPENDENCY_VERSIONS['tsx'],
+    typescript: DEPENDENCY_VERSIONS['typescript'],
   };
 
   if (stack.database !== 'none' && stack.orm === 'prisma') {
-    dependencies['@prisma/client'] = '^6.16.1';
-    devDependencies.prisma = '^6.16.1';
+    dependencies['@prisma/client'] = DEPENDENCY_VERSIONS['@prisma/client'];
+    devDependencies.prisma = DEPENDENCY_VERSIONS['prisma'];
   }
   if (stack.database !== 'none' && stack.orm === 'drizzle') {
-    dependencies['drizzle-orm'] = '^0.44.5';
-    devDependencies['drizzle-kit'] = '^0.31.4';
+    dependencies['drizzle-orm'] = DEPENDENCY_VERSIONS['drizzle-orm'];
+    devDependencies['drizzle-kit'] = DEPENDENCY_VERSIONS['drizzle-kit'];
   }
   if (stack.auth === 'better-auth') {
-    dependencies['better-auth'] = '^1.3.8';
+    dependencies['better-auth'] = DEPENDENCY_VERSIONS['better-auth'];
   }
   if (stack.auth === 'clerk') {
-    dependencies['@hono/clerk-auth'] = '^3.1.1';
+    dependencies['@hono/clerk-auth'] = DEPENDENCY_VERSIONS['@hono/clerk-auth'];
   }
   if (stack.database !== 'none' && stack.api === 'orpc') {
-    dependencies['@orpc/openapi'] = 'beta';
-    dependencies['@orpc/server'] = 'beta';
+    dependencies['@orpc/openapi'] = DEPENDENCY_VERSIONS['@orpc/openapi'];
+    dependencies['@orpc/server'] = DEPENDENCY_VERSIONS['@orpc/server'];
     dependencies['@repo/contract'] = dep;
   }
   if (stack.database !== 'none' && stack.api === 'trpc') {
-    dependencies['@hono/trpc-server'] = '^0.4.2';
+    dependencies['@hono/trpc-server'] =
+      DEPENDENCY_VERSIONS['@hono/trpc-server'];
     dependencies['@repo/contract'] = dep;
-    dependencies['@trpc/server'] = '^11.5.1';
+    dependencies['@trpc/server'] = DEPENDENCY_VERSIONS['@trpc/server'];
   }
 
   setFile(
@@ -903,30 +905,34 @@ function webDependencies(
 ): Record<string, string> {
   const dependencies: Record<string, string> = {
     '@repo/ui': dep,
-    react: '^19.1.1',
-    'react-dom': '^19.1.1',
+    react: DEPENDENCY_VERSIONS['react'],
+    'react-dom': DEPENDENCY_VERSIONS['react-dom'],
   };
   if (stack.auth === 'better-auth') {
-    dependencies['better-auth'] = '^1.3.8';
+    dependencies['better-auth'] = DEPENDENCY_VERSIONS['better-auth'];
   }
   if (stack.auth === 'clerk' && stack.frontend === 'next') {
-    dependencies['@clerk/nextjs'] = '^6.31.5';
+    dependencies['@clerk/nextjs'] = DEPENDENCY_VERSIONS['@clerk/nextjs'];
   }
   if (stack.auth === 'clerk' && stack.frontend === 'tanstack-start') {
-    dependencies['@clerk/tanstack-react-start'] = '^0.25.0';
+    dependencies['@clerk/tanstack-react-start'] =
+      DEPENDENCY_VERSIONS['@clerk/tanstack-react-start'];
   }
   if (stack.database !== 'none' && stack.api === 'orpc') {
-    dependencies['@orpc/client'] = 'beta';
-    dependencies['@orpc/contract'] = 'beta';
-    dependencies['@orpc/openapi'] = 'beta';
+    dependencies['@orpc/client'] = DEPENDENCY_VERSIONS['@orpc/client'];
+    dependencies['@orpc/contract'] = DEPENDENCY_VERSIONS['@orpc/contract'];
+    dependencies['@orpc/openapi'] = DEPENDENCY_VERSIONS['@orpc/openapi'];
     dependencies['@repo/contract'] = dep;
-    dependencies['@tanstack/react-query'] = '^5.89.0';
+    dependencies['@tanstack/react-query'] =
+      DEPENDENCY_VERSIONS['@tanstack/react-query'];
   }
   if (stack.database !== 'none' && stack.api === 'trpc') {
     dependencies['@repo/contract'] = dep;
-    dependencies['@tanstack/react-query'] = '^5.89.0';
-    dependencies['@trpc/client'] = '^11.5.1';
-    dependencies['@trpc/react-query'] = '^11.5.1';
+    dependencies['@tanstack/react-query'] =
+      DEPENDENCY_VERSIONS['@tanstack/react-query'];
+    dependencies['@trpc/client'] = DEPENDENCY_VERSIONS['@trpc/client'];
+    dependencies['@trpc/react-query'] =
+      DEPENDENCY_VERSIONS['@trpc/react-query'];
   }
   return dependencies;
 }
@@ -934,7 +940,7 @@ function webDependencies(
 function emitNextWeb(ctx: EmitCtx, stack: HonoStack, dep: string): void {
   const dependencies = {
     ...webDependencies(stack, dep),
-    next: '^15.5.4',
+    next: DEPENDENCY_VERSIONS['next'],
   };
   setFile(
     ctx.files,
@@ -953,12 +959,12 @@ function emitNextWeb(ctx: EmitCtx, stack: HonoStack, dep: string): void {
         dependencies,
         devDependencies: {
           '@repo/typescript-config': dep,
-          '@tailwindcss/postcss': '^4.1.13',
-          '@types/node': '^24.3.1',
-          '@types/react': '^19.1.12',
-          '@types/react-dom': '^19.1.9',
-          tailwindcss: '^4.1.13',
-          typescript: '^5.9.2',
+          '@tailwindcss/postcss': DEPENDENCY_VERSIONS['@tailwindcss/postcss'],
+          '@types/node': DEPENDENCY_VERSIONS['@types/node'],
+          '@types/react': DEPENDENCY_VERSIONS['@types/react'],
+          '@types/react-dom': DEPENDENCY_VERSIONS['@types/react-dom'],
+          tailwindcss: DEPENDENCY_VERSIONS['tailwindcss'],
+          typescript: DEPENDENCY_VERSIONS['typescript'],
         },
       },
       null,
@@ -1279,9 +1285,11 @@ export function NotesClient() {
 function emitStartWeb(ctx: EmitCtx, stack: HonoStack, dep: string): void {
   const dependencies = {
     ...webDependencies(stack, dep),
-    '@tanstack/react-router': '^1.132.0',
-    '@tanstack/react-router-devtools': '^1.132.0',
-    '@tanstack/react-start': '^1.132.0',
+    '@tanstack/react-router': DEPENDENCY_VERSIONS['@tanstack/react-router'],
+    '@tanstack/router-core': DEPENDENCY_VERSIONS['@tanstack/router-core'],
+    '@tanstack/react-router-devtools':
+      DEPENDENCY_VERSIONS['@tanstack/react-router-devtools'],
+    '@tanstack/react-start': DEPENDENCY_VERSIONS['@tanstack/react-start'],
   };
   setFile(
     ctx.files,
@@ -1300,15 +1308,15 @@ function emitStartWeb(ctx: EmitCtx, stack: HonoStack, dep: string): void {
         dependencies,
         devDependencies: {
           '@repo/typescript-config': dep,
-          '@tailwindcss/vite': '^4.1.13',
-          '@types/node': '^24.3.1',
-          '@types/react': '^19.1.12',
-          '@types/react-dom': '^19.1.9',
-          '@vitejs/plugin-react': '^5.0.2',
-          tailwindcss: '^4.1.13',
-          typescript: '^5.9.2',
-          vite: '^7.1.5',
-          'vite-tsconfig-paths': '^5.1.4',
+          '@tailwindcss/vite': DEPENDENCY_VERSIONS['@tailwindcss/vite'],
+          '@types/node': DEPENDENCY_VERSIONS['@types/node'],
+          '@types/react': DEPENDENCY_VERSIONS['@types/react'],
+          '@types/react-dom': DEPENDENCY_VERSIONS['@types/react-dom'],
+          '@vitejs/plugin-react': DEPENDENCY_VERSIONS['@vitejs/plugin-react'],
+          tailwindcss: DEPENDENCY_VERSIONS['tailwindcss'],
+          typescript: DEPENDENCY_VERSIONS['typescript'],
+          vite: DEPENDENCY_VERSIONS['vite'],
+          'vite-tsconfig-paths': DEPENDENCY_VERSIONS['vite-tsconfig-paths'],
         },
       },
       null,

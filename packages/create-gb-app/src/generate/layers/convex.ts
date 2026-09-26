@@ -1,10 +1,11 @@
 import type { EmitCtx } from '../../types/generate';
+import { DEPENDENCY_VERSIONS } from '../dependency-versions';
 import { setFile } from '../files';
 
 export function emitConvex(ctx: EmitCtx): void {
   const isNext = ctx.stack.frontend === 'next';
   const authed = ctx.stack.auth === 'clerk';
-  ctx.pkg.dependencies.convex = '^1.27.0';
+  ctx.pkg.dependencies.convex = DEPENDENCY_VERSIONS['convex'];
   ctx.pkg.scripts.dev = isNext ? 'next dev' : 'vite dev';
   ctx.pkg.scripts['convex:dev'] = 'convex dev';
   ctx.pkg.scripts['convex:codegen'] = 'convex codegen';

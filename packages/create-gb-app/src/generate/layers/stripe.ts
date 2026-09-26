@@ -1,9 +1,10 @@
 import type { EmitCtx } from '../../types/generate';
+import { DEPENDENCY_VERSIONS } from '../dependency-versions';
 import { setFile } from '../files';
 import { isAppsLayout, isStart } from '../paths';
 
 export function emitStripe(ctx: EmitCtx): void {
-  ctx.pkg.dependencies.stripe = '^18.5.0';
+  ctx.pkg.dependencies.stripe = DEPENDENCY_VERSIONS['stripe'];
   const webhookPath = isAppsLayout(ctx.stack)
     ? 'apps/server/src/stripe.webhook.ts'
     : isStart(ctx.stack)

@@ -1,13 +1,16 @@
 import type { EmitCtx } from '../../types/generate';
+import { DEPENDENCY_VERSIONS } from '../dependency-versions';
 import { setFile } from '../files';
 
 export function emitTrpc(ctx: EmitCtx): void {
-  ctx.pkg.dependencies['@trpc/server'] = '^11.5.1';
-  ctx.pkg.dependencies['@trpc/client'] = '^11.5.1';
-  ctx.pkg.dependencies['@trpc/react-query'] = '^11.5.1';
-  ctx.pkg.dependencies['@tanstack/react-query'] = '^5.89.0';
-  ctx.pkg.dependencies.zod = '^4.1.5';
-  ctx.pkg.dependencies.superjson = '^2.2.2';
+  ctx.pkg.dependencies['@trpc/server'] = DEPENDENCY_VERSIONS['@trpc/server'];
+  ctx.pkg.dependencies['@trpc/client'] = DEPENDENCY_VERSIONS['@trpc/client'];
+  ctx.pkg.dependencies['@trpc/react-query'] =
+    DEPENDENCY_VERSIONS['@trpc/react-query'];
+  ctx.pkg.dependencies['@tanstack/react-query'] =
+    DEPENDENCY_VERSIONS['@tanstack/react-query'];
+  ctx.pkg.dependencies.zod = DEPENDENCY_VERSIONS['zod'];
+  ctx.pkg.dependencies.superjson = DEPENDENCY_VERSIONS['superjson'];
 
   if (ctx.stack.frontend === 'next') {
     emitTrpcNext(ctx);

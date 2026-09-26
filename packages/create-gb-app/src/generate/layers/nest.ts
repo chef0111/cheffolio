@@ -1,4 +1,5 @@
 import type { EmitCtx } from '../../types/generate';
+import { DEPENDENCY_VERSIONS } from '../dependency-versions';
 import { GenerateError } from '../errors';
 import { setFile } from '../files';
 import { workspaceProtocol } from '../workspace-protocol';
@@ -31,8 +32,8 @@ export function emitNest(ctx: EmitCtx): void {
   ctx.pkg.scripts.dev = 'turbo dev';
   ctx.pkg.scripts.build = 'turbo build';
   ctx.pkg.scripts.lint = 'turbo lint';
-  ctx.pkg.devDependencies.turbo = '^2.5.6';
-  ctx.pkg.devDependencies.typescript = '^5.9.2';
+  ctx.pkg.devDependencies.turbo = DEPENDENCY_VERSIONS['turbo'];
+  ctx.pkg.devDependencies.typescript = DEPENDENCY_VERSIONS['typescript'];
   ctx.pkg.workspaces = ['apps/*', 'packages/*'];
 
   if (ctx.stack.database !== 'none') {
@@ -187,9 +188,9 @@ function emitContract(ctx: EmitCtx, dep: string): void {
         type: 'module',
         exports: { '.': './src/index.ts' },
         dependencies: {
-          '@orpc/contract': 'beta',
-          '@orpc/openapi': 'beta',
-          zod: '^4.1.5',
+          '@orpc/contract': DEPENDENCY_VERSIONS['@orpc/contract'],
+          '@orpc/openapi': DEPENDENCY_VERSIONS['@orpc/openapi'],
+          zod: DEPENDENCY_VERSIONS['zod'],
         },
         devDependencies: {
           '@repo/typescript-config': dep,
@@ -279,11 +280,11 @@ function emitUiPackage(ctx: EmitCtx, dep: string): void {
         dependencies: {
           clsx: '^2.1.1',
           'tailwind-merge': '^3.3.1',
-          react: '^19.1.1',
+          react: DEPENDENCY_VERSIONS['react'],
         },
         devDependencies: {
           '@repo/typescript-config': dep,
-          '@types/react': '^19.1.12',
+          '@types/react': DEPENDENCY_VERSIONS['@types/react'],
         },
       },
       null,
@@ -379,18 +380,19 @@ function emitShellServer(ctx: EmitCtx, dep: string): void {
           build: 'tsc',
         },
         dependencies: {
-          '@nestjs/common': '^11.1.6',
-          '@nestjs/core': '^11.1.6',
-          '@nestjs/platform-express': '^11.1.6',
-          'reflect-metadata': '^0.2.2',
-          rxjs: '^7.8.2',
+          '@nestjs/common': DEPENDENCY_VERSIONS['@nestjs/common'],
+          '@nestjs/core': DEPENDENCY_VERSIONS['@nestjs/core'],
+          '@nestjs/platform-express':
+            DEPENDENCY_VERSIONS['@nestjs/platform-express'],
+          'reflect-metadata': DEPENDENCY_VERSIONS['reflect-metadata'],
+          rxjs: DEPENDENCY_VERSIONS['rxjs'],
         },
         devDependencies: {
           '@repo/typescript-config': dep,
-          '@types/express': '^5.0.3',
-          '@types/node': '^24.3.1',
-          tsx: '^4.20.5',
-          typescript: '^5.9.2',
+          '@types/express': DEPENDENCY_VERSIONS['@types/express'],
+          '@types/node': DEPENDENCY_VERSIONS['@types/node'],
+          tsx: DEPENDENCY_VERSIONS['tsx'],
+          typescript: DEPENDENCY_VERSIONS['typescript'],
         },
       },
       null,
@@ -431,16 +433,17 @@ function emitRestServer(ctx: EmitCtx, dep: string): void {
   }
   const authed = ctx.stack.auth === 'better-auth';
   const dependencies: Record<string, string> = {
-    '@nestjs/common': '^11.1.6',
-    '@nestjs/core': '^11.1.6',
-    '@nestjs/platform-express': '^11.1.6',
-    '@prisma/client': '^6.16.1',
-    'reflect-metadata': '^0.2.2',
-    rxjs: '^7.8.2',
+    '@nestjs/common': DEPENDENCY_VERSIONS['@nestjs/common'],
+    '@nestjs/core': DEPENDENCY_VERSIONS['@nestjs/core'],
+    '@nestjs/platform-express': DEPENDENCY_VERSIONS['@nestjs/platform-express'],
+    '@prisma/client': DEPENDENCY_VERSIONS['@prisma/client'],
+    'reflect-metadata': DEPENDENCY_VERSIONS['reflect-metadata'],
+    rxjs: DEPENDENCY_VERSIONS['rxjs'],
   };
   if (authed) {
-    dependencies['@thallesp/nestjs-better-auth'] = '^2.2.0';
-    dependencies['better-auth'] = '^1.3.8';
+    dependencies['@thallesp/nestjs-better-auth'] =
+      DEPENDENCY_VERSIONS['@thallesp/nestjs-better-auth'];
+    dependencies['better-auth'] = DEPENDENCY_VERSIONS['better-auth'];
   }
 
   setFile(
@@ -460,11 +463,11 @@ function emitRestServer(ctx: EmitCtx, dep: string): void {
         dependencies,
         devDependencies: {
           '@repo/typescript-config': dep,
-          '@types/express': '^5.0.3',
-          '@types/node': '^24.3.1',
-          prisma: '^6.16.1',
-          tsx: '^4.20.5',
-          typescript: '^5.9.2',
+          '@types/express': DEPENDENCY_VERSIONS['@types/express'],
+          '@types/node': DEPENDENCY_VERSIONS['@types/node'],
+          prisma: DEPENDENCY_VERSIONS['prisma'],
+          tsx: DEPENDENCY_VERSIONS['tsx'],
+          typescript: DEPENDENCY_VERSIONS['typescript'],
         },
       },
       null,
@@ -628,26 +631,28 @@ function emitServer(ctx: EmitCtx, dep: string): void {
           build: 'tsc',
         },
         dependencies: {
-          '@nestjs/common': '^11.1.6',
-          '@nestjs/core': '^11.1.6',
-          '@nestjs/platform-express': '^11.1.6',
-          '@orpc/nest': 'beta',
-          '@orpc/openapi': 'beta',
-          '@orpc/server': 'beta',
-          '@prisma/client': '^6.16.1',
+          '@nestjs/common': DEPENDENCY_VERSIONS['@nestjs/common'],
+          '@nestjs/core': DEPENDENCY_VERSIONS['@nestjs/core'],
+          '@nestjs/platform-express':
+            DEPENDENCY_VERSIONS['@nestjs/platform-express'],
+          '@orpc/nest': DEPENDENCY_VERSIONS['@orpc/nest'],
+          '@orpc/openapi': DEPENDENCY_VERSIONS['@orpc/openapi'],
+          '@orpc/server': DEPENDENCY_VERSIONS['@orpc/server'],
+          '@prisma/client': DEPENDENCY_VERSIONS['@prisma/client'],
           '@repo/contract': dep,
-          '@thallesp/nestjs-better-auth': '^2.2.0',
-          'better-auth': '^1.3.8',
-          'reflect-metadata': '^0.2.2',
-          rxjs: '^7.8.2',
+          '@thallesp/nestjs-better-auth':
+            DEPENDENCY_VERSIONS['@thallesp/nestjs-better-auth'],
+          'better-auth': DEPENDENCY_VERSIONS['better-auth'],
+          'reflect-metadata': DEPENDENCY_VERSIONS['reflect-metadata'],
+          rxjs: DEPENDENCY_VERSIONS['rxjs'],
         },
         devDependencies: {
           '@repo/typescript-config': dep,
-          '@types/express': '^5.0.3',
-          '@types/node': '^24.3.1',
-          prisma: '^6.16.1',
-          tsx: '^4.20.5',
-          typescript: '^5.9.2',
+          '@types/express': DEPENDENCY_VERSIONS['@types/express'],
+          '@types/node': DEPENDENCY_VERSIONS['@types/node'],
+          prisma: DEPENDENCY_VERSIONS['prisma'],
+          tsx: DEPENDENCY_VERSIONS['tsx'],
+          typescript: DEPENDENCY_VERSIONS['typescript'],
         },
       },
       null,
@@ -873,37 +878,41 @@ function emitNestStartWeb(ctx: EmitCtx, dep: string): void {
   const restNotes = ctx.stack.api === 'none' && ctx.stack.database !== 'none';
   const dependencies: Record<string, string> = {
     '@repo/ui': dep,
-    '@tanstack/react-router': '^1.132.0',
-    '@tanstack/react-router-devtools': '^1.132.0',
-    '@tanstack/react-start': '^1.132.0',
-    react: '^19.1.1',
-    'react-dom': '^19.1.1',
+    '@tanstack/react-router': DEPENDENCY_VERSIONS['@tanstack/react-router'],
+    '@tanstack/router-core': DEPENDENCY_VERSIONS['@tanstack/router-core'],
+    '@tanstack/react-router-devtools':
+      DEPENDENCY_VERSIONS['@tanstack/react-router-devtools'],
+    '@tanstack/react-start': DEPENDENCY_VERSIONS['@tanstack/react-start'],
+    react: DEPENDENCY_VERSIONS['react'],
+    'react-dom': DEPENDENCY_VERSIONS['react-dom'],
   };
   if (orpcWeb || ctx.stack.auth === 'better-auth') {
-    dependencies['better-auth'] = '^1.3.8';
+    dependencies['better-auth'] = DEPENDENCY_VERSIONS['better-auth'];
   }
   if (orpcWeb) {
-    dependencies['@orpc/client'] = 'beta';
-    dependencies['@orpc/contract'] = 'beta';
-    dependencies['@orpc/openapi'] = 'beta';
-    dependencies['@orpc/tanstack-query'] = 'beta';
+    dependencies['@orpc/client'] = DEPENDENCY_VERSIONS['@orpc/client'];
+    dependencies['@orpc/contract'] = DEPENDENCY_VERSIONS['@orpc/contract'];
+    dependencies['@orpc/openapi'] = DEPENDENCY_VERSIONS['@orpc/openapi'];
+    dependencies['@orpc/tanstack-query'] =
+      DEPENDENCY_VERSIONS['@orpc/tanstack-query'];
     dependencies['@repo/contract'] = dep;
-    dependencies['@tanstack/react-query'] = '^5.89.0';
+    dependencies['@tanstack/react-query'] =
+      DEPENDENCY_VERSIONS['@tanstack/react-query'];
   }
 
   emitStartWebApp(ctx, {
     dependencies,
     devDependencies: {
       '@repo/typescript-config': dep,
-      '@tailwindcss/vite': '^4.1.13',
-      '@types/node': '^24.3.1',
-      '@types/react': '^19.1.12',
-      '@types/react-dom': '^19.1.9',
-      '@vitejs/plugin-react': '^5.0.2',
-      tailwindcss: '^4.1.13',
-      typescript: '^5.9.2',
-      vite: '^7.1.5',
-      'vite-tsconfig-paths': '^5.1.4',
+      '@tailwindcss/vite': DEPENDENCY_VERSIONS['@tailwindcss/vite'],
+      '@types/node': DEPENDENCY_VERSIONS['@types/node'],
+      '@types/react': DEPENDENCY_VERSIONS['@types/react'],
+      '@types/react-dom': DEPENDENCY_VERSIONS['@types/react-dom'],
+      '@vitejs/plugin-react': DEPENDENCY_VERSIONS['@vitejs/plugin-react'],
+      tailwindcss: DEPENDENCY_VERSIONS['tailwindcss'],
+      typescript: DEPENDENCY_VERSIONS['typescript'],
+      vite: DEPENDENCY_VERSIONS['vite'],
+      'vite-tsconfig-paths': DEPENDENCY_VERSIONS['vite-tsconfig-paths'],
     },
     providers: orpcWeb ? nestStartOrpcProviders() : startPassthroughProviders(),
     notesLink: ctx.stack.database !== 'none',
@@ -1192,19 +1201,21 @@ function emitWebShell(ctx: EmitCtx, dep: string): void {
         },
         dependencies: {
           '@repo/ui': dep,
-          ...(authClient ? { 'better-auth': '^1.3.8' } : {}),
-          next: '^15.5.4',
-          react: '^19.1.1',
-          'react-dom': '^19.1.1',
+          ...(authClient
+            ? { 'better-auth': DEPENDENCY_VERSIONS['better-auth'] }
+            : {}),
+          next: DEPENDENCY_VERSIONS['next'],
+          react: DEPENDENCY_VERSIONS['react'],
+          'react-dom': DEPENDENCY_VERSIONS['react-dom'],
         },
         devDependencies: {
           '@repo/typescript-config': dep,
-          '@tailwindcss/postcss': '^4.1.13',
-          '@types/node': '^24.3.1',
-          '@types/react': '^19.1.12',
-          '@types/react-dom': '^19.1.9',
-          tailwindcss: '^4.1.13',
-          typescript: '^5.9.2',
+          '@tailwindcss/postcss': DEPENDENCY_VERSIONS['@tailwindcss/postcss'],
+          '@types/node': DEPENDENCY_VERSIONS['@types/node'],
+          '@types/react': DEPENDENCY_VERSIONS['@types/react'],
+          '@types/react-dom': DEPENDENCY_VERSIONS['@types/react-dom'],
+          tailwindcss: DEPENDENCY_VERSIONS['tailwindcss'],
+          typescript: DEPENDENCY_VERSIONS['typescript'],
         },
       },
       null,
@@ -1392,28 +1403,29 @@ function emitWeb(ctx: EmitCtx, dep: string): void {
           start: 'next start',
         },
         dependencies: {
-          '@orpc/client': 'beta',
-          '@orpc/contract': 'beta',
-          '@orpc/openapi': 'beta',
-          '@orpc/tanstack-query': 'beta',
+          '@orpc/client': DEPENDENCY_VERSIONS['@orpc/client'],
+          '@orpc/contract': DEPENDENCY_VERSIONS['@orpc/contract'],
+          '@orpc/openapi': DEPENDENCY_VERSIONS['@orpc/openapi'],
+          '@orpc/tanstack-query': DEPENDENCY_VERSIONS['@orpc/tanstack-query'],
           '@repo/contract': dep,
           ...uiDeps,
-          '@tanstack/react-query': '^5.89.0',
-          '@tanstack/react-query-next-experimental': '^5.89.0',
-          'better-auth': '^1.3.8',
-          next: '^15.5.4',
-          react: '^19.1.1',
-          'react-dom': '^19.1.1',
-          'server-only': '^0.0.1',
+          '@tanstack/react-query': DEPENDENCY_VERSIONS['@tanstack/react-query'],
+          '@tanstack/react-query-next-experimental':
+            DEPENDENCY_VERSIONS['@tanstack/react-query-next-experimental'],
+          'better-auth': DEPENDENCY_VERSIONS['better-auth'],
+          next: DEPENDENCY_VERSIONS['next'],
+          react: DEPENDENCY_VERSIONS['react'],
+          'react-dom': DEPENDENCY_VERSIONS['react-dom'],
+          'server-only': DEPENDENCY_VERSIONS['server-only'],
         },
         devDependencies: {
           '@repo/typescript-config': dep,
-          '@tailwindcss/postcss': '^4.1.13',
-          '@types/node': '^24.3.1',
-          '@types/react': '^19.1.12',
-          '@types/react-dom': '^19.1.9',
-          tailwindcss: '^4.1.13',
-          typescript: '^5.9.2',
+          '@tailwindcss/postcss': DEPENDENCY_VERSIONS['@tailwindcss/postcss'],
+          '@types/node': DEPENDENCY_VERSIONS['@types/node'],
+          '@types/react': DEPENDENCY_VERSIONS['@types/react'],
+          '@types/react-dom': DEPENDENCY_VERSIONS['@types/react-dom'],
+          tailwindcss: DEPENDENCY_VERSIONS['tailwindcss'],
+          typescript: DEPENDENCY_VERSIONS['typescript'],
         },
       },
       null,
