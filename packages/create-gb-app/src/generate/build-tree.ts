@@ -28,6 +28,7 @@ import { emitShadcn } from './layers/shadcn';
 import { emitStart } from './layers/start';
 import { emitStripe } from './layers/stripe';
 import { emitTrpc } from './layers/trpc';
+import { emitValidation } from './layers/validation';
 import { projectLayout } from './layout';
 import { finalizeWorkspaces } from './workspaces';
 
@@ -255,6 +256,7 @@ export function Providers({ children }: { children: ReactNode }) {
 
   if (foundations) {
     emitUi(stack, emitCtx);
+    emitValidation(emitCtx);
   }
 
   pkg.dependencies = sortRecord(pkg.dependencies);

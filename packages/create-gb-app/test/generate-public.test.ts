@@ -48,6 +48,7 @@ test('public generate still emits YES paths', () => {
   for (const path of YES_PATHS) {
     expect(files[path]).toBeDefined();
   }
+  expect(files['lib/note-validation.ts']).toBeDefined();
   expect(YES_DEFAULTS.frontend).toBe('next');
   expect(YES_DEFAULTS.backend).toBe('self');
 });

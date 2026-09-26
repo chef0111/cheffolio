@@ -213,6 +213,7 @@ function emitContract(ctx: EmitCtx, dep: string): void {
     'packages/contract/src/contract.ts',
     `import { oc } from "@orpc/contract";
 import { openapi } from "@orpc/openapi";
+import { noteInputSchema } from "@repo/validation";
 import { z } from "zod";
 
 const UserSchema = z.object({
@@ -239,15 +240,14 @@ export const contract = {
       .output(z.array(NoteSchema)),
     create: oc
       .meta(openapi({ method: "POST", path: "/notes" }))
-      .input(z.object({ title: z.string().min(1), body: z.string() }))
+      .input(noteInputSchema)
       .output(NoteSchema),
     update: oc
       .meta(openapi({ method: "PATCH", path: "/notes/{id}" }))
       .input(
         z.object({
           id: z.string(),
-          title: z.string().min(1),
-          body: z.string(),
+          ...noteInputSchema.shape,
         }),
       )
       .output(NoteSchema),
@@ -549,28 +549,36 @@ export const auth = betterAuth({
 
   const sessionLookup = authed
     ? `import { fromNodeHeaders } from "better-auth/node";
-import type { Request } from "express";
-import { auth } from "./auth";
-import { prisma } from "./db";
+import { auth } from "./auth.js";
+import { prisma } from "./db.js";
 
 async function requireUserId(request: Request) {
   const session = await auth.api.getSession({
     headers: fromNodeHeaders(request.headers),
   });
   if (!session) {
-    throw new Error("UNAUTHORIZED");
+    throw new UnauthorizedException();
   }
   return session.user.id;
 }
 `
-    : `import { prisma } from "./db";
+    : `import { prisma } from "./db.js";
 `;
 
   setFile(
     ctx.files,
     'apps/server/src/notes.controller.ts',
-    `import { Body, Controller, Delete, Get, Param, Patch, Post${authed ? ', Req' : ''} } from "@nestjs/common";
+    `import { BadRequestException, Body, Controller, Delete, Get, Param, Patch, Post${authed ? ', Req, UnauthorizedException' : ''} } from "@nestjs/common";
+import { noteInputSchema } from "@repo/validation";
 ${authed ? `import type { Request } from "express";\n` : ''}${sessionLookup}
+function parseNote(input: unknown) {
+  const parsed = noteInputSchema.safeParse(input);
+  if (!parsed.success) {
+    throw new BadRequestException({ error: "VALIDATION_ERROR", issues: parsed.error.issues });
+  }
+  return parsed.data;
+}
+
 @Controller("notes")
 export class NotesController {
   @Get()
@@ -583,12 +591,13 @@ export class NotesController {
   }
 
   @Post()
-  async create(${authed ? '@Req() request: Request, ' : ''}@Body() body: { title: string; body: string }) {
+  async create(${authed ? '@Req() request: Request, ' : ''}@Body() body: unknown) {
     ${authed ? 'const userId = await requireUserId(request);' : ''}
+    const note = parseNote(body);
     return prisma.note.create({
       data: {
-        title: body.title,
-        body: body.body,
+        title: note.title,
+        body: note.body,
         ${authed ? 'userId,' : ''}
       },
     });
@@ -597,11 +606,12 @@ export class NotesController {
   @Patch(":id")
   async update(
     ${authed ? '@Req() request: Request, ' : ''}@Param("id") id: string,
-    @Body() body: { title: string; body: string },
+    @Body() body: unknown,
   ) {
+    const parsed = parseNote(body);
     ${authed ? 'const userId = await requireUserId(request);\n    const note = await prisma.note.findFirst({ where: { id, userId } });\n    if (!note) {\n      throw new Error("NOT_FOUND");\n    }\n    ' : ''}return prisma.note.update({
       where: { id${authed ? ': note.id' : ''} },
-      data: { title: body.title, body: body.body },
+      data: { title: parsed.title, body: parsed.body },
     });
   }
 
@@ -1012,7 +1022,8 @@ export function Providers(props: { children: ReactNode }) {
 }
 
 function nestStartOrpcNotesRoute(): string {
-  return `import { useState } from "react";
+  return `import { noteInputSchema } from "@repo/validation";
+import { useState } from "react";
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { orpc } from "@/lib/orpc";
@@ -1027,6 +1038,7 @@ export const Route = createFileRoute("/notes")({
 function NotesPage() {
   const queryClient = useQueryClient();
   const [title, setTitle] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const [body, setBody] = useState("");
   const notes = useQuery(orpc.notes.list.queryOptions());
   const create = useMutation(
@@ -1051,13 +1063,20 @@ function NotesPage() {
         className="flex flex-col gap-3"
         onSubmit={(event) => {
           event.preventDefault();
-          create.mutate({ title, body });
+          const parsed = noteInputSchema.safeParse({ title, body });
+          if (!parsed.success) {
+            setError(parsed.error.issues[0]?.message ?? "Invalid note");
+            return;
+          }
+          setError(null);
+          create.mutate(parsed.data);
         }}
       >
         <Input name="title" placeholder="Title" value={title} onChange={(event) => setTitle(event.target.value)} required />
         <Input name="body" placeholder="Body" value={body} onChange={(event) => setBody(event.target.value)} />
         <Button type="submit" disabled={create.isPending}>Add note</Button>
       </form>
+      {error || create.error?.message ? <p role="alert" className="text-sm text-destructive">{error || create.error?.message}</p> : null}
       <ul className="flex flex-col gap-3">
         {(notes.data ?? []).map((note) => (
           <li key={note.id}>
@@ -1119,7 +1138,8 @@ function LoginPage() {
 }
 
 function nestStartRestNotesRoute(): string {
-  return `import { useState } from "react";
+  return `import { noteInputSchema } from "@repo/validation";
+import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Button } from "@repo/ui/button";
 import { Card } from "@repo/ui/card";
@@ -1135,6 +1155,8 @@ export const Route = createFileRoute("/notes")({
 
 function NotesPage() {
   const [title, setTitle] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
   const [body, setBody] = useState("");
   const [notes, setNotes] = useState<Note[]>([]);
 
@@ -1143,25 +1165,42 @@ function NotesPage() {
       <h1 className="text-2xl font-semibold">Notes</h1>
       <form
         className="flex flex-col gap-3"
-        onSubmit={(event) => {
+        onSubmit={async (event) => {
           event.preventDefault();
-          void fetch(serverUrl + "/notes", {
+          const parsed = noteInputSchema.safeParse({ title, body });
+          if (!parsed.success) {
+            setError(parsed.error.issues[0]?.message ?? "Invalid note");
+            return;
+          }
+          setError(null);
+          setPending(true);
+          try {
+            const response = await fetch(serverUrl + "/notes", {
             method: "POST",
             credentials: "include",
             headers: { "content-type": "application/json" },
-            body: JSON.stringify({ title, body }),
-          }).then(async () => {
+            body: JSON.stringify(parsed.data),
+            });
+            if (!response.ok) {
+              const failure = await response.json().catch(() => null);
+              throw new Error(failure?.issues?.[0]?.message ?? failure?.error ?? "Could not save note");
+            }
+            const listResponse = await fetch(serverUrl + "/notes", { credentials: "include" });
+            setNotes(await listResponse.json());
             setTitle("");
             setBody("");
-            const response = await fetch(serverUrl + "/notes", { credentials: "include" });
-            setNotes(await response.json());
-          });
+          } catch (cause) {
+            setError(cause instanceof Error ? cause.message : "Could not save note");
+          } finally {
+            setPending(false);
+          }
         }}
       >
         <Input name="title" placeholder="Title" value={title} onChange={(event) => setTitle(event.target.value)} required />
         <Input name="body" placeholder="Body" value={body} onChange={(event) => setBody(event.target.value)} />
-        <Button type="submit">Add note</Button>
+        <Button type="submit" disabled={pending}>Add note</Button>
       </form>
+      {error ? <p role="alert" className="text-sm text-destructive">{error}</p> : null}
       <ul className="flex flex-col gap-3">
         {notes.map((note) => (
           <li key={note.id}>
@@ -1292,6 +1331,7 @@ export default function RootLayout({
     'apps/web/app/notes/notes-client.tsx',
     `"use client";
 
+import { noteInputSchema } from "@repo/validation";
 import { useState } from "react";
 import { Button } from "@repo/ui/button";
 import { Card } from "@repo/ui/card";
@@ -1303,6 +1343,8 @@ type Note = { id: string; title: string; body: string };
 
 export function NotesClient() {
   const [title, setTitle] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
   const [body, setBody] = useState("");
   const [notes, setNotes] = useState<Note[]>([]);
 
@@ -1310,25 +1352,42 @@ export function NotesClient() {
     <div className="flex flex-col gap-6">
       <form
         className="flex flex-col gap-3"
-        onSubmit={(event) => {
+        onSubmit={async (event) => {
           event.preventDefault();
-          void fetch(serverUrl + "/notes", {
+          const parsed = noteInputSchema.safeParse({ title, body });
+          if (!parsed.success) {
+            setError(parsed.error.issues[0]?.message ?? "Invalid note");
+            return;
+          }
+          setError(null);
+          setPending(true);
+          try {
+            const response = await fetch(serverUrl + "/notes", {
             method: "POST",
             credentials: "include",
             headers: { "content-type": "application/json" },
-            body: JSON.stringify({ title, body }),
-          }).then(async () => {
+            body: JSON.stringify(parsed.data),
+            });
+            if (!response.ok) {
+              const failure = await response.json().catch(() => null);
+              throw new Error(failure?.issues?.[0]?.message ?? failure?.error ?? "Could not save note");
+            }
+            const listResponse = await fetch(serverUrl + "/notes", { credentials: "include" });
+            setNotes(await listResponse.json());
             setTitle("");
             setBody("");
-            const response = await fetch(serverUrl + "/notes", { credentials: "include" });
-            setNotes(await response.json());
-          });
+          } catch (cause) {
+            setError(cause instanceof Error ? cause.message : "Could not save note");
+          } finally {
+            setPending(false);
+          }
         }}
       >
         <Input name="title" placeholder="Title" value={title} onChange={(event) => setTitle(event.target.value)} required />
         <Input name="body" placeholder="Body" value={body} onChange={(event) => setBody(event.target.value)} />
-        <Button type="submit">Add note</Button>
+        <Button type="submit" disabled={pending}>Add note</Button>
       </form>
+      {error ? <p role="alert" className="text-sm text-destructive">{error}</p> : null}
       <ul className="flex flex-col gap-3">
         {notes.map((note) => (
           <li key={note.id}>
@@ -1616,6 +1675,7 @@ import { Input } from "@repo/ui/input";`;
     'apps/web/app/notes/notes-client.tsx',
     `"use client";
 
+import { noteInputSchema } from "@repo/validation";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { orpc } from "@/lib/orpc";
@@ -1624,6 +1684,7 @@ ${buttonImport}
 export function NotesClient() {
   const queryClient = useQueryClient();
   const [title, setTitle] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const [body, setBody] = useState("");
   const notes = useQuery(orpc.notes.list.queryOptions());
   const create = useMutation(
@@ -1642,11 +1703,18 @@ export function NotesClient() {
         className="flex flex-col gap-3"
         onSubmit={(event) => {
           event.preventDefault();
-          create.mutate({ title, body });
+          const parsed = noteInputSchema.safeParse({ title, body });
+          if (!parsed.success) {
+            setError(parsed.error.issues[0]?.message ?? "Invalid note");
+            return;
+          }
+          setError(null);
+          create.mutate(parsed.data);
         }}
       >
         ${formControls}
       </form>
+      {error || create.error?.message ? <p role="alert" className="text-sm text-destructive">{error || create.error?.message}</p> : null}
       <ul className="flex flex-col gap-3">
         {(notes.data ?? []).map((note) => (
           <li key={note.id}>

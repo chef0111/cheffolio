@@ -32,6 +32,7 @@ const GOLDEN2_PATHS = [
   'src/components/ui/separator.tsx',
   'src/components/ui/textarea.tsx',
   'src/lib/db.ts',
+  'src/lib/note-validation.ts',
   'src/lib/query-client.ts',
   'src/lib/trpc.ts',
   'src/lib/utils.ts',

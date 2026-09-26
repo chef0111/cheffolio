@@ -30,6 +30,7 @@ export default defineSchema({
     ctx.files,
     'convex/notes.ts',
     `import { v } from "convex/values";
+import { noteInputSchema } from "../${isNext ? '' : 'src/'}lib/note-validation";
 import { mutation, query } from "./_generated/server";
 
 export const list = query({
@@ -62,9 +63,10 @@ export const create = mutation({
     }`
         : ''
     }
+    const note = noteInputSchema.parse(args);
     return ctx.db.insert("notes", {
-      title: args.title,
-      body: args.body,
+      title: note.title,
+      body: note.body,
       ${authed ? 'userId: identity.subject,' : ''}
     });
   },

@@ -18,10 +18,22 @@ test('optional fullstack workspaces retain web-owned server actions and shared f
     );
     expect(files['apps/web/package.json']).toBeDefined();
     expect(files['packages/ui/package.json']).toBeDefined();
+    expect(files['packages/validation/package.json']).toBeDefined();
     expect(files['apps/server/package.json']).toBeUndefined();
     expect(files['apps/web/prisma/schema.prisma']).toContain(
       'provider = "sqlite"'
     );
+    const sourceRoot = frontend === 'next' ? 'apps/web' : 'apps/web/src';
+    expect(files[`${sourceRoot}/lib/note-validation.ts`]).toContain(
+      '@repo/validation'
+    );
+    expect(
+      files[
+        frontend === 'next'
+          ? 'apps/web/app/notes/actions.ts'
+          : 'apps/web/src/server/notes.ts'
+      ]
+    ).toContain('noteInputSchema');
     expect(
       JSON.parse(files['apps/web/package.json']).scripts['db:generate']
     ).toBe('prisma generate');
@@ -78,7 +90,7 @@ test('Convex workspaces keep native functions with their frontend and explicit c
       { projectName: 'convex-workspace', packageManager: 'pnpm' }
     );
     expect(files['apps/web/convex/schema.ts']).toBeDefined();
-    expect(files['apps/web/convex/notes.ts']).toContain('mutation');
+    expect(files['apps/web/convex/notes.ts']).toContain('@repo/validation');
     expect(files['apps/server/package.json']).toBeUndefined();
     const pkg = JSON.parse(files['apps/web/package.json']);
     expect(pkg.scripts['convex:codegen']).toBe('convex codegen');

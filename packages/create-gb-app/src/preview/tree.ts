@@ -15,6 +15,7 @@ export function previewTree(stack: Stack): string {
     rows.push(
       'packages/typescript-config',
       'packages/ui',
+      'packages/validation',
       'turbo.json'
     );
     return rows.join('\n');

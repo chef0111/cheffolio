@@ -20,6 +20,7 @@ export function emitOptionalWorkspace(
   web.version = '0.0.0';
   const protocol = workspaceProtocol(ctx.packageManager);
   web.dependencies['@repo/ui'] = protocol;
+  web.dependencies['@repo/validation'] = protocol;
   web.devDependencies['@repo/typescript-config'] = protocol;
 
   for (const [path, contents] of Object.entries(single)) {
@@ -140,6 +141,24 @@ export function emitOptionalWorkspace(
       2
     )
   );
+  const sourceRoot =
+    ctx.stack.frontend === 'next' ? 'apps/web' : 'apps/web/src';
+  setFile(
+    ctx.files,
+    `${sourceRoot}/lib/note-validation.ts`,
+    'export { noteInputSchema, type NoteInput } from "@repo/validation";\n'
+  );
+  if (ctx.stack.backend === 'convex') {
+    const notes = ctx.files['apps/web/convex/notes.ts'];
+    setFile(
+      ctx.files,
+      'apps/web/convex/notes.ts',
+      notes.replace(
+        /from "\.\.\/(?:src\/)?lib\/note-validation"/,
+        'from "@repo/validation"'
+      )
+    );
+  }
   const convexSetup =
     ctx.stack.backend === 'convex'
       ? '\nRun the root convex:dev task first to configure a deployment, generate apps/web/convex/_generated, and write apps/web/.env.local. Set NEXT_PUBLIC_CONVEX_URL for Next.js or VITE_CONVEX_URL for Start to the deployment URL. Keep convex:dev running alongside the root dev task. Run convex:codegen after function changes when needed. The app cannot typecheck before codegen. If Clerk is selected, configure its convex JWT template and set CLERK_JWT_ISSUER_DOMAIN in the Convex deployment environment. Live deployment setup requires your own Convex account.\n'
@@ -147,6 +166,6 @@ export function emitOptionalWorkspace(
   setFile(
     ctx.files,
     'README.md',
-    `# ${ctx.projectName}\n\nThe fullstack web application lives in apps/web. Shared UI and TypeScript configuration live in packages. Run the root dev task to start the app; shared packages build first. Database tasks delegate to the web application and use its local environment and schema.\n${convexSetup}`
+    `# ${ctx.projectName}\n\nThe fullstack web application lives in apps/web. Shared UI, domain validation, and TypeScript configuration live in packages. Run the root dev task to start the app; shared validation builds first. Database tasks delegate to the web application and use its local environment and schema.\n${convexSetup}`
   );
 }

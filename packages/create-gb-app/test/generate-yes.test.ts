@@ -43,6 +43,7 @@ const YES_PATHS = [
   'lib/auth-client.ts',
   'lib/auth.ts',
   'lib/db.ts',
+  'lib/note-validation.ts',
   'lib/orpc.ts',
   'lib/query-client.ts',
   'lib/utils.ts',
