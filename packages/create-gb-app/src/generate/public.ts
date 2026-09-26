@@ -1,3 +1,4 @@
+export { SHADCN_FOUNDATION } from '#/generate/assets/shadcn/metadata';
 export { buildTree } from '#/generate/build-tree';
 export type { GenerateGapCode } from '#/generate/errors';
 export { GENERATE_GAPS, GenerateError } from '#/generate/errors';

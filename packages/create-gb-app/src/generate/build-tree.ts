@@ -208,7 +208,6 @@ export function buildTree(stack: Stack, ctx: GenerateContext): FileMap {
   if (stack.backend !== 'nest' && stack.backend !== 'hono') {
     emitAuth(stack, emitCtx);
     emitPayments(stack, emitCtx);
-    emitUi(stack, emitCtx);
     emitLinter(stack, emitCtx);
     if (stack.backend === 'convex' || stack.database !== 'none') {
       emitNotes(emitCtx);
@@ -237,6 +236,7 @@ export function Providers({ children }: { children: ReactNode }) {
     );
   }
 
+  emitUi(stack, emitCtx);
   pkg.dependencies = sortRecord(pkg.dependencies);
   pkg.devDependencies = sortRecord(pkg.devDependencies);
   pkg.scripts = sortRecord(pkg.scripts);

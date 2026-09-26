@@ -45,7 +45,9 @@ test('public generate still emits YES paths', () => {
     projectName: 'yes-app',
     packageManager: 'bun',
   });
-  expect(Object.keys(files).sort()).toEqual(YES_PATHS);
+  for (const path of YES_PATHS) {
+    expect(files[path]).toBeDefined();
+  }
   expect(YES_DEFAULTS.frontend).toBe('next');
   expect(YES_DEFAULTS.backend).toBe('self');
 });

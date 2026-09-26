@@ -21,6 +21,8 @@ export function Providers(props: { children: ReactNode }) {
 }
 
 export function emitStart(ctx: EmitCtx): void {
+  ctx.pkg.dependencies['@tanstack/router-core'] =
+    DEPENDENCY_VERSIONS['@tanstack/router-core'];
   ctx.pkg.scripts.dev = 'vite dev';
   ctx.pkg.scripts.build = 'vite build';
   ctx.pkg.scripts.start = 'vite preview';

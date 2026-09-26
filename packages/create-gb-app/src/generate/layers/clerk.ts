@@ -224,21 +224,22 @@ export class NotesController {
 }
 
 function emitStartClerkConvexProviders(ctx: EmitCtx): void {
+  const start = isStart(ctx.stack);
   setFile(
     ctx.files,
-    'src/components/providers.tsx',
+    start ? 'src/components/providers.tsx' : 'app/providers.tsx',
     `"use client";
 
-import { ClerkProvider, useAuth } from "@clerk/clerk-react";
+import { ClerkProvider, useAuth } from "${start ? '@clerk/clerk-react' : '@clerk/nextjs'}";
 import { ConvexReactClient } from "convex/react";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
 import type { ReactNode } from "react";
 
-const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL as string);
+const convex = new ConvexReactClient(${start ? 'import.meta.env.VITE_CONVEX_URL as string' : 'process.env.NEXT_PUBLIC_CONVEX_URL!'});
 
 export function Providers(props: { children: ReactNode }) {
   return (
-    <ClerkProvider publishableKey={import.meta.env.VITE_CLERK_PUBLISHABLE_KEY as string}>
+    <ClerkProvider publishableKey={${start ? 'import.meta.env.VITE_CLERK_PUBLISHABLE_KEY as string' : 'process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY!'}}>
       <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
         {props.children}
       </ConvexProviderWithClerk>

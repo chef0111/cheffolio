@@ -84,6 +84,7 @@ export default config;
 /// <reference types="next/image-types/global" />
 `
   );
+  setFile(ctx.files, 'global.d.ts', 'declare module "*.css";\n');
 
   setFile(
     ctx.files,
