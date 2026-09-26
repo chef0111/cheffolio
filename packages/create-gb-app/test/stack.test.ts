@@ -63,19 +63,19 @@ test('structure follows the historical backend layout', () => {
   expect(resolveStack({ backend: 'hono' }).structure).toBe('turborepo');
 });
 
-test('required structures fail descriptively and optional layouts remain unavailable', () => {
+test('required structures fail descriptively and optional layouts remain available', () => {
   expect(() => resolveStack({ backend: 'nest', structure: 'single' })).toThrow(
     new CompatError(RULE_IDS.backendRequiresTurborepo)
   );
   expect(() => resolveStack({ backend: 'hono', structure: 'single' })).toThrow(
     new CompatError(RULE_IDS.backendRequiresTurborepo)
   );
-  expect(() => resolveStack({ backend: 'self', structure: 'turborepo' })).toThrow(
-    new CompatError(RULE_IDS.optionalTurborepoUnavailable)
-  );
-  expect(() => resolveStack({ backend: 'convex', structure: 'turborepo' })).toThrow(
-    new CompatError(RULE_IDS.optionalTurborepoUnavailable)
-  );
+  expect(
+    resolveStack({ backend: 'self', structure: 'turborepo' }).structure
+  ).toBe('turborepo');
+  expect(
+    resolveStack({ backend: 'convex', structure: 'turborepo' }).structure
+  ).toBe('turborepo');
 });
 
 test('CompatError ruleId is not writable', () => {

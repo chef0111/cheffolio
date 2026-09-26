@@ -2,21 +2,25 @@ import { expect, test } from 'bun:test';
 
 import { buildTree, resolveStack } from '#/generate/public';
 
-for (const structure of ['single'] as const) {
+for (const structure of ['single', 'turborepo'] as const) {
   test(`${structure} ESLint owns the plugins loaded relative to the app`, () => {
     const files = buildTree(resolveStack({ structure }), {
       projectName: 'lint-fixture',
       packageManager: 'bun',
     });
-    const prefix = '';
+    const prefix = structure === 'turborepo' ? 'apps/web/' : '';
     const pkg = JSON.parse(files[prefix + 'package.json']!);
+    const root = JSON.parse(files['package.json']!);
     for (const [name, version] of [
       ['eslint-plugin-react-hooks', '^5.0.0'],
       ['@next/eslint-plugin-next', '^15.5.4'],
     ]) {
       expect(pkg.devDependencies[name]).toBe(
-        version
+        structure === 'single' ? version : 'catalog:'
       );
+      if (structure === 'turborepo') {
+        expect(root.workspaces.catalog[name]).toBe(version);
+      }
     }
     expect(files[prefix + 'eslint.config.mjs']).toContain(
       'next/core-web-vitals'

@@ -132,12 +132,6 @@ function disabledRule(
     ) {
       return RULE_IDS.backendRequiresTurborepo;
     }
-    if (
-      (flags.backend === 'self' || flags.backend === 'convex') &&
-      value === 'turborepo'
-    ) {
-      return RULE_IDS.optionalTurborepoUnavailable;
-    }
   }
   if (flags.backend === 'convex' && value !== 'none') {
     const convexRule = convexRelationalRule(group);

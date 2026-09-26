@@ -58,10 +58,20 @@ test('required Turborepo stays selected and explains its constraint', () => {
   expect(disabledRuleId(nest, 'structure', 'turborepo')).toBeNull();
   const self = applyFlagChange(nest, 'backend', 'self');
   expect(self.structure).toBe('single');
-  expect(disabledRuleId(self, 'structure', 'turborepo')).toBe(
-    'optional-turborepo-unavailable'
-  );
+  expect(disabledRuleId(self, 'structure', 'turborepo')).toBeNull();
 });
+
+for (const backend of ['self', 'convex'] as const) {
+  test(`${backend} allows both layouts and preserves URL structure`, () => {
+    const defaults = applyFlagChange(YES_DEFAULTS, 'backend', backend);
+    expect(defaults.structure).toBe('single');
+    for (const structure of ['single', 'turborepo'] as const) {
+      expect(disabledRuleId(defaults, 'structure', structure)).toBeNull();
+      const selected = applyFlagChange(defaults, 'structure', structure);
+      expect(normalizeFlags(selected)).toEqual(selected);
+    }
+  });
+}
 
 test('nest plus oxlint stays oxlint', () => {
   const next = applyFlagChange(

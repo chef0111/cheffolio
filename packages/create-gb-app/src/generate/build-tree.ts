@@ -17,6 +17,7 @@ import { emitHono } from './layers/hono';
 import { emitNest } from './layers/nest';
 import { emitNext } from './layers/next';
 import { emitNotes } from './layers/notes';
+import { emitOptionalWorkspace } from './layers/optional-workspace';
 import { emitOrpc } from './layers/orpc';
 import { emitOxlint } from './layers/oxlint';
 import { emitPolar } from './layers/polar';
@@ -164,7 +165,11 @@ function emitApi(
   }
 }
 
-export function buildTree(stack: Stack, ctx: GenerateContext): FileMap {
+function buildProject(
+  stack: Stack,
+  ctx: GenerateContext,
+  foundations: boolean
+): FileMap {
   const files: FileMap = {};
   const pkg: PackageJsonShape = {
     name: ctx.projectName,
@@ -177,49 +182,56 @@ export function buildTree(stack: Stack, ctx: GenerateContext): FileMap {
   const layout = projectLayout(stack);
   const emitCtx = { ...ctx, files, pkg, stack, layout };
 
-  switch (stack.backend) {
-    case 'self': {
-      emitSelf(emitCtx);
-      emitFrontend(stack, emitCtx);
-      if (stack.database !== 'none') {
-        if (stack.api !== 'none') {
-          emitApi(stack, emitCtx);
+  if (stack.structure === 'single') {
+    switch (stack.backend) {
+      case 'self': {
+        emitSelf(emitCtx);
+        emitFrontend(stack, emitCtx);
+        if (stack.database !== 'none') {
+          if (stack.api !== 'none') {
+            emitApi(stack, emitCtx);
+          }
+          emitDatabase(stack, emitCtx);
         }
-        emitDatabase(stack, emitCtx);
+        break;
       }
-      break;
+      case 'convex':
+        emitFrontend(stack, emitCtx);
+        emitConvex(emitCtx);
+        break;
+      default:
+        throw new Error(
+          `unsupported single-app backend: ${JSON.stringify(stack)}`
+        );
     }
-    case 'nest':
-      emitNest(emitCtx);
-      break;
-    case 'hono':
-      emitHono(emitCtx);
-      break;
-    case 'convex':
-      emitFrontend(stack, emitCtx);
-      emitConvex(emitCtx);
-      break;
-    default: {
-      const _exhaustive: never = stack;
-      throw new Error(`unhandled stack: ${JSON.stringify(_exhaustive)}`);
+  } else {
+    switch (stack.backend) {
+      case 'nest':
+        emitNest(emitCtx);
+        break;
+      case 'hono':
+        emitHono(emitCtx);
+        break;
+      case 'self':
+      case 'convex':
+        emitOptionalWorkspace(emitCtx, (singleStack, context) =>
+          buildProject(singleStack, context, false)
+        );
+        break;
+      default:
+        throw new Error(
+          `unsupported Turborepo backend: ${JSON.stringify(stack)}`
+        );
     }
   }
 
-  if (stack.backend !== 'nest' && stack.backend !== 'hono') {
+  if (stack.structure === 'single') {
     emitAuth(stack, emitCtx);
     emitPayments(stack, emitCtx);
     emitLinter(stack, emitCtx);
     if (stack.backend === 'convex' || stack.database !== 'none') {
       emitNotes(emitCtx);
     }
-  } else if (stack.backend === 'nest') {
-    if (stack.auth === 'clerk') {
-      emitClerk(emitCtx);
-    }
-    emitPayments(stack, emitCtx);
-  }
-
-  if (stack.backend === 'self' || stack.backend === 'convex') {
     const providerPath =
       stack.frontend === 'next'
         ? 'app/providers.tsx'
@@ -234,9 +246,17 @@ export function Providers({ children }: { children: ReactNode }) {
 }
 `
     );
+  } else if (stack.backend === 'nest') {
+    if (stack.auth === 'clerk') {
+      emitClerk(emitCtx);
+    }
+    emitPayments(stack, emitCtx);
   }
 
-  emitUi(stack, emitCtx);
+  if (foundations) {
+    emitUi(stack, emitCtx);
+  }
+
   pkg.dependencies = sortRecord(pkg.dependencies);
   pkg.devDependencies = sortRecord(pkg.devDependencies);
   pkg.scripts = sortRecord(pkg.scripts);
@@ -248,4 +268,8 @@ export function Providers({ children }: { children: ReactNode }) {
   );
   finalizeWorkspaces(files, ctx.packageManager);
   return files;
+}
+
+export function buildTree(stack: Stack, ctx: GenerateContext): FileMap {
+  return buildProject(stack, ctx, true);
 }

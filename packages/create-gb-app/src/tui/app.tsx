@@ -1,10 +1,18 @@
-import { useKeyboard, useTerminalDimensions } from '@opentui/react';
-import { useMemo, useState } from 'react';
+import { CliRenderEvents, type ScrollBoxRenderable } from '@opentui/core';
+import {
+  useKeyboard,
+  useRenderer,
+  useTerminalDimensions,
+} from '@opentui/react';
+import { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 import { formatCommand } from '#/preview/command';
 import { previewTree } from '#/preview/tree';
 import { CompatError } from '#/stack/errors';
-import { defaultStructureForBackend, resolveStack } from '#/stack/resolve';
+import {
+  defaultStructureForBackend,
+  resolveStack,
+} from '#/stack/resolve';
 import type {
   Api,
   Auth,
@@ -15,7 +23,14 @@ import type {
   RawFlags,
 } from '#/types/stack';
 
-type FocusId = 'backend' | 'structure' | 'frontend' | 'api' | 'auth' | 'payments' | 'confirm';
+type FocusId =
+  | 'backend'
+  | 'structure'
+  | 'frontend'
+  | 'api'
+  | 'auth'
+  | 'payments'
+  | 'confirm';
 
 const FOCUS_ORDER: FocusId[] = [
   'backend',
@@ -53,6 +68,11 @@ const OPTIONAL_STRUCTURE_OPTIONS = [
     description: 'One app at project root',
     value: 'single',
   },
+  {
+    name: 'Turborepo',
+    description: 'Web app with shared packages',
+    value: 'turborepo',
+  },
 ];
 const REQUIRED_STRUCTURE_OPTIONS = [
   {
@@ -77,7 +97,6 @@ const AUTH_OPTIONS = [
   { name: 'Clerk', description: 'Hosted auth', value: 'clerk' },
   { name: 'None', description: 'Public notes', value: 'none' },
 ];
-
 function paymentOptions(auth: Auth | undefined) {
   const none = { name: 'None', description: 'No billing', value: 'none' };
   if (auth === 'none' || auth === undefined) {
@@ -151,10 +170,26 @@ function wizardFlags(initialFlags: RawFlags): RawFlags {
 }
 
 export function App({ initialFlags = {}, onExit, onGenerate }: AppProps) {
-  const { width } = useTerminalDimensions();
+  const { width, height } = useTerminalDimensions();
+  const renderer = useRenderer();
   const stacked = width < 72;
   const [flags, setFlags] = useState<RawFlags>(() => wizardFlags(initialFlags));
   const [focus, setFocus] = useState<FocusId>('backend');
+  const controls = useRef<ScrollBoxRenderable>(null);
+
+  const revealFocusedControl = useCallback(() => {
+    controls.current?.scrollChildIntoView(`label-${focus}`);
+    controls.current?.scrollChildIntoView(`control-${focus}`);
+  }, [focus]);
+
+  useLayoutEffect(() => {
+    revealFocusedControl();
+    // Resizes apply native geometry after React's layout effect.
+    renderer.once(CliRenderEvents.FRAME, revealFocusedControl);
+    return () => {
+      renderer.off(CliRenderEvents.FRAME, revealFocusedControl);
+    };
+  }, [renderer, revealFocusedControl, width, height, flags.backend]);
 
   const payments = paymentOptions(flags.auth);
   const polarAvailable = flags.auth === 'better-auth';
@@ -182,7 +217,9 @@ export function App({ initialFlags = {}, onExit, onGenerate }: AppProps) {
   function patch(next: Partial<RawFlags>) {
     setFlags((current: RawFlags) => {
       const merged = { ...current, ...next };
-      if (next.backend !== undefined) merged.structure = defaultStructureForBackend(next.backend);
+      if (next.backend !== undefined) {
+        merged.structure = defaultStructureForBackend(next.backend);
+      }
       if (merged.backend === 'convex') {
         merged.api = undefined;
         merged.database = undefined;
@@ -207,16 +244,37 @@ export function App({ initialFlags = {}, onExit, onGenerate }: AppProps) {
     : (resolved.error ?? '');
   const command = formatCommand(flags);
   const convexHidesApi = flags.backend === 'convex';
-  const structureOptions = flags.backend === 'nest' || flags.backend === 'hono' ? REQUIRED_STRUCTURE_OPTIONS : OPTIONAL_STRUCTURE_OPTIONS;
+  const structureOptions =
+    flags.backend === 'nest' || flags.backend === 'hono'
+      ? REQUIRED_STRUCTURE_OPTIONS
+      : OPTIONAL_STRUCTURE_OPTIONS;
 
   return (
-    <box flexDirection="column" paddingLeft={1} paddingRight={1}>
-      <text>create-gb-app</text>
-      <text>{command}</text>
-      <box flexDirection={stacked ? 'column' : 'row'} gap={1} flexGrow={1}>
-        <box flexDirection="column" width={stacked ? undefined : 28}>
-          <text>Backend</text>
+    <box
+      height={height}
+      flexDirection="column"
+      paddingLeft={1}
+      paddingRight={1}
+    >
+      <scrollbox height={2} flexShrink={0} scrollX={false}>
+        <text flexShrink={0}>{command}</text>
+      </scrollbox>
+      <box flexDirection="row" gap={1} flexGrow={1} minHeight={0}>
+        <scrollbox
+          ref={controls}
+          width={stacked ? '100%' : 28}
+          flexGrow={1}
+          minHeight={0}
+          scrollX={false}
+          onSizeChange={revealFocusedControl}
+          contentOptions={{ flexDirection: 'column', flexShrink: 0 }}
+        >
+          <text id="label-backend" flexShrink={0}>
+            Backend
+          </text>
           <select
+            id="control-backend"
+            flexShrink={0}
             focused={focus === 'backend'}
             height={4}
             showDescription={false}
@@ -228,12 +286,12 @@ export function App({ initialFlags = {}, onExit, onGenerate }: AppProps) {
               }
             }}
           />
-          <text>
+          <text id="label-structure" flexShrink={0}>
             Project structure
           </text>
           <select
-           
-           
+            id="control-structure"
+            flexShrink={0}
             focused={focus === 'structure'}
             height={2}
             showDescription={false}
@@ -245,13 +303,17 @@ export function App({ initialFlags = {}, onExit, onGenerate }: AppProps) {
               }
             }}
           />
-          <text>
+          <text flexShrink={0}>
             {flags.backend === 'nest' || flags.backend === 'hono'
               ? 'Nest/Hono need Turborepo'
-              : 'Single app; Turborepo coming later'}
+              : 'Single app or Turborepo'}
           </text>
-          <text>Frontend</text>
+          <text id="label-frontend" flexShrink={0}>
+            Frontend
+          </text>
           <select
+            id="control-frontend"
+            flexShrink={0}
             focused={focus === 'frontend'}
             height={2}
             showDescription={false}
@@ -264,9 +326,13 @@ export function App({ initialFlags = {}, onExit, onGenerate }: AppProps) {
             }}
           />
           {flags.backend === 'convex' ? null : (
-            <box flexDirection="column">
-              <text>API</text>
+            <box flexDirection="column" flexShrink={0}>
+              <text id="label-api" flexShrink={0}>
+                API
+              </text>
               <select
+                id="control-api"
+                flexShrink={0}
                 focused={focus === 'api'}
                 height={flags.backend === 'nest' ? 2 : 3}
                 showDescription={false}
@@ -284,8 +350,12 @@ export function App({ initialFlags = {}, onExit, onGenerate }: AppProps) {
               />
             </box>
           )}
-          <text>Auth</text>
+          <text id="label-auth" flexShrink={0}>
+            Auth
+          </text>
           <select
+            id="control-auth"
+            flexShrink={0}
             focused={focus === 'auth'}
             height={3}
             showDescription={false}
@@ -297,8 +367,12 @@ export function App({ initialFlags = {}, onExit, onGenerate }: AppProps) {
               }
             }}
           />
-          <text>Payments</text>
+          <text id="label-payments" flexShrink={0}>
+            Payments
+          </text>
           <select
+            id="control-payments"
+            flexShrink={0}
             focused={focus === 'payments'}
             height={3}
             showDescription={false}
@@ -311,6 +385,8 @@ export function App({ initialFlags = {}, onExit, onGenerate }: AppProps) {
             }}
           />
           <select
+            id="control-confirm"
+            flexShrink={0}
             focused={focus === 'confirm'}
             height={1}
             showDescription={false}
@@ -321,21 +397,44 @@ export function App({ initialFlags = {}, onExit, onGenerate }: AppProps) {
               void onGenerate?.(flags);
             }}
           />
-        </box>
-        <box flexDirection="column" flexGrow={1} border>
-          <text>Tree</text>
-          <text>{tree}</text>
-          <text>Command</text>
-          <text>{command}</text>
-          <text>
-            {polarAvailable ? 'Polar available' : 'Polar unavailable'}
-          </text>
-          <text>
-            {convexHidesApi ? 'API and database hidden' : 'API visible'}
-          </text>
-        </box>
+        </scrollbox>
+        {!stacked && (
+          <scrollbox
+            flexDirection="column"
+            flexGrow={1}
+            minHeight={0}
+            border
+            scrollX={false}
+          >
+            <text>Tree</text>
+            <text>{tree}</text>
+            <text>Command</text>
+            <text>{command}</text>
+            <text>
+              {polarAvailable ? 'Polar available' : 'Polar unavailable'}
+            </text>
+            <text>
+              {convexHidesApi ? 'API and database hidden' : 'API visible'}
+            </text>
+          </scrollbox>
+        )}
       </box>
-      <text>Tab cycles. Escape exits. Enter on Generate writes files.</text>
+      {stacked && (
+        <text flexShrink={0} truncate>
+          Tree: {tree.replaceAll('\n', ', ')}
+        </text>
+      )}
+      {stacked && (
+        <text flexShrink={0}>
+          {polarAvailable ? 'Polar available' : 'Polar unavailable'};{' '}
+          {convexHidesApi ? 'API and database hidden' : 'API visible'}
+        </text>
+      )}
+      <text flexShrink={0}>
+        {stacked
+          ? 'Tab: next. Esc: exit. Enter: generate.'
+          : 'Tab cycles. Escape exits. Enter on Generate writes files.'}
+      </text>
     </box>
   );
 }

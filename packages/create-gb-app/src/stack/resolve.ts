@@ -92,10 +92,6 @@ export function resolveStack(raw: RawFlags): Stack {
     throw new CompatError(RULE_IDS.backendRequiresTurborepo);
   }
 
-  if ((backend === 'self' || backend === 'convex') && structure === 'turborepo') {
-    throw new CompatError(RULE_IDS.optionalTurborepoUnavailable);
-  }
-
   if (backend === 'convex') {
     rejectUnlessNone(raw.database, RULE_IDS.convexDatabaseOff);
     rejectUnlessNone(raw.api, RULE_IDS.convexApiOff);
