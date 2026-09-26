@@ -517,22 +517,33 @@ function NotesPage() {
 }
 
 function emitConvexNotes(ctx: EmitCtx): void {
+  const isNext = ctx.stack.frontend === 'next';
+  if (isNext)
+    setFile(
+      ctx.files,
+      'app/notes/page.tsx',
+      `import { NotesClient } from "./notes-client";\n\nexport default function NotesPage() { return <NotesClient />; }\n`
+    );
   setFile(
     ctx.files,
-    'src/routes/notes.tsx',
-    `import { createFileRoute } from "@tanstack/react-router";
+    isNext ? 'app/notes/notes-client.tsx' : 'src/routes/notes.tsx',
+    `${isNext ? '"use client";\n' : 'import { createFileRoute } from "@tanstack/react-router";'}
 import { useMutation, useQuery } from "convex/react";
 import { useState } from "react";
-import { api } from "../../convex/_generated/api";
-import { Button } from "../components/ui/button";
-import { Card } from "../components/ui/card";
-import { Input } from "../components/ui/input";
+import { api } from "../../${isNext ? '' : '../'}convex/_generated/api";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
-export const Route = createFileRoute("/notes")({
+${
+  isNext
+    ? ''
+    : `export const Route = createFileRoute("/notes")({
   component: NotesPage,
-});
+});`
+}
 
-function NotesPage() {
+${isNext ? 'export function NotesClient' : 'function NotesPage'}() {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const notes = useQuery(api.notes.list);

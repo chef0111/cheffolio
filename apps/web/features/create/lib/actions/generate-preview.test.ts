@@ -23,5 +23,6 @@ test('generatePreview returns the YES tree', async () => {
   }
   expect(Object.keys(result.files)).toContain('package.json');
   expect(Object.keys(result.files)).toContain('README.md');
-  expect(Object.keys(result.files).length).toBe(32);
+  expect(result.files['app/layout.tsx']).toBeDefined();
+  expect(result.files['apps/web/package.json']).toBeUndefined();
 });

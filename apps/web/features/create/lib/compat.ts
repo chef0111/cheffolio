@@ -14,6 +14,8 @@ import {
 export { YES_DEFAULTS };
 
 export const RULE_IDS = {
+  backendRequiresTurborepo: 'backend-requires-turborepo',
+  optionalTurborepoUnavailable: 'optional-turborepo-unavailable',
   nestTrpc: 'nest-trpc',
   polarRequiresBetterAuth: 'polar-requires-better-auth',
   paymentsRequireAuth: 'payments-require-auth',
@@ -34,6 +36,9 @@ export const RULE_IDS = {
 export type RuleId = (typeof RULE_IDS)[keyof typeof RULE_IDS];
 
 export const RULE_MESSAGES: Record<RuleId, string> = {
+  'backend-requires-turborepo': 'Nest and Hono require Turborepo',
+  'optional-turborepo-unavailable':
+    'Turborepo for this backend is not available yet',
   'nest-trpc': 'Nest tRPC generate is not implemented yet',
   'polar-requires-better-auth': 'Polar requires Better Auth',
   'payments-require-auth': 'Payments require auth',
@@ -101,6 +106,7 @@ function convexRelationalRule(group: FlagGroup): RuleId | null {
       return RULE_IDS.convexOrmOff;
     case 'dbSetup':
       return RULE_IDS.convexDbSetupOff;
+    case 'structure':
     case 'frontend':
     case 'backend':
     case 'auth':
@@ -119,6 +125,20 @@ function disabledRule(
   group: FlagGroup,
   value: string
 ): RuleId | null {
+  if (group === 'structure') {
+    if (
+      (flags.backend === 'nest' || flags.backend === 'hono') &&
+      value === 'single'
+    ) {
+      return RULE_IDS.backendRequiresTurborepo;
+    }
+    if (
+      (flags.backend === 'self' || flags.backend === 'convex') &&
+      value === 'turborepo'
+    ) {
+      return RULE_IDS.optionalTurborepoUnavailable;
+    }
+  }
   if (flags.backend === 'convex' && value !== 'none') {
     const convexRule = convexRelationalRule(group);
     if (convexRule) {
@@ -229,6 +249,7 @@ export function applyFlagChange<K extends FlagGroup>(
       return applyPaymentsSideEffects(next, value as Payments);
     case 'dbSetup':
       return applyDbSetupSideEffects(next, value as DbSetup);
+    case 'structure':
     case 'frontend':
     case 'api':
     case 'orm':
@@ -265,7 +286,7 @@ function enabledFallback(
 }
 
 export function normalizeFlags(flags: CreateFlags): CreateFlags {
-  let next = flags;
+  let next = { ...YES_DEFAULTS, ...flags };
 
   for (const group of FLAG_GROUPS) {
     if (isOptionEnabled(next, group, next[group])) {
@@ -283,12 +304,14 @@ function applyBackendSideEffects(
 ): CreateFlags {
   switch (backend) {
     case 'nest':
-    case 'self':
     case 'hono':
-      return flags;
+      return { ...flags, structure: 'turborepo' };
+    case 'self':
+      return { ...flags, structure: 'single' };
     case 'convex':
       return {
         ...flags,
+        structure: 'single',
         api: 'none',
         database: 'none',
         orm: 'none',

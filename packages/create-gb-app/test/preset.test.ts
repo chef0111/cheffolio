@@ -34,10 +34,12 @@ test('literal legacy codes retain their original selections', () => {
   expect(decodePreset('gb2')).toEqual({
     ...YES_DEFAULTS,
     backend: 'nest',
+    structure: 'turborepo',
   });
   expect(decodePreset('gb6')).toEqual({
     ...YES_DEFAULTS,
     backend: 'hono',
+    structure: 'turborepo',
   });
   expect(decodePreset('gb-v1-48')).toEqual(decodePreset('gb2'));
 });
@@ -118,6 +120,8 @@ test('database none is an app shell', () => {
   );
   expect(files['package.json']).toContain('"name": "shell-app"');
   expect(files['components/ui/button.tsx']).toBeDefined();
+  expect(files['app/providers.tsx']).toContain('export function Providers');
+  expect(files['app/layout.tsx']).toContain('from "./providers"');
   expect(files['app/notes/page.tsx']).toBeUndefined();
   expect(files['prisma/schema.prisma']).toBeUndefined();
   expect(files['router.ts']).toBeUndefined();
@@ -148,6 +152,26 @@ test('api none on Start uses createServerFn', () => {
   expect(files['src/server/notes.ts']).toContain('createServerFn');
   expect(files['src/server/router.ts']).toBeUndefined();
   expect(files['packages/contract/package.json']).toBeUndefined();
+});
+
+test('minimal Start shell resolves its provider and Vite types', () => {
+  const files = buildTree(
+    resolveStack({
+      frontend: 'tanstack-start',
+      database: 'none',
+      auth: 'none',
+      api: 'none',
+    }),
+    { projectName: 'start-shell', packageManager: 'bun' }
+  );
+  expect(files['src/components/providers.tsx']).toContain(
+    'export function Providers'
+  );
+  expect(files['src/routes/__root.tsx']).toContain(
+    'from "../components/providers"'
+  );
+  expect(files['src/router.tsx']).toContain('routeTree.gen');
+  expect(files['tsconfig.json']).toContain('vite/client');
 });
 
 test('api none on Nest is REST without a contract package', () => {

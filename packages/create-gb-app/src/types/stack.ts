@@ -8,10 +8,12 @@ import type {
   LINTERS,
   ORMS,
   PAYMENTS,
+  PROJECT_STRUCTURES,
 } from '#/stack/vocab';
 
 export type Frontend = (typeof FRONTENDS)[number];
 export type Backend = (typeof BACKENDS)[number];
+export type ProjectStructure = (typeof PROJECT_STRUCTURES)[number];
 export type Api = (typeof APIS)[number];
 export type Database = (typeof DATABASES)[number];
 export type Orm = (typeof ORMS)[number];
@@ -23,6 +25,7 @@ export type Linter = (typeof LINTERS)[number];
 export type PresetFields = {
   frontend: Frontend;
   backend: Backend;
+  structure: ProjectStructure;
   api: Api;
   database: Database;
   orm: Orm;
@@ -39,6 +42,7 @@ export type RawFlags = {
   preset?: string;
   frontend?: Frontend;
   backend?: Backend;
+  structure?: ProjectStructure;
   api?: Api;
   database?: Database;
   orm?: Orm;
@@ -68,26 +72,26 @@ export type SelfStack = Shared &
   Relational & {
     backend: 'self';
     api: Api;
-    monorepo: false;
+    structure: ProjectStructure;
   };
 
 export type NestStack = Shared &
   Relational & {
     backend: 'nest';
     api: Api;
-    monorepo: true;
+    structure: 'turborepo';
   };
 
 export type HonoStack = Shared &
   Relational & {
     backend: 'hono';
     api: Api;
-    monorepo: true;
+    structure: 'turborepo';
   };
 
 export type ConvexStack = Shared & {
   backend: 'convex';
-  monorepo: false;
+  structure: ProjectStructure;
 };
 
 export type Stack = SelfStack | NestStack | HonoStack | ConvexStack;

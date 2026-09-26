@@ -19,6 +19,7 @@ test('convex preview keeps relational none and is not convex-database-off', () =
   expect(flagsToRaw(flags)).toEqual({
     frontend: 'next',
     backend: 'convex',
+    structure: 'single',
     api: 'none',
     database: 'none',
     orm: 'none',
@@ -76,7 +77,8 @@ test('default generate includes package.json', () => {
   expect(result.files['package.json']).toContain('"name": "my-gb-app"');
   expect(Object.keys(result.files)).toContain('.gitignore');
   expect(Object.keys(result.files)).toContain('README.md');
-  expect(Object.keys(result.files).length).toBe(32);
+  expect(result.files['app/layout.tsx']).toBeDefined();
+  expect(result.files['apps/web/package.json']).toBeUndefined();
 });
 
 test('hono next preview lists apps/server and @hono/node-server', () => {
@@ -188,6 +190,7 @@ test('nest plus start with trpc stays disabled', () => {
     {
       ...YES_DEFAULTS,
       backend: 'nest',
+      structure: 'turborepo',
       frontend: 'tanstack-start',
       api: 'trpc',
       linter: 'biome',
@@ -203,7 +206,7 @@ test('nest plus start with trpc stays disabled', () => {
 
 test('nest plus eslint returns a FileMap', () => {
   const result = buildCreateFileMap(
-    { ...YES_DEFAULTS, backend: 'nest' },
+    normalizeFlags({ ...YES_DEFAULTS, backend: 'nest' }),
     'nest-app'
   );
   expect(result.ok).toBe(true);

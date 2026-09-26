@@ -4,20 +4,22 @@ import { useMemo, useState } from 'react';
 import { formatCommand } from '#/preview/command';
 import { previewTree } from '#/preview/tree';
 import { CompatError } from '#/stack/errors';
-import { resolveStack } from '#/stack/resolve';
+import { defaultStructureForBackend, resolveStack } from '#/stack/resolve';
 import type {
   Api,
   Auth,
   Backend,
   Frontend,
   Payments,
+  ProjectStructure,
   RawFlags,
 } from '#/types/stack';
 
-type FocusId = 'backend' | 'frontend' | 'api' | 'auth' | 'payments' | 'confirm';
+type FocusId = 'backend' | 'structure' | 'frontend' | 'api' | 'auth' | 'payments' | 'confirm';
 
 const FOCUS_ORDER: FocusId[] = [
   'backend',
+  'structure',
   'frontend',
   'api',
   'auth',
@@ -43,6 +45,21 @@ const BACKEND_OPTIONS = [
 const FRONTEND_OPTIONS = [
   { name: 'Next', description: 'Next.js App Router', value: 'next' },
   { name: 'Start', description: 'TanStack Start', value: 'tanstack-start' },
+];
+
+const OPTIONAL_STRUCTURE_OPTIONS = [
+  {
+    name: 'Single app',
+    description: 'One app at project root',
+    value: 'single',
+  },
+];
+const REQUIRED_STRUCTURE_OPTIONS = [
+  {
+    name: 'Turborepo',
+    description: 'Required by Nest and Hono',
+    value: 'turborepo',
+  },
 ];
 
 const API_OPTIONS = [
@@ -111,6 +128,7 @@ function wizardFlags(initialFlags: RawFlags): RawFlags {
     ...initialFlags,
     frontend: initialFlags.frontend ?? 'next',
     backend,
+    structure: initialFlags.structure ?? defaultStructureForBackend(backend),
     auth: initialFlags.auth ?? 'better-auth',
     payments: initialFlags.payments ?? 'none',
     linter: initialFlags.linter ?? 'eslint',
@@ -164,6 +182,7 @@ export function App({ initialFlags = {}, onExit, onGenerate }: AppProps) {
   function patch(next: Partial<RawFlags>) {
     setFlags((current: RawFlags) => {
       const merged = { ...current, ...next };
+      if (next.backend !== undefined) merged.structure = defaultStructureForBackend(next.backend);
       if (merged.backend === 'convex') {
         merged.api = undefined;
         merged.database = undefined;
@@ -188,6 +207,7 @@ export function App({ initialFlags = {}, onExit, onGenerate }: AppProps) {
     : (resolved.error ?? '');
   const command = formatCommand(flags);
   const convexHidesApi = flags.backend === 'convex';
+  const structureOptions = flags.backend === 'nest' || flags.backend === 'hono' ? REQUIRED_STRUCTURE_OPTIONS : OPTIONAL_STRUCTURE_OPTIONS;
 
   return (
     <box flexDirection="column" paddingLeft={1} paddingRight={1}>
@@ -208,6 +228,28 @@ export function App({ initialFlags = {}, onExit, onGenerate }: AppProps) {
               }
             }}
           />
+          <text>
+            Project structure
+          </text>
+          <select
+           
+           
+            focused={focus === 'structure'}
+            height={2}
+            showDescription={false}
+            options={structureOptions}
+            selectedIndex={indexOfValue(structureOptions, flags.structure)}
+            onChange={(_index, option) => {
+              if (option?.value) {
+                patch({ structure: option.value as ProjectStructure });
+              }
+            }}
+          />
+          <text>
+            {flags.backend === 'nest' || flags.backend === 'hono'
+              ? 'Nest/Hono need Turborepo'
+              : 'Single app; Turborepo coming later'}
+          </text>
           <text>Frontend</text>
           <select
             focused={focus === 'frontend'}

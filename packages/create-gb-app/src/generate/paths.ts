@@ -5,7 +5,7 @@ export function isStart(stack: Stack): boolean {
 }
 
 export function isAppsLayout(stack: Stack): boolean {
-  return stack.backend === 'nest' || stack.backend === 'hono';
+  return stack.structure === 'turborepo';
 }
 
 export function webPrefix(stack: Stack): string {
@@ -17,7 +17,11 @@ export function webPrefix(stack: Stack): string {
 
 export function serverPrefix(stack: Stack): string {
   if (isAppsLayout(stack)) {
-    return 'apps/server/';
+    return stack.backend === 'nest' || stack.backend === 'hono'
+      ? 'apps/server/'
+      : isStart(stack)
+        ? 'apps/web/src/'
+        : 'apps/web/';
   }
   return isStart(stack) ? 'src/' : '';
 }

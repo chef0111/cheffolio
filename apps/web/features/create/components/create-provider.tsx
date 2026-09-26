@@ -12,6 +12,7 @@ import {
   LINTERS,
   ORMS,
   PAYMENTS,
+  PROJECT_STRUCTURES,
   YES_DEFAULTS,
 } from 'create-gb-app/preset';
 import { parseAsString, parseAsStringLiteral, useQueryStates } from 'nuqs';
@@ -38,6 +39,9 @@ const createSearchParams = {
   name: parseAsString.withDefault(DEFAULT_PROJECT_NAME),
   frontend: parseAsStringLiteral(FRONTENDS).withDefault(YES_DEFAULTS.frontend),
   backend: parseAsStringLiteral(BACKENDS).withDefault(YES_DEFAULTS.backend),
+  structure: parseAsStringLiteral(PROJECT_STRUCTURES).withDefault(
+    YES_DEFAULTS.structure
+  ),
   api: parseAsStringLiteral(APIS).withDefault(YES_DEFAULTS.api),
   database: parseAsStringLiteral(DATABASES).withDefault(YES_DEFAULTS.database),
   orm: parseAsStringLiteral(ORMS).withDefault(YES_DEFAULTS.orm),
@@ -85,7 +89,13 @@ export function CreateProvider({ children }: { children: ReactNode }) {
 
   return (
     <CreateContext.Provider
-      value={{ flags, setFlag, projectName, setProjectName, command }}
+      value={{
+        flags,
+        setFlag,
+        projectName,
+        setProjectName,
+        command,
+      }}
     >
       {children}
     </CreateContext.Provider>

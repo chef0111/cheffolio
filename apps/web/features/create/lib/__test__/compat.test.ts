@@ -18,9 +18,7 @@ import {
 } from '../compat';
 
 test('vendored yesDefault is the picker default', () => {
-  const { monorepo, ...flags } = compat.yesDefault;
-  expect(monorepo).toBe(false);
-  expect(flags).toEqual(YES_DEFAULTS);
+  expect(compat.yesDefault).toEqual(YES_DEFAULTS);
 });
 
 test('nest keeps the selected linter', () => {
@@ -28,6 +26,7 @@ test('nest keeps the selected linter', () => {
   expect(next).toEqual({
     ...YES_DEFAULTS,
     backend: 'nest',
+    structure: 'turborepo',
   });
   expect(next.linter).toBe('eslint');
   expect(normalizeFlags({ ...YES_DEFAULTS, backend: 'nest' })).toEqual(next);
@@ -38,12 +37,30 @@ test('nest keeps the selected linter', () => {
 
 test('hono keeps eslint and leaves tRPC enabled', () => {
   const next = applyFlagChange(YES_DEFAULTS, 'backend', 'hono');
-  expect(next).toEqual({ ...YES_DEFAULTS, backend: 'hono' });
+  expect(next).toEqual({
+    ...YES_DEFAULTS,
+    backend: 'hono',
+    structure: 'turborepo',
+  });
   expect(disabledRuleId(next, 'api', 'trpc')).toBeNull();
   expect(disabledRuleId(next, 'linter', 'eslint')).toBeNull();
   expect(
     disabledRuleId({ ...YES_DEFAULTS, backend: 'nest' }, 'api', 'trpc')
   ).toBe('nest-trpc');
+});
+
+test('required Turborepo stays selected and explains its constraint', () => {
+  const nest = applyFlagChange(YES_DEFAULTS, 'backend', 'nest');
+  expect(nest.structure).toBe('turborepo');
+  expect(disabledRuleId(nest, 'structure', 'single')).toBe(
+    'backend-requires-turborepo'
+  );
+  expect(disabledRuleId(nest, 'structure', 'turborepo')).toBeNull();
+  const self = applyFlagChange(nest, 'backend', 'self');
+  expect(self.structure).toBe('single');
+  expect(disabledRuleId(self, 'structure', 'turborepo')).toBe(
+    'optional-turborepo-unavailable'
+  );
 });
 
 test('nest plus oxlint stays oxlint', () => {
@@ -60,7 +77,10 @@ test('nest plus oxlint stays oxlint', () => {
 
 for (const legal of compat.legal) {
   test(legal.name, () => {
-    const flags = { ...YES_DEFAULTS, ...legal.flags } as CreateFlags;
+    const flags = normalizeFlags({
+      ...YES_DEFAULTS,
+      ...legal.flags,
+    } as CreateFlags);
     for (const group of FLAG_GROUPS) {
       if (!(group in legal.stack)) {
         continue;

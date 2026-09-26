@@ -27,6 +27,7 @@ import { emitShadcn } from './layers/shadcn';
 import { emitStart } from './layers/start';
 import { emitStripe } from './layers/stripe';
 import { emitTrpc } from './layers/trpc';
+import { projectLayout } from './layout';
 
 function emitDatabase(
   stack: Extract<Stack, { backend: 'self' | 'nest' }>,
@@ -172,7 +173,8 @@ export function buildTree(stack: Stack, ctx: GenerateContext): FileMap {
     dependencies: {},
     devDependencies: {},
   };
-  const emitCtx = { ...ctx, files, pkg, stack };
+  const layout = projectLayout(stack);
+  const emitCtx = { ...ctx, files, pkg, stack, layout };
 
   switch (stack.backend) {
     case 'self': {
@@ -215,6 +217,23 @@ export function buildTree(stack: Stack, ctx: GenerateContext): FileMap {
       emitClerk(emitCtx);
     }
     emitPayments(stack, emitCtx);
+  }
+
+  if (stack.backend === 'self' || stack.backend === 'convex') {
+    const providerPath =
+      stack.frontend === 'next'
+        ? 'app/providers.tsx'
+        : 'src/components/providers.tsx';
+    setFileIfAbsent(
+      files,
+      providerPath,
+      `import type { ReactNode } from "react";
+
+export function Providers({ children }: { children: ReactNode }) {
+  return children;
+}
+`
+    );
   }
 
   pkg.dependencies = sortRecord(pkg.dependencies);

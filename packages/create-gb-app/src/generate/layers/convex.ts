@@ -2,9 +2,12 @@ import type { EmitCtx } from '../../types/generate';
 import { setFile } from '../files';
 
 export function emitConvex(ctx: EmitCtx): void {
+  const isNext = ctx.stack.frontend === 'next';
+  const authed = ctx.stack.auth === 'clerk';
   ctx.pkg.dependencies.convex = '^1.27.0';
-  ctx.pkg.scripts.dev = 'convex dev --once && vite dev';
+  ctx.pkg.scripts.dev = isNext ? 'next dev' : 'vite dev';
   ctx.pkg.scripts['convex:dev'] = 'convex dev';
+  ctx.pkg.scripts['convex:codegen'] = 'convex codegen';
 
   setFile(
     ctx.files,
@@ -16,8 +19,8 @@ export default defineSchema({
   notes: defineTable({
     title: v.string(),
     body: v.string(),
-    userId: v.string(),
-  }).index("by_user", ["userId"]),
+    ${authed ? 'userId: v.string(),' : ''}
+  })${authed ? '.index("by_user", ["userId"])' : ''},
 });
 `
   );
@@ -31,13 +34,17 @@ import { mutation, query } from "./_generated/server";
 export const list = query({
   args: {},
   handler: async (ctx) => {
-    const identity = await ctx.auth.getUserIdentity();
+    ${
+      authed
+        ? `const identity = await ctx.auth.getUserIdentity();
     if (!identity) {
       return [];
+    }`
+        : ''
     }
     return ctx.db
       .query("notes")
-      .withIndex("by_user", (q) => q.eq("userId", identity.subject))
+      ${authed ? '.withIndex("by_user", (q) => q.eq("userId", identity.subject))' : ''}
       .order("desc")
       .collect();
   },
@@ -46,24 +53,29 @@ export const list = query({
 export const create = mutation({
   args: { title: v.string(), body: v.string() },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
+    ${
+      authed
+        ? `const identity = await ctx.auth.getUserIdentity();
     if (!identity) {
       throw new Error("Unauthorized");
+    }`
+        : ''
     }
     return ctx.db.insert("notes", {
       title: args.title,
       body: args.body,
-      userId: identity.subject,
+      ${authed ? 'userId: identity.subject,' : ''}
     });
   },
 });
 `
   );
 
-  setFile(
-    ctx.files,
-    'convex/auth.config.ts',
-    `export default {
+  if (authed)
+    setFile(
+      ctx.files,
+      'convex/auth.config.ts',
+      `export default {
   providers: [
     {
       domain: process.env.CLERK_JWT_ISSUER_DOMAIN,
@@ -72,24 +84,33 @@ export const create = mutation({
   ],
 };
 `
-  );
+    );
 
+  const env =
+    `${isNext ? 'NEXT_PUBLIC' : 'VITE'}_CONVEX_URL="https://your-deployment.convex.cloud"\n` +
+    (authed
+      ? `${isNext ? 'NEXT_PUBLIC' : 'VITE'}_CLERK_PUBLISHABLE_KEY="pk_test_replace_me"\nCLERK_SECRET_KEY="sk_test_replace_me"\nCLERK_JWT_ISSUER_DOMAIN="https://your-clerk-domain"\n`
+      : '');
+  setFile(ctx.files, '.env', env);
+  setFile(ctx.files, '.env.example', env);
+  if (!authed)
+    setFile(
+      ctx.files,
+      isNext ? 'app/providers.tsx' : 'src/components/providers.tsx',
+      `"use client";
+import { ConvexProvider, ConvexReactClient } from "convex/react";
+import type { ReactNode } from "react";
+
+const convex = new ConvexReactClient(${isNext ? 'process.env.NEXT_PUBLIC_CONVEX_URL!' : 'import.meta.env.VITE_CONVEX_URL as string'});
+
+export function Providers({ children }: { children: ReactNode }) {
+  return <ConvexProvider client={convex}>{children}</ConvexProvider>;
+}
+`
+    );
   setFile(
     ctx.files,
-    '.env',
-    `VITE_CONVEX_URL="https://your-deployment.convex.cloud"
-VITE_CLERK_PUBLISHABLE_KEY="pk_test_replace_me"
-CLERK_SECRET_KEY="sk_test_replace_me"
-CLERK_JWT_ISSUER_DOMAIN="https://your-clerk-domain"
-`
-  );
-  setFile(
-    ctx.files,
-    '.env.example',
-    `VITE_CONVEX_URL="https://your-deployment.convex.cloud"
-VITE_CLERK_PUBLISHABLE_KEY="pk_test_replace_me"
-CLERK_SECRET_KEY="sk_test_replace_me"
-CLERK_JWT_ISSUER_DOMAIN="https://your-clerk-domain"
-`
+    'README.md',
+    `# ${ctx.projectName}\n\nRun convex:dev to configure your own deployment and generate convex/_generated before typechecking or starting the frontend. Keep convex:dev running alongside dev. Set ${isNext ? 'NEXT_PUBLIC_CONVEX_URL' : 'VITE_CONVEX_URL'} in .env.local to your deployment URL. Run convex:codegen when generated APIs need refreshing. ${authed ? 'Configure the Clerk convex JWT template and set CLERK_JWT_ISSUER_DOMAIN in the Convex deployment environment.' : 'Without authentication, Notes are shared by all users.'}\n`
   );
 }

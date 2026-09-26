@@ -20,6 +20,7 @@ import {
   LINTERS,
   ORMS,
   PAYMENTS,
+  PROJECT_STRUCTURES,
 } from 'create-gb-app/preset';
 
 import { resolveProjectName } from './command';
@@ -27,6 +28,7 @@ import { resolveProjectName } from './command';
 const VOCAB: Record<FlagGroup, ReadonlySet<string>> = {
   frontend: new Set(FRONTENDS),
   backend: new Set(BACKENDS),
+  structure: new Set(PROJECT_STRUCTURES),
   api: new Set(APIS),
   database: new Set(DATABASES),
   orm: new Set(ORMS),
@@ -58,6 +60,7 @@ export function flagsToRaw(flags: CreateFlags): RawFlags {
   return {
     frontend: flags.frontend,
     backend: flags.backend,
+    structure: flags.structure,
     api: flags.api,
     database: flags.database,
     orm: flags.orm,

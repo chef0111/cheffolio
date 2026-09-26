@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test';
 
-import { CompatError, type RuleId } from '#/stack/errors';
+import { CompatError, RULE_IDS, type RuleId } from '#/stack/errors';
 import { resolveStack } from '#/stack/resolve';
 import type { RawFlags, Stack } from '#/types/stack';
 
@@ -34,6 +34,7 @@ describe('parse then resolve', () => {
     expect(resolveStack({ yes: true })).toEqual({
       frontend: 'next',
       backend: 'self',
+      structure: 'single',
       api: 'orpc',
       database: 'postgres',
       orm: 'prisma',
@@ -41,7 +42,6 @@ describe('parse then resolve', () => {
       auth: 'better-auth',
       payments: 'none',
       linter: 'eslint',
-      monorepo: false,
     });
   });
 });
@@ -53,6 +53,28 @@ test('convex with explicit db-setup none', () => {
   expect(convexHappy).toBeDefined();
   expect(resolveStack({ backend: 'convex', dbSetup: 'none' })).toEqual(
     convexHappy!.stack as Stack
+  );
+});
+
+test('structure follows the historical backend layout', () => {
+  expect(resolveStack({ backend: 'self' }).structure).toBe('single');
+  expect(resolveStack({ backend: 'convex' }).structure).toBe('single');
+  expect(resolveStack({ backend: 'nest' }).structure).toBe('turborepo');
+  expect(resolveStack({ backend: 'hono' }).structure).toBe('turborepo');
+});
+
+test('required structures fail descriptively and optional layouts remain unavailable', () => {
+  expect(() => resolveStack({ backend: 'nest', structure: 'single' })).toThrow(
+    new CompatError(RULE_IDS.backendRequiresTurborepo)
+  );
+  expect(() => resolveStack({ backend: 'hono', structure: 'single' })).toThrow(
+    new CompatError(RULE_IDS.backendRequiresTurborepo)
+  );
+  expect(() => resolveStack({ backend: 'self', structure: 'turborepo' })).toThrow(
+    new CompatError(RULE_IDS.optionalTurborepoUnavailable)
+  );
+  expect(() => resolveStack({ backend: 'convex', structure: 'turborepo' })).toThrow(
+    new CompatError(RULE_IDS.optionalTurborepoUnavailable)
   );
 });
 

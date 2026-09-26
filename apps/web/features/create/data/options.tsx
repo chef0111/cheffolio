@@ -30,6 +30,7 @@ import type { IconProps } from '@/components/icons/type';
 export const FLAG_GROUP_LABELS: Record<FlagGroup, string> = {
   frontend: 'Frontend',
   backend: 'Backend',
+  structure: 'Project structure',
   api: 'API layer',
   database: 'Database',
   orm: 'ORM',
@@ -85,6 +86,18 @@ export const FLAG_OPTIONS: { [K in FlagGroup]: readonly FlagOption<K>[] } = {
       label: 'Hono',
       description: 'Web framework built on Web Standards',
       icon: HonoIcon,
+    },
+  ],
+  structure: [
+    {
+      value: 'single',
+      label: 'Single app',
+      description: 'One application at the project root',
+    },
+    {
+      value: 'turborepo',
+      label: 'Turborepo',
+      description: 'Applications and shared packages in one workspace',
     },
   ],
   api: [

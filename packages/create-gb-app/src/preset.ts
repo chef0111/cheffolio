@@ -1,10 +1,14 @@
 import { ParseError } from '#/stack/parse-error';
-import { YES_DEFAULTS } from '#/stack/resolve';
+import { defaultStructureForBackend, YES_DEFAULTS } from '#/stack/resolve';
 import type { FlagGroup } from '#/stack/vocab';
 import { FLAG_GROUPS } from '#/stack/vocab';
 import type { PresetFields, RawFlags } from '#/types/stack';
 
-export { YES_DEFAULTS } from '#/stack/resolve';
+export {
+  databaseSetupRule,
+  defaultStructureForBackend,
+  YES_DEFAULTS,
+} from '#/stack/resolve';
 export type { FlagGroup } from '#/stack/vocab';
 export {
   APIS,
@@ -17,6 +21,7 @@ export {
   LINTERS,
   ORMS,
   PAYMENTS,
+  PROJECT_STRUCTURES,
   RELATIONAL_GROUPS,
   VOCAB_BY_GROUP,
 } from '#/stack/vocab';
@@ -32,6 +37,7 @@ export type {
   Orm,
   Payments,
   PresetFields,
+  ProjectStructure,
   RawFlags,
 } from '#/types/stack';
 
@@ -69,7 +75,7 @@ const LEGACY_VOCAB_BY_GROUP = {
   readonly string[]
 >;
 
-// Version 1 assigns stable bytes; slots 9 through 11 remain reserved.
+// Version 1 assigns stable bytes; slots 10 and 11 remain reserved.
 const VERSIONED_FLAG_GROUPS = [
   'frontend',
   'backend',
@@ -97,11 +103,13 @@ const VERSIONED_VOCAB_BY_GROUP = {
 >;
 const VERSIONED_SLOT_COUNT = 12;
 const VERSIONED_SLOT_BITS = BigInt(8);
+const STRUCTURE_SLOT = 9;
 
 export const GOLDEN_PRESETS = {
   nest: {
     ...YES_DEFAULTS,
     backend: 'nest',
+    structure: 'turborepo',
     api: 'orpc',
     linter: 'biome',
   },
@@ -182,6 +190,20 @@ export function encodePreset(fields: PresetFields): PresetCode {
     packed |= BigInt(index) << (BigInt(slot) * VERSIONED_SLOT_BITS);
   }
 
+  const historical = defaultStructureForBackend(fields.backend);
+  const structureId =
+    fields.structure === historical
+      ? 0
+      : fields.structure === 'turborepo'
+        ? 1
+        : fields.structure === 'single'
+          ? 2
+          : -1;
+  if (structureId < 0) {
+    throw new ParseError(`unencodable structure "${fields.structure}"`);
+  }
+  packed |=
+    BigInt(structureId) << (BigInt(STRUCTURE_SLOT) * VERSIONED_SLOT_BITS);
 
   return `${VERSIONED_PREFIX}${encodeBase62(packed)}`;
 }
@@ -221,6 +243,7 @@ export function decodePreset(code: string): PresetFields {
     shift += bits;
   }
 
+  fields.structure = defaultStructureForBackend(fields.backend);
 
   return fields;
 }
@@ -242,7 +265,7 @@ function decodeVersionedPreset(code: string): PresetFields {
     throw new ParseError(`invalid preset "${code}"`);
   }
   // Unassigned slots must be zero until a later schema defines their meaning.
-  if (packed >> (BigInt(9) * VERSIONED_SLOT_BITS)) {
+  if (packed >> (BigInt(STRUCTURE_SLOT + 1) * VERSIONED_SLOT_BITS)) {
     throw new ParseError(`invalid preset "${code}"`);
   }
 
@@ -257,6 +280,23 @@ function decodeVersionedPreset(code: string): PresetFields {
       throw new ParseError(`invalid preset "${code}"`);
     }
     assignField(fields, group, value);
+  }
+
+  const structureId = Number(
+    (packed >> (BigInt(STRUCTURE_SLOT) * VERSIONED_SLOT_BITS)) & BigInt(255)
+  );
+  switch (structureId) {
+    case 0:
+      fields.structure = defaultStructureForBackend(fields.backend);
+      break;
+    case 1:
+      fields.structure = 'turborepo';
+      break;
+    case 2:
+      fields.structure = 'single';
+      break;
+    default:
+      throw new ParseError(`invalid preset "${code}"`);
   }
 
   return fields;
@@ -308,6 +348,9 @@ function assignField(
       return;
     case 'backend':
       target.backend = value as PresetFields['backend'];
+      return;
+    case 'structure':
+      target.structure = value as PresetFields['structure'];
       return;
     case 'api':
       target.api = value as PresetFields['api'];

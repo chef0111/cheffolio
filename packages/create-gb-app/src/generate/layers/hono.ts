@@ -1323,6 +1323,7 @@ function emitStartWeb(ctx: EmitCtx, stack: HonoStack, dep: string): void {
         extends: '@repo/typescript-config/base.json',
         compilerOptions: {
           lib: ['ES2022', 'DOM', 'DOM.Iterable'],
+          types: ['vite/client'],
           jsx: 'react-jsx',
           noEmit: true,
           paths: { '@/*': ['./src/*'] },
@@ -1359,6 +1360,17 @@ export default defineConfig({
     ctx.files,
     'apps/web/src/styles.css',
     `@import "tailwindcss";
+`
+  );
+  setFile(
+    ctx.files,
+    'apps/web/src/router.tsx',
+    `import { createRouter } from "@tanstack/react-router";
+import { routeTree } from "./routeTree.gen";
+
+export function getRouter() {
+  return createRouter({ routeTree, scrollRestoration: true });
+}
 `
   );
   setFile(

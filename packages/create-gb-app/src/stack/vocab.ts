@@ -1,5 +1,6 @@
 export const FRONTENDS = ['next', 'tanstack-start'] as const;
 export const BACKENDS = ['self', 'nest', 'convex', 'hono'] as const;
+export const PROJECT_STRUCTURES = ['single', 'turborepo'] as const;
 export const APIS = ['orpc', 'trpc', 'none'] as const;
 export const DATABASES = ['postgres', 'sqlite', 'mysql', 'none'] as const;
 export const ORMS = ['prisma', 'drizzle', 'none'] as const;
@@ -11,6 +12,7 @@ export const LINTERS = ['eslint', 'biome', 'oxlint'] as const;
 export const FLAG_GROUPS = [
   'frontend',
   'backend',
+  'structure',
   'api',
   'database',
   'orm',
@@ -25,6 +27,7 @@ export type FlagGroup = (typeof FLAG_GROUPS)[number];
 export const VOCAB_BY_GROUP = {
   frontend: FRONTENDS,
   backend: BACKENDS,
+  structure: PROJECT_STRUCTURES,
   api: APIS,
   database: DATABASES,
   orm: ORMS,
@@ -39,6 +42,7 @@ export const RELATIONAL_GROUPS = ['api', 'database', 'orm', 'dbSetup'] as const;
 export const STACK_CLI_FLAGS: { key: FlagGroup; flag: string }[] = [
   { key: 'frontend', flag: '--frontend' },
   { key: 'backend', flag: '--backend' },
+  { key: 'structure', flag: '--structure' },
   { key: 'api', flag: '--api' },
   { key: 'database', flag: '--database' },
   { key: 'orm', flag: '--orm' },

@@ -41,6 +41,7 @@ export function emitStart(ctx: EmitCtx): void {
   setFile(ctx.files, 'tsconfig.json', startRootTsconfig());
   setFile(ctx.files, 'vite.config.ts', startViteConfig());
   setFile(ctx.files, 'src/styles.css', startStyles());
+  setFile(ctx.files, 'src/router.tsx', startRouter());
   setFile(ctx.files, 'src/routes/__root.tsx', startRootRoute(ctx.projectName));
   setFile(
     ctx.files,
@@ -93,6 +94,7 @@ export function emitStartWebApp(
         extends: '@repo/typescript-config/base.json',
         compilerOptions: {
           lib: ['ES2022', 'DOM', 'DOM.Iterable'],
+          types: ['vite/client'],
           jsx: 'react-jsx',
           noEmit: true,
           paths: { '@/*': ['./src/*'] },
@@ -105,6 +107,7 @@ export function emitStartWebApp(
   );
   setFile(ctx.files, 'apps/web/vite.config.ts', startViteConfig());
   setFile(ctx.files, 'apps/web/src/styles.css', startStyles());
+  setFile(ctx.files, 'apps/web/src/router.tsx', startRouter());
   setFile(
     ctx.files,
     'apps/web/src/components/providers.tsx',
@@ -146,6 +149,7 @@ function startRootTsconfig(): string {
         module: 'ESNext',
         moduleResolution: 'bundler',
         jsx: 'react-jsx',
+        types: ['vite/client'],
         strict: true,
         noEmit: true,
         skipLibCheck: true,
@@ -176,6 +180,16 @@ export default defineConfig({
     tailwindcss(),
   ],
 });
+`;
+}
+
+function startRouter(): string {
+  return `import { createRouter } from "@tanstack/react-router";
+import { routeTree } from "./routeTree.gen";
+
+export function getRouter() {
+  return createRouter({ routeTree, scrollRestoration: true });
+}
 `;
 }
 

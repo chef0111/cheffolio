@@ -28,6 +28,7 @@ const GOLDEN2_PATHS = [
   'src/lib/query-client.ts',
   'src/lib/trpc.ts',
   'src/lib/utils.ts',
+  'src/router.tsx',
   'src/routes/__root.tsx',
   'src/routes/api/trpc.$.ts',
   'src/routes/index.tsx',

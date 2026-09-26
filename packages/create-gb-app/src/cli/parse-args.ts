@@ -1,5 +1,6 @@
 import { overlayRawFlags, parsePresetToken } from '#/preset';
 import { ParseError } from '#/stack/parse-error';
+import { defaultStructureForBackend } from '#/stack/resolve';
 import {
   APIS,
   AUTHS,
@@ -10,6 +11,7 @@ import {
   LINTERS,
   ORMS,
   PAYMENTS,
+  PROJECT_STRUCTURES,
 } from '#/stack/vocab';
 import type { RawFlags } from '#/types/stack';
 
@@ -115,6 +117,12 @@ export function parseArgs(argv: string[]): RawFlags {
         i += consumed;
         break;
       }
+      case '--structure': {
+        const { value, consumed } = takeValue(argv, i, name);
+        flags.structure = oneOf('structure', value, PROJECT_STRUCTURES);
+        i += consumed;
+        break;
+      }
       case '--api': {
         const { value, consumed } = takeValue(argv, i, name);
         flags.api = oneOf('api', value, APIS);
@@ -179,10 +187,16 @@ export function parseArgs(argv: string[]): RawFlags {
   try {
     const { preset: _token, ...explicit } = flags;
     void _token;
-    return overlayRawFlags(
-      { ...parsePresetToken(token), preset: token },
-      explicit
-    );
+    const presetFlags = parsePresetToken(token);
+    const merged = overlayRawFlags({ ...presetFlags, preset: token }, explicit);
+    if (
+      explicit.backend !== undefined &&
+      explicit.backend !== presetFlags.backend &&
+      explicit.structure === undefined
+    ) {
+      merged.structure = defaultStructureForBackend(explicit.backend);
+    }
+    return merged;
   } catch (error) {
     if (error instanceof ParseError) {
       throw error;
@@ -205,7 +219,8 @@ Flags
   --yes, -y
   --preset <nest|start|convex|gb…>
   --frontend next|tanstack-start
-  --backend self|nest|convex
+  --backend self|nest|convex|hono
+  --structure single|turborepo (Nest and Hono require turborepo)
   --api orpc|trpc|none
   --database postgres|sqlite|mysql|none
   --orm prisma|drizzle|none

@@ -91,6 +91,26 @@ dist
   }
 
   emitTypescriptConfig(ctx, dep);
+  setFile(
+    ctx.files,
+    'apps/server/tsconfig.json',
+    JSON.stringify(
+      {
+        extends: '@repo/typescript-config/base.json',
+        compilerOptions: {
+          module: 'NodeNext',
+          moduleResolution: 'NodeNext',
+          experimentalDecorators: true,
+          emitDecoratorMetadata: true,
+          outDir: 'dist',
+          rootDir: 'src',
+        },
+        include: ['src/**/*.ts'],
+      },
+      null,
+      2
+    )
+  );
   if (ctx.stack.api === 'orpc') {
     emitContract(ctx, dep);
   }
@@ -383,7 +403,7 @@ function emitShellServer(ctx: EmitCtx, dep: string): void {
     'apps/server/src/main.ts',
     `import "reflect-metadata";
 import { NestFactory } from "@nestjs/core";
-import { AppModule } from "./app.module";
+import { AppModule } from "./app.module.js";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -457,12 +477,10 @@ function emitRestServer(ctx: EmitCtx, dep: string): void {
     'apps/server/src/main.ts',
     `import "reflect-metadata";
 import { NestFactory } from "@nestjs/core";
-import { AppModule } from "./app.module";
+import { AppModule } from "./app.module.js";
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
-    bodyParser: false,
-  });
+  const app = await NestFactory.create(AppModule${authed ? ', { bodyParser: false }' : ''});
 
   app.enableCors({
     origin: ["http://localhost:3000"],
@@ -482,8 +500,8 @@ void bootstrap();
     authed
       ? `import { Module } from "@nestjs/common";
 import { AuthModule } from "@thallesp/nestjs-better-auth";
-import { auth } from "./auth";
-import { NotesController } from "./notes.controller";
+import { auth } from "./auth.js";
+import { NotesController } from "./notes.controller.js";
 
 @Module({
   imports: [
@@ -500,7 +518,7 @@ import { NotesController } from "./notes.controller";
 export class AppModule {}
 `
       : `import { Module } from "@nestjs/common";
-import { NotesController } from "./notes.controller";
+import { NotesController } from "./notes.controller.js";
 
 @Module({
   controllers: [NotesController],
@@ -515,7 +533,7 @@ export class AppModule {}
       'apps/server/src/auth.ts',
       `import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { prisma } from "./db";
+import { prisma } from "./db.js";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, { provider: "postgresql" }),
@@ -642,7 +660,7 @@ function emitServer(ctx: EmitCtx, dep: string): void {
     'apps/server/src/main.ts',
     `import "reflect-metadata";
 import { NestFactory } from "@nestjs/core";
-import { AppModule } from "./app.module";
+import { AppModule } from "./app.module.js";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -668,8 +686,8 @@ void bootstrap();
 import { ORPCModule } from "@orpc/nest";
 import { AuthModule } from "@thallesp/nestjs-better-auth";
 import type { Request } from "express";
-import { auth } from "./auth";
-import { NotesController } from "./notes.controller";
+import { auth } from "./auth.js";
+import { NotesController } from "./notes.controller.js";
 
 @Module({
   imports: [
@@ -697,7 +715,7 @@ export class AppModule {}
     'apps/server/src/auth.ts',
     `import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { prisma } from "./db";
+import { prisma } from "./db.js";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, { provider: "postgresql" }),
@@ -716,8 +734,8 @@ import { ORPCError, implement } from "@orpc/server";
 import { contract } from "@repo/contract";
 import { fromNodeHeaders } from "better-auth/node";
 import type { Request } from "express";
-import { auth } from "./auth";
-import { prisma } from "./db";
+import { auth } from "./auth.js";
+import { prisma } from "./db.js";
 
 @Controller()
 export class NotesController {

@@ -1,3 +1,4 @@
+import type { ProjectLayout } from '#/generate/layout';
 import type { Stack } from '#/types/stack';
 
 export type FileMap = Record<string, string>;
@@ -23,4 +24,5 @@ export type EmitCtx = GenerateContext & {
   files: FileMap;
   pkg: PackageJsonShape;
   stack: Stack;
+  layout: ProjectLayout;
 };

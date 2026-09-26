@@ -41,6 +41,8 @@ test('Nest selection preview lists packages/contract', async () => {
     const frame = setup.captureCharFrame();
     expect(frame).toContain('packages/contract');
     expect(frame).toContain('--backend nest');
+    expect(frame).toContain('Project structure');
+    expect(frame).toContain('Nest/Hono need Turborepo');
   } finally {
     setup.renderer.destroy();
   }
