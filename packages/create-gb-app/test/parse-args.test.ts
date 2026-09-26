@@ -45,6 +45,18 @@ test('explicit flags overlay the preset', () => {
   expect(raw.backend).toBe('nest');
 });
 
+test('explicit flags overlay versioned preset selections', () => {
+  const raw = parseArgs([
+    '--preset',
+    'gb-v1-48',
+    '--frontend',
+    'tanstack-start',
+  ]);
+  expect(raw.backend).toBe('nest');
+  expect(raw.frontend).toBe('tanstack-start');
+  expect(raw.preset).toBe('gb-v1-48');
+});
+
 test('unknown --preset fails closed', () => {
   expect(() => parseArgs(['--preset', 'nope'])).toThrow(ParseError);
 });

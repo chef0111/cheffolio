@@ -1,7 +1,7 @@
 import { ParseError } from '#/stack/parse-error';
 import { YES_DEFAULTS } from '#/stack/resolve';
 import type { FlagGroup } from '#/stack/vocab';
-import { FLAG_GROUPS, VOCAB_BY_GROUP } from '#/stack/vocab';
+import { FLAG_GROUPS } from '#/stack/vocab';
 import type { PresetFields, RawFlags } from '#/types/stack';
 
 export { YES_DEFAULTS } from '#/stack/resolve';
@@ -37,8 +37,66 @@ export type {
 
 export type PresetCode = string;
 
-const PRESET_PREFIX = 'gb';
+const LEGACY_PREFIX = 'gb';
+const VERSIONED_PREFIX = 'gb-v1-';
 const BASE62 = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+// These positions and values describe codes issued before preset versioning.
+const LEGACY_FLAG_GROUPS = [
+  'frontend',
+  'backend',
+  'api',
+  'database',
+  'orm',
+  'dbSetup',
+  'auth',
+  'payments',
+  'linter',
+] as const satisfies readonly FlagGroup[];
+
+const LEGACY_VOCAB_BY_GROUP = {
+  frontend: ['next', 'tanstack-start'],
+  backend: ['self', 'nest', 'convex', 'hono'],
+  api: ['orpc', 'trpc', 'none'],
+  database: ['postgres', 'sqlite', 'mysql', 'none'],
+  orm: ['prisma', 'drizzle', 'none'],
+  dbSetup: ['none', 'docker', 'neon', 'supabase'],
+  auth: ['better-auth', 'clerk', 'none'],
+  payments: ['none', 'stripe', 'polar'],
+  linter: ['eslint', 'biome', 'oxlint'],
+} as const satisfies Record<
+  (typeof LEGACY_FLAG_GROUPS)[number],
+  readonly string[]
+>;
+
+// Version 1 assigns stable bytes; slots 9 through 11 remain reserved.
+const VERSIONED_FLAG_GROUPS = [
+  'frontend',
+  'backend',
+  'api',
+  'database',
+  'orm',
+  'dbSetup',
+  'auth',
+  'payments',
+  'linter',
+] as const satisfies readonly FlagGroup[];
+const VERSIONED_VOCAB_BY_GROUP = {
+  frontend: ['next', 'tanstack-start'],
+  backend: ['self', 'nest', 'convex', 'hono'],
+  api: ['orpc', 'trpc', 'none'],
+  database: ['postgres', 'sqlite', 'mysql', 'none'],
+  orm: ['prisma', 'drizzle', 'none'],
+  dbSetup: ['none', 'docker', 'neon', 'supabase'],
+  auth: ['better-auth', 'clerk', 'none'],
+  payments: ['none', 'stripe', 'polar'],
+  linter: ['eslint', 'biome', 'oxlint'],
+} as const satisfies Record<
+  (typeof VERSIONED_FLAG_GROUPS)[number],
+  readonly string[]
+>;
+const VERSIONED_SLOT_COUNT = 12;
+const VERSIONED_SLOT_BITS = BigInt(8);
 
 export const GOLDEN_PRESETS = {
   nest: {
@@ -86,12 +144,12 @@ function encodeBase62(value: bigint): string {
   return digits.reverse().join('');
 }
 
-function decodeBase62(payload: string): bigint {
+function decodeBase62(payload: string, code: string): bigint {
   let value = ZERO;
   for (const char of payload) {
     const index = BASE62.indexOf(char);
     if (index < 0) {
-      throw new ParseError(`invalid preset "${PRESET_PREFIX}${payload}"`);
+      throw new ParseError(`invalid preset "${code}"`);
     }
     value = value * BASE + BigInt(index);
   }
@@ -114,44 +172,44 @@ export function rawFlagsFromPreset(fields: PresetFields): RawFlags {
 
 export function encodePreset(fields: PresetFields): PresetCode {
   let packed = ZERO;
-  let shift = 0;
 
-  for (const group of FLAG_GROUPS) {
-    const vocab = VOCAB_BY_GROUP[group];
-    const bits = fieldBits(vocab.length);
+  for (const [slot, group] of VERSIONED_FLAG_GROUPS.entries()) {
+    const vocab = VERSIONED_VOCAB_BY_GROUP[group];
     const index = (vocab as readonly string[]).indexOf(fields[group]);
     if (index < 0) {
       throw new ParseError(`unencodable ${group} "${fields[group]}"`);
     }
-    packed |= BigInt(index) << BigInt(shift);
-    shift += bits;
+    packed |= BigInt(index) << (BigInt(slot) * VERSIONED_SLOT_BITS);
   }
 
-  return `${PRESET_PREFIX}${encodeBase62(packed)}`;
+
+  return `${VERSIONED_PREFIX}${encodeBase62(packed)}`;
 }
 
 export function decodePreset(code: string): PresetFields {
-  if (!code.startsWith(PRESET_PREFIX)) {
+  if (code.startsWith(VERSIONED_PREFIX)) {
+    return decodeVersionedPreset(code);
+  }
+  if (/^gb-v\d+-/.test(code)) {
+    throw new ParseError(`unsupported preset version "${code}"`);
+  }
+  if (!code.startsWith(LEGACY_PREFIX)) {
     throw new ParseError(`invalid preset "${code}"`);
   }
-  const payload = code.slice(PRESET_PREFIX.length);
-  if (payload.length === 0 || payload !== encodeBase62(decodeBase62(payload))) {
-    throw new ParseError(`invalid preset "${code}"`);
-  }
+  const packed = parsePayload(code.slice(LEGACY_PREFIX.length), code);
 
-  const totalBits = FLAG_GROUPS.reduce(
-    (sum, group) => sum + fieldBits(VOCAB_BY_GROUP[group].length),
+  const totalBits = LEGACY_FLAG_GROUPS.reduce(
+    (sum, group) => sum + fieldBits(LEGACY_VOCAB_BY_GROUP[group].length),
     0
   );
-  const packed = decodeBase62(payload);
   if (packed >= ONE << BigInt(totalBits)) {
     throw new ParseError(`invalid preset "${code}"`);
   }
 
   const fields = {} as PresetFields;
   let shift = 0;
-  for (const group of FLAG_GROUPS) {
-    const vocab = VOCAB_BY_GROUP[group];
+  for (const group of LEGACY_FLAG_GROUPS) {
+    const vocab = LEGACY_VOCAB_BY_GROUP[group];
     const bits = fieldBits(vocab.length);
     const mask = (ONE << BigInt(bits)) - ONE;
     const index = Number((packed >> BigInt(shift)) & mask);
@@ -163,6 +221,44 @@ export function decodePreset(code: string): PresetFields {
     shift += bits;
   }
 
+
+  return fields;
+}
+
+function parsePayload(payload: string, code: string): bigint {
+  if (payload.length === 0 || payload.length > 17) {
+    throw new ParseError(`invalid preset "${code}"`);
+  }
+  const packed = decodeBase62(payload, code);
+  if (payload !== encodeBase62(packed)) {
+    throw new ParseError(`invalid preset "${code}"`);
+  }
+  return packed;
+}
+
+function decodeVersionedPreset(code: string): PresetFields {
+  const packed = parsePayload(code.slice(VERSIONED_PREFIX.length), code);
+  if (packed >= ONE << (BigInt(VERSIONED_SLOT_COUNT) * VERSIONED_SLOT_BITS)) {
+    throw new ParseError(`invalid preset "${code}"`);
+  }
+  // Unassigned slots must be zero until a later schema defines their meaning.
+  if (packed >> (BigInt(9) * VERSIONED_SLOT_BITS)) {
+    throw new ParseError(`invalid preset "${code}"`);
+  }
+
+  const fields = {} as PresetFields;
+  for (const [slot, group] of VERSIONED_FLAG_GROUPS.entries()) {
+    const vocab = VERSIONED_VOCAB_BY_GROUP[group];
+    const index = Number(
+      (packed >> (BigInt(slot) * VERSIONED_SLOT_BITS)) & BigInt(255)
+    );
+    const value = vocab[index];
+    if (value === undefined) {
+      throw new ParseError(`invalid preset "${code}"`);
+    }
+    assignField(fields, group, value);
+  }
+
   return fields;
 }
 
@@ -170,7 +266,7 @@ export function parsePresetToken(token: string): RawFlags {
   if (Object.hasOwn(GOLDEN_PRESETS, token)) {
     return rawFlagsFromPreset(GOLDEN_PRESETS[token as GoldenName]);
   }
-  if (token.startsWith(PRESET_PREFIX)) {
+  if (token.startsWith(LEGACY_PREFIX)) {
     return decodePreset(token);
   }
   throw new ParseError(`unknown preset "${token}"`);

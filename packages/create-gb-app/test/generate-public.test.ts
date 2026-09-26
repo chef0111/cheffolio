@@ -51,10 +51,19 @@ test('public generate still emits YES paths', () => {
 });
 
 test('public generate exports stack and tree entry points', () => {
-  expect(generate.encodePreset(YES_DEFAULTS)).toBe('gb0');
+  expect(generate.encodePreset(YES_DEFAULTS)).toBe('gb-v1-0');
   expect(generate.decodePreset('gb0')).toEqual(YES_DEFAULTS);
   expect(typeof generate.CompatError).toBe('function');
   expect(typeof generate.GenerateError).toBe('function');
+});
+
+test('literal legacy preset generates its historical layout', () => {
+  const files = buildTree(resolveStack(generate.decodePreset('gb2')), {
+    projectName: 'saved-nest',
+    packageManager: 'pnpm',
+  });
+  expect(files['turbo.json']).toBeDefined();
+  expect(files['apps/server/package.json']).toContain('@nestjs/core');
 });
 
 test('public generate does not export CLI or goldens', () => {
