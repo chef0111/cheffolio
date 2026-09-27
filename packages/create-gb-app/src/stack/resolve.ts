@@ -54,6 +54,16 @@ export function databaseSetupRule(
     return RULE_IDS.neonRequiresPostgres;
   if (dbSetup === 'supabase' && database !== 'postgres')
     return RULE_IDS.supabaseRequiresPostgres;
+  if (dbSetup === 'turso' && database !== 'sqlite')
+    return RULE_IDS.tursoRequiresSqlite;
+  if (
+    dbSetup === 'planetscale' &&
+    database !== 'postgres' &&
+    database !== 'mysql'
+  )
+    return RULE_IDS.planetscaleRequiresSql;
+  if (dbSetup === 'prisma-postgres' && database !== 'postgres')
+    return RULE_IDS.prismaPostgresRequiresPostgres;
   return null;
 }
 

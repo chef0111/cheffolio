@@ -182,6 +182,21 @@ export const FLAG_OPTIONS: { [K in FlagGroup]: readonly FlagOption<K>[] } = {
       description: 'Hosted Postgres',
       icon: SupabaseIcon,
     },
+    {
+      value: 'turso',
+      label: 'Turso',
+      description: 'Hosted SQLite with libSQL',
+    },
+    {
+      value: 'planetscale',
+      label: 'PlanetScale',
+      description: 'Hosted Postgres or MySQL',
+    },
+    {
+      value: 'prisma-postgres',
+      label: 'Prisma Postgres',
+      description: 'Hosted Postgres with either ORM',
+    },
   ],
   auth: [
     {

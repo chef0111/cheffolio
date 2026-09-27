@@ -4,7 +4,15 @@ export const PROJECT_STRUCTURES = ['single', 'turborepo'] as const;
 export const APIS = ['orpc', 'trpc', 'none'] as const;
 export const DATABASES = ['postgres', 'sqlite', 'mysql', 'none'] as const;
 export const ORMS = ['prisma', 'drizzle', 'none'] as const;
-export const DB_SETUPS = ['none', 'docker', 'neon', 'supabase'] as const;
+export const DB_SETUPS = [
+  'none',
+  'docker',
+  'neon',
+  'supabase',
+  'turso',
+  'planetscale',
+  'prisma-postgres',
+] as const;
 export const AUTHS = ['better-auth', 'clerk', 'none'] as const;
 export const PAYMENTS = ['none', 'stripe', 'polar'] as const;
 export const LINTERS = ['eslint', 'biome', 'oxlint'] as const;

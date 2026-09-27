@@ -65,6 +65,9 @@ export function emitOptionalWorkspace(
       inputs: ['$TURBO_DEFAULT$', '.env*'],
       env: [
         'DATABASE_URL',
+        'DIRECT_URL',
+        'TURSO_DATABASE_URL',
+        'TURSO_AUTH_TOKEN',
         'CLERK_SECRET_KEY',
         'CLERK_JWT_ISSUER_DOMAIN',
         'NEXT_PUBLIC_*',

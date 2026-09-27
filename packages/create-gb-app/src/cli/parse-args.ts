@@ -224,7 +224,7 @@ Flags
   --api orpc|trpc|none
   --database postgres|sqlite|mysql|none
   --orm prisma|drizzle|none
-  --db-setup none|docker|neon|supabase
+  --db-setup none|docker|neon|supabase|turso|planetscale|prisma-postgres
   --auth better-auth|clerk|none
   --payments none|stripe|polar
   --linter eslint|biome|oxlint

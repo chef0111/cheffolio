@@ -10,7 +10,7 @@ import { setFile, setFileIfAbsent, sortRecord } from './files';
 import { emitBetterAuth } from './layers/better-auth';
 import { emitClerk } from './layers/clerk';
 import { emitConvex } from './layers/convex';
-import { emitDbSetup } from './layers/db-setup';
+import { emitDbSetup, finalizeDatabaseSetup } from './layers/db-setup';
 import { emitDrizzle } from './layers/drizzle';
 import { emitEslintPrettier } from './layers/eslint';
 import { emitHono } from './layers/hono';
@@ -257,6 +257,7 @@ export function Providers({ children }: { children: ReactNode }) {
   if (foundations) {
     emitUi(stack, emitCtx);
     emitValidation(emitCtx);
+    finalizeDatabaseSetup(emitCtx);
   }
 
   pkg.dependencies = sortRecord(pkg.dependencies);

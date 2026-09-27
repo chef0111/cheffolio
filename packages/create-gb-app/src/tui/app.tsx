@@ -10,14 +10,19 @@ import { formatCommand } from '#/preview/command';
 import { previewTree } from '#/preview/tree';
 import { CompatError } from '#/stack/errors';
 import {
+  databaseSetupRule,
   defaultStructureForBackend,
   resolveStack,
 } from '#/stack/resolve';
+import { DATABASES, DB_SETUPS, ORMS } from '#/stack/vocab';
 import type {
   Api,
   Auth,
   Backend,
+  Database,
+  DbSetup,
   Frontend,
+  Orm,
   Payments,
   ProjectStructure,
   RawFlags,
@@ -27,6 +32,9 @@ type FocusId =
   | 'backend'
   | 'structure'
   | 'frontend'
+  | 'database'
+  | 'orm'
+  | 'dbSetup'
   | 'api'
   | 'auth'
   | 'payments'
@@ -37,6 +45,9 @@ const FOCUS_ORDER: FocusId[] = [
   'structure',
   'frontend',
   'api',
+  'database',
+  'orm',
+  'dbSetup',
   'auth',
   'payments',
   'confirm',
@@ -129,7 +140,9 @@ function indexOfValue(
 function nextFocus(current: FocusId, backend: Backend | undefined): FocusId {
   const order =
     backend === 'convex'
-      ? FOCUS_ORDER.filter((id) => id !== 'api')
+      ? FOCUS_ORDER.filter(
+          (id) => !['api', 'database', 'orm', 'dbSetup'].includes(id)
+        )
       : FOCUS_ORDER;
   const index = order.indexOf(current);
   return order[(index < 0 ? 0 : index + 1) % order.length];
@@ -228,6 +241,14 @@ export function App({ initialFlags = {}, onExit, onGenerate }: AppProps) {
       }
       if (merged.backend === 'nest' && merged.api === 'trpc') {
         merged.api = 'orpc';
+      }
+      if (next.database !== undefined) {
+        if (databaseSetupRule(next.database, merged.dbSetup ?? 'none'))
+          merged.dbSetup = 'none';
+        if (next.database === 'none') {
+          merged.orm = 'none';
+          if (merged.auth === 'better-auth') merged.auth = 'none';
+        } else if (merged.orm === 'none') merged.orm = 'prisma';
       }
       if (merged.auth === 'none') {
         merged.payments = 'none';
@@ -346,6 +367,77 @@ export function App({ initialFlags = {}, onExit, onGenerate }: AppProps) {
                   if (option?.value) {
                     patch({ api: option.value as Api });
                   }
+                }}
+              />
+            </box>
+          )}
+          {flags.backend !== 'convex' && (
+            <box flexDirection="column" flexShrink={0}>
+              <text id="label-database" flexShrink={0}>
+                Database
+              </text>
+              <select
+                id="control-database"
+                flexShrink={0}
+                focused={focus === 'database'}
+                height={4}
+                showDescription={false}
+                options={DATABASES.map((value) => ({
+                  name: value,
+                  description: value,
+                  value,
+                }))}
+                selectedIndex={indexOfValue(
+                  DATABASES.map((value) => ({ value })),
+                  flags.database ?? 'postgres'
+                )}
+                onChange={(_index, option) => {
+                  if (option?.value)
+                    patch({ database: option.value as Database });
+                }}
+              />
+              <text id="label-orm" flexShrink={0}>
+                ORM
+              </text>
+              <select
+                id="control-orm"
+                flexShrink={0}
+                focused={focus === 'orm'}
+                height={2}
+                showDescription={false}
+                options={ORMS.filter((value) =>
+                  (flags.database ?? 'postgres') === 'none'
+                    ? value === 'none'
+                    : value !== 'none'
+                ).map((value) => ({ name: value, description: value, value }))}
+                selectedIndex={(flags.orm ?? 'prisma') === 'drizzle' ? 1 : 0}
+                onChange={(_index, option) => {
+                  if (option?.value) patch({ orm: option.value as Orm });
+                }}
+              />
+              <text id="label-dbSetup" flexShrink={0}>
+                Database setup
+              </text>
+              <select
+                id="control-dbSetup"
+                flexShrink={0}
+                focused={focus === 'dbSetup'}
+                height={4}
+                showDescription={false}
+                options={DB_SETUPS.filter(
+                  (value) =>
+                    !databaseSetupRule(flags.database ?? 'postgres', value)
+                ).map((value) => ({ name: value, description: value, value }))}
+                selectedIndex={indexOfValue(
+                  DB_SETUPS.filter(
+                    (value) =>
+                      !databaseSetupRule(flags.database ?? 'postgres', value)
+                  ).map((value) => ({ value })),
+                  flags.dbSetup ?? 'none'
+                )}
+                onChange={(_index, option) => {
+                  if (option?.value)
+                    patch({ dbSetup: option.value as DbSetup });
                 }}
               />
             </box>
