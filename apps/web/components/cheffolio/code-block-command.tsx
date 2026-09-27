@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 
-export type PackageManager = 'prompt' | 'pnpm' | 'yarn' | 'npm' | 'bun';
+export type PackageManager = 'prompt' | 'npm' | 'yarn' | 'pnpm' | 'bun';
 
 const packageManagerAtom = atomWithStorage<PackageManager>(
   'packageManager',
@@ -115,7 +115,7 @@ export function CodeBlockCommand({
           <TabsContent
             key={key}
             value={key}
-            className="bg-background mx-2 mb-2 rounded-md border"
+            className="bg-background m-1.5 mt-0 rounded-md border"
           >
             <pre
               data-pm={key}
@@ -137,7 +137,7 @@ export function CodeBlockCommand({
       </Tabs>
 
       <CopyButton
-        className="absolute top-2 right-2 z-10 size-6 rounded-md border-none [&_svg:not([class*='size-'])]:size-3.5"
+        className="absolute top-2 right-2 z-10 size-6 rounded-sm border-none [&_svg:not([class*='size-'])]:size-3.5"
         variant="ghost"
         size="icon-sm"
         text={tabs[active] || ''}

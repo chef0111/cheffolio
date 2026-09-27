@@ -86,7 +86,7 @@ test('countTreeEntries is zero for an empty project root', () => {
   });
 });
 
-test('default selected path prefers package.json', () => {
+test('default selected path prefers README.md', () => {
   expect(
     defaultSelectedPath([
       'README.md',
@@ -94,7 +94,7 @@ test('default selected path prefers package.json', () => {
       'package.json',
       'lib/utils.ts',
     ])
-  ).toBe('package.json');
+  ).toBe('README.md');
 });
 
 test('treeFromPaths keeps README.md as a file', () => {

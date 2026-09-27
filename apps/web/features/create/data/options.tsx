@@ -24,6 +24,7 @@ import {
   SupabaseIcon,
   TanStackStartIcon,
   TrpcIcon,
+  TurborepoIcon,
 } from '@/components/icons';
 import type { IconProps } from '@/components/icons/type';
 
@@ -104,18 +105,6 @@ export const FLAG_OPTIONS: { [K in FlagGroup]: readonly FlagOption<K>[] } = {
       label: 'Hono',
       description: 'Web framework built on Web Standards',
       icon: HonoIcon,
-    },
-  ],
-  structure: [
-    {
-      value: 'single',
-      label: 'Single app',
-      description: 'One application at the project root',
-    },
-    {
-      value: 'turborepo',
-      label: 'Turborepo',
-      description: 'Applications and shared packages in one workspace',
     },
   ],
   api: [
@@ -272,6 +261,19 @@ export const FLAG_OPTIONS: { [K in FlagGroup]: readonly FlagOption<K>[] } = {
       label: 'Oxlint',
       description: 'High-performance linter for JS and TS',
       icon: OxlintIcon,
+    },
+  ],
+  structure: [
+    {
+      value: 'single',
+      label: 'Single app',
+      description: 'One application at the project root',
+    },
+    {
+      value: 'turborepo',
+      label: 'Monorepo',
+      description: 'Use Turborepo build system for coding agents',
+      icon: TurborepoIcon,
     },
   ],
 };

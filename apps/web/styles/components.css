@@ -32,7 +32,7 @@
     @apply has-data-rehype-pretty-code-title:pt-0;
 
     pre {
-      @apply no-scrollbar overflow-x-auto overscroll-x-contain py-4 outline-none;
+      @apply scroll-fade no-scrollbar overflow-x-auto overscroll-x-contain py-4 outline-none;
     }
 
     code {

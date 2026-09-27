@@ -1,6 +1,7 @@
 'use client';
 
 import { EllipsisIcon, LinkIcon, ShareIcon } from 'lucide-react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 
 import { FacebookIcon, LinkedInIcon, XIcon } from '@/components/icons';
@@ -13,23 +14,40 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { copyText } from '@/utils/copy';
 
-export function ShareMenu({ title, url }: { title: string; url: string }) {
-  const absoluteUrl = url.startsWith('http')
-    ? url
+export function ShareMenu({
+  variant = 'secondary',
+  title,
+  url,
+  getUrl,
+}: {
+  variant?: 'secondary' | 'outline';
+  title: string;
+  url: string;
+  getUrl?: () => string;
+}) {
+  const [currentUrl, setCurrentUrl] = useState(url);
+  const resolvedUrl = getUrl ? currentUrl : url;
+  const absoluteUrl = resolvedUrl.startsWith('http')
+    ? resolvedUrl
     : typeof window !== 'undefined'
-      ? new URL(url, window.location.origin).toString()
-      : url;
+      ? new URL(resolvedUrl, window.location.origin).toString()
+      : resolvedUrl;
 
   const encodedUrl = encodeURIComponent(absoluteUrl);
 
   return (
-    <DropdownMenu>
+    <DropdownMenu
+      onOpenChange={(open) => {
+        if (open && getUrl) setCurrentUrl(getUrl());
+      }}
+    >
       <DropdownMenuTrigger
         render={
           <Button
             className="active:scale-none!"
-            variant="secondary"
+            variant={variant}
             size="icon-sm"
+            aria-label="Share"
           >
             <ShareIcon />
           </Button>

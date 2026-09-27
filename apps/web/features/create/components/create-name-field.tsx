@@ -10,7 +10,7 @@ export function CreateNameField() {
   const { projectName, setProjectName } = useCreate();
 
   return (
-    <div className="flex flex-col gap-2 px-4 py-3">
+    <div className="flex flex-col gap-2 p-3">
       <Label htmlFor="create-project-name">Project name</Label>
       <Input
         id="create-project-name"

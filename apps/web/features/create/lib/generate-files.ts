@@ -71,6 +71,7 @@ export function flagsToRaw(flags: CreateFlags): RawFlags {
     auth: flags.auth,
     payments: flags.payments,
     linter: flags.linter,
+    form: flags.form,
   };
 }
 

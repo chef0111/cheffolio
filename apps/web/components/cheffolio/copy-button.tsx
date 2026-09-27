@@ -69,7 +69,7 @@ export function CopyButton({
 
   return (
     <Button
-      className={cn('will-change-transform', className)}
+      className={cn('text-muted-foreground will-change-transform', className)}
       size={size}
       onClick={(e) => {
         copy(text);

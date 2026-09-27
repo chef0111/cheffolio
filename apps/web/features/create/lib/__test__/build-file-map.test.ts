@@ -27,6 +27,7 @@ test('convex preview keeps relational none and is not convex-database-off', () =
     auth: 'better-auth',
     payments: 'none',
     linter: 'eslint',
+    form: 'none',
   });
   const result = buildCreateFileMap(flags, 'convex-app');
   expect(result.ok).toBe(true);
@@ -39,6 +40,38 @@ test('convex preview keeps relational none and is not convex-database-off', () =
       result.files['src/components/ui/button.tsx']
   ).toBeDefined();
 });
+
+test.each([
+  ['next', 'react-hook-form', 'components/notes-form.tsx', 'react-hook-form'],
+  [
+    'tanstack-start',
+    'tanstack-form',
+    'src/components/notes-form.tsx',
+    '@tanstack/react-form',
+  ],
+] as const)(
+  '%s preview includes the selected %s templates',
+  (frontend, form, notesPath, dependency) => {
+    const flags = normalizeFlags({
+      ...YES_DEFAULTS,
+      frontend,
+      form,
+      api: frontend === 'tanstack-start' ? 'none' : YES_DEFAULTS.api,
+    });
+    const result = buildCreateFileMap(flags, 'forms-app');
+    if (!result.ok) throw new Error(result.message);
+    expect(result.ok).toBe(true);
+
+    expect(result.files[notesPath]).toBeDefined();
+    expect(
+      result.files[notesPath.replace('notes-form.tsx', 'form/form-base.tsx')]
+    ).toBeDefined();
+    expect(
+      result.files[notesPath.replace('notes-form.tsx', 'form/README.md')]
+    ).toBeDefined();
+    expect(result.files['package.json']).toContain(dependency);
+  }
+);
 
 test('database none is a shell without notes', () => {
   const flags = normalizeFlags({

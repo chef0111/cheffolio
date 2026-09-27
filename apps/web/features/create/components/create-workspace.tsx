@@ -11,11 +11,12 @@ import {
   TabsTrigger,
 } from '@/components/ui/tabs';
 
+import { CreateActions } from './create-actions';
 import { CreateBuilder } from './create-builder';
 import { CreateCommand } from './create-command';
 import { CreateNameField } from './create-name-field';
-import { CreateProjectSummary } from './create-project-summary';
 import { CreateProvider } from './create-provider';
+import { CreateStackSummary } from './create-stack-summary';
 
 const CreatePreview = dynamic(() =>
   import('./create-preview').then((mod) => mod.CreatePreview)
@@ -25,12 +26,13 @@ export function CreateWorkspace() {
   return (
     <CreateProvider>
       <div className="grid flex-1 grid-cols-1 border-x p-0 [--builder-height:calc(100svh-var(--top-height)-var(--bottom-height))] xl:grid-cols-3">
-        <div className="gap-0 rounded-none bg-transparent ring-0 xl:col-span-1">
+        <div className="flex max-h-(--builder-height) min-h-0 flex-col overflow-y-auto rounded-none bg-transparent ring-0 xl:col-span-1 xl:h-(--builder-height) xl:overflow-hidden">
           <CreateNameField />
-          <div className="border-b px-4 pb-3">
+          <div className="border-b px-3 pb-3">
             <CreateCommand />
           </div>
-          <CreateProjectSummary />
+          <CreateStackSummary />
+          <CreateActions />
         </div>
         <div className="border-border h-(--builder-height) min-h-0 overflow-hidden xl:col-span-2 xl:border-l">
           <Tabs defaultValue="config" className="h-full gap-0">

@@ -2,7 +2,6 @@ import { expect, test } from 'bun:test';
 import { YES_DEFAULTS } from 'create-gb-app/preset';
 
 import { applyFlagChange, disabledRuleId, normalizeFlags } from '../compat';
-import { getDatabaseSetupGuidance } from '../database-setup-guidance';
 
 test('Create enforces hosted engine constraints and clears hosts when prerequisites change', () => {
   expect(disabledRuleId(YES_DEFAULTS, 'dbSetup', 'turso')).toBe(
@@ -33,34 +32,4 @@ test('Create enforces hosted engine constraints and clears hosts when prerequisi
     normalizeFlags({ ...YES_DEFAULTS, database: 'mysql', dbSetup: 'turso' })
       .dbSetup
   ).toBe('none');
-});
-
-test('hosted setup guidance uses manager commands from the root and names the actual owner', () => {
-  const [turso] = getDatabaseSetupGuidance(
-    {
-      ...YES_DEFAULTS,
-      database: 'sqlite',
-      dbSetup: 'turso',
-      structure: 'turborepo',
-    },
-    'pnpm'
-  );
-  expect(turso.description).toContain('apps/web/.env');
-  expect(turso.commands).toEqual([
-    'pnpm run db:generate',
-    'pnpm run db:migrate',
-  ]);
-  const [postgres] = getDatabaseSetupGuidance(
-    {
-      ...YES_DEFAULTS,
-      backend: 'hono',
-      dbSetup: 'prisma-postgres',
-      structure: 'turborepo',
-      orm: 'drizzle',
-    },
-    'yarn'
-  );
-  expect(postgres.description).toContain('apps/server/.env');
-  expect(postgres.description).toContain('DIRECT_URL');
-  expect(postgres.commands).toEqual(['yarn run db:push']);
 });

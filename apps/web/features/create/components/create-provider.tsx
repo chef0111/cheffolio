@@ -32,6 +32,7 @@ import {
 type CreateContextValue = {
   flags: CreateFlags;
   setFlag: <K extends FlagGroup>(key: K, value: CreateFlags[K]) => void;
+  setFlags: (flags: CreateFlags) => void;
   projectName: string;
   setProjectName: (name: string) => void;
   command: string;
@@ -95,11 +96,19 @@ export function CreateProvider({ children }: { children: ReactNode }) {
     [setParams]
   );
 
+  const setFlags = useCallback(
+    (next: CreateFlags) => {
+      void setParams(normalizeFlags(next));
+    },
+    [setParams]
+  );
+
   return (
     <CreateContext.Provider
       value={{
         flags,
         setFlag,
+        setFlags,
         projectName,
         setProjectName,
         command,
