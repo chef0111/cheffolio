@@ -42,7 +42,7 @@ export function emitForms(ctx: EmitCtx): void {
     setFile(ctx.files, sourceRoot + 'components/form/' + name, adapt(source));
   setFile(
     ctx.files,
-    sourceRoot + 'components/form/notes-form.tsx',
+    sourceRoot + 'components/notes-form.tsx',
     adapt(notesFormSource(ctx.stack.form))
   );
   setFile(
@@ -63,7 +63,7 @@ The Notes form submits the shared schema's parsed values, disables controls whil
   if (client?.includes('<form')) {
     setFile(ctx.files, clientPath, integrateNotesForm(client));
   } else if (ctx.stack.backend !== 'convex' && ctx.stack.database === 'none') {
-    const demo = `import { NotesForm } from "@/components/form/notes-form";
+    const demo = `import { NotesForm } from "@/components/notes-form";
 ${!isNext ? 'import { createFileRoute } from "@tanstack/react-router";\nexport const Route = createFileRoute("/notes")({ component: NotesPage });' : ''}
 ${isNext ? 'export default' : ''} function NotesPage() {
   return <main className="mx-auto flex min-h-screen max-w-xl flex-col gap-6 p-8"><h1 className="text-2xl font-semibold">Notes</h1><NotesForm persistent={false} onSubmit={async () => {}} /></main>;
@@ -121,8 +121,6 @@ function integrateNotesForm(source: string): string {
   const boundary = result.startsWith('"use client";') ? '"use client";\n' : '';
   result = result.slice(boundary.length);
   return (
-    boundary +
-    'import { NotesForm } from "@/components/form/notes-form";\n' +
-    result
+    boundary + 'import { NotesForm } from "@/components/notes-form";\n' + result
   );
 }

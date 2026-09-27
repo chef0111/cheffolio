@@ -136,7 +136,7 @@ test('React Hook Form selection includes only its reusable integration', () => {
   expect(files['components/form/form-input.tsx']).toBeDefined();
   expect(files['components/form/form-select.tsx']).toBeDefined();
   expect(files['app/notes/page.tsx']).toBeDefined();
-  expect(files['components/form/notes-form.tsx']).toContain('zodResolver');
+  expect(files['components/notes-form.tsx']).toContain('zodResolver');
 });
 
 for (const frontend of ['next', 'tanstack-start'] as const) {
@@ -166,7 +166,7 @@ for (const frontend of ['next', 'tanstack-start'] as const) {
         expect(Boolean(pkg.dependencies['@tanstack/react-form'])).toBe(
           form === 'tanstack-form'
         );
-        expect(Boolean(files[source + 'components/form/notes-form.tsx'])).toBe(
+        expect(Boolean(files[source + 'components/notes-form.tsx'])).toBe(
           form !== 'none'
         );
         if (form !== 'none') {

@@ -10,8 +10,8 @@ import {
 import { resolveStack, YES_DEFAULTS } from '#/stack/resolve';
 import type { PresetFields } from '#/types/stack';
 
-test('encodePreset writes compact versioned defaults and reads legacy defaults', () => {
-  expect(encodePreset(YES_DEFAULTS)).toBe('gb-v1-0');
+test('encodePreset writes compact defaults and reads versioned defaults', () => {
+  expect(encodePreset(YES_DEFAULTS)).toBe('gb0');
   expect(decodePreset('gb-v1-0')).toEqual(YES_DEFAULTS);
   expect(decodePreset('gb0')).toEqual(YES_DEFAULTS);
 });
@@ -23,7 +23,8 @@ test('encodePreset and decodePreset round-trip a non-default overlay', () => {
     linter: 'oxlint',
   };
   const code = encodePreset(fields);
-  expect(code).toStartWith('gb-v1-');
+  expect(code).toStartWith('gb');
+  expect(code).not.toStartWith('gb-v1-');
   expect(decodePreset(code)).toEqual(fields);
 });
 
@@ -44,7 +45,7 @@ test('literal legacy codes retain their original selections', () => {
   expect(decodePreset('gb-v1-48')).toEqual(decodePreset('gb2'));
 });
 
-test('versioned codes preserve named preset selections', () => {
+test('compact codes preserve named preset selections', () => {
   for (const fields of Object.values(GOLDEN_PRESETS)) {
     expect(decodePreset(encodePreset(fields))).toEqual(fields);
   }

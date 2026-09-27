@@ -23,7 +23,7 @@ test('hono next FileMap includes apps/server and @hono/node-server', () => {
   expect(files['app/api/[[...route]]/route.ts']).toBeUndefined();
   expect(files['apps/web/app/api/[[...route]]/route.ts']).toBeUndefined();
   expect(files['vite.config.ts']).toBeUndefined();
-  expect(encodePreset(YES_DEFAULTS)).toBe('gb-v1-0');
+  expect(encodePreset(YES_DEFAULTS)).toBe('gb0');
   expect(decodePreset('gb0')).toEqual(YES_DEFAULTS);
 });
 

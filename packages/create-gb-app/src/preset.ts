@@ -147,6 +147,12 @@ export type GoldenName = keyof typeof GOLDEN_PRESETS;
 const ZERO = BigInt(0);
 const ONE = BigInt(1);
 const BASE = BigInt(62);
+const EXTENDED_DB_SETUPS = [
+  null,
+  'turso',
+  'planetscale',
+  'prisma-postgres',
+] as const;
 
 function fieldBits(length: number): number {
   return Math.max(1, Math.ceil(Math.log2(length)));
@@ -193,16 +199,26 @@ export function rawFlagsFromPreset(fields: PresetFields): RawFlags {
 
 export function encodePreset(fields: PresetFields): PresetCode {
   let packed = ZERO;
-
-  for (const [slot, group] of VERSIONED_FLAG_GROUPS.entries()) {
-    const vocab = VERSIONED_VOCAB_BY_GROUP[group];
-    const index = (vocab as readonly string[]).indexOf(fields[group]);
+  let shift = 0;
+  for (const group of LEGACY_FLAG_GROUPS) {
+    const vocab = LEGACY_VOCAB_BY_GROUP[group];
+    const value =
+      group === 'dbSetup' &&
+      EXTENDED_DB_SETUPS.includes(
+        fields.dbSetup as (typeof EXTENDED_DB_SETUPS)[number]
+      )
+        ? 'none'
+        : fields[group];
+    const index = (vocab as readonly string[]).indexOf(value);
     if (index < 0) {
       throw new ParseError(`unencodable ${group} "${fields[group]}"`);
     }
-    packed |= BigInt(index) << (BigInt(slot) * VERSIONED_SLOT_BITS);
+    packed |= BigInt(index) << BigInt(shift);
+    shift += fieldBits(vocab.length);
   }
-
+  const setupId = EXTENDED_DB_SETUPS.indexOf(
+    fields.dbSetup as (typeof EXTENDED_DB_SETUPS)[number]
+  );
   const historical = defaultStructureForBackend(fields.backend);
   const structureId =
     fields.structure === historical
@@ -215,13 +231,16 @@ export function encodePreset(fields: PresetFields): PresetCode {
   if (structureId < 0) {
     throw new ParseError(`unencodable structure "${fields.structure}"`);
   }
-  packed |=
-    BigInt(structureId) << (BigInt(STRUCTURE_SLOT) * VERSIONED_SLOT_BITS);
   const formId = (VERSIONED_FORMS as readonly string[]).indexOf(fields.form);
   if (formId < 0) throw new ParseError(`unencodable form "${fields.form}"`);
-  packed |= BigInt(formId) << (BigInt(FORM_SLOT) * VERSIONED_SLOT_BITS);
+  if (setupId > 0 || structureId > 0 || formId > 0) {
+    packed |= ONE << BigInt(shift);
+    packed |= BigInt(Math.max(0, setupId)) << BigInt(shift + 1);
+    packed |= BigInt(structureId) << BigInt(shift + 3);
+    packed |= BigInt(formId) << BigInt(shift + 5);
+  }
 
-  return `${VERSIONED_PREFIX}${encodeBase62(packed)}`;
+  return `${LEGACY_PREFIX}${encodeBase62(packed)}`;
 }
 
 export function decodePreset(code: string): PresetFields {
@@ -240,10 +259,6 @@ export function decodePreset(code: string): PresetFields {
     (sum, group) => sum + fieldBits(LEGACY_VOCAB_BY_GROUP[group].length),
     0
   );
-  if (packed >= ONE << BigInt(totalBits)) {
-    throw new ParseError(`invalid preset "${code}"`);
-  }
-
   const fields = {} as PresetFields;
   let shift = 0;
   for (const group of LEGACY_FLAG_GROUPS) {
@@ -261,6 +276,26 @@ export function decodePreset(code: string): PresetFields {
 
   fields.structure = defaultStructureForBackend(fields.backend);
   fields.form = 'none';
+
+  const extension = packed >> BigInt(totalBits);
+  if (extension !== ZERO) {
+    if ((extension & ONE) !== ONE || extension >> BigInt(7)) {
+      throw new ParseError(`invalid preset "${code}"`);
+    }
+    const setupId = Number((extension >> ONE) & BigInt(3));
+    const setup = EXTENDED_DB_SETUPS[setupId];
+    if (setup === undefined) throw new ParseError(`invalid preset "${code}"`);
+    if (setup !== null) fields.dbSetup = setup;
+    const structureId = Number((extension >> BigInt(3)) & BigInt(3));
+    if (structureId === 1) fields.structure = 'turborepo';
+    else if (structureId === 2) fields.structure = 'single';
+    else if (structureId !== 0)
+      throw new ParseError(`invalid preset "${code}"`);
+    const formId = Number((extension >> BigInt(5)) & BigInt(3));
+    const form = VERSIONED_FORMS[formId];
+    if (!form) throw new ParseError(`invalid preset "${code}"`);
+    fields.form = form;
+  }
 
   return fields;
 }

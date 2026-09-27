@@ -21,7 +21,6 @@ export const FORMS = ['none', 'react-hook-form', 'tanstack-form'] as const;
 export const FLAG_GROUPS = [
   'frontend',
   'backend',
-  'structure',
   'api',
   'database',
   'orm',
@@ -29,6 +28,7 @@ export const FLAG_GROUPS = [
   'auth',
   'payments',
   'linter',
+  'structure',
   'form',
 ] as const;
 
@@ -37,7 +37,6 @@ export type FlagGroup = (typeof FLAG_GROUPS)[number];
 export const VOCAB_BY_GROUP = {
   frontend: FRONTENDS,
   backend: BACKENDS,
-  structure: PROJECT_STRUCTURES,
   api: APIS,
   database: DATABASES,
   orm: ORMS,
@@ -45,6 +44,7 @@ export const VOCAB_BY_GROUP = {
   auth: AUTHS,
   payments: PAYMENTS,
   linter: LINTERS,
+  structure: PROJECT_STRUCTURES,
   form: FORMS,
 } as const satisfies Record<FlagGroup, readonly string[]>;
 

@@ -213,6 +213,7 @@ export function notesFormSource(
   library: 'react-hook-form' | 'tanstack-form'
 ): string {
   const common = `"use client";
+
 import { useState } from "react";
 import { noteInputSchema, type NoteInput } from "@/lib/note-validation";
 import { Button } from "@/components/ui/button";
@@ -226,8 +227,8 @@ type NotesFormProps = { onSubmit: (input: NoteInput) => Promise<void>; persisten
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { z } from "zod";
-import { FormInput } from "./form-input";
-import { FormTextarea } from "./form-textarea";
+import { FormInput } from "./form/form-input";
+import { FormTextarea } from "./form/form-textarea";
 
 export function NotesForm({ onSubmit, persistent = true }: NotesFormProps) {
   const [error, setError] = useState<string | null>(null);
@@ -254,7 +255,7 @@ export function NotesForm({ onSubmit, persistent = true }: NotesFormProps) {
   return (
     common +
     `
-import { useAppForm } from "./hooks";
+import { useAppForm } from "./form/hooks";
 
 export function NotesForm({ onSubmit, persistent = true }: NotesFormProps) {
   const [error, setError] = useState<string | null>(null);
