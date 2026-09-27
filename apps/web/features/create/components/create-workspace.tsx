@@ -14,6 +14,7 @@ import {
 import { CreateBuilder } from './create-builder';
 import { CreateCommand } from './create-command';
 import { CreateNameField } from './create-name-field';
+import { CreateProjectSummary } from './create-project-summary';
 import { CreateProvider } from './create-provider';
 
 const CreatePreview = dynamic(() =>
@@ -29,6 +30,7 @@ export function CreateWorkspace() {
           <div className="border-b px-4 pb-3">
             <CreateCommand />
           </div>
+          <CreateProjectSummary />
         </div>
         <div className="border-border h-(--builder-height) min-h-0 overflow-hidden xl:col-span-2 xl:border-l">
           <Tabs defaultValue="config" className="h-full gap-0">
