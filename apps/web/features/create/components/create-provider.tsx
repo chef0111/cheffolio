@@ -9,6 +9,7 @@ import {
   DATABASES,
   DB_SETUPS,
   type FlagGroup,
+  FORMS,
   FRONTENDS,
   LINTERS,
   ORMS,
@@ -53,6 +54,7 @@ const createSearchParams = {
   auth: parseAsStringLiteral(AUTHS).withDefault(YES_DEFAULTS.auth),
   payments: parseAsStringLiteral(PAYMENTS).withDefault(YES_DEFAULTS.payments),
   linter: parseAsStringLiteral(LINTERS).withDefault(YES_DEFAULTS.linter),
+  form: parseAsStringLiteral(FORMS).withDefault(YES_DEFAULTS.form),
 };
 
 const CREATE_URL_KEYS = {

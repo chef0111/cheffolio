@@ -16,6 +16,7 @@ export const DB_SETUPS = [
 export const AUTHS = ['better-auth', 'clerk', 'none'] as const;
 export const PAYMENTS = ['none', 'stripe', 'polar'] as const;
 export const LINTERS = ['eslint', 'biome', 'oxlint'] as const;
+export const FORMS = ['none', 'react-hook-form', 'tanstack-form'] as const;
 
 export const FLAG_GROUPS = [
   'frontend',
@@ -28,6 +29,7 @@ export const FLAG_GROUPS = [
   'auth',
   'payments',
   'linter',
+  'form',
 ] as const;
 
 export type FlagGroup = (typeof FLAG_GROUPS)[number];
@@ -43,6 +45,7 @@ export const VOCAB_BY_GROUP = {
   auth: AUTHS,
   payments: PAYMENTS,
   linter: LINTERS,
+  form: FORMS,
 } as const satisfies Record<FlagGroup, readonly string[]>;
 
 export const RELATIONAL_GROUPS = ['api', 'database', 'orm', 'dbSetup'] as const;
@@ -58,4 +61,5 @@ export const STACK_CLI_FLAGS: { key: FlagGroup; flag: string }[] = [
   { key: 'auth', flag: '--auth' },
   { key: 'payments', flag: '--payments' },
   { key: 'linter', flag: '--linter' },
+  { key: 'form', flag: '--form' },
 ];

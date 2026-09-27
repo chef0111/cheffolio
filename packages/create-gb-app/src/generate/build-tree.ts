@@ -13,6 +13,7 @@ import { emitConvex } from './layers/convex';
 import { emitDbSetup, finalizeDatabaseSetup } from './layers/db-setup';
 import { emitDrizzle } from './layers/drizzle';
 import { emitEslintPrettier } from './layers/eslint';
+import { emitForms } from './layers/forms';
 import { emitHono } from './layers/hono';
 import { emitNest } from './layers/nest';
 import { emitNext } from './layers/next';
@@ -257,6 +258,7 @@ export function Providers({ children }: { children: ReactNode }) {
   if (foundations) {
     emitUi(stack, emitCtx);
     emitValidation(emitCtx);
+    emitForms(emitCtx);
     finalizeDatabaseSetup(emitCtx);
   }
 

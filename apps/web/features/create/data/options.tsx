@@ -38,6 +38,7 @@ export const FLAG_GROUP_LABELS: Record<FlagGroup, string> = {
   auth: 'Authentication',
   payments: 'Payments',
   linter: 'Linter',
+  form: 'Forms',
 };
 
 export type FlagOption<K extends FlagGroup> = {
@@ -48,6 +49,23 @@ export type FlagOption<K extends FlagGroup> = {
 };
 
 export const FLAG_OPTIONS: { [K in FlagGroup]: readonly FlagOption<K>[] } = {
+  form: [
+    {
+      value: 'none',
+      label: 'None',
+      description: 'Use the included controls without a form library',
+    },
+    {
+      value: 'react-hook-form',
+      label: 'React Hook Form',
+      description: 'Typed controllers with a Zod resolver',
+    },
+    {
+      value: 'tanstack-form',
+      label: 'TanStack Form',
+      description: 'Typed form hooks with native schema validation',
+    },
+  ],
   frontend: [
     {
       value: 'next',

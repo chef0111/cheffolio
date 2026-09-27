@@ -9,7 +9,8 @@
     "dbSetup": "none",
     "auth": "better-auth",
     "payments": "none",
-    "linter": "eslint"
+    "linter": "eslint",
+    "form": "none"
   },
   "legal": [
     {
@@ -27,7 +28,8 @@
         "dbSetup": "none",
         "auth": "better-auth",
         "payments": "none",
-        "linter": "eslint"
+        "linter": "eslint",
+        "form": "none"
       }
     },
     {
@@ -41,7 +43,8 @@
         "structure": "single",
         "auth": "better-auth",
         "payments": "none",
-        "linter": "eslint"
+        "linter": "eslint",
+        "form": "none"
       }
     }
   ],

@@ -42,6 +42,7 @@ describe('parse then resolve', () => {
       auth: 'better-auth',
       payments: 'none',
       linter: 'eslint',
+      form: 'none',
     });
   });
 });

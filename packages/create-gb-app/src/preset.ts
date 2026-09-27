@@ -17,6 +17,7 @@ export {
   DATABASES,
   DB_SETUPS,
   FLAG_GROUPS,
+  FORMS,
   FRONTENDS,
   LINTERS,
   ORMS,
@@ -32,6 +33,7 @@ export type {
   Backend,
   Database,
   DbSetup,
+  Form,
   Frontend,
   Linter,
   Orm,
@@ -75,7 +77,8 @@ const LEGACY_VOCAB_BY_GROUP = {
   readonly string[]
 >;
 
-// Version 1 assigns stable bytes; slots 10 and 11 remain reserved.
+// Version 1 assigns a stable byte to each field. Slot 9 is structure;
+// Slot 10 is forms; slot 11 remains reserved without moving issued values.
 const VERSIONED_FLAG_GROUPS = [
   'frontend',
   'backend',
@@ -112,6 +115,8 @@ const VERSIONED_VOCAB_BY_GROUP = {
 const VERSIONED_SLOT_COUNT = 12;
 const VERSIONED_SLOT_BITS = BigInt(8);
 const STRUCTURE_SLOT = 9;
+const FORM_SLOT = 10;
+const VERSIONED_FORMS = ['none', 'react-hook-form', 'tanstack-form'] as const;
 
 export const GOLDEN_PRESETS = {
   nest: {
@@ -212,6 +217,9 @@ export function encodePreset(fields: PresetFields): PresetCode {
   }
   packed |=
     BigInt(structureId) << (BigInt(STRUCTURE_SLOT) * VERSIONED_SLOT_BITS);
+  const formId = (VERSIONED_FORMS as readonly string[]).indexOf(fields.form);
+  if (formId < 0) throw new ParseError(`unencodable form "${fields.form}"`);
+  packed |= BigInt(formId) << (BigInt(FORM_SLOT) * VERSIONED_SLOT_BITS);
 
   return `${VERSIONED_PREFIX}${encodeBase62(packed)}`;
 }
@@ -252,6 +260,7 @@ export function decodePreset(code: string): PresetFields {
   }
 
   fields.structure = defaultStructureForBackend(fields.backend);
+  fields.form = 'none';
 
   return fields;
 }
@@ -273,11 +282,17 @@ function decodeVersionedPreset(code: string): PresetFields {
     throw new ParseError(`invalid preset "${code}"`);
   }
   // Unassigned slots must be zero until a later schema defines their meaning.
-  if (packed >> (BigInt(STRUCTURE_SLOT + 1) * VERSIONED_SLOT_BITS)) {
+  if (packed >> (BigInt(FORM_SLOT + 1) * VERSIONED_SLOT_BITS)) {
     throw new ParseError(`invalid preset "${code}"`);
   }
 
   const fields = {} as PresetFields;
+  const formId = Number(
+    (packed >> (BigInt(FORM_SLOT) * VERSIONED_SLOT_BITS)) & BigInt(255)
+  );
+  const form = VERSIONED_FORMS[formId];
+  if (form === undefined) throw new ParseError(`invalid preset "${code}"`);
+  fields.form = form;
   for (const [slot, group] of VERSIONED_FLAG_GROUPS.entries()) {
     const vocab = VERSIONED_VOCAB_BY_GROUP[group];
     const index = Number(
@@ -380,6 +395,9 @@ function assignField(
       return;
     case 'linter':
       target.linter = value as PresetFields['linter'];
+      return;
+    case 'form':
+      target.form = value as PresetFields['form'];
       return;
     default: {
       const _exhaustive: never = group;

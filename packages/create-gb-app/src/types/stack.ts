@@ -4,6 +4,7 @@ import type {
   BACKENDS,
   DATABASES,
   DB_SETUPS,
+  FORMS,
   FRONTENDS,
   LINTERS,
   ORMS,
@@ -21,6 +22,7 @@ export type DbSetup = (typeof DB_SETUPS)[number];
 export type Auth = (typeof AUTHS)[number];
 export type Payments = (typeof PAYMENTS)[number];
 export type Linter = (typeof LINTERS)[number];
+export type Form = (typeof FORMS)[number];
 
 export type PresetFields = {
   frontend: Frontend;
@@ -33,6 +35,7 @@ export type PresetFields = {
   auth: Auth;
   payments: Payments;
   linter: Linter;
+  form: Form;
 };
 
 export type RawFlags = {
@@ -50,6 +53,7 @@ export type RawFlags = {
   auth?: Auth;
   payments?: Payments;
   linter?: Linter;
+  form?: Form;
   noGit?: boolean;
   noInstall?: boolean;
   projectName?: string;
@@ -60,6 +64,7 @@ type Shared = {
   auth: Auth;
   payments: Payments;
   linter: Linter;
+  form: Form;
 };
 
 type Relational = {

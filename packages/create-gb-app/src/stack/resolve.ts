@@ -22,6 +22,7 @@ export const YES_DEFAULTS = {
   auth: 'better-auth',
   payments: 'none',
   linter: 'eslint',
+  form: 'none',
 } as const satisfies PresetFields;
 
 export function defaultStructureForBackend(
@@ -97,6 +98,7 @@ export function resolveStack(raw: RawFlags): Stack {
   const auth = raw.auth ?? YES_DEFAULTS.auth;
   const payments = raw.payments ?? YES_DEFAULTS.payments;
   const linter = raw.linter ?? YES_DEFAULTS.linter;
+  const form = raw.form ?? YES_DEFAULTS.form;
 
   if ((backend === 'nest' || backend === 'hono') && structure !== 'turborepo') {
     throw new CompatError(RULE_IDS.backendRequiresTurborepo);
@@ -114,6 +116,7 @@ export function resolveStack(raw: RawFlags): Stack {
       auth,
       payments,
       linter,
+      form,
       structure,
     };
   }
@@ -142,6 +145,7 @@ export function resolveStack(raw: RawFlags): Stack {
       auth,
       payments,
       linter,
+      form,
       structure: 'turborepo',
     };
   }
@@ -157,6 +161,7 @@ export function resolveStack(raw: RawFlags): Stack {
       auth,
       payments,
       linter,
+      form,
       structure,
     };
   }

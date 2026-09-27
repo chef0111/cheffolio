@@ -21,6 +21,7 @@ import type {
   Backend,
   Database,
   DbSetup,
+  Form,
   Frontend,
   Orm,
   Payments,
@@ -38,6 +39,7 @@ type FocusId =
   | 'api'
   | 'auth'
   | 'payments'
+  | 'form'
   | 'confirm';
 
 const FOCUS_ORDER: FocusId[] = [
@@ -50,6 +52,7 @@ const FOCUS_ORDER: FocusId[] = [
   'dbSetup',
   'auth',
   'payments',
+  'form',
   'confirm',
 ];
 
@@ -108,6 +111,20 @@ const AUTH_OPTIONS = [
   { name: 'Clerk', description: 'Hosted auth', value: 'clerk' },
   { name: 'None', description: 'Public notes', value: 'none' },
 ];
+const FORM_OPTIONS = [
+  { name: 'None', description: 'No form library', value: 'none' },
+  {
+    name: 'React Hook Form',
+    description: 'Typed controllers and Zod',
+    value: 'react-hook-form',
+  },
+  {
+    name: 'TanStack Form',
+    description: 'Typed form hooks and Zod',
+    value: 'tanstack-form',
+  },
+];
+
 function paymentOptions(auth: Auth | undefined) {
   const none = { name: 'None', description: 'No billing', value: 'none' };
   if (auth === 'none' || auth === undefined) {
@@ -164,6 +181,7 @@ function wizardFlags(initialFlags: RawFlags): RawFlags {
     auth: initialFlags.auth ?? 'better-auth',
     payments: initialFlags.payments ?? 'none',
     linter: initialFlags.linter ?? 'eslint',
+    form: initialFlags.form ?? 'none',
     projectName: initialFlags.projectName ?? 'my-gb-app',
   };
   if (backend === 'convex') {
@@ -474,6 +492,21 @@ export function App({ initialFlags = {}, onExit, onGenerate }: AppProps) {
               if (option?.value) {
                 patch({ payments: option.value as Payments });
               }
+            }}
+          />
+          <text id="label-form" flexShrink={0}>
+            Add-ons: Forms
+          </text>
+          <select
+            id="control-form"
+            flexShrink={0}
+            focused={focus === 'form'}
+            height={3}
+            showDescription={false}
+            options={FORM_OPTIONS}
+            selectedIndex={indexOfValue(FORM_OPTIONS, flags.form)}
+            onChange={(_index, option) => {
+              if (option?.value) patch({ form: option.value as Form });
             }}
           />
           <select

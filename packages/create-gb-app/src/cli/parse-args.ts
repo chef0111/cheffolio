@@ -7,6 +7,7 @@ import {
   BACKENDS,
   DATABASES,
   DB_SETUPS,
+  FORMS,
   FRONTENDS,
   LINTERS,
   ORMS,
@@ -159,6 +160,12 @@ export function parseArgs(argv: string[]): RawFlags {
         i += consumed;
         break;
       }
+      case '--form': {
+        const { value, consumed } = takeValue(argv, i, name);
+        flags.form = oneOf('form', value, FORMS);
+        i += consumed;
+        break;
+      }
       case '--linter': {
         const { value, consumed } = takeValue(argv, i, name);
         flags.linter = oneOf('linter', value, LINTERS);
@@ -228,6 +235,7 @@ Flags
   --auth better-auth|clerk|none
   --payments none|stripe|polar
   --linter eslint|biome|oxlint
+  --form none|react-hook-form|tanstack-form
   --no-git
   --no-install
 `;

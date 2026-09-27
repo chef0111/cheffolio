@@ -38,11 +38,15 @@ export function CreateBuilder() {
     <Card className="rounded-none bg-transparent ring-0">
       <CardContent>
         <FieldGroup className="gap-6">
-          {FLAG_GROUPS.map((group) =>
+          {FLAG_GROUPS.filter((group) => group !== 'form').map((group) =>
             isGroupVisible(flags, group) ? (
               <FlagRadioGroup key={group} group={group} />
             ) : null
           )}
+          <FieldSet>
+            <FieldLegend>Add-ons</FieldLegend>
+            <FlagRadioGroup group="form" />
+          </FieldSet>
         </FieldGroup>
       </CardContent>
     </Card>

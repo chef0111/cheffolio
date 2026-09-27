@@ -120,6 +120,7 @@ function convexRelationalRule(group: FlagGroup): RuleId | null {
     case 'auth':
     case 'payments':
     case 'linter':
+    case 'form':
       return null;
     default: {
       const _exhaustive: never = group;
@@ -235,6 +236,7 @@ export function applyFlagChange<K extends FlagGroup>(
     case 'api':
     case 'orm':
     case 'linter':
+    case 'form':
       return next;
     default: {
       const _exhaustive: never = key;

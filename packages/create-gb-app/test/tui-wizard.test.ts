@@ -62,6 +62,60 @@ for (const backend of ['nest', 'hono'] as const) {
   });
 }
 
+for (const [width, height] of [
+  [80, 24],
+  [40, 12],
+] as const) {
+  test(`${width}x${height} follows keyboard focus through Forms and Generate`, async () => {
+    let generatedForm: string | undefined;
+    const setup = await testRender(
+      createElement(App, {
+        initialFlags: {},
+        onGenerate: (flags) => {
+          generatedForm = flags.form;
+        },
+      }),
+      { width, height }
+    );
+    try {
+      await setup.renderOnce();
+      for (let index = 0; index < 9; index++) {
+        await act(async () => setup.mockInput.pressTab());
+        await setup.renderOnce();
+      }
+      expect(setup.captureCharFrame()).toContain('Add-ons: Forms');
+      expect(setup.captureCharFrame()).toContain('React Hook Form');
+      expect(setup.captureCharFrame()).toContain('TanStack Form');
+      if (width === 80) {
+        await act(async () => setup.resize(40, 12));
+        await setup.flush();
+        expect(setup.captureCharFrame()).toContain('Add-ons: Forms');
+        expect(setup.captureCharFrame()).toContain('TanStack Form');
+        await act(async () => setup.resize(width, height));
+        await setup.flush();
+      }
+      await act(async () => setup.mockInput.pressArrow('down'));
+      await setup.renderOnce();
+      expect(setup.captureCharFrame()).toContain('▶ React Hook Form');
+      expect(
+        setup
+          .captureCharFrame()
+          .split('\n')
+          .map((line) => line.trim())
+          .join('')
+      ).toContain('react-hook-form');
+      await act(async () => setup.mockInput.pressTab());
+      await setup.renderOnce();
+      expect(setup.captureCharFrame()).toContain('Generate');
+      await act(async () => setup.mockInput.pressEnter());
+      await setup.renderOnce();
+      expect(generatedForm).toBe('react-hook-form');
+    } finally {
+      setup.renderer.destroy();
+    }
+  });
+}
+
 test('wizard first frame shows Backend and blocks Polar when auth is none', async () => {
   const started = performance.now();
   const setup = await testRender(

@@ -17,6 +17,7 @@ import {
   DB_SETUPS,
   FLAG_GROUPS,
   type FlagGroup,
+  FORMS,
   FRONTENDS,
   LINTERS,
   ORMS,
@@ -37,6 +38,7 @@ const VOCAB: Record<FlagGroup, ReadonlySet<string>> = {
   auth: new Set(AUTHS),
   payments: new Set(PAYMENTS),
   linter: new Set(LINTERS),
+  form: new Set(FORMS),
 };
 
 export function isCreateFlags(value: unknown): value is CreateFlags {
