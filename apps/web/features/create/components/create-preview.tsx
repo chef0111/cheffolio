@@ -1,13 +1,13 @@
 'use client';
 
-import { type CreateFlags, FLAG_GROUPS } from 'create-gb-app/preset';
 import {
   ChevronLeftIcon,
   FilesIcon,
   FoldersIcon,
   InfoIcon,
 } from 'lucide-react';
-import { startTransition, useEffect, useMemo, useState } from 'react';
+import React from 'react';
+import { browser } from 'react-dom';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -17,58 +17,75 @@ import {
 } from '@/components/ui/resizable';
 
 import { defaultSelectedPath, type FileMap } from '../data/file-map';
-import { generatePreview } from '../lib/actions/generate-preview';
+import {
+  type GeneratedPreview,
+  type PreviewResult,
+  useGeneratedPreview,
+} from '../hooks/use-generated-preview';
 import { resolveProjectName } from '../lib/command';
 import { countTreeEntries, treeFromPaths } from '../lib/tree-from-paths';
 import { CreateFilePreview } from './create-file-preview';
-import { useCreate } from './create-provider';
 import { CreateTree } from './create-tree';
 
 type NarrowPane = 'tree' | 'code';
-type PreviewResult = Awaited<ReturnType<typeof generatePreview>>;
 type PreviewTree = ReturnType<typeof treeFromPaths>;
 type PreviewFile = { path: string; contents: string };
 
-const EMPTY_FILES: FileMap = {};
-
-const previewCache = new Map<string, ReturnType<typeof generatePreview>>();
+const BUILDER_DEFAULT_SIZE = '32%';
+const BUILDER_MIN_SIZE = '28%';
+const PREVIEW_DEFAULT_SIZE = '66%';
+const PREVIEW_MIN_SIZE = '50%';
 
 export function CreatePreview() {
-  const { flags, projectName } = useCreate();
-  const rootName = resolveProjectName(projectName);
-  const requestKey = previewKey(flags, projectName);
-  const [result, setResult] = useState<PreviewResult | null>(null);
-  const [selectedPath, setSelectedPath] = useState('');
-  const [narrowPane, setNarrowPane] = useState<NarrowPane>('tree');
+  React.use(browser());
 
-  useEffect(() => {
-    let cancelled = false;
-    void previewResult(flags, projectName).then((next) => {
-      if (cancelled) {
-        return;
-      }
-      startTransition(() => {
-        setResult(next);
-      });
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [flags, projectName, requestKey]);
-
-  const files: FileMap = result?.ok ? result.files : EMPTY_FILES;
-  const paths = Object.keys(files);
-  const tree = useMemo(() => treeFromPaths(paths, rootName), [paths, rootName]);
-  const resolvedPath =
-    selectedPath in files
-      ? selectedPath
-      : (defaultSelectedPath(paths) ?? paths[0] ?? '');
-  const contents = files[resolvedPath];
-  const file = contents === undefined ? null : { path: resolvedPath, contents };
-
-  if (!result) {
+  const preview = useGeneratedPreview();
+  if (!preview) {
     return null;
   }
+
+  return <CreatePreviewResult preview={preview} />;
+}
+
+function CreatePreviewResult({ preview }: { preview: GeneratedPreview }) {
+  const result = React.use(preview.promise);
+
+  return (
+    <CreatePreviewContents result={result} projectName={preview.projectName} />
+  );
+}
+
+function CreatePreviewContents({
+  result,
+  projectName,
+}: {
+  result: PreviewResult;
+  projectName: string;
+}) {
+  const rootName = resolveProjectName(projectName);
+  const [selectedPath, setSelectedPath] = React.useState('');
+  const [narrowPane, setNarrowPane] = React.useState<NarrowPane>('tree');
+
+  const files: FileMap | null = result.ok ? result.files : null;
+  const paths = React.useMemo(() => Object.keys(files ?? {}).sort(), [files]);
+  const pathKey = paths.join('\0');
+  const tree = React.useMemo(
+    () => treeFromPaths(pathKey ? pathKey.split('\0') : [], rootName),
+    [pathKey, rootName]
+  );
+
+  const resolvedPath =
+    files && selectedPath in files
+      ? selectedPath
+      : (defaultSelectedPath(paths) ?? paths[0] ?? '');
+
+  const contents = files?.[resolvedPath];
+  const file = contents === undefined ? null : { path: resolvedPath, contents };
+
+  const onSelectPath = React.useCallback((path: string) => {
+    setSelectedPath(path);
+    setNarrowPane('code');
+  }, []);
 
   if (!result.ok) {
     return (
@@ -77,14 +94,6 @@ export function CreatePreview() {
       </p>
     );
   }
-
-  const onSelectPath = (path: string) => {
-    if (!(path in files)) {
-      return;
-    }
-    setSelectedPath(path);
-    setNarrowPane('code');
-  };
 
   return (
     <div className="flex h-full min-h-0 flex-col">
@@ -110,8 +119,8 @@ export function CreatePreview() {
           className="min-h-0 flex-1"
         >
           <ResizablePanel
-            defaultSize="32%"
-            minSize="28%"
+            defaultSize={BUILDER_DEFAULT_SIZE}
+            minSize={BUILDER_MIN_SIZE}
             className="min-h-0 overflow-y-auto"
           >
             <CreatePreviewTreePane
@@ -121,7 +130,11 @@ export function CreatePreview() {
             />
           </ResizablePanel>
           <ResizableHandle />
-          <ResizablePanel defaultSize="66%" minSize="50%" className="min-h-0">
+          <ResizablePanel
+            defaultSize={PREVIEW_DEFAULT_SIZE}
+            minSize={PREVIEW_MIN_SIZE}
+            className="min-h-0"
+          >
             <CreatePreviewCodePane file={file} />
           </ResizablePanel>
         </ResizablePanelGroup>
@@ -130,7 +143,7 @@ export function CreatePreview() {
   );
 }
 
-function CreatePreviewTreePane({
+const CreatePreviewTreePane = React.memo(function CreatePreviewTreePane({
   tree,
   selectedPath,
   onSelectPath,
@@ -165,7 +178,7 @@ function CreatePreviewTreePane({
       </div>
     </div>
   );
-}
+});
 
 function CreatePreviewCodePane({
   file,
@@ -200,19 +213,4 @@ function CreatePreviewCodePane({
       </div>
     </div>
   );
-}
-
-function previewKey(flags: CreateFlags, projectName: string) {
-  return `${projectName}:${FLAG_GROUPS.map((group) => flags[group]).join(',')}`;
-}
-
-function previewResult(flags: CreateFlags, projectName: string) {
-  const key = previewKey(flags, projectName);
-  const cached = previewCache.get(key);
-  if (cached) {
-    return cached;
-  }
-  const next = generatePreview(flags, projectName);
-  previewCache.set(key, next);
-  return next;
 }

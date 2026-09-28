@@ -34,6 +34,7 @@ export * from './sun';
 export * from './supabase';
 export * from './tanstack-start';
 export * from './trpc';
+export * from './turborepo';
 export * from './typescript';
 export * from './verified-icon';
 export * from './x';

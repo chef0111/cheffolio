@@ -1,11 +1,20 @@
+export { SHADCN_FOUNDATION } from '#/generate/assets/shadcn/metadata';
 export { buildTree } from '#/generate/build-tree';
 export type { GenerateGapCode } from '#/generate/errors';
 export { GENERATE_GAPS, GenerateError } from '#/generate/errors';
+export {
+  isPackageManager,
+  PACKAGE_MANAGER_METADATA,
+} from '#/generate/package-managers';
 export type { PresetCode } from '#/preset';
 export { decodePreset, encodePreset, rawFlagsFromPreset } from '#/preset';
 export { CompatError, RULE_IDS } from '#/stack/errors';
 export { ParseError } from '#/stack/parse-error';
-export { resolveStack, YES_DEFAULTS } from '#/stack/resolve';
+export {
+  defaultStructureForBackend,
+  resolveStack,
+  YES_DEFAULTS,
+} from '#/stack/resolve';
 export {
   APIS,
   AUTHS,
@@ -17,6 +26,7 @@ export {
   LINTERS,
   ORMS,
   PAYMENTS,
+  PROJECT_STRUCTURES,
 } from '#/stack/vocab';
 export type {
   FileMap,
@@ -34,6 +44,7 @@ export type {
   Orm,
   Payments,
   PresetFields,
+  ProjectStructure,
   RawFlags,
   Stack,
 } from '#/types/stack';

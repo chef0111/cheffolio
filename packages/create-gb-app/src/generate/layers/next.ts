@@ -1,59 +1,60 @@
 import type { EmitCtx } from '../../types/generate';
+import { DEPENDENCY_VERSIONS } from '../dependency-versions';
 import { setFile } from '../files';
 
 export function emitNext(ctx: EmitCtx): void {
   ctx.pkg.scripts.dev = 'next dev';
   ctx.pkg.scripts.build = 'next build';
   ctx.pkg.scripts.start = 'next start';
-  ctx.pkg.dependencies.next = '^15.5.4';
-  ctx.pkg.dependencies.react = '^19.1.1';
-  ctx.pkg.dependencies['react-dom'] = '^19.1.1';
-  ctx.pkg.devDependencies['@types/node'] = '^24.3.1';
-  ctx.pkg.devDependencies['@types/react'] = '^19.1.12';
-  ctx.pkg.devDependencies['@types/react-dom'] = '^19.1.9';
-  ctx.pkg.devDependencies.typescript = '^5.9.2';
-  ctx.pkg.devDependencies['@tailwindcss/postcss'] = '^4.1.13';
-  ctx.pkg.devDependencies.tailwindcss = '^4.1.13';
+  ctx.pkg.dependencies.next = DEPENDENCY_VERSIONS['next'];
+  ctx.pkg.dependencies.react = DEPENDENCY_VERSIONS['react'];
+  ctx.pkg.dependencies['react-dom'] = DEPENDENCY_VERSIONS['react-dom'];
+  ctx.pkg.devDependencies['@types/node'] = DEPENDENCY_VERSIONS['@types/node'];
+  ctx.pkg.devDependencies['@types/react'] = DEPENDENCY_VERSIONS['@types/react'];
+  ctx.pkg.devDependencies['@types/react-dom'] =
+    DEPENDENCY_VERSIONS['@types/react-dom'];
+  ctx.pkg.devDependencies.typescript = DEPENDENCY_VERSIONS['typescript'];
+  ctx.pkg.devDependencies['@tailwindcss/postcss'] =
+    DEPENDENCY_VERSIONS['@tailwindcss/postcss'];
+  ctx.pkg.devDependencies.tailwindcss = DEPENDENCY_VERSIONS['tailwindcss'];
 
   setFile(
     ctx.files,
     'tsconfig.json',
-    JSON.stringify(
+    `{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
       {
-        compilerOptions: {
-          target: 'ES2017',
-          lib: ['dom', 'dom.iterable', 'esnext'],
-          allowJs: true,
-          skipLibCheck: true,
-          strict: true,
-          noEmit: true,
-          esModuleInterop: true,
-          module: 'esnext',
-          moduleResolution: 'bundler',
-          resolveJsonModule: true,
-          isolatedModules: true,
-          jsx: 'preserve',
-          incremental: true,
-          plugins: [{ name: 'next' }],
-          paths: { '@/*': ['./*'] },
-        },
-        include: [
-          'next-env.d.ts',
-          '**/*.ts',
-          '**/*.tsx',
-          '.next/types/**/*.ts',
-        ],
-        exclude: ['node_modules'],
-      },
-      null,
-      2
-    )
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./*"]
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}
+`
   );
 
   setFile(
     ctx.files,
     'next.config.ts',
-    `import type { NextConfig } from "next";
+    `import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {};
 
@@ -66,7 +67,7 @@ export default nextConfig;
     'postcss.config.mjs',
     `const config = {
   plugins: {
-    "@tailwindcss/postcss": {},
+    '@tailwindcss/postcss': {},
   },
 };
 
@@ -81,11 +82,12 @@ export default config;
 /// <reference types="next/image-types/global" />
 `
   );
+  setFile(ctx.files, 'global.d.ts', "declare module '*.css';\n");
 
   setFile(
     ctx.files,
     'app/globals.css',
-    `@import "tailwindcss";
+    `@import 'tailwindcss';
 
 :root {
   --background: #ffffff;
@@ -109,13 +111,13 @@ body {
   setFile(
     ctx.files,
     'app/layout.tsx',
-    `import type { Metadata } from "next";
-import { Providers } from "./providers";
-import "./globals.css";
+    `import type { Metadata } from 'next';
+import { Providers } from './providers';
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: "${ctx.projectName}",
-  description: "Notes app",
+  title: '${ctx.projectName}',
+  description: 'Notes app',
 };
 
 export default function RootLayout({
@@ -137,7 +139,7 @@ export default function RootLayout({
   setFile(
     ctx.files,
     'app/page.tsx',
-    `import Link from "next/link";
+    `import Link from 'next/link';
 
 export default function HomePage() {
   return (

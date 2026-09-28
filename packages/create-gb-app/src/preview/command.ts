@@ -1,5 +1,5 @@
 import { parsePresetToken } from '#/preset';
-import { YES_DEFAULTS } from '#/stack/resolve';
+import { defaultStructureForBackend, YES_DEFAULTS } from '#/stack/resolve';
 import type { FlagGroup } from '#/stack/vocab';
 import { RELATIONAL_GROUPS, STACK_CLI_FLAGS } from '#/stack/vocab';
 import type { RawFlags } from '#/types/stack';
@@ -18,6 +18,9 @@ function impliedValue(baseline: RawFlags, key: FlagGroup): string | undefined {
     (RELATIONAL_GROUPS as readonly FlagGroup[]).includes(key)
   ) {
     return undefined;
+  }
+  if (key === 'structure') {
+    return baseline.structure ?? defaultStructureForBackend(backend);
   }
   const fromBaseline = baseline[key];
   if (fromBaseline !== undefined) {

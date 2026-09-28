@@ -4,6 +4,7 @@ import {
   buildTree,
   CompatError,
   GenerateError,
+  type PackageManager,
   type RawFlags,
   resolveStack,
 } from 'create-gb-app/generate';
@@ -16,10 +17,12 @@ import {
   DB_SETUPS,
   FLAG_GROUPS,
   type FlagGroup,
+  FORMS,
   FRONTENDS,
   LINTERS,
   ORMS,
   PAYMENTS,
+  PROJECT_STRUCTURES,
 } from 'create-gb-app/preset';
 
 import { resolveProjectName } from './command';
@@ -27,6 +30,7 @@ import { resolveProjectName } from './command';
 const VOCAB: Record<FlagGroup, ReadonlySet<string>> = {
   frontend: new Set(FRONTENDS),
   backend: new Set(BACKENDS),
+  structure: new Set(PROJECT_STRUCTURES),
   api: new Set(APIS),
   database: new Set(DATABASES),
   orm: new Set(ORMS),
@@ -34,6 +38,7 @@ const VOCAB: Record<FlagGroup, ReadonlySet<string>> = {
   auth: new Set(AUTHS),
   payments: new Set(PAYMENTS),
   linter: new Set(LINTERS),
+  form: new Set(FORMS),
 };
 
 export function isCreateFlags(value: unknown): value is CreateFlags {
@@ -58,6 +63,7 @@ export function flagsToRaw(flags: CreateFlags): RawFlags {
   return {
     frontend: flags.frontend,
     backend: flags.backend,
+    structure: flags.structure,
     api: flags.api,
     database: flags.database,
     orm: flags.orm,
@@ -65,17 +71,19 @@ export function flagsToRaw(flags: CreateFlags): RawFlags {
     auth: flags.auth,
     payments: flags.payments,
     linter: flags.linter,
+    form: flags.form,
   };
 }
 
 export function buildCreateFileMap(
   flags: CreateFlags,
-  projectName: string
+  projectName: string,
+  packageManager: PackageManager = 'bun'
 ): CreateFileMapResult {
   try {
     const files = buildTree(resolveStack(flagsToRaw(flags)), {
       projectName: resolveProjectName(projectName),
-      packageManager: 'bun',
+      packageManager,
     });
     return { ok: true, files };
   } catch (error) {

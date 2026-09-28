@@ -25,7 +25,13 @@ import type { CopyState } from '@/hooks/use-copy';
 
 const cache = new Map<string, string>();
 
-export function MDCopyButton({ markdownUrl }: { markdownUrl: string }) {
+export function MDCopyButton({
+  markdownUrl,
+  variant = 'secondary',
+}: {
+  markdownUrl: string;
+  variant?: 'secondary' | 'outline';
+}) {
   const [state, setState] = React.useState<CopyState>('idle');
   const [isCopying, setIsCopying] = React.useState(false);
   const operationRef = React.useRef(false);
@@ -76,7 +82,7 @@ export function MDCopyButton({ markdownUrl }: { markdownUrl: string }) {
   return (
     <Button
       size="sm"
-      variant="secondary"
+      variant={variant}
       className="-mr-px gap-1.5 active:scale-none!"
       aria-label="Copy"
       aria-busy={isCopying}
@@ -105,7 +111,13 @@ function getGitHubSourceUrl(markdownUrl: string) {
   return `https://github.com/chef0111/cheffolio/blob/main/docs/${filePath}.mdx`;
 }
 
-export function ViewOptions({ markdownUrl }: { markdownUrl: string }) {
+export function ViewOptions({
+  markdownUrl,
+  variant,
+}: {
+  markdownUrl: string;
+  variant?: 'secondary' | 'outline';
+}) {
   const items = React.useMemo(() => {
     const fullMarkdownUrl =
       typeof window !== 'undefined'
@@ -151,7 +163,7 @@ export function ViewOptions({ markdownUrl }: { markdownUrl: string }) {
         render={
           <Button
             className="active:scale-none!"
-            variant="secondary"
+            variant={variant}
             size="icon-sm"
             aria-label="View Options"
           >
@@ -181,12 +193,18 @@ export function ViewOptions({ markdownUrl }: { markdownUrl: string }) {
   );
 }
 
-export function MDCopyButtonGroup({ markdownUrl }: { markdownUrl: string }) {
+export function MDCopyButtonGroup({
+  markdownUrl,
+  variant,
+}: {
+  markdownUrl: string;
+  variant?: 'secondary' | 'outline';
+}) {
   return (
     <ButtonGroup>
-      <MDCopyButton markdownUrl={markdownUrl} />
+      <MDCopyButton markdownUrl={markdownUrl} variant={variant} />
       <ButtonGroupSeparator orientation="vertical" />
-      <ViewOptions markdownUrl={markdownUrl} />
+      <ViewOptions markdownUrl={markdownUrl} variant={variant} />
     </ButtonGroup>
   );
 }

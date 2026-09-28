@@ -3,6 +3,7 @@ import {
   type Backend,
   type CreateFlags,
   type Database,
+  databaseSetupRule,
   type DbSetup,
   FLAG_GROUPS,
   type FlagGroup,
@@ -14,6 +15,8 @@ import {
 export { YES_DEFAULTS };
 
 export const RULE_IDS = {
+  backendRequiresTurborepo: 'backend-requires-turborepo',
+  optionalTurborepoUnavailable: 'optional-turborepo-unavailable',
   nestTrpc: 'nest-trpc',
   polarRequiresBetterAuth: 'polar-requires-better-auth',
   paymentsRequireAuth: 'payments-require-auth',
@@ -24,6 +27,9 @@ export const RULE_IDS = {
   sqliteDockerForbidden: 'sqlite-docker-forbidden',
   neonRequiresPostgres: 'neon-requires-postgres',
   supabaseRequiresPostgres: 'supabase-requires-postgres',
+  tursoRequiresSqlite: 'turso-requires-sqlite',
+  planetscaleRequiresSql: 'planetscale-requires-postgres-or-mysql',
+  prismaPostgresRequiresPostgres: 'prisma-postgres-requires-postgres',
   clerkPolarForbidden: 'clerk-polar-forbidden',
   betterAuthRequiresDatabase: 'better-auth-requires-database',
   databaseRequiresOrm: 'database-requires-orm',
@@ -34,6 +40,9 @@ export const RULE_IDS = {
 export type RuleId = (typeof RULE_IDS)[keyof typeof RULE_IDS];
 
 export const RULE_MESSAGES: Record<RuleId, string> = {
+  'backend-requires-turborepo': 'Nest and Hono require Turborepo',
+  'optional-turborepo-unavailable':
+    'Turborepo for this backend is not available yet',
   'nest-trpc': 'Nest tRPC generate is not implemented yet',
   'polar-requires-better-auth': 'Polar requires Better Auth',
   'payments-require-auth': 'Payments require auth',
@@ -44,6 +53,10 @@ export const RULE_MESSAGES: Record<RuleId, string> = {
   'sqlite-docker-forbidden': 'SQLite cannot use docker',
   'neon-requires-postgres': 'Neon requires Postgres',
   'supabase-requires-postgres': 'Supabase requires Postgres',
+  'turso-requires-sqlite': 'Turso requires SQLite',
+  'planetscale-requires-postgres-or-mysql':
+    'PlanetScale requires Postgres or MySQL',
+  'prisma-postgres-requires-postgres': 'Prisma Postgres requires Postgres',
   'clerk-polar-forbidden': 'Clerk cannot be used with Polar',
   'better-auth-requires-database': 'Better Auth requires a database',
   'database-requires-orm': 'A database requires an ORM',
@@ -103,9 +116,11 @@ function convexRelationalRule(group: FlagGroup): RuleId | null {
       return RULE_IDS.convexDbSetupOff;
     case 'frontend':
     case 'backend':
+    case 'structure':
     case 'auth':
     case 'payments':
     case 'linter':
+    case 'form':
       return null;
     default: {
       const _exhaustive: never = group;
@@ -119,6 +134,14 @@ function disabledRule(
   group: FlagGroup,
   value: string
 ): RuleId | null {
+  if (group === 'structure') {
+    if (
+      (flags.backend === 'nest' || flags.backend === 'hono') &&
+      value === 'single'
+    ) {
+      return RULE_IDS.backendRequiresTurborepo;
+    }
+  }
   if (flags.backend === 'convex' && value !== 'none') {
     const convexRule = convexRelationalRule(group);
     if (convexRule) {
@@ -157,31 +180,10 @@ function disabledRule(
     return RULE_IDS.betterAuthRequiresDatabase;
   }
 
-  if (group === 'dbSetup' && flags.database === 'none' && value !== 'none') {
-    return RULE_IDS.dbSetupRequiresDatabase;
-  }
-
-  if (group === 'dbSetup' && flags.database !== 'none') {
-    if (value === 'docker' && flags.database === 'sqlite') {
-      return RULE_IDS.sqliteDockerForbidden;
-    }
-    if (value === 'neon' && flags.database !== 'postgres') {
-      return RULE_IDS.neonRequiresPostgres;
-    }
-    if (value === 'supabase' && flags.database !== 'postgres') {
-      return RULE_IDS.supabaseRequiresPostgres;
-    }
-  }
-
+  if (group === 'dbSetup') return databaseSetupRule(flags.database, value);
   if (group === 'database' && value !== 'none') {
-    if (
-      (flags.dbSetup === 'neon' || flags.dbSetup === 'supabase') &&
-      value !== 'postgres'
-    ) {
-      return flags.dbSetup === 'neon'
-        ? RULE_IDS.neonRequiresPostgres
-        : RULE_IDS.supabaseRequiresPostgres;
-    }
+    const rule = databaseSetupRule(value, flags.dbSetup);
+    if (rule) return rule;
   }
 
   if (group === 'payments') {
@@ -230,9 +232,11 @@ export function applyFlagChange<K extends FlagGroup>(
     case 'dbSetup':
       return applyDbSetupSideEffects(next, value as DbSetup);
     case 'frontend':
+    case 'structure':
     case 'api':
     case 'orm':
     case 'linter':
+    case 'form':
       return next;
     default: {
       const _exhaustive: never = key;
@@ -265,7 +269,7 @@ function enabledFallback(
 }
 
 export function normalizeFlags(flags: CreateFlags): CreateFlags {
-  let next = flags;
+  let next = { ...YES_DEFAULTS, ...flags };
 
   for (const group of FLAG_GROUPS) {
     if (isOptionEnabled(next, group, next[group])) {
@@ -283,12 +287,14 @@ function applyBackendSideEffects(
 ): CreateFlags {
   switch (backend) {
     case 'nest':
-    case 'self':
     case 'hono':
-      return flags;
+      return { ...flags, structure: 'turborepo' };
+    case 'self':
+      return { ...flags, structure: 'single' };
     case 'convex':
       return {
         ...flags,
+        structure: 'single',
         api: 'none',
         database: 'none',
         orm: 'none',
@@ -312,15 +318,8 @@ function applyDatabaseSideEffects(
     }
     return next;
   }
-  if (database === 'sqlite' && flags.dbSetup === 'docker') {
+  if (databaseSetupRule(database, flags.dbSetup))
     return { ...flags, dbSetup: 'none' };
-  }
-  if (
-    database !== 'postgres' &&
-    (flags.dbSetup === 'neon' || flags.dbSetup === 'supabase')
-  ) {
-    return { ...flags, dbSetup: 'none' };
-  }
   if (flags.orm === 'none') {
     return { ...flags, orm: 'prisma' };
   }
@@ -354,17 +353,7 @@ function applyDbSetupSideEffects(
   flags: CreateFlags,
   dbSetup: DbSetup
 ): CreateFlags {
-  if (flags.database === 'none' && dbSetup !== 'none') {
+  if (databaseSetupRule(flags.database, dbSetup))
     return { ...flags, dbSetup: 'none' };
-  }
-  if (dbSetup === 'docker' && flags.database === 'sqlite') {
-    return { ...flags, dbSetup: 'none' };
-  }
-  if (
-    (dbSetup === 'neon' || dbSetup === 'supabase') &&
-    flags.database !== 'postgres'
-  ) {
-    return { ...flags, dbSetup: 'none' };
-  }
   return flags;
 }

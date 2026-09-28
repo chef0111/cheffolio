@@ -5,7 +5,7 @@ import {
   FLAG_GROUPS,
   type FlagGroup,
 } from 'create-gb-app/preset';
-import { TerminalIcon } from 'lucide-react';
+import { BlocksIcon, TerminalIcon } from 'lucide-react';
 import { useId } from 'react';
 
 import { Card, CardContent } from '@/components/ui/card';
@@ -38,11 +38,21 @@ export function CreateBuilder() {
     <Card className="rounded-none bg-transparent ring-0">
       <CardContent>
         <FieldGroup className="gap-6">
-          {FLAG_GROUPS.map((group) =>
+          {FLAG_GROUPS.filter((group) => group !== 'form').map((group) =>
             isGroupVisible(flags, group) ? (
               <FlagRadioGroup key={group} group={group} />
             ) : null
           )}
+          <FieldSet>
+            <FieldLegend className="relative flex w-full items-center justify-center [&_svg]:size-4">
+              <div className="bg-background flex items-center gap-2 rounded-sm border px-2 py-1">
+                <BlocksIcon />
+                <span>Add-ons</span>
+              </div>
+              <div className="bg-border absolute -z-1 ml-2 h-px w-full flex-1 grow" />
+            </FieldLegend>
+            <FlagRadioGroup group="form" />
+          </FieldSet>
         </FieldGroup>
       </CardContent>
     </Card>

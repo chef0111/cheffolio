@@ -1,8 +1,8 @@
 import { expect, test } from 'bun:test';
 
 import { buildTree } from '#/generate/build-tree';
-import { decodePreset,encodePreset } from '#/preset';
-import { resolveStack,YES_DEFAULTS } from '#/stack/resolve';
+import { decodePreset, encodePreset } from '#/preset';
+import { resolveStack, YES_DEFAULTS } from '#/stack/resolve';
 
 const ctx = { projectName: 'hono-app', packageManager: 'pnpm' } as const;
 
@@ -37,7 +37,7 @@ test('hono start FileMap includes apps/server under the turbo root', () => {
   expect(files['apps/web/vite.config.ts']).toContain('tanstackStart');
   expect(files['apps/web/src/routes/__root.tsx']).toContain('Providers');
   expect(files['apps/web/src/components/providers.tsx']).toBeDefined();
-  expect(files['package.json']).toContain('"dev": "turbo dev"');
+  expect(files['package.json']).toContain('"dev": "turbo run dev"');
   expect(files['package.json']).not.toContain('vite dev');
   expect(files['vite.config.ts']).toBeUndefined();
   expect(files['src/routes/__root.tsx']).toBeUndefined();

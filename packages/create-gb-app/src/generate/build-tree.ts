@@ -10,13 +10,16 @@ import { setFile, setFileIfAbsent, sortRecord } from './files';
 import { emitBetterAuth } from './layers/better-auth';
 import { emitClerk } from './layers/clerk';
 import { emitConvex } from './layers/convex';
-import { emitDbSetup } from './layers/db-setup';
+import { emitDbSetup, finalizeDatabaseSetup } from './layers/db-setup';
 import { emitDrizzle } from './layers/drizzle';
-import { emitEslintPrettier } from './layers/eslint';
+import { emitEslint } from './layers/eslint';
+import { emitForms } from './layers/forms';
 import { emitHono } from './layers/hono';
+import { emitLogin } from './layers/login';
 import { emitNest } from './layers/nest';
 import { emitNext } from './layers/next';
 import { emitNotes } from './layers/notes';
+import { emitOptionalWorkspace } from './layers/optional-workspace';
 import { emitOrpc } from './layers/orpc';
 import { emitOxlint } from './layers/oxlint';
 import { emitPolar } from './layers/polar';
@@ -27,6 +30,10 @@ import { emitShadcn } from './layers/shadcn';
 import { emitStart } from './layers/start';
 import { emitStripe } from './layers/stripe';
 import { emitTrpc } from './layers/trpc';
+import { emitValidation } from './layers/validation';
+import { projectLayout } from './layout';
+import { generateReadme } from './readme';
+import { finalizeWorkspaces } from './workspaces';
 
 function emitDatabase(
   stack: Extract<Stack, { backend: 'self' | 'nest' }>,
@@ -90,7 +97,7 @@ function emitUi(_stack: Stack, ctx: Parameters<typeof emitNext>[0]) {
 function emitLinter(stack: Stack, ctx: Parameters<typeof emitNext>[0]) {
   switch (stack.linter) {
     case 'eslint':
-      emitEslintPrettier(ctx);
+      emitEslint(ctx);
       break;
     case 'oxlint':
       emitOxlint(ctx);
@@ -162,7 +169,11 @@ function emitApi(
   }
 }
 
-export function buildTree(stack: Stack, ctx: GenerateContext): FileMap {
+function buildProject(
+  stack: Stack,
+  ctx: GenerateContext,
+  foundations: boolean
+): FileMap {
   const files: FileMap = {};
   const pkg: PackageJsonShape = {
     name: ctx.projectName,
@@ -172,44 +183,73 @@ export function buildTree(stack: Stack, ctx: GenerateContext): FileMap {
     dependencies: {},
     devDependencies: {},
   };
-  const emitCtx = { ...ctx, files, pkg, stack };
+  const layout = projectLayout(stack);
+  const emitCtx = { ...ctx, files, pkg, stack, layout };
 
-  switch (stack.backend) {
-    case 'self': {
-      emitSelf(emitCtx);
-      emitFrontend(stack, emitCtx);
-      if (stack.database !== 'none') {
-        if (stack.api !== 'none') {
-          emitApi(stack, emitCtx);
+  if (stack.structure === 'single') {
+    switch (stack.backend) {
+      case 'self': {
+        emitSelf(emitCtx);
+        emitFrontend(stack, emitCtx);
+        if (stack.database !== 'none') {
+          if (stack.api !== 'none') {
+            emitApi(stack, emitCtx);
+          }
+          emitDatabase(stack, emitCtx);
         }
-        emitDatabase(stack, emitCtx);
+        break;
       }
-      break;
+      case 'convex':
+        emitFrontend(stack, emitCtx);
+        emitConvex(emitCtx);
+        break;
+      default:
+        throw new Error(
+          `unsupported single-app backend: ${JSON.stringify(stack)}`
+        );
     }
-    case 'nest':
-      emitNest(emitCtx);
-      break;
-    case 'hono':
-      emitHono(emitCtx);
-      break;
-    case 'convex':
-      emitFrontend(stack, emitCtx);
-      emitConvex(emitCtx);
-      break;
-    default: {
-      const _exhaustive: never = stack;
-      throw new Error(`unhandled stack: ${JSON.stringify(_exhaustive)}`);
+  } else {
+    switch (stack.backend) {
+      case 'nest':
+        emitNest(emitCtx);
+        break;
+      case 'hono':
+        emitHono(emitCtx);
+        break;
+      case 'self':
+      case 'convex':
+        emitOptionalWorkspace(emitCtx, (singleStack, context) =>
+          buildProject(singleStack, context, false)
+        );
+        break;
+      default:
+        throw new Error(
+          `unsupported Turborepo backend: ${JSON.stringify(stack)}`
+        );
     }
   }
 
-  if (stack.backend !== 'nest' && stack.backend !== 'hono') {
+  if (stack.structure === 'single') {
     emitAuth(stack, emitCtx);
     emitPayments(stack, emitCtx);
-    emitUi(stack, emitCtx);
     emitLinter(stack, emitCtx);
     if (stack.backend === 'convex' || stack.database !== 'none') {
       emitNotes(emitCtx);
     }
+    const providerPath =
+      stack.frontend === 'next'
+        ? 'app/providers.tsx'
+        : 'src/components/providers.tsx';
+    setFileIfAbsent(
+      files,
+      providerPath,
+      `import type { ReactNode } from "react";
+
+export function Providers({ children }: { children: ReactNode }) {
+  return children;
+}
+`
+    );
   } else if (stack.backend === 'nest') {
     if (stack.auth === 'clerk') {
       emitClerk(emitCtx);
@@ -217,14 +257,25 @@ export function buildTree(stack: Stack, ctx: GenerateContext): FileMap {
     emitPayments(stack, emitCtx);
   }
 
+  if (foundations) {
+    emitUi(stack, emitCtx);
+    emitValidation(emitCtx);
+    emitForms(emitCtx);
+    emitLogin(emitCtx);
+    finalizeDatabaseSetup(emitCtx);
+  }
+
   pkg.dependencies = sortRecord(pkg.dependencies);
   pkg.devDependencies = sortRecord(pkg.devDependencies);
   pkg.scripts = sortRecord(pkg.scripts);
   setFile(files, 'package.json', JSON.stringify(pkg, null, 2));
-  setFileIfAbsent(
-    files,
-    'README.md',
-    `# ${ctx.projectName}\n\nGenerated by create-gb-app.\n`
-  );
+  finalizeWorkspaces(files, ctx.packageManager);
+  if (foundations) {
+    setFile(files, 'README.md', generateReadme(stack, ctx, files, pkg));
+  }
   return files;
+}
+
+export function buildTree(stack: Stack, ctx: GenerateContext): FileMap {
+  return buildProject(stack, ctx, true);
 }

@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 import { getIconExtension } from './extensions/get-icon';
 
 const copyButtonClassName =
-  "text-muted-foreground z-10 border-none [&_svg:not([class*='size-'])]:size-4";
+  "text-muted-foreground z-10 rounded-sm border-none [&_svg:not([class*='size-'])]:size-4";
 
 export const mdxCodeBlockComponents = {
   figure({ className, ...props }: ComponentProps<'figure'>) {
@@ -43,13 +43,7 @@ export const mdxCodeBlockComponents = {
           children
         )}
         {__rawString__ && (
-          <CopyButton
-            data-slot="copy-button"
-            className={cn(copyButtonClassName, 'rounded-md')}
-            variant="ghost"
-            size="icon-xs"
-            text={__rawString__}
-          />
+          <CopyCodeButton className="rounded-md" text={__rawString__} />
         )}
       </figcaption>
     );
@@ -79,14 +73,8 @@ export const mdxCodeBlockComponents = {
         />
 
         {__rawString__ && !__withMeta__ ? (
-          <CopyButton
-            data-slot="copy-button"
-            className={cn(
-              copyButtonClassName,
-              'absolute top-2 right-2 opacity-0 group-hover/pre:opacity-100'
-            )}
-            variant="ghost"
-            size="icon-xs"
+          <CopyCodeButton
+            className="absolute top-2 right-2 opacity-0 group-hover/pre:opacity-100"
             text={__rawString__}
           />
         ) : null}
@@ -103,7 +91,7 @@ export function MDXCodeBlock({
   className,
 }: {
   language: string;
-  title: string;
+  title?: string;
   html: string | null;
   raw: string;
   className?: string;
@@ -119,26 +107,53 @@ export function MDXCodeBlock({
       )}
       data-rehype-pretty-code-figure=""
     >
-      <Figcaption
-        data-rehype-pretty-code-title=""
-        data-language={language}
-        className="h-10 shrink-0"
-        __rawString__={raw}
-      >
-        {title}
-      </Figcaption>
+      {title && (
+        <Figcaption
+          data-rehype-pretty-code-title=""
+          data-language={language}
+          className="h-10 shrink-0"
+          __rawString__={raw}
+        >
+          {title}
+        </Figcaption>
+      )}
       {html ? (
-        <div
-          className="bg-code [&_pre]:no-scrollbar min-h-0 flex-1 overflow-hidden rounded-lg border [&_pre]:h-full [&_pre]:overflow-y-auto [&_pre]:bg-transparent"
-          dangerouslySetInnerHTML={{ __html: html }}
-        />
+        <div className="group/pre relative min-h-0 flex-1 [--code-padding-right:6rem]">
+          <div
+            className="bg-code [&_pre]:no-scrollbar h-full overflow-hidden rounded-lg border [&_pre]:h-full [&_pre]:overflow-y-auto [&_pre]:bg-transparent"
+            dangerouslySetInnerHTML={{ __html: html }}
+          />
+          {!title && (
+            <CopyCodeButton className="absolute top-2 right-2" text={raw} />
+          )}
+        </div>
       ) : (
         <div className="group/pre bg-code relative min-h-0 flex-1 overflow-auto rounded-lg border">
           <pre className="no-scrollbar h-full overflow-auto p-4 font-mono text-sm [--code-padding-right:6rem]">
             <code>{raw}</code>
           </pre>
+          {!title && (
+            <CopyCodeButton className="absolute top-2 right-2" text={raw} />
+          )}
         </div>
       )}
     </Figure>
+  );
+}
+
+function CopyCodeButton({
+  className,
+  text,
+  ...props
+}: React.ComponentProps<typeof CopyButton>) {
+  return (
+    <CopyButton
+      {...props}
+      data-slot="copy-button"
+      className={cn(copyButtonClassName, className)}
+      variant="ghost"
+      size="icon-xs"
+      text={text}
+    />
   );
 }

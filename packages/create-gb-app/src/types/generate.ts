@@ -1,3 +1,4 @@
+import type { ProjectLayout } from '#/generate/layout';
 import type { Stack } from '#/types/stack';
 
 export type FileMap = Record<string, string>;
@@ -16,11 +17,14 @@ export type PackageJsonShape = {
   scripts: Record<string, string>;
   dependencies: Record<string, string>;
   devDependencies: Record<string, string>;
-  workspaces?: string[];
+  workspaces?:
+    string[] | { packages: string[]; catalog: Record<string, string> };
+  packageManager?: string;
 };
 
 export type EmitCtx = GenerateContext & {
   files: FileMap;
   pkg: PackageJsonShape;
   stack: Stack;
+  layout: ProjectLayout;
 };

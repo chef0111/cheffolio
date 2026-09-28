@@ -1,5 +1,6 @@
 'use server';
 
+import { isPackageManager, type PackageManager } from 'create-gb-app/generate';
 import type { CreateFlags } from 'create-gb-app/preset';
 
 import { normalizeFlags } from '../compat';
@@ -11,11 +12,16 @@ import {
 
 export async function generatePreview(
   flags: CreateFlags,
-  projectName: string
+  projectName: string,
+  packageManager: PackageManager = 'bun'
 ): Promise<CreateFileMapResult> {
-  if (!isCreateFlags(flags) || typeof projectName !== 'string') {
+  if (
+    !isCreateFlags(flags) ||
+    typeof projectName !== 'string' ||
+    !isPackageManager(packageManager)
+  ) {
     return { ok: false, message: 'invalid flags', code: 'invalid' };
   }
 
-  return buildCreateFileMap(normalizeFlags(flags), projectName);
+  return buildCreateFileMap(normalizeFlags(flags), projectName, packageManager);
 }

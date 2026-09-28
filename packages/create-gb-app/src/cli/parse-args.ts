@@ -1,15 +1,18 @@
 import { overlayRawFlags, parsePresetToken } from '#/preset';
 import { ParseError } from '#/stack/parse-error';
+import { defaultStructureForBackend } from '#/stack/resolve';
 import {
   APIS,
   AUTHS,
   BACKENDS,
   DATABASES,
   DB_SETUPS,
+  FORMS,
   FRONTENDS,
   LINTERS,
   ORMS,
   PAYMENTS,
+  PROJECT_STRUCTURES,
 } from '#/stack/vocab';
 import type { RawFlags } from '#/types/stack';
 
@@ -115,6 +118,12 @@ export function parseArgs(argv: string[]): RawFlags {
         i += consumed;
         break;
       }
+      case '--structure': {
+        const { value, consumed } = takeValue(argv, i, name);
+        flags.structure = oneOf('structure', value, PROJECT_STRUCTURES);
+        i += consumed;
+        break;
+      }
       case '--api': {
         const { value, consumed } = takeValue(argv, i, name);
         flags.api = oneOf('api', value, APIS);
@@ -151,6 +160,12 @@ export function parseArgs(argv: string[]): RawFlags {
         i += consumed;
         break;
       }
+      case '--form': {
+        const { value, consumed } = takeValue(argv, i, name);
+        flags.form = oneOf('form', value, FORMS);
+        i += consumed;
+        break;
+      }
       case '--linter': {
         const { value, consumed } = takeValue(argv, i, name);
         flags.linter = oneOf('linter', value, LINTERS);
@@ -179,10 +194,16 @@ export function parseArgs(argv: string[]): RawFlags {
   try {
     const { preset: _token, ...explicit } = flags;
     void _token;
-    return overlayRawFlags(
-      { ...parsePresetToken(token), preset: token },
-      explicit
-    );
+    const presetFlags = parsePresetToken(token);
+    const merged = overlayRawFlags({ ...presetFlags, preset: token }, explicit);
+    if (
+      explicit.backend !== undefined &&
+      explicit.backend !== presetFlags.backend &&
+      explicit.structure === undefined
+    ) {
+      merged.structure = defaultStructureForBackend(explicit.backend);
+    }
+    return merged;
   } catch (error) {
     if (error instanceof ParseError) {
       throw error;
@@ -205,14 +226,16 @@ Flags
   --yes, -y
   --preset <nest|start|convex|gb…>
   --frontend next|tanstack-start
-  --backend self|nest|convex
+  --backend self|nest|convex|hono
+  --structure single|turborepo (Nest and Hono require turborepo)
   --api orpc|trpc|none
   --database postgres|sqlite|mysql|none
   --orm prisma|drizzle|none
-  --db-setup none|docker|neon|supabase
+  --db-setup none|docker|neon|supabase|turso|planetscale|prisma-postgres
   --auth better-auth|clerk|none
   --payments none|stripe|polar
   --linter eslint|biome|oxlint
+  --form none|react-hook-form|tanstack-form
   --no-git
   --no-install
 `;

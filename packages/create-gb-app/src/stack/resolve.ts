@@ -4,6 +4,7 @@ import type {
   DbSetup,
   Payments,
   PresetFields,
+  ProjectStructure,
   RawFlags,
   Stack,
 } from '#/types/stack';
@@ -13,6 +14,7 @@ import { CompatError, RULE_IDS } from './errors';
 export const YES_DEFAULTS = {
   frontend: 'next',
   backend: 'self',
+  structure: 'single',
   api: 'orpc',
   database: 'postgres',
   orm: 'prisma',
@@ -20,7 +22,14 @@ export const YES_DEFAULTS = {
   auth: 'better-auth',
   payments: 'none',
   linter: 'eslint',
+  form: 'none',
 } as const satisfies PresetFields;
+
+export function defaultStructureForBackend(
+  backend: PresetFields['backend']
+): ProjectStructure {
+  return backend === 'nest' || backend === 'hono' ? 'turborepo' : 'single';
+}
 
 function assertPayments(auth: Auth, payments: Payments): void {
   if (auth === 'clerk' && payments === 'polar') {
@@ -34,19 +43,34 @@ function assertPayments(auth: Auth, payments: Payments): void {
   }
 }
 
+export function databaseSetupRule(
+  database: string,
+  dbSetup: string
+): (typeof RULE_IDS)[keyof typeof RULE_IDS] | null {
+  if (database === 'none' && dbSetup !== 'none')
+    return RULE_IDS.dbSetupRequiresDatabase;
+  if (database === 'sqlite' && dbSetup === 'docker')
+    return RULE_IDS.sqliteDockerForbidden;
+  if (dbSetup === 'neon' && database !== 'postgres')
+    return RULE_IDS.neonRequiresPostgres;
+  if (dbSetup === 'supabase' && database !== 'postgres')
+    return RULE_IDS.supabaseRequiresPostgres;
+  if (dbSetup === 'turso' && database !== 'sqlite')
+    return RULE_IDS.tursoRequiresSqlite;
+  if (
+    dbSetup === 'planetscale' &&
+    database !== 'postgres' &&
+    database !== 'mysql'
+  )
+    return RULE_IDS.planetscaleRequiresSql;
+  if (dbSetup === 'prisma-postgres' && database !== 'postgres')
+    return RULE_IDS.prismaPostgresRequiresPostgres;
+  return null;
+}
+
 function assertDbSetup(database: Database, dbSetup: DbSetup): void {
-  if (database === 'none' && dbSetup !== 'none') {
-    throw new CompatError(RULE_IDS.dbSetupRequiresDatabase);
-  }
-  if (database === 'sqlite' && dbSetup === 'docker') {
-    throw new CompatError(RULE_IDS.sqliteDockerForbidden);
-  }
-  if (dbSetup === 'neon' && database !== 'postgres') {
-    throw new CompatError(RULE_IDS.neonRequiresPostgres);
-  }
-  if (dbSetup === 'supabase' && database !== 'postgres') {
-    throw new CompatError(RULE_IDS.supabaseRequiresPostgres);
-  }
+  const rule = databaseSetupRule(database, dbSetup);
+  if (rule) throw new CompatError(rule);
 }
 
 function assertOrm(database: Database, orm: PresetFields['orm']): void {
@@ -70,9 +94,15 @@ function rejectUnlessNone(
 export function resolveStack(raw: RawFlags): Stack {
   const frontend = raw.frontend ?? YES_DEFAULTS.frontend;
   const backend = raw.backend ?? YES_DEFAULTS.backend;
+  const structure = raw.structure ?? defaultStructureForBackend(backend);
   const auth = raw.auth ?? YES_DEFAULTS.auth;
   const payments = raw.payments ?? YES_DEFAULTS.payments;
   const linter = raw.linter ?? YES_DEFAULTS.linter;
+  const form = raw.form ?? YES_DEFAULTS.form;
+
+  if ((backend === 'nest' || backend === 'hono') && structure !== 'turborepo') {
+    throw new CompatError(RULE_IDS.backendRequiresTurborepo);
+  }
 
   if (backend === 'convex') {
     rejectUnlessNone(raw.database, RULE_IDS.convexDatabaseOff);
@@ -86,7 +116,8 @@ export function resolveStack(raw: RawFlags): Stack {
       auth,
       payments,
       linter,
-      monorepo: false,
+      form,
+      structure,
     };
   }
 
@@ -114,7 +145,8 @@ export function resolveStack(raw: RawFlags): Stack {
       auth,
       payments,
       linter,
-      monorepo: true,
+      form,
+      structure: 'turborepo',
     };
   }
 
@@ -129,7 +161,8 @@ export function resolveStack(raw: RawFlags): Stack {
       auth,
       payments,
       linter,
-      monorepo: false,
+      form,
+      structure,
     };
   }
 

@@ -24,12 +24,14 @@ import {
   SupabaseIcon,
   TanStackStartIcon,
   TrpcIcon,
+  TurborepoIcon,
 } from '@/components/icons';
 import type { IconProps } from '@/components/icons/type';
 
 export const FLAG_GROUP_LABELS: Record<FlagGroup, string> = {
   frontend: 'Frontend',
   backend: 'Backend',
+  structure: 'Project structure',
   api: 'API layer',
   database: 'Database',
   orm: 'ORM',
@@ -37,6 +39,7 @@ export const FLAG_GROUP_LABELS: Record<FlagGroup, string> = {
   auth: 'Authentication',
   payments: 'Payments',
   linter: 'Linter',
+  form: 'Forms',
 };
 
 export type FlagOption<K extends FlagGroup> = {
@@ -47,6 +50,23 @@ export type FlagOption<K extends FlagGroup> = {
 };
 
 export const FLAG_OPTIONS: { [K in FlagGroup]: readonly FlagOption<K>[] } = {
+  form: [
+    {
+      value: 'none',
+      label: 'None',
+      description: 'Use the included controls without a form library',
+    },
+    {
+      value: 'react-hook-form',
+      label: 'React Hook Form',
+      description: 'Typed controllers with a Zod resolver',
+    },
+    {
+      value: 'tanstack-form',
+      label: 'TanStack Form',
+      description: 'Typed form hooks with native schema validation',
+    },
+  ],
   frontend: [
     {
       value: 'next',
@@ -169,6 +189,21 @@ export const FLAG_OPTIONS: { [K in FlagGroup]: readonly FlagOption<K>[] } = {
       description: 'Hosted Postgres',
       icon: SupabaseIcon,
     },
+    {
+      value: 'turso',
+      label: 'Turso',
+      description: 'Hosted SQLite with libSQL',
+    },
+    {
+      value: 'planetscale',
+      label: 'PlanetScale',
+      description: 'Hosted Postgres or MySQL',
+    },
+    {
+      value: 'prisma-postgres',
+      label: 'Prisma Postgres',
+      description: 'Hosted Postgres with either ORM',
+    },
   ],
   auth: [
     {
@@ -226,6 +261,19 @@ export const FLAG_OPTIONS: { [K in FlagGroup]: readonly FlagOption<K>[] } = {
       label: 'Oxlint',
       description: 'High-performance linter for JS and TS',
       icon: OxlintIcon,
+    },
+  ],
+  structure: [
+    {
+      value: 'single',
+      label: 'Single app',
+      description: 'One application at the project root',
+    },
+    {
+      value: 'turborepo',
+      label: 'Monorepo',
+      description: 'Use Turborepo build system for coding agents',
+      icon: TurborepoIcon,
     },
   ],
 };

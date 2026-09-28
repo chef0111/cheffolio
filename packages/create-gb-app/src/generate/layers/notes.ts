@@ -29,17 +29,18 @@ export function emitNotes(ctx: EmitCtx): void {
   setFile(
     ctx.files,
     'router.ts',
-    `import { ORPCError, os } from "@orpc/server";
-import { z } from "zod";
-import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/db";
+    `import { ORPCError, os } from '@orpc/server';
+import { z } from 'zod';
+import { auth } from '@/lib/auth';
+import { prisma } from '@/lib/db';
+import { noteInputSchema } from '@/lib/note-validation';
 
 const base = os.$context<{ headers: Headers }>();
 
 const authed = base.use(async ({ context, next }) => {
   const session = await auth.api.getSession({ headers: context.headers });
   if (!session) {
-    throw new ORPCError("UNAUTHORIZED");
+    throw new ORPCError('UNAUTHORIZED');
   }
   return next({ context: { user: session.user } });
 });
@@ -50,11 +51,11 @@ export const router = {
     list: authed.handler(async ({ context }) => {
       return prisma.note.findMany({
         where: { userId: context.user.id },
-        orderBy: { createdAt: "desc" },
+        orderBy: { createdAt: 'desc' },
       });
     }),
     create: authed
-      .input(z.object({ title: z.string().min(1), body: z.string() }))
+      .input(noteInputSchema)
       .handler(async ({ input, context }) => {
         return prisma.note.create({
           data: {
@@ -68,16 +69,15 @@ export const router = {
       .input(
         z.object({
           id: z.string(),
-          title: z.string().min(1),
-          body: z.string(),
-        }),
+          ...noteInputSchema.shape,
+        })
       )
       .handler(async ({ input, context }) => {
         const note = await prisma.note.findFirst({
           where: { id: input.id, userId: context.user.id },
         });
         if (!note) {
-          throw new ORPCError("NOT_FOUND");
+          throw new ORPCError('NOT_FOUND');
         }
         return prisma.note.update({
           where: { id: note.id },
@@ -91,7 +91,7 @@ export const router = {
           where: { id: input.id, userId: context.user.id },
         });
         if (!note) {
-          throw new ORPCError("NOT_FOUND");
+          throw new ORPCError('NOT_FOUND');
         }
         await prisma.note.delete({ where: { id: note.id } });
         return { ok: true };
@@ -104,8 +104,8 @@ export const router = {
   setFile(
     ctx.files,
     'app/notes/page.tsx',
-    `import Link from "next/link";
-import { NotesClient } from "./notes-client";
+    `import Link from 'next/link';
+import { NotesClient } from './notes-client';
 
 export default function NotesPage() {
   return (
@@ -126,28 +126,30 @@ export default function NotesPage() {
   setFile(
     ctx.files,
     'app/notes/notes-client.tsx',
-    `"use client";
+    `'use client';
 
-import { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { orpc } from "@/lib/orpc";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { noteInputSchema } from '@/lib/note-validation';
+import { useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { orpc } from '@/lib/orpc';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 
 export function NotesClient() {
   const queryClient = useQueryClient();
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
+  const [title, setTitle] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [body, setBody] = useState('');
   const notes = useQuery(orpc.notes.list.queryOptions());
   const create = useMutation(
     orpc.notes.create.mutationOptions({
       onSuccess: async () => {
-        setTitle("");
-        setBody("");
+        setTitle('');
+        setBody('');
         await queryClient.invalidateQueries();
       },
-    }),
+    })
   );
 
   return (
@@ -156,7 +158,13 @@ export function NotesClient() {
         className="flex flex-col gap-3"
         onSubmit={(event) => {
           event.preventDefault();
-          create.mutate({ title, body });
+          const parsed = noteInputSchema.safeParse({ title, body });
+          if (!parsed.success) {
+            setError(parsed.error.issues[0]?.message ?? 'Invalid note');
+            return;
+          }
+          setError(null);
+          create.mutate(parsed.data);
         }}
       >
         <Input
@@ -176,9 +184,14 @@ export function NotesClient() {
           Add note
         </Button>
       </form>
+      {error || create.error?.message ? (
+        <p role="alert" className="text-destructive text-sm">
+          {error || create.error?.message}
+        </p>
+      ) : null}
       {notes.error ? (
         <p className="text-sm">
-          Sign in to load notes. {String(notes.error.message ?? "")}
+          Sign in to load notes. {String(notes.error.message ?? '')}
         </p>
       ) : null}
       <ul className="flex flex-col gap-3">
@@ -202,17 +215,18 @@ function emitStartTrpcNotes(ctx: EmitCtx): void {
   setFile(
     ctx.files,
     'src/server/router.ts',
-    `import { z } from "zod";
-import { prisma } from "../lib/db";
-import { publicProcedure, router } from "./trpc";
+    `import { z } from 'zod';
+import { prisma } from '../lib/db';
+import { noteInputSchema } from '../lib/note-validation';
+import { publicProcedure, router } from './trpc';
 
 export const appRouter = router({
   notes: {
     list: publicProcedure.query(async () => {
-      return prisma.note.findMany({ orderBy: { createdAt: "desc" } });
+      return prisma.note.findMany({ orderBy: { createdAt: 'desc' } });
     }),
     create: publicProcedure
-      .input(z.object({ title: z.string().min(1), body: z.string() }))
+      .input(noteInputSchema)
       .mutation(async ({ input }) => {
         return prisma.note.create({
           data: { title: input.title, body: input.body },
@@ -222,9 +236,8 @@ export const appRouter = router({
       .input(
         z.object({
           id: z.string(),
-          title: z.string().min(1),
-          body: z.string(),
-        }),
+          ...noteInputSchema.shape,
+        })
       )
       .mutation(async ({ input }) => {
         return prisma.note.update({
@@ -248,23 +261,25 @@ export type AppRouter = typeof appRouter;
   setFile(
     ctx.files,
     'src/routes/notes.tsx',
-    `import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
-import { trpc } from "../lib/trpc";
+    `import { createFileRoute } from '@tanstack/react-router';
+import { noteInputSchema } from '../lib/note-validation';
+import { useState } from 'react';
+import { trpc } from '../lib/trpc';
 
-export const Route = createFileRoute("/notes")({
+export const Route = createFileRoute('/notes')({
   component: NotesPage,
 });
 
 function NotesPage() {
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
+  const [title, setTitle] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [body, setBody] = useState('');
   const notes = trpc.notes.list.useQuery();
   const utils = trpc.useUtils();
   const create = trpc.notes.create.useMutation({
     onSuccess: async () => {
-      setTitle("");
-      setBody("");
+      setTitle('');
+      setBody('');
       await utils.notes.list.invalidate();
     },
   });
@@ -275,7 +290,13 @@ function NotesPage() {
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          create.mutate({ title, body });
+          const parsed = noteInputSchema.safeParse({ title, body });
+          if (!parsed.success) {
+            setError(parsed.error.issues[0]?.message ?? 'Invalid note');
+            return;
+          }
+          setError(null);
+          create.mutate(parsed.data);
         }}
       >
         <label>
@@ -299,6 +320,11 @@ function NotesPage() {
           Add note
         </button>
       </form>
+      {error || create.error?.message ? (
+        <p role="alert" className="text-destructive text-sm">
+          {error || create.error?.message}
+        </p>
+      ) : null}
       {notes.error ? <p>{notes.error.message}</p> : null}
       <ul>
         {(notes.data ?? []).map((note) => (
@@ -319,8 +345,9 @@ function NotesPage() {
 
 function emitNextServerActionNotes(ctx: EmitCtx): void {
   const authed = ctx.stack.auth !== 'none';
-  const sessionHelpers = authed
-    ? `import { headers } from "next/headers";
+  const sessionHelpers =
+    ctx.stack.auth === 'better-auth'
+      ? `import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
@@ -332,7 +359,19 @@ async function requireUserId() {
   return session.user.id;
 }
 `
-    : `import { prisma } from "@/lib/db";
+      : ctx.stack.auth === 'clerk'
+        ? `import { auth } from "@clerk/nextjs/server";
+import { prisma } from "@/lib/db";
+
+async function requireUserId() {
+  const { userId } = await auth();
+  if (!userId) {
+    throw new Error("UNAUTHORIZED");
+  }
+  return userId;
+}
+`
+        : `import { prisma } from "@/lib/db";
 `;
 
   setFile(
@@ -341,6 +380,8 @@ async function requireUserId() {
     `"use server";
 
 ${sessionHelpers}
+import { noteInputSchema, type NoteInput } from "@/lib/note-validation";
+
 export async function listNotes() {
   ${authed ? 'const userId = await requireUserId();' : ''}
   return prisma.note.findMany({
@@ -349,12 +390,13 @@ export async function listNotes() {
   });
 }
 
-export async function createNote(input: { title: string; body: string }) {
+export async function createNote(input: NoteInput) {
   ${authed ? 'const userId = await requireUserId();' : ''}
+  const note = noteInputSchema.parse(input);
   return prisma.note.create({
     data: {
-      title: input.title,
-      body: input.body,
+      title: note.title,
+      body: note.body,
       ${authed ? 'userId,' : ''}
     },
   });
@@ -365,37 +407,72 @@ export async function createNote(input: { title: string; body: string }) {
   setFile(
     ctx.files,
     'app/notes/notes-client.tsx',
-    `"use client";
+    `'use client';
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { createNote, listNotes } from "./actions";
+import { useState } from 'react';
+import { noteInputSchema } from '@/lib/note-validation';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { createNote, listNotes } from './actions';
 
 export function NotesClient() {
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
-  const [notes, setNotes] = useState<Array<{ id: string; title: string; body: string }>>([]);
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
+  const [notes, setNotes] = useState<
+    Array<{ id: string; title: string; body: string }>
+  >([]);
+  const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
 
   return (
     <div className="flex flex-col gap-6">
       <form
         className="flex flex-col gap-3"
-        action={async (formData) => {
-          await createNote({
-            title: String(formData.get("title") ?? ""),
-            body: String(formData.get("body") ?? ""),
-          });
-          setTitle("");
-          setBody("");
-          setNotes(await listNotes());
+        action={async () => {
+          const parsed = noteInputSchema.safeParse({ title, body });
+          if (!parsed.success) {
+            setError(parsed.error.issues[0]?.message ?? 'Invalid note');
+            return;
+          }
+          setError(null);
+          setPending(true);
+          try {
+            await createNote(parsed.data);
+            setNotes(await listNotes());
+            setTitle('');
+            setBody('');
+          } catch (cause) {
+            setError(
+              cause instanceof Error ? cause.message : 'Could not save note'
+            );
+          } finally {
+            setPending(false);
+          }
         }}
       >
-        <Input name="title" placeholder="Title" value={title} onChange={(event) => setTitle(event.target.value)} required />
-        <Input name="body" placeholder="Body" value={body} onChange={(event) => setBody(event.target.value)} />
-        <Button type="submit">Add note</Button>
+        <Input
+          name="title"
+          placeholder="Title"
+          value={title}
+          onChange={(event) => setTitle(event.target.value)}
+          required
+        />
+        <Input
+          name="body"
+          placeholder="Body"
+          value={body}
+          onChange={(event) => setBody(event.target.value)}
+        />
+        <Button type="submit" disabled={pending}>
+          Add note
+        </Button>
       </form>
+      {error ? (
+        <p role="alert" className="text-destructive text-sm">
+          {error}
+        </p>
+      ) : null}
       <ul className="flex flex-col gap-3">
         {notes.map((note) => (
           <li key={note.id}>
@@ -415,8 +492,8 @@ export function NotesClient() {
   setFile(
     ctx.files,
     'app/notes/page.tsx',
-    `import Link from "next/link";
-import { NotesClient } from "./notes-client";
+    `import Link from 'next/link';
+import { NotesClient } from './notes-client';
 
 export default function NotesPage() {
   return (
@@ -437,27 +514,54 @@ export default function NotesPage() {
 
 function emitStartServerFnNotes(ctx: EmitCtx): void {
   const authed = ctx.stack.auth !== 'none';
-  const createData = authed
-    ? `{ title: data.title, body: data.body, userId: data.userId }`
-    : `{ title: data.title, body: data.body }`;
-  const inputType = authed
-    ? `{ title: string; body: string; userId: string }`
-    : `{ title: string; body: string }`;
+  const sessionHelpers =
+    ctx.stack.auth === 'better-auth'
+      ? `import { getRequest } from "@tanstack/react-start/server";
+import { auth } from "../lib/auth";
+
+async function requireUserId() {
+  const session = await auth.api.getSession({ headers: getRequest().headers });
+  if (!session) {
+    throw new Error("UNAUTHORIZED");
+  }
+  return session.user.id;
+}
+`
+      : ctx.stack.auth === 'clerk'
+        ? `import { auth } from "@clerk/tanstack-react-start/server";
+
+async function requireUserId() {
+  const { userId } = await auth();
+  if (!userId) {
+    throw new Error("UNAUTHORIZED");
+  }
+  return userId;
+}
+`
+        : '';
 
   setFile(
     ctx.files,
     'src/server/notes.ts',
     `import { createServerFn } from "@tanstack/react-start";
 import { prisma } from "../lib/db";
-
+import { noteInputSchema } from "../lib/note-validation";
+${sessionHelpers}
 export const listNotes = createServerFn({ method: "GET" }).handler(async () => {
-  return prisma.note.findMany({ orderBy: { createdAt: "desc" } });
+  ${authed ? 'const userId = await requireUserId();' : ''}
+  return prisma.note.findMany({
+    ${authed ? 'where: { userId },' : ''}
+    orderBy: { createdAt: "desc" },
+  });
 });
 
 export const createNote = createServerFn({ method: "POST" })
-  .validator((input: ${inputType}) => input)
+  .validator((input: unknown) => noteInputSchema.parse(input))
   .handler(async ({ data }) => {
-    return prisma.note.create({ data: ${createData} });
+    ${authed ? 'const userId = await requireUserId();' : ''}
+    return prisma.note.create({
+      data: { title: data.title, body: data.body${authed ? ', userId' : ''} },
+    });
   });
 `
   );
@@ -465,40 +569,72 @@ export const createNote = createServerFn({ method: "POST" })
   setFile(
     ctx.files,
     'src/routes/notes.tsx',
-    `import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
-import { Button } from "../components/ui/button";
-import { Card } from "../components/ui/card";
-import { Input } from "../components/ui/input";
-import { createNote, listNotes } from "../server/notes";
+    `import { createFileRoute } from '@tanstack/react-router';
+import { useState } from 'react';
+import { Button } from '../components/ui/button';
+import { Card } from '../components/ui/card';
+import { Input } from '../components/ui/input';
+import { noteInputSchema } from '../lib/note-validation';
+import { createNote, listNotes } from '../server/notes';
 
-export const Route = createFileRoute("/notes")({
+export const Route = createFileRoute('/notes')({
   component: NotesPage,
 });
 
 function NotesPage() {
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
-  const [notes, setNotes] = useState<Array<{ id: string; title: string; body: string }>>([]);
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
+  const [notes, setNotes] = useState<
+    Array<{ id: string; title: string; body: string }>
+  >([]);
+  const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
+
+  async function submitNote(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const parsed = noteInputSchema.safeParse({ title, body });
+    if (!parsed.success) {
+      setError(parsed.error.issues[0]?.message ?? 'Invalid note');
+      return;
+    }
+    setError(null);
+    setPending(true);
+    try {
+      await createNote({ data: parsed.data });
+      setNotes(await listNotes());
+      setTitle('');
+      setBody('');
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : 'Could not save note');
+    } finally {
+      setPending(false);
+    }
+  }
 
   return (
     <main className="mx-auto flex min-h-screen max-w-xl flex-col gap-6 p-8">
       <h1 className="text-2xl font-semibold">Notes</h1>
-      <form
-        className="flex flex-col gap-3"
-        onSubmit={(event) => {
-          event.preventDefault();
-          void createNote({ data: { title, body } }).then(async () => {
-            setTitle("");
-            setBody("");
-            setNotes(await listNotes());
-          });
-        }}
-      >
-        <Input name="title" value={title} onChange={(event) => setTitle(event.target.value)} required />
-        <Input name="body" value={body} onChange={(event) => setBody(event.target.value)} />
-        <Button type="submit">Add note</Button>
+      <form className="flex flex-col gap-3" onSubmit={submitNote}>
+        <Input
+          name="title"
+          value={title}
+          onChange={(event) => setTitle(event.target.value)}
+          required
+        />
+        <Input
+          name="body"
+          value={body}
+          onChange={(event) => setBody(event.target.value)}
+        />
+        <Button type="submit" disabled={pending}>
+          Add note
+        </Button>
       </form>
+      {error ? (
+        <p role="alert" className="text-destructive text-sm">
+          {error}
+        </p>
+      ) : null}
       <ul className="flex flex-col gap-3">
         {notes.map((note) => (
           <li key={note.id}>
@@ -517,42 +653,70 @@ function NotesPage() {
 }
 
 function emitConvexNotes(ctx: EmitCtx): void {
+  const isNext = ctx.stack.frontend === 'next';
+  if (isNext)
+    setFile(
+      ctx.files,
+      'app/notes/page.tsx',
+      `import { NotesClient } from "./notes-client";\n\nexport default function NotesPage() { return <NotesClient />; }\n`
+    );
   setFile(
     ctx.files,
-    'src/routes/notes.tsx',
-    `import { createFileRoute } from "@tanstack/react-router";
+    isNext ? 'app/notes/notes-client.tsx' : 'src/routes/notes.tsx',
+    `${isNext ? '"use client";\n' : 'import { createFileRoute } from "@tanstack/react-router";'}
 import { useMutation, useQuery } from "convex/react";
 import { useState } from "react";
-import { api } from "../../convex/_generated/api";
-import { Button } from "../components/ui/button";
-import { Card } from "../components/ui/card";
-import { Input } from "../components/ui/input";
+import { api } from "../../${isNext ? '' : '../'}convex/_generated/api";
+import { noteInputSchema } from "@/lib/note-validation";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
-export const Route = createFileRoute("/notes")({
+${
+  isNext
+    ? ''
+    : `export const Route = createFileRoute("/notes")({
   component: NotesPage,
-});
+});`
+}
 
-function NotesPage() {
+${isNext ? 'export function NotesClient' : 'function NotesPage'}() {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const notes = useQuery(api.notes.list);
   const create = useMutation(api.notes.create);
+  const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
 
   return (
     <main className="mx-auto flex min-h-screen max-w-xl flex-col gap-6 p-8">
       <h1 className="text-2xl font-semibold">Notes</h1>
       <form
-        onSubmit={(event) => {
+        onSubmit={async (event) => {
           event.preventDefault();
-          void create({ title, body });
-          setTitle("");
-          setBody("");
+          const parsed = noteInputSchema.safeParse({ title, body });
+          if (!parsed.success) {
+            setError(parsed.error.issues[0]?.message ?? "Invalid note");
+            return;
+          }
+          setError(null);
+          setPending(true);
+          try {
+            await create(parsed.data);
+            setTitle("");
+            setBody("");
+          } catch (cause) {
+            setError(cause instanceof Error ? cause.message : "Could not save note");
+          } finally {
+            setPending(false);
+          }
         }}
       >
         <Input name="title" value={title} onChange={(event) => setTitle(event.target.value)} required />
         <Input name="body" value={body} onChange={(event) => setBody(event.target.value)} />
-        <Button type="submit">Add note</Button>
+        <Button type="submit" disabled={pending}>Add note</Button>
       </form>
+      {error ? <p role="alert" className="text-sm text-destructive">{error}</p> : null}
       <ul>
         {(notes ?? []).map((note) => (
           <li key={note._id}>

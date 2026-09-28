@@ -1,12 +1,11 @@
 import type { EmitCtx } from '../../types/generate';
+import { DEPENDENCY_VERSIONS } from '../dependency-versions';
 import { setFile } from '../files';
 import { isAppsLayout } from '../paths';
 
 export function emitOxlint(ctx: EmitCtx): void {
   ctx.pkg.scripts.lint = 'oxlint .';
-  ctx.pkg.scripts.format = 'oxfmt .';
-  ctx.pkg.devDependencies.oxlint = '^1.16.0';
-  ctx.pkg.devDependencies.oxfmt = '^0.5.0';
+  ctx.pkg.devDependencies.oxlint = DEPENDENCY_VERSIONS['oxlint'];
 
   const nextRoot =
     ctx.stack.frontend === 'next'

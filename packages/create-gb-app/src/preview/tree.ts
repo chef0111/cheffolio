@@ -1,40 +1,35 @@
 import type { Stack } from '#/types/stack';
 
 export function previewTree(stack: Stack): string {
-  switch (stack.backend) {
-    case 'nest':
-    case 'hono': {
-      const web =
-        stack.backend === 'nest' && stack.frontend === 'tanstack-start'
-          ? 'apps/web/src/routes'
-          : 'apps/web';
-      const rows = [web, 'apps/server'];
-      if (stack.api !== 'none') {
-        rows.push('packages/contract');
-      }
-      rows.push('packages/typescript-config', 'packages/ui', 'turbo.json');
-      return rows.join('\n');
+  if (stack.structure === 'turborepo') {
+    const rows = ['apps/web'];
+    if (stack.backend === 'nest' || stack.backend === 'hono')
+      rows.push('apps/server');
+    if (stack.backend === 'convex') rows.push('apps/web/convex');
+    if (
+      (stack.backend === 'nest' || stack.backend === 'hono') &&
+      stack.api !== 'none'
+    ) {
+      rows.push('packages/contract');
     }
-    case 'convex':
-      return ['app', 'convex', 'package.json'].join('\n');
-    case 'self':
-      if (stack.frontend === 'tanstack-start') {
-        return [
-          'src/routes',
-          stack.api === 'none' ? 'src/server/notes.ts' : 'src/server',
-          ...(stack.database === 'none' ? [] : ['prisma']),
-          'package.json',
-        ].join('\n');
-      }
-      return [
-        'app',
-        'lib',
-        ...(stack.database === 'none' ? [] : ['prisma']),
-        'package.json',
-      ].join('\n');
-    default: {
-      const _exhaustive: never = stack;
-      throw new Error(`unhandled backend: ${JSON.stringify(_exhaustive)}`);
+    rows.push(
+      'packages/typescript-config',
+      'packages/ui',
+      'packages/validation',
+      'turbo.json'
+    );
+    return rows.join('\n');
+  }
+
+  const rows = [stack.frontend === 'next' ? 'app' : 'src/routes'];
+  if (stack.backend === 'convex') {
+    rows.push('convex');
+  } else if (stack.database !== 'none') {
+    rows.push(stack.frontend === 'next' ? 'lib' : 'src/server');
+    if (stack.orm === 'prisma') {
+      rows.push('prisma');
     }
   }
+  rows.push('package.json');
+  return rows.join('\n');
 }

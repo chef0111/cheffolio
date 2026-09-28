@@ -6,6 +6,7 @@ import {
   shouldGenerateHeadless,
   USAGE,
 } from '#/cli/parse-args';
+import { resolveStack } from '#/stack/resolve';
 
 test('single directory positional', () => {
   expect(parseArgs(['my-gb-app', '--yes'])).toEqual({
@@ -43,6 +44,42 @@ test('explicit flags overlay the preset', () => {
   expect(raw.frontend).toBe('tanstack-start');
   expect(raw.preset).toBe('gb2');
   expect(raw.backend).toBe('nest');
+});
+
+test('explicit flags overlay versioned preset selections', () => {
+  const raw = parseArgs([
+    '--preset',
+    'gb-v1-48',
+    '--frontend',
+    'tanstack-start',
+  ]);
+  expect(raw.backend).toBe('nest');
+  expect(raw.frontend).toBe('tanstack-start');
+  expect(raw.preset).toBe('gb-v1-48');
+});
+
+test('structure flag is parsed and required backends reject single app', () => {
+  const raw = parseArgs(['--preset', 'gb-v1-48', '--structure', 'single']);
+  expect(raw.structure).toBe('single');
+  expect(raw.backend).toBe('nest');
+  expect(() => resolveStack(raw)).toThrow('Nest and Hono require Turborepo');
+  expect(() => parseArgs(['--structure', 'workspace'])).toThrow(ParseError);
+});
+
+test('explicit backend override reconciles a preset structure', () => {
+  const raw = parseArgs(['--preset', 'nest', '--backend', 'self']);
+  expect(raw.backend).toBe('self');
+  expect(raw.structure).toBe('single');
+  expect(resolveStack(raw).structure).toBe('single');
+  const explicitStructure = parseArgs([
+    '--preset',
+    'nest',
+    '--backend',
+    'self',
+    '--structure',
+    'turborepo',
+  ]);
+  expect(explicitStructure.structure).toBe('turborepo');
 });
 
 test('unknown --preset fails closed', () => {

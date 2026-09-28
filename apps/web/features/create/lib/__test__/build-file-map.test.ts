@@ -19,6 +19,7 @@ test('convex preview keeps relational none and is not convex-database-off', () =
   expect(flagsToRaw(flags)).toEqual({
     frontend: 'next',
     backend: 'convex',
+    structure: 'single',
     api: 'none',
     database: 'none',
     orm: 'none',
@@ -26,6 +27,7 @@ test('convex preview keeps relational none and is not convex-database-off', () =
     auth: 'better-auth',
     payments: 'none',
     linter: 'eslint',
+    form: 'none',
   });
   const result = buildCreateFileMap(flags, 'convex-app');
   expect(result.ok).toBe(true);
@@ -38,6 +40,38 @@ test('convex preview keeps relational none and is not convex-database-off', () =
       result.files['src/components/ui/button.tsx']
   ).toBeDefined();
 });
+
+test.each([
+  ['next', 'react-hook-form', 'components/notes-form.tsx', 'react-hook-form'],
+  [
+    'tanstack-start',
+    'tanstack-form',
+    'src/components/notes-form.tsx',
+    '@tanstack/react-form',
+  ],
+] as const)(
+  '%s preview includes the selected %s templates',
+  (frontend, form, notesPath, dependency) => {
+    const flags = normalizeFlags({
+      ...YES_DEFAULTS,
+      frontend,
+      form,
+      api: frontend === 'tanstack-start' ? 'none' : YES_DEFAULTS.api,
+    });
+    const result = buildCreateFileMap(flags, 'forms-app');
+    if (!result.ok) throw new Error(result.message);
+    expect(result.ok).toBe(true);
+
+    expect(result.files[notesPath]).toBeDefined();
+    expect(
+      result.files[notesPath.replace('notes-form.tsx', 'form/form-base.tsx')]
+    ).toBeDefined();
+    expect(
+      result.files[notesPath.replace('notes-form.tsx', 'form/README.md')]
+    ).toBeDefined();
+    expect(result.files['package.json']).toContain(dependency);
+  }
+);
 
 test('database none is a shell without notes', () => {
   const flags = normalizeFlags({
@@ -76,7 +110,8 @@ test('default generate includes package.json', () => {
   expect(result.files['package.json']).toContain('"name": "my-gb-app"');
   expect(Object.keys(result.files)).toContain('.gitignore');
   expect(Object.keys(result.files)).toContain('README.md');
-  expect(Object.keys(result.files).length).toBe(32);
+  expect(result.files['app/layout.tsx']).toBeDefined();
+  expect(result.files['apps/web/package.json']).toBeUndefined();
 });
 
 test('hono next preview lists apps/server and @hono/node-server', () => {
@@ -147,7 +182,7 @@ test('nest plus start returns a FileMap', () => {
   expect(result.files['apps/web/vite.config.ts']).toContain('tanstackStart');
   expect(result.files['apps/web/src/routes/__root.tsx']).toBeDefined();
   expect(result.files['apps/web/src/components/providers.tsx']).toBeDefined();
-  expect(result.files['package.json']).toContain('"dev": "turbo dev"');
+  expect(result.files['package.json']).toContain('"dev": "turbo run dev"');
   expect(result.files['vite.config.ts']).toBeUndefined();
   expect(result.files['src/routes/__root.tsx']).toBeUndefined();
   expect(result.files['packages/contract/package.json']).toBeDefined();
@@ -188,6 +223,7 @@ test('nest plus start with trpc stays disabled', () => {
     {
       ...YES_DEFAULTS,
       backend: 'nest',
+      structure: 'turborepo',
       frontend: 'tanstack-start',
       api: 'trpc',
       linter: 'biome',
@@ -203,7 +239,7 @@ test('nest plus start with trpc stays disabled', () => {
 
 test('nest plus eslint returns a FileMap', () => {
   const result = buildCreateFileMap(
-    { ...YES_DEFAULTS, backend: 'nest' },
+    normalizeFlags({ ...YES_DEFAULTS, backend: 'nest' }),
     'nest-app'
   );
   expect(result.ok).toBe(true);

@@ -1,11 +1,15 @@
 import type { EmitCtx } from '../../types/generate';
+import { DEPENDENCY_VERSIONS } from '../dependency-versions';
 import { setFile } from '../files';
 import { isStart } from '../paths';
 
 export function emitClerk(ctx: EmitCtx): void {
   if (ctx.stack.backend === 'convex') {
-    ctx.pkg.dependencies['@clerk/clerk-react'] = '^5.46.1';
-    ctx.pkg.dependencies['convex'] = ctx.pkg.dependencies.convex ?? '^1.27.0';
+    const dependency = isStart(ctx.stack)
+      ? '@clerk/clerk-react'
+      : '@clerk/nextjs';
+    ctx.pkg.dependencies[dependency] = DEPENDENCY_VERSIONS[dependency];
+    ctx.pkg.dependencies.convex = DEPENDENCY_VERSIONS.convex;
     emitStartClerkConvexProviders(ctx);
     return;
   }
@@ -16,11 +20,12 @@ export function emitClerk(ctx: EmitCtx): void {
   }
 
   if (isStart(ctx.stack) && ctx.stack.backend === 'self') {
-    ctx.pkg.dependencies['@clerk/tanstack-react-start'] = '^0.25.0';
+    ctx.pkg.dependencies['@clerk/tanstack-react-start'] =
+      DEPENDENCY_VERSIONS['@clerk/tanstack-react-start'];
     return;
   }
 
-  ctx.pkg.dependencies['@clerk/nextjs'] = '^6.31.5';
+  ctx.pkg.dependencies['@clerk/nextjs'] = DEPENDENCY_VERSIONS['@clerk/nextjs'];
   setFile(
     ctx.files,
     'middleware.ts',
@@ -36,14 +41,16 @@ export const config = {
 }
 
 function emitNestClerk(ctx: EmitCtx): void {
-  ctx.pkg.dependencies['@clerk/express'] = '^1.7.19';
+  ctx.pkg.dependencies['@clerk/express'] =
+    DEPENDENCY_VERSIONS['@clerk/express'];
   const serverPkgPath = 'apps/server/package.json';
   const serverPkgRaw = ctx.files[serverPkgPath];
   if (serverPkgRaw) {
     const serverPkg = JSON.parse(serverPkgRaw) as {
       dependencies: Record<string, string>;
     };
-    serverPkg.dependencies['@clerk/express'] = '^1.7.19';
+    serverPkg.dependencies['@clerk/express'] =
+      DEPENDENCY_VERSIONS['@clerk/express'];
     delete serverPkg.dependencies['@thallesp/nestjs-better-auth'];
     delete serverPkg.dependencies['better-auth'];
     setFile(
@@ -217,21 +224,22 @@ export class NotesController {
 }
 
 function emitStartClerkConvexProviders(ctx: EmitCtx): void {
+  const start = isStart(ctx.stack);
   setFile(
     ctx.files,
-    'src/components/providers.tsx',
+    start ? 'src/components/providers.tsx' : 'app/providers.tsx',
     `"use client";
 
-import { ClerkProvider, useAuth } from "@clerk/clerk-react";
+import { ClerkProvider, useAuth } from "${start ? '@clerk/clerk-react' : '@clerk/nextjs'}";
 import { ConvexReactClient } from "convex/react";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
 import type { ReactNode } from "react";
 
-const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL as string);
+const convex = new ConvexReactClient(${start ? 'import.meta.env.VITE_CONVEX_URL as string' : 'process.env.NEXT_PUBLIC_CONVEX_URL!'});
 
 export function Providers(props: { children: ReactNode }) {
   return (
-    <ClerkProvider publishableKey={import.meta.env.VITE_CLERK_PUBLISHABLE_KEY as string}>
+    <ClerkProvider publishableKey={${start ? 'import.meta.env.VITE_CLERK_PUBLISHABLE_KEY as string' : 'process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY!'}}>
       <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
         {props.children}
       </ConvexProviderWithClerk>

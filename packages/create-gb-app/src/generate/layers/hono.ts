@@ -1,12 +1,13 @@
 import type { HonoStack } from '#/types/stack';
 
 import type { EmitCtx } from '../../types/generate';
+import { DEPENDENCY_VERSIONS } from '../dependency-versions';
 import { setFile } from '../files';
 import { workspaceProtocol } from '../workspace-protocol';
 import { emitBiome } from './biome';
 import { emitDbSetup } from './db-setup';
 import { emitDrizzle } from './drizzle';
-import { emitEslintPrettier } from './eslint';
+import { emitEslint } from './eslint';
 import { emitOxlint } from './oxlint';
 import { emitPolar } from './polar';
 import { emitPostgres } from './postgres';
@@ -31,8 +32,8 @@ export function emitHono(ctx: EmitCtx): void {
   ctx.pkg.scripts.dev = 'turbo dev';
   ctx.pkg.scripts.build = 'turbo build';
   ctx.pkg.scripts.lint = 'turbo lint';
-  ctx.pkg.devDependencies.turbo = '^2.5.6';
-  ctx.pkg.devDependencies.typescript = '^5.9.2';
+  ctx.pkg.devDependencies.turbo = DEPENDENCY_VERSIONS['turbo'];
+  ctx.pkg.devDependencies.typescript = DEPENDENCY_VERSIONS['typescript'];
   ctx.pkg.workspaces = ['apps/*', 'packages/*'];
 
   setFile(
@@ -123,7 +124,7 @@ See the Hono Node guide for the Node.js adapter.
 function emitChosenLinter(ctx: EmitCtx, stack: HonoStack): void {
   switch (stack.linter) {
     case 'eslint':
-      emitEslintPrettier(ctx);
+      emitEslint(ctx);
       break;
     case 'biome':
       emitBiome(ctx);
@@ -201,9 +202,9 @@ function emitOrpcContract(ctx: EmitCtx, dep: string): void {
         type: 'module',
         exports: { '.': './src/index.ts' },
         dependencies: {
-          '@orpc/contract': 'beta',
-          '@orpc/openapi': 'beta',
-          zod: '^4.1.5',
+          '@orpc/contract': DEPENDENCY_VERSIONS['@orpc/contract'],
+          '@orpc/openapi': DEPENDENCY_VERSIONS['@orpc/openapi'],
+          zod: DEPENDENCY_VERSIONS['zod'],
         },
         devDependencies: {
           '@repo/typescript-config': dep,
@@ -224,6 +225,7 @@ function emitOrpcContract(ctx: EmitCtx, dep: string): void {
     'packages/contract/src/contract.ts',
     `import { oc } from "@orpc/contract";
 import { openapi } from "@orpc/openapi";
+import { noteInputSchema } from "@repo/validation";
 import { z } from "zod";
 
 const UserSchema = z.object({
@@ -250,15 +252,14 @@ export const contract = {
       .output(z.array(NoteSchema)),
     create: oc
       .meta(openapi({ method: "POST", path: "/notes" }))
-      .input(z.object({ title: z.string().min(1), body: z.string() }))
+      .input(noteInputSchema)
       .output(NoteSchema),
     update: oc
       .meta(openapi({ method: "PATCH", path: "/notes/{id}" }))
       .input(
         z.object({
           id: z.string(),
-          title: z.string().min(1),
-          body: z.string(),
+          ...noteInputSchema.shape,
         }),
       )
       .output(NoteSchema),
@@ -284,8 +285,8 @@ function emitTrpcContract(ctx: EmitCtx, dep: string): void {
         type: 'module',
         exports: { '.': './src/index.ts' },
         dependencies: {
-          '@trpc/server': '^11.5.1',
-          zod: '^4.1.5',
+          '@trpc/server': DEPENDENCY_VERSIONS['@trpc/server'],
+          zod: DEPENDENCY_VERSIONS['zod'],
         },
         devDependencies: {
           '@repo/typescript-config': dep,
@@ -299,6 +300,7 @@ function emitTrpcContract(ctx: EmitCtx, dep: string): void {
     ctx.files,
     'packages/contract/src/index.ts',
     `import { initTRPC } from "@trpc/server";
+import { noteInputSchema } from "@repo/validation";
 import { z } from "zod";
 
 export type Note = {
@@ -332,10 +334,10 @@ export const appRouter = t.router({
   notes: t.router({
     list: t.procedure.query(({ ctx }) => ctx.notes.list(ctx.userId)),
     create: t.procedure
-      .input(z.object({ title: z.string(), body: z.string() }))
+      .input(noteInputSchema)
       .mutation(({ ctx, input }) => ctx.notes.create(ctx.userId, input)),
     update: t.procedure
-      .input(z.object({ id: z.string(), title: z.string(), body: z.string() }))
+      .input(z.object({ id: z.string(), ...noteInputSchema.shape }))
       .mutation(({ ctx, input }) => ctx.notes.update(ctx.userId, input)),
     remove: t.procedure
       .input(z.object({ id: z.string() }))
@@ -365,13 +367,13 @@ function emitUiPackage(ctx: EmitCtx, dep: string): void {
           './utils': './src/utils.ts',
         },
         dependencies: {
-          clsx: '^2.1.1',
-          'tailwind-merge': '^3.3.1',
-          react: '^19.1.1',
+          clsx: DEPENDENCY_VERSIONS['clsx'],
+          'tailwind-merge': DEPENDENCY_VERSIONS['tailwind-merge'],
+          react: DEPENDENCY_VERSIONS['react'],
         },
         devDependencies: {
           '@repo/typescript-config': dep,
-          '@types/react': '^19.1.12',
+          '@types/react': DEPENDENCY_VERSIONS['@types/react'],
         },
       },
       null,
@@ -453,39 +455,40 @@ export function Card({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
 
 function emitServer(ctx: EmitCtx, stack: HonoStack, dep: string): void {
   const dependencies: Record<string, string> = {
-    '@hono/node-server': '^2.1.1',
-    hono: '^4.13.7',
+    '@hono/node-server': DEPENDENCY_VERSIONS['@hono/node-server'],
+    hono: DEPENDENCY_VERSIONS['hono'],
   };
   const devDependencies: Record<string, string> = {
     '@repo/typescript-config': dep,
-    '@types/node': '^24.3.1',
-    tsx: '^4.20.5',
-    typescript: '^5.9.2',
+    '@types/node': DEPENDENCY_VERSIONS['@types/node'],
+    tsx: DEPENDENCY_VERSIONS['tsx'],
+    typescript: DEPENDENCY_VERSIONS['typescript'],
   };
 
   if (stack.database !== 'none' && stack.orm === 'prisma') {
-    dependencies['@prisma/client'] = '^6.16.1';
-    devDependencies.prisma = '^6.16.1';
+    dependencies['@prisma/client'] = DEPENDENCY_VERSIONS['@prisma/client'];
+    devDependencies.prisma = DEPENDENCY_VERSIONS['prisma'];
   }
   if (stack.database !== 'none' && stack.orm === 'drizzle') {
-    dependencies['drizzle-orm'] = '^0.44.5';
-    devDependencies['drizzle-kit'] = '^0.31.4';
+    dependencies['drizzle-orm'] = DEPENDENCY_VERSIONS['drizzle-orm'];
+    devDependencies['drizzle-kit'] = DEPENDENCY_VERSIONS['drizzle-kit'];
   }
   if (stack.auth === 'better-auth') {
-    dependencies['better-auth'] = '^1.3.8';
+    dependencies['better-auth'] = DEPENDENCY_VERSIONS['better-auth'];
   }
   if (stack.auth === 'clerk') {
-    dependencies['@hono/clerk-auth'] = '^3.1.1';
+    dependencies['@hono/clerk-auth'] = DEPENDENCY_VERSIONS['@hono/clerk-auth'];
   }
   if (stack.database !== 'none' && stack.api === 'orpc') {
-    dependencies['@orpc/openapi'] = 'beta';
-    dependencies['@orpc/server'] = 'beta';
+    dependencies['@orpc/openapi'] = DEPENDENCY_VERSIONS['@orpc/openapi'];
+    dependencies['@orpc/server'] = DEPENDENCY_VERSIONS['@orpc/server'];
     dependencies['@repo/contract'] = dep;
   }
   if (stack.database !== 'none' && stack.api === 'trpc') {
-    dependencies['@hono/trpc-server'] = '^0.4.2';
+    dependencies['@hono/trpc-server'] =
+      DEPENDENCY_VERSIONS['@hono/trpc-server'];
     dependencies['@repo/contract'] = dep;
-    dependencies['@trpc/server'] = '^11.5.1';
+    dependencies['@trpc/server'] = DEPENDENCY_VERSIONS['@trpc/server'];
   }
 
   setFile(
@@ -585,7 +588,8 @@ function emitNotesStore(ctx: EmitCtx, stack: HonoStack): void {
     setFile(
       ctx.files,
       'apps/server/src/notes.ts',
-      `import { eq } from "drizzle-orm";
+      `import { noteInputSchema } from "@repo/validation";
+import { eq } from "drizzle-orm";
 import { db } from "./db";
 import { notes } from "./schema";
 
@@ -611,10 +615,11 @@ export async function createNote(
   _userId: string | null,
   input: { title: string; body: string },
 ): Promise<Note> {
+  const note = noteInputSchema.parse(input);
   const created = row({
     id: crypto.randomUUID(),
-    title: input.title,
-    body: input.body,
+    title: note.title,
+    body: note.body,
   });
   await db.insert(notes).values({
     id: created.id,
@@ -628,11 +633,12 @@ export async function updateNote(
   _userId: string | null,
   input: { id: string; title: string; body: string },
 ): Promise<Note> {
+  const note = noteInputSchema.parse(input);
   await db
     .update(notes)
-    .set({ title: input.title, body: input.body })
+    .set({ title: note.title, body: note.body })
     .where(eq(notes.id, input.id));
-  return row(input);
+  return row({ ...input, ...note });
 }
 
 export async function removeNote(
@@ -651,7 +657,8 @@ export async function removeNote(
   setFile(
     ctx.files,
     'apps/server/src/notes.ts',
-    `import { prisma } from "./db";
+    `import { noteInputSchema } from "@repo/validation";
+import { prisma } from "./db";
 
 export async function listNotes(userId: string | null) {
   ${authed ? 'if (!userId) {\n    return [];\n  }\n  ' : ''}return prisma.note.findMany({
@@ -664,10 +671,11 @@ export async function createNote(
   userId: string | null,
   input: { title: string; body: string },
 ) {
+  const note = noteInputSchema.parse(input);
   return prisma.note.create({
     data: {
-      title: input.title,
-      body: input.body,
+      title: note.title,
+      body: note.body,
       ${authed ? 'userId: userId ?? "",' : ''}
     },
   });
@@ -677,9 +685,10 @@ export async function updateNote(
   userId: string | null,
   input: { id: string; title: string; body: string },
 ) {
+  const parsed = noteInputSchema.parse(input);
   ${authed ? 'const note = await prisma.note.findFirst({ where: { id: input.id, userId: userId ?? "" } });\n  if (!note) {\n    throw new Error("NOT_FOUND");\n  }\n  ' : ''}return prisma.note.update({
     where: { id: ${authed ? 'note.id' : 'input.id'} },
-    data: { title: input.title, body: input.body },
+    data: { title: parsed.title, body: parsed.body },
   });
 }
 
@@ -773,6 +782,7 @@ function serverEntry(stack: HonoStack): string {
     imports.push(
       `import { createNote, listNotes, removeNote, updateNote } from "./notes";`
     );
+    imports.push(`import { noteInputSchema } from "@repo/validation";`);
   }
   if (stack.database !== 'none' && stack.api === 'trpc') {
     imports.push(`import * as notes from "./notes";`);
@@ -781,7 +791,7 @@ function serverEntry(stack: HonoStack): string {
   const lines = [
     ...imports,
     '',
-    `const app = new Hono<{ Variables: { userId: string | null } }>();`,
+    `export const app = new Hono<{ Variables: { userId: string | null } }>();`,
     '',
     `app.use("*", cors({ origin: "${WEB_ORIGIN}", credentials: true }));`,
   ];
@@ -867,13 +877,19 @@ app.get("/notes", async (c) => {
 });
 
 app.post("/notes", async (c) => {
-  ${deny}const body = await c.req.json<{ title: string; body: string }>();
-  return c.json(await createNote(c.get("userId"), body));
+  ${deny}const parsed = noteInputSchema.safeParse(await c.req.json());
+  if (!parsed.success) {
+    return c.json({ error: "VALIDATION_ERROR", issues: parsed.error.issues }, 400);
+  }
+  return c.json(await createNote(c.get("userId"), parsed.data));
 });
 
 app.patch("/notes/:id", async (c) => {
-  ${deny}const body = await c.req.json<{ title: string; body: string }>();
-  return c.json(await updateNote(c.get("userId"), { id: c.req.param("id"), ...body }));
+  ${deny}const parsed = noteInputSchema.safeParse(await c.req.json());
+  if (!parsed.success) {
+    return c.json({ error: "VALIDATION_ERROR", issues: parsed.error.issues }, 400);
+  }
+  return c.json(await updateNote(c.get("userId"), { id: c.req.param("id"), ...parsed.data }));
 });
 
 app.delete("/notes/:id", async (c) => {
@@ -903,30 +919,34 @@ function webDependencies(
 ): Record<string, string> {
   const dependencies: Record<string, string> = {
     '@repo/ui': dep,
-    react: '^19.1.1',
-    'react-dom': '^19.1.1',
+    react: DEPENDENCY_VERSIONS['react'],
+    'react-dom': DEPENDENCY_VERSIONS['react-dom'],
   };
   if (stack.auth === 'better-auth') {
-    dependencies['better-auth'] = '^1.3.8';
+    dependencies['better-auth'] = DEPENDENCY_VERSIONS['better-auth'];
   }
   if (stack.auth === 'clerk' && stack.frontend === 'next') {
-    dependencies['@clerk/nextjs'] = '^6.31.5';
+    dependencies['@clerk/nextjs'] = DEPENDENCY_VERSIONS['@clerk/nextjs'];
   }
   if (stack.auth === 'clerk' && stack.frontend === 'tanstack-start') {
-    dependencies['@clerk/tanstack-react-start'] = '^0.25.0';
+    dependencies['@clerk/tanstack-react-start'] =
+      DEPENDENCY_VERSIONS['@clerk/tanstack-react-start'];
   }
   if (stack.database !== 'none' && stack.api === 'orpc') {
-    dependencies['@orpc/client'] = 'beta';
-    dependencies['@orpc/contract'] = 'beta';
-    dependencies['@orpc/openapi'] = 'beta';
+    dependencies['@orpc/client'] = DEPENDENCY_VERSIONS['@orpc/client'];
+    dependencies['@orpc/contract'] = DEPENDENCY_VERSIONS['@orpc/contract'];
+    dependencies['@orpc/openapi'] = DEPENDENCY_VERSIONS['@orpc/openapi'];
     dependencies['@repo/contract'] = dep;
-    dependencies['@tanstack/react-query'] = '^5.89.0';
+    dependencies['@tanstack/react-query'] =
+      DEPENDENCY_VERSIONS['@tanstack/react-query'];
   }
   if (stack.database !== 'none' && stack.api === 'trpc') {
     dependencies['@repo/contract'] = dep;
-    dependencies['@tanstack/react-query'] = '^5.89.0';
-    dependencies['@trpc/client'] = '^11.5.1';
-    dependencies['@trpc/react-query'] = '^11.5.1';
+    dependencies['@tanstack/react-query'] =
+      DEPENDENCY_VERSIONS['@tanstack/react-query'];
+    dependencies['@trpc/client'] = DEPENDENCY_VERSIONS['@trpc/client'];
+    dependencies['@trpc/react-query'] =
+      DEPENDENCY_VERSIONS['@trpc/react-query'];
   }
   return dependencies;
 }
@@ -934,7 +954,7 @@ function webDependencies(
 function emitNextWeb(ctx: EmitCtx, stack: HonoStack, dep: string): void {
   const dependencies = {
     ...webDependencies(stack, dep),
-    next: '^15.5.4',
+    next: DEPENDENCY_VERSIONS['next'],
   };
   setFile(
     ctx.files,
@@ -953,12 +973,12 @@ function emitNextWeb(ctx: EmitCtx, stack: HonoStack, dep: string): void {
         dependencies,
         devDependencies: {
           '@repo/typescript-config': dep,
-          '@tailwindcss/postcss': '^4.1.13',
-          '@types/node': '^24.3.1',
-          '@types/react': '^19.1.12',
-          '@types/react-dom': '^19.1.9',
-          tailwindcss: '^4.1.13',
-          typescript: '^5.9.2',
+          '@tailwindcss/postcss': DEPENDENCY_VERSIONS['@tailwindcss/postcss'],
+          '@types/node': DEPENDENCY_VERSIONS['@types/node'],
+          '@types/react': DEPENDENCY_VERSIONS['@types/react'],
+          '@types/react-dom': DEPENDENCY_VERSIONS['@types/react-dom'],
+          tailwindcss: DEPENDENCY_VERSIONS['tailwindcss'],
+          typescript: DEPENDENCY_VERSIONS['typescript'],
         },
       },
       null,
@@ -1163,6 +1183,7 @@ function nextNotesClient(stack: HonoStack): string {
   if (stack.api === 'trpc') {
     return `"use client";
 
+import { noteInputSchema } from "@repo/validation";
 import { useState } from "react";
 import { createTRPCProxyClient, httpBatchLink } from "@trpc/client";
 import type { AppRouter } from "@repo/contract";
@@ -1184,6 +1205,8 @@ type Note = { id: string; title: string; body: string };
 
 export function NotesClient() {
   const [title, setTitle] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
   const [body, setBody] = useState("");
   const [notes, setNotes] = useState<Note[]>([]);
 
@@ -1191,19 +1214,32 @@ export function NotesClient() {
     <div className="flex flex-col gap-6">
       <form
         className="flex flex-col gap-3"
-        onSubmit={(event) => {
+        onSubmit={async (event) => {
           event.preventDefault();
-          void client.notes.create.mutate({ title, body }).then(async () => {
+          const parsed = noteInputSchema.safeParse({ title, body });
+          if (!parsed.success) {
+            setError(parsed.error.issues[0]?.message ?? "Invalid note");
+            return;
+          }
+          setError(null);
+          setPending(true);
+          try {
+            await client.notes.create.mutate(parsed.data);
+            setNotes(await client.notes.list.query());
             setTitle("");
             setBody("");
-            setNotes(await client.notes.list.query());
-          });
+          } catch (cause) {
+            setError(cause instanceof Error ? cause.message : "Could not save note");
+          } finally {
+            setPending(false);
+          }
         }}
       >
         <Input name="title" placeholder="Title" value={title} onChange={(event) => setTitle(event.target.value)} required />
         <Input name="body" placeholder="Body" value={body} onChange={(event) => setBody(event.target.value)} />
-        <Button type="submit">Add note</Button>
+        <Button type="submit" disabled={pending}>Add note</Button>
       </form>
+      {error ? <p role="alert" className="text-sm text-destructive">{error}</p> : null}
       <ul className="flex flex-col gap-3">
         {notes.map((note) => (
           <li key={note.id}>
@@ -1223,6 +1259,7 @@ export function NotesClient() {
   const path = notesHttpPath(stack);
   return `"use client";
 
+import { noteInputSchema } from "@repo/validation";
 import { useState } from "react";
 import { Button } from "@repo/ui/button";
 import { Card } from "@repo/ui/card";
@@ -1234,6 +1271,8 @@ type Note = { id: string; title: string; body: string };
 
 export function NotesClient() {
   const [title, setTitle] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
   const [body, setBody] = useState("");
   const [notes, setNotes] = useState<Note[]>([]);
 
@@ -1241,25 +1280,42 @@ export function NotesClient() {
     <div className="flex flex-col gap-6">
       <form
         className="flex flex-col gap-3"
-        onSubmit={(event) => {
+        onSubmit={async (event) => {
           event.preventDefault();
-          void fetch(serverUrl + "${path}", {
+          const parsed = noteInputSchema.safeParse({ title, body });
+          if (!parsed.success) {
+            setError(parsed.error.issues[0]?.message ?? "Invalid note");
+            return;
+          }
+          setError(null);
+          setPending(true);
+          try {
+            const response = await fetch(serverUrl + "${path}", {
             method: "POST",
             credentials: "include",
             headers: { "content-type": "application/json" },
-            body: JSON.stringify({ title, body }),
-          }).then(async () => {
+            body: JSON.stringify(parsed.data),
+            });
+            if (!response.ok) {
+              const failure = await response.json().catch(() => null);
+              throw new Error(failure?.issues?.[0]?.message ?? failure?.error ?? "Could not save note");
+            }
+            const listResponse = await fetch(serverUrl + "${path}", { credentials: "include" });
+            setNotes(await listResponse.json());
             setTitle("");
             setBody("");
-            const response = await fetch(serverUrl + "${path}", { credentials: "include" });
-            setNotes(await response.json());
-          });
+          } catch (cause) {
+            setError(cause instanceof Error ? cause.message : "Could not save note");
+          } finally {
+            setPending(false);
+          }
         }}
       >
         <Input name="title" placeholder="Title" value={title} onChange={(event) => setTitle(event.target.value)} required />
         <Input name="body" placeholder="Body" value={body} onChange={(event) => setBody(event.target.value)} />
-        <Button type="submit">Add note</Button>
+        <Button type="submit" disabled={pending}>Add note</Button>
       </form>
+      {error ? <p role="alert" className="text-sm text-destructive">{error}</p> : null}
       <ul className="flex flex-col gap-3">
         {notes.map((note) => (
           <li key={note.id}>
@@ -1279,9 +1335,11 @@ export function NotesClient() {
 function emitStartWeb(ctx: EmitCtx, stack: HonoStack, dep: string): void {
   const dependencies = {
     ...webDependencies(stack, dep),
-    '@tanstack/react-router': '^1.132.0',
-    '@tanstack/react-router-devtools': '^1.132.0',
-    '@tanstack/react-start': '^1.132.0',
+    '@tanstack/react-router': DEPENDENCY_VERSIONS['@tanstack/react-router'],
+    '@tanstack/router-core': DEPENDENCY_VERSIONS['@tanstack/router-core'],
+    '@tanstack/react-router-devtools':
+      DEPENDENCY_VERSIONS['@tanstack/react-router-devtools'],
+    '@tanstack/react-start': DEPENDENCY_VERSIONS['@tanstack/react-start'],
   };
   setFile(
     ctx.files,
@@ -1300,15 +1358,15 @@ function emitStartWeb(ctx: EmitCtx, stack: HonoStack, dep: string): void {
         dependencies,
         devDependencies: {
           '@repo/typescript-config': dep,
-          '@tailwindcss/vite': '^4.1.13',
-          '@types/node': '^24.3.1',
-          '@types/react': '^19.1.12',
-          '@types/react-dom': '^19.1.9',
-          '@vitejs/plugin-react': '^5.0.2',
-          tailwindcss: '^4.1.13',
-          typescript: '^5.9.2',
-          vite: '^7.1.5',
-          'vite-tsconfig-paths': '^5.1.4',
+          '@tailwindcss/vite': DEPENDENCY_VERSIONS['@tailwindcss/vite'],
+          '@types/node': DEPENDENCY_VERSIONS['@types/node'],
+          '@types/react': DEPENDENCY_VERSIONS['@types/react'],
+          '@types/react-dom': DEPENDENCY_VERSIONS['@types/react-dom'],
+          '@vitejs/plugin-react': DEPENDENCY_VERSIONS['@vitejs/plugin-react'],
+          tailwindcss: DEPENDENCY_VERSIONS['tailwindcss'],
+          typescript: DEPENDENCY_VERSIONS['typescript'],
+          vite: DEPENDENCY_VERSIONS['vite'],
+          'vite-tsconfig-paths': DEPENDENCY_VERSIONS['vite-tsconfig-paths'],
         },
       },
       null,
@@ -1323,6 +1381,7 @@ function emitStartWeb(ctx: EmitCtx, stack: HonoStack, dep: string): void {
         extends: '@repo/typescript-config/base.json',
         compilerOptions: {
           lib: ['ES2022', 'DOM', 'DOM.Iterable'],
+          types: ['vite/client'],
           jsx: 'react-jsx',
           noEmit: true,
           paths: { '@/*': ['./src/*'] },
@@ -1363,6 +1422,17 @@ export default defineConfig({
   );
   setFile(
     ctx.files,
+    'apps/web/src/router.tsx',
+    `import { createRouter } from "@tanstack/react-router";
+import { routeTree } from "./routeTree.gen";
+
+export function getRouter() {
+  return createRouter({ routeTree, scrollRestoration: true });
+}
+`
+  );
+  setFile(
+    ctx.files,
     'apps/web/src/components/providers.tsx',
     `import type { ReactNode } from "react";
 
@@ -1398,11 +1468,11 @@ function RootDocument() {
         <HeadContent />
       </head>
       <body>
-        <Providers>
-          <Outlet />
-        </Providers>
-        <TanStackRouterDevtools />
-        <Scripts />
+          <Providers>
+            <Outlet />
+          </Providers>
+          <TanStackRouterDevtools />
+          <Scripts />
       </body>
     </html>
   );
@@ -1456,6 +1526,7 @@ export const authClient = createAuthClient({
 function startNotesRoute(stack: HonoStack): string {
   if (stack.api === 'trpc') {
     return `import { createFileRoute } from "@tanstack/react-router";
+import { noteInputSchema } from "@repo/validation";
 import { useState } from "react";
 import { createTRPCProxyClient, httpBatchLink } from "@trpc/client";
 import type { AppRouter } from "@repo/contract";
@@ -1478,19 +1549,37 @@ export const Route = createFileRoute("/notes")({
 
 function NotesPage() {
   const [title, setTitle] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
   return (
     <main className="mx-auto flex min-h-screen max-w-xl flex-col gap-4 p-8">
       <h1 className="text-2xl font-semibold">Notes</h1>
       <form
         className="flex flex-col gap-3"
-        onSubmit={(event) => {
+        onSubmit={async (event) => {
           event.preventDefault();
-          void client.notes.create.mutate({ title, body: "" });
+          const parsed = noteInputSchema.safeParse({ title, body: "" });
+          if (!parsed.success) {
+            setError(parsed.error.issues[0]?.message ?? "Invalid note");
+            return;
+          }
+          setError(null);
+          setPending(true);
+          try {
+            await client.notes.create.mutate(parsed.data);
+            setTitle("");
+
+          } catch (cause) {
+            setError(cause instanceof Error ? cause.message : "Could not save note");
+          } finally {
+            setPending(false);
+          }
         }}
       >
         <Input value={title} onChange={(event) => setTitle(event.target.value)} placeholder="Title" />
-        <Button type="submit">Add note</Button>
+        <Button type="submit" disabled={pending}>Add note</Button>
       </form>
+      {error ? <p role="alert" className="text-sm text-destructive">{error}</p> : null}
     </main>
   );
 }
@@ -1498,6 +1587,7 @@ function NotesPage() {
   }
 
   return `import { createFileRoute } from "@tanstack/react-router";
+import { noteInputSchema } from "@repo/validation";
 import { useState } from "react";
 import { Button } from "@repo/ui/button";
 import { Input } from "@repo/ui/input";
@@ -1510,24 +1600,46 @@ export const Route = createFileRoute("/notes")({
 
 function NotesPage() {
   const [title, setTitle] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
   return (
     <main className="mx-auto flex min-h-screen max-w-xl flex-col gap-4 p-8">
       <h1 className="text-2xl font-semibold">Notes</h1>
       <form
         className="flex flex-col gap-3"
-        onSubmit={(event) => {
+        onSubmit={async (event) => {
           event.preventDefault();
-          void fetch(serverUrl + "${notesHttpPath(stack)}", {
+          const parsed = noteInputSchema.safeParse({ title, body: "" });
+          if (!parsed.success) {
+            setError(parsed.error.issues[0]?.message ?? "Invalid note");
+            return;
+          }
+          setError(null);
+          setPending(true);
+          try {
+            const response = await fetch(serverUrl + "${notesHttpPath(stack)}", {
             method: "POST",
             credentials: "include",
             headers: { "content-type": "application/json" },
-            body: JSON.stringify({ title, body: "" }),
-          });
+            body: JSON.stringify(parsed.data),
+            });
+            if (!response.ok) {
+              const failure = await response.json().catch(() => null);
+              throw new Error(failure?.issues?.[0]?.message ?? failure?.error ?? "Could not save note");
+            }
+            setTitle("");
+
+          } catch (cause) {
+            setError(cause instanceof Error ? cause.message : "Could not save note");
+          } finally {
+            setPending(false);
+          }
         }}
       >
         <Input value={title} onChange={(event) => setTitle(event.target.value)} placeholder="Title" />
-        <Button type="submit">Add note</Button>
+        <Button type="submit" disabled={pending}>Add note</Button>
       </form>
+      {error ? <p role="alert" className="text-sm text-destructive">{error}</p> : null}
     </main>
   );
 }

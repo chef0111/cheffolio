@@ -1,6 +1,7 @@
 import type { Stack } from '#/types/stack';
 
 import type { EmitCtx } from '../../types/generate';
+import { DEPENDENCY_VERSIONS } from '../dependency-versions';
 import { setFile } from '../files';
 
 export type StartWebAppOptions = {
@@ -20,27 +21,37 @@ export function Providers(props: { children: ReactNode }) {
 }
 
 export function emitStart(ctx: EmitCtx): void {
+  ctx.pkg.dependencies['@tanstack/router-core'] =
+    DEPENDENCY_VERSIONS['@tanstack/router-core'];
   ctx.pkg.scripts.dev = 'vite dev';
   ctx.pkg.scripts.build = 'vite build';
   ctx.pkg.scripts.start = 'vite preview';
-  ctx.pkg.dependencies['@tanstack/react-start'] = '^1.132.0';
-  ctx.pkg.dependencies['@tanstack/react-router'] = '^1.132.0';
-  ctx.pkg.dependencies['@tanstack/react-router-devtools'] = '^1.132.0';
-  ctx.pkg.dependencies.react = '^19.1.1';
-  ctx.pkg.dependencies['react-dom'] = '^19.1.1';
-  ctx.pkg.devDependencies['@tailwindcss/vite'] = '^4.1.13';
-  ctx.pkg.devDependencies['@types/node'] = '^24.3.1';
-  ctx.pkg.devDependencies['@types/react'] = '^19.1.12';
-  ctx.pkg.devDependencies['@types/react-dom'] = '^19.1.9';
-  ctx.pkg.devDependencies['@vitejs/plugin-react'] = '^5.0.2';
-  ctx.pkg.devDependencies.tailwindcss = '^4.1.13';
-  ctx.pkg.devDependencies.typescript = '^5.9.2';
-  ctx.pkg.devDependencies.vite = '^7.1.5';
-  ctx.pkg.devDependencies['vite-tsconfig-paths'] = '^5.1.4';
+  ctx.pkg.dependencies['@tanstack/react-start'] =
+    DEPENDENCY_VERSIONS['@tanstack/react-start'];
+  ctx.pkg.dependencies['@tanstack/react-router'] =
+    DEPENDENCY_VERSIONS['@tanstack/react-router'];
+  ctx.pkg.dependencies['@tanstack/react-router-devtools'] =
+    DEPENDENCY_VERSIONS['@tanstack/react-router-devtools'];
+  ctx.pkg.dependencies.react = DEPENDENCY_VERSIONS['react'];
+  ctx.pkg.dependencies['react-dom'] = DEPENDENCY_VERSIONS['react-dom'];
+  ctx.pkg.devDependencies['@tailwindcss/vite'] =
+    DEPENDENCY_VERSIONS['@tailwindcss/vite'];
+  ctx.pkg.devDependencies['@types/node'] = DEPENDENCY_VERSIONS['@types/node'];
+  ctx.pkg.devDependencies['@types/react'] = DEPENDENCY_VERSIONS['@types/react'];
+  ctx.pkg.devDependencies['@types/react-dom'] =
+    DEPENDENCY_VERSIONS['@types/react-dom'];
+  ctx.pkg.devDependencies['@vitejs/plugin-react'] =
+    DEPENDENCY_VERSIONS['@vitejs/plugin-react'];
+  ctx.pkg.devDependencies.tailwindcss = DEPENDENCY_VERSIONS['tailwindcss'];
+  ctx.pkg.devDependencies.typescript = DEPENDENCY_VERSIONS['typescript'];
+  ctx.pkg.devDependencies.vite = DEPENDENCY_VERSIONS['vite'];
+  ctx.pkg.devDependencies['vite-tsconfig-paths'] =
+    DEPENDENCY_VERSIONS['vite-tsconfig-paths'];
 
   setFile(ctx.files, 'tsconfig.json', startRootTsconfig());
   setFile(ctx.files, 'vite.config.ts', startViteConfig());
   setFile(ctx.files, 'src/styles.css', startStyles());
+  setFile(ctx.files, 'src/router.tsx', startRouter());
   setFile(ctx.files, 'src/routes/__root.tsx', startRootRoute(ctx.projectName));
   setFile(
     ctx.files,
@@ -93,6 +104,7 @@ export function emitStartWebApp(
         extends: '@repo/typescript-config/base.json',
         compilerOptions: {
           lib: ['ES2022', 'DOM', 'DOM.Iterable'],
+          types: ['vite/client'],
           jsx: 'react-jsx',
           noEmit: true,
           paths: { '@/*': ['./src/*'] },
@@ -105,6 +117,7 @@ export function emitStartWebApp(
   );
   setFile(ctx.files, 'apps/web/vite.config.ts', startViteConfig());
   setFile(ctx.files, 'apps/web/src/styles.css', startStyles());
+  setFile(ctx.files, 'apps/web/src/router.tsx', startRouter());
   setFile(
     ctx.files,
     'apps/web/src/components/providers.tsx',
@@ -146,6 +159,7 @@ function startRootTsconfig(): string {
         module: 'ESNext',
         moduleResolution: 'bundler',
         jsx: 'react-jsx',
+        types: ['vite/client'],
         strict: true,
         noEmit: true,
         skipLibCheck: true,
@@ -176,6 +190,16 @@ export default defineConfig({
     tailwindcss(),
   ],
 });
+`;
+}
+
+function startRouter(): string {
+  return `import { createRouter } from "@tanstack/react-router";
+import { routeTree } from "./routeTree.gen";
+
+export function getRouter() {
+  return createRouter({ routeTree, scrollRestoration: true });
+}
 `;
 }
 
@@ -226,11 +250,11 @@ function RootDocument() {
         <HeadContent />
       </head>
       <body>
-        <Providers>
-          <Outlet />
-        </Providers>
-        <TanStackRouterDevtools />
-        <Scripts />
+          <Providers>
+            <Outlet />
+          </Providers>
+          <TanStackRouterDevtools />
+          <Scripts />
       </body>
     </html>
   );
@@ -239,7 +263,7 @@ function RootDocument() {
 }
 
 function startIndexRoute(projectName: string, notesLink: boolean): string {
-  return `import { Link, createFileRoute } from "@tanstack/react-router";
+  return `import { ${notesLink ? 'Link, ' : ''}createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
   component: HomePage,

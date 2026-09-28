@@ -6,7 +6,7 @@ import { convertNpmCommand } from '@/lib/convert-npm-command';
 import { buildCommand, encodePreset, isSelectable } from '../command';
 import { applyFlagChange, disabledRuleId, normalizeFlags } from '../compat';
 
-test('default command copies --preset gb0', () => {
+test('default command copies a compact preset', () => {
   expect(buildCommand(YES_DEFAULTS)).toBe(
     'npx create-gb-app my-gb-app --preset gb0'
   );
@@ -71,11 +71,13 @@ test('nest copies a packed --preset', () => {
   expect(decodePreset('gb2')).toEqual(flags);
 });
 
-test('hono copies a packed --preset and leaves gb0 alone', () => {
+test('hono copies a packed --preset and leaves defaults alone', () => {
   const flags = applyFlagChange(YES_DEFAULTS, 'backend', 'hono');
   expect(flags.linter).toBe('eslint');
   expect(flags.api).toBe('orpc');
-  expect(buildCommand(flags)).toBe('npx create-gb-app my-gb-app --preset gb6');
+  expect(buildCommand(flags)).toBe(
+    `npx create-gb-app my-gb-app --preset ${encodePreset(flags)}`
+  );
   expect(decodePreset('gb6')).toEqual(flags);
   expect(buildCommand(YES_DEFAULTS)).toBe(
     'npx create-gb-app my-gb-app --preset gb0'
@@ -93,6 +95,8 @@ test('convex copies a packed --preset with relational groups forced to none', ()
   expect(flags.database).toBe('none');
   expect(flags.orm).toBe('none');
   expect(flags.dbSetup).toBe('none');
-  expect(buildCommand(flags)).toBe('npx create-gb-app my-gb-app --preset gb60');
+  expect(buildCommand(flags)).toBe(
+    `npx create-gb-app my-gb-app --preset ${encodePreset(flags)}`
+  );
   expect(decodePreset('gb60')).toEqual(flags);
 });
