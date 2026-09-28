@@ -61,7 +61,6 @@ const SCRIPT_DESCRIPTIONS: Record<string, string> = {
   build: 'Build the project for production',
   start: 'Start the production build',
   lint: 'Check the code',
-  format: 'Format the code',
   'db:generate': 'Generate database client or migration files',
   'db:push': 'Apply the schema to the database',
   'db:migrate': 'Run database migrations',

@@ -6,7 +6,7 @@ import { workspaceProtocol } from '../workspace-protocol';
 import { emitBiome } from './biome';
 import { emitDbSetup } from './db-setup';
 import { emitDrizzle } from './drizzle';
-import { emitEslintPrettier } from './eslint';
+import { emitEslint } from './eslint';
 import { emitOxlint } from './oxlint';
 import { emitPostgres } from './postgres';
 import { emitPrisma } from './prisma';
@@ -130,7 +130,7 @@ dist
       emitBiome(ctx);
       break;
     case 'eslint':
-      emitEslintPrettier(ctx);
+      emitEslint(ctx);
       break;
     case 'oxlint':
       emitOxlint(ctx);

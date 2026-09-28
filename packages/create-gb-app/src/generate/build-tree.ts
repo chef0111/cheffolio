@@ -12,7 +12,7 @@ import { emitClerk } from './layers/clerk';
 import { emitConvex } from './layers/convex';
 import { emitDbSetup, finalizeDatabaseSetup } from './layers/db-setup';
 import { emitDrizzle } from './layers/drizzle';
-import { emitEslintPrettier } from './layers/eslint';
+import { emitEslint } from './layers/eslint';
 import { emitForms } from './layers/forms';
 import { emitHono } from './layers/hono';
 import { emitLogin } from './layers/login';
@@ -97,7 +97,7 @@ function emitUi(_stack: Stack, ctx: Parameters<typeof emitNext>[0]) {
 function emitLinter(stack: Stack, ctx: Parameters<typeof emitNext>[0]) {
   switch (stack.linter) {
     case 'eslint':
-      emitEslintPrettier(ctx);
+      emitEslint(ctx);
       break;
     case 'oxlint':
       emitOxlint(ctx);

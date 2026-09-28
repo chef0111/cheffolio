@@ -55,12 +55,12 @@ export function CodeBlockCommand({
   const tabs = useMemo(
     () => ({
       prompt,
-      bun,
-      pnpm,
       npm,
       yarn,
+      pnpm,
+      bun,
     }),
-    [prompt, bun, pnpm, npm, yarn]
+    [prompt, npm, yarn, pnpm, bun]
   );
 
   const tabsFiltered = useMemo(

@@ -9,7 +9,7 @@ test('generated Next app includes the official Base UI button', () => {
   });
 
   expect(files['components/ui/button.tsx']).toContain(
-    'import { Button as ButtonPrimitive } from "@base-ui/react/button"'
+    "import { Button as ButtonPrimitive } from '@base-ui/react/button'"
   );
 });
 

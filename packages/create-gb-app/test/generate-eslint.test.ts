@@ -26,6 +26,11 @@ for (const structure of ['single', 'turborepo'] as const) {
       'next/core-web-vitals'
     );
     expect(files[prefix + 'eslint.config.mjs']).toContain('next-env.d.ts');
+    expect(files['prettier.config.mjs']).toBeUndefined();
+    expect(pkg.devDependencies.prettier).toBeUndefined();
+    expect(pkg.devDependencies['eslint-config-prettier']).toBeUndefined();
+    expect(pkg.devDependencies.oxfmt).toBeUndefined();
+    expect(pkg.scripts.format).toBeUndefined();
   });
 }
 
@@ -48,4 +53,26 @@ test('Start ESLint uses React and TypeScript without the Next parser', () => {
   expect(files['eslint.config.mjs']).not.toContain('next/core-web-vitals');
   expect(files['eslint.config.mjs']).toContain('dist/**');
   expect(files['src/routes/index.tsx']).not.toContain('import { Link,');
+});
+
+test('generated lint choices do not install or expose a formatter', () => {
+  for (const linter of ['eslint', 'biome', 'oxlint'] as const) {
+    const files = buildTree(resolveStack({ backend: 'nest', linter }), {
+      projectName: 'lint-only',
+      packageManager: 'bun',
+    });
+
+    for (const [path, source] of Object.entries(files)) {
+      if (!path.endsWith('package.json')) continue;
+      const pkg = JSON.parse(source);
+      expect(pkg.scripts?.format).toBeUndefined();
+      expect(pkg.devDependencies?.prettier).toBeUndefined();
+      expect(pkg.devDependencies?.oxfmt).toBeUndefined();
+    }
+
+    expect(files['prettier.config.mjs']).toBeUndefined();
+    if (linter === 'biome') {
+      expect(JSON.parse(files['biome.json']!).formatter.enabled).toBe(false);
+    }
+  }
 });

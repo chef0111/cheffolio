@@ -122,7 +122,7 @@ test('database none is an app shell', () => {
   expect(files['package.json']).toContain('"name": "shell-app"');
   expect(files['components/ui/button.tsx']).toBeDefined();
   expect(files['app/providers.tsx']).toContain('export function Providers');
-  expect(files['app/layout.tsx']).toContain('from "./providers"');
+  expect(files['app/layout.tsx']).toContain("from './providers'");
   expect(files['app/notes/page.tsx']).toBeUndefined();
   expect(files['prisma/schema.prisma']).toBeUndefined();
   expect(files['router.ts']).toBeUndefined();

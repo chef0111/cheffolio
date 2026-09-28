@@ -5,9 +5,7 @@ import { isAppsLayout } from '../paths';
 
 export function emitOxlint(ctx: EmitCtx): void {
   ctx.pkg.scripts.lint = 'oxlint .';
-  ctx.pkg.scripts.format = 'oxfmt .';
   ctx.pkg.devDependencies.oxlint = DEPENDENCY_VERSIONS['oxlint'];
-  ctx.pkg.devDependencies.oxfmt = DEPENDENCY_VERSIONS['oxfmt'];
 
   const nextRoot =
     ctx.stack.frontend === 'next'

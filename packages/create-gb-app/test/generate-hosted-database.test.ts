@@ -156,7 +156,7 @@ test('self Drizzle Notes uses selected driver and an authenticated Notes reposit
   );
   expect(files['lib/schema.ts']).toContain('sqliteTable("session"');
   expect(files['lib/schema.ts']).toContain('sqliteTable("account"');
-  expect(files['lib/auth.ts']).toContain('provider: "sqlite"');
+  expect(files['lib/auth.ts']).toContain("provider: 'sqlite'");
   expect(files['lib/auth.ts']).toContain('schema,');
 });
 

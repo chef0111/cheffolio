@@ -1,5 +1,5 @@
 import type { EmitCtx } from '../../types/generate';
-import shadcnSource from '../assets/shadcn/source.json';
+import shadcnSource from '../assets/shadcn/formatted-source.json';
 import { DEPENDENCY_VERSIONS } from '../dependency-versions';
 import { setFile, setFileIfAbsent } from '../files';
 
@@ -336,12 +336,12 @@ function emitStartTheme(
 }
 
 function withNextTheme(layout: string, utilsImport: string): string {
-  const imports = `import { Geist, Geist_Mono } from "next/font/google";
-import { ThemeProvider } from "@/components/theme-provider";
-import { cn } from "${utilsImport}";
+  const imports = `import { Geist, Geist_Mono } from 'next/font/google';
+import { ThemeProvider } from '@/components/theme-provider';
+import { cn } from '${utilsImport}';
 
-const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
-const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" });
+const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
+const geistMono = Geist_Mono({ subsets: ['latin'], variable: '--font-mono' });
 
 `;
 
@@ -350,9 +350,19 @@ const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" });
     layout
       .replace(
         /<html([^>]*)>/,
-        '<html$1 suppressHydrationWarning className={cn("antialiased", "font-sans", geist.variable, geistMono.variable)}>'
+        `<html
+     $1
+      suppressHydrationWarning
+      className={cn(
+        'antialiased',
+        'font-sans',
+        geist.variable,
+        geistMono.variable
+      )}
+    >`
       )
-      .replace(/<body([^>]*)>/, '<body$1><ThemeProvider>')
-      .replace('</body>', '</ThemeProvider></body>')
+      .replace(/<body([^>]*)>/, '<body$1>\n        <ThemeProvider>')
+      .replace('        <Providers>', '          <Providers>')
+      .replace('</body>', '  </ThemeProvider>\n      </body>')
   );
 }

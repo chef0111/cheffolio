@@ -7,7 +7,7 @@ import { workspaceProtocol } from '../workspace-protocol';
 import { emitBiome } from './biome';
 import { emitDbSetup } from './db-setup';
 import { emitDrizzle } from './drizzle';
-import { emitEslintPrettier } from './eslint';
+import { emitEslint } from './eslint';
 import { emitOxlint } from './oxlint';
 import { emitPolar } from './polar';
 import { emitPostgres } from './postgres';
@@ -124,7 +124,7 @@ See the Hono Node guide for the Node.js adapter.
 function emitChosenLinter(ctx: EmitCtx, stack: HonoStack): void {
   switch (stack.linter) {
     case 'eslint':
-      emitEslintPrettier(ctx);
+      emitEslint(ctx);
       break;
     case 'biome':
       emitBiome(ctx);

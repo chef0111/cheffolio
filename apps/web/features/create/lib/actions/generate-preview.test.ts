@@ -25,6 +25,9 @@ test('generatePreview returns the YES tree', async () => {
   expect(Object.keys(result.files)).toContain('README.md');
   expect(result.files['app/layout.tsx']).toBeDefined();
   expect(result.files['apps/web/package.json']).toBeUndefined();
+  expect(result.files['components/login-form.tsx']).toContain(
+    'return (\n    <Card>'
+  );
 });
 
 test('preview follows the command package manager for workspace configuration', async () => {

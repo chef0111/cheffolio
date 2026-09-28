@@ -21,42 +21,40 @@ export function emitNext(ctx: EmitCtx): void {
   setFile(
     ctx.files,
     'tsconfig.json',
-    JSON.stringify(
+    `{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
       {
-        compilerOptions: {
-          target: 'ES2017',
-          lib: ['dom', 'dom.iterable', 'esnext'],
-          allowJs: true,
-          skipLibCheck: true,
-          strict: true,
-          noEmit: true,
-          esModuleInterop: true,
-          module: 'esnext',
-          moduleResolution: 'bundler',
-          resolveJsonModule: true,
-          isolatedModules: true,
-          jsx: 'preserve',
-          incremental: true,
-          plugins: [{ name: 'next' }],
-          paths: { '@/*': ['./*'] },
-        },
-        include: [
-          'next-env.d.ts',
-          '**/*.ts',
-          '**/*.tsx',
-          '.next/types/**/*.ts',
-        ],
-        exclude: ['node_modules'],
-      },
-      null,
-      2
-    )
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./*"]
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}
+`
   );
 
   setFile(
     ctx.files,
     'next.config.ts',
-    `import type { NextConfig } from "next";
+    `import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {};
 
@@ -69,7 +67,7 @@ export default nextConfig;
     'postcss.config.mjs',
     `const config = {
   plugins: {
-    "@tailwindcss/postcss": {},
+    '@tailwindcss/postcss': {},
   },
 };
 
@@ -84,12 +82,12 @@ export default config;
 /// <reference types="next/image-types/global" />
 `
   );
-  setFile(ctx.files, 'global.d.ts', 'declare module "*.css";\n');
+  setFile(ctx.files, 'global.d.ts', "declare module '*.css';\n");
 
   setFile(
     ctx.files,
     'app/globals.css',
-    `@import "tailwindcss";
+    `@import 'tailwindcss';
 
 :root {
   --background: #ffffff;
@@ -113,13 +111,13 @@ body {
   setFile(
     ctx.files,
     'app/layout.tsx',
-    `import type { Metadata } from "next";
-import { Providers } from "./providers";
-import "./globals.css";
+    `import type { Metadata } from 'next';
+import { Providers } from './providers';
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: "${ctx.projectName}",
-  description: "Notes app",
+  title: '${ctx.projectName}',
+  description: 'Notes app',
 };
 
 export default function RootLayout({
@@ -141,7 +139,7 @@ export default function RootLayout({
   setFile(
     ctx.files,
     'app/page.tsx',
-    `import Link from "next/link";
+    `import Link from 'next/link';
 
 export default function HomePage() {
   return (

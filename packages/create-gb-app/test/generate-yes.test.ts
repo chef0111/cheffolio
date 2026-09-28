@@ -1,4 +1,4 @@
-import { mkdir, mkdtemp, readdir, rm } from 'node:fs/promises';
+import { mkdir, mkdtemp, readdir, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -52,7 +52,6 @@ const YES_PATHS = [
   'next.config.ts',
   'package.json',
   'postcss.config.mjs',
-  'prettier.config.mjs',
   'prisma/schema.prisma',
   'router.ts',
   'tsconfig.json',
@@ -113,6 +112,8 @@ test('writeTree --yes --no-git dest has package.json and no turbo.json', async (
   expect(listing).toContain('package.json');
   expect(listing).not.toContain('turbo.json');
   expect(listing).not.toContain('.git');
+  const login = await readFile(join(dest, 'components/login-form.tsx'), 'utf8');
+  expect(login).toContain('return (\n    <Card>');
   await rm(dest, { recursive: true, force: true });
 });
 

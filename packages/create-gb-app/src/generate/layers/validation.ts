@@ -3,10 +3,10 @@ import { DEPENDENCY_VERSIONS } from '../dependency-versions';
 import { setFile } from '../files';
 import { workspaceProtocol } from '../workspace-protocol';
 
-const noteValidationSource = `import { z } from "zod";
+const noteValidationSource = `import { z } from 'zod';
 
 export const noteInputSchema = z.object({
-  title: z.string().trim().min(1, "Title is required"),
+  title: z.string().trim().min(1, 'Title is required'),
   body: z.string(),
 });
 

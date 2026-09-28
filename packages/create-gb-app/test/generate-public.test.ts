@@ -33,7 +33,6 @@ const YES_PATHS = [
   'next.config.ts',
   'package.json',
   'postcss.config.mjs',
-  'prettier.config.mjs',
   'prisma/schema.prisma',
   'router.ts',
   'tsconfig.json',

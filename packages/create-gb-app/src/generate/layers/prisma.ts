@@ -125,10 +125,10 @@ model Verification {
   setFile(
     ctx.files,
     dbPath,
-    `import { PrismaClient } from "@prisma/client";
+    `import { PrismaClient } from '@prisma/client';
 ${
   turso
-    ? `import { PrismaLibSQL } from "@prisma/adapter-libsql";
+    ? `import { PrismaLibSQL } from '@prisma/adapter-libsql';
 
 const adapter = new PrismaLibSQL({
   url: process.env.TURSO_DATABASE_URL!,
@@ -137,12 +137,11 @@ const adapter = new PrismaLibSQL({
 `
     : ''
 }
-
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 
 export const prisma = globalForPrisma.prisma ?? new PrismaClient(${turso ? '{ adapter }' : ''});
 
-if (process.env.NODE_ENV !== "production") {
+if (process.env.NODE_ENV !== 'production') {
   globalForPrisma.prisma = prisma;
 }
 `

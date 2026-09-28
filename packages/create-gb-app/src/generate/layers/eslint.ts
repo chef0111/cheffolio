@@ -2,9 +2,8 @@ import type { EmitCtx } from '../../types/generate';
 import { DEPENDENCY_VERSIONS } from '../dependency-versions';
 import { setFile } from '../files';
 
-export function emitEslintPrettier(ctx: EmitCtx): void {
+export function emitEslint(ctx: EmitCtx): void {
   ctx.pkg.scripts.lint = 'eslint .';
-  ctx.pkg.scripts.format = 'prettier --write .';
   ctx.pkg.devDependencies.eslint = DEPENDENCY_VERSIONS['eslint'];
   ctx.pkg.devDependencies['eslint-plugin-react-hooks'] =
     DEPENDENCY_VERSIONS['eslint-plugin-react-hooks'];
@@ -26,42 +25,31 @@ export function emitEslintPrettier(ctx: EmitCtx): void {
   }
   ctx.pkg.devDependencies['@eslint/eslintrc'] =
     DEPENDENCY_VERSIONS['@eslint/eslintrc'];
-  ctx.pkg.devDependencies.prettier = DEPENDENCY_VERSIONS['prettier'];
-  ctx.pkg.devDependencies['eslint-config-prettier'] =
-    DEPENDENCY_VERSIONS['eslint-config-prettier'];
-
   setFile(
     ctx.files,
     'eslint.config.mjs',
-    `import { dirname } from "node:path";
-import { fileURLToPath } from "node:url";
-import { FlatCompat } from "@eslint/eslintrc";
+    `import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { FlatCompat } from '@eslint/eslintrc';
 
 const compat = new FlatCompat({
   baseDirectory: dirname(fileURLToPath(import.meta.url)),
 });
 
 const eslintConfig = [
-  ...compat.extends(${isNext ? '"next/core-web-vitals", "next/typescript", "prettier"' : '"plugin:react/recommended", "plugin:react/jsx-runtime", "plugin:react-hooks/recommended", "plugin:@typescript-eslint/recommended", "prettier"'}),
+  ...compat.extends(${isNext ? "'next/core-web-vitals', 'next/typescript'" : "'plugin:react/recommended', 'plugin:react/jsx-runtime', 'plugin:react-hooks/recommended', 'plugin:@typescript-eslint/recommended'"}),
   {
-    ignores: [".next/**", "next-env.d.ts", "dist/**", ".output/**", "node_modules/**"],
+    ignores: [
+      '.next/**',
+      'next-env.d.ts',
+      'dist/**',
+      '.output/**',
+      'node_modules/**',
+    ],
   },
-${isNext ? '' : '  { settings: { react: { version: "detect" } } },\n'}
-];
+${isNext ? '' : "  { settings: { react: { version: 'detect' } } },\n"}];
 
 export default eslintConfig;
-`
-  );
-
-  setFile(
-    ctx.files,
-    'prettier.config.mjs',
-    `const config = {
-  semi: true,
-  singleQuote: false,
-};
-
-export default config;
 `
   );
 }
