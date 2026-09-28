@@ -250,11 +250,11 @@ function RootDocument() {
         <HeadContent />
       </head>
       <body>
-        <Providers>
-          <Outlet />
-        </Providers>
-        <TanStackRouterDevtools />
-        <Scripts />
+          <Providers>
+            <Outlet />
+          </Providers>
+          <TanStackRouterDevtools />
+          <Scripts />
       </body>
     </html>
   );

@@ -547,7 +547,6 @@ async function requireUserId() {
 import { prisma } from "../lib/db";
 import { noteInputSchema } from "../lib/note-validation";
 ${sessionHelpers}
-
 export const listNotes = createServerFn({ method: "GET" }).handler(async () => {
   ${authed ? 'const userId = await requireUserId();' : ''}
   return prisma.note.findMany({

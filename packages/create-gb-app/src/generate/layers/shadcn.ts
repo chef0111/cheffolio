@@ -320,10 +320,10 @@ function emitStartTheme(
       route
         .replace(
           '<html lang="en">',
-          '<html lang="en" suppressHydrationWarning className="font-sans antialiased">'
+          '<html lang="en" className="font-sans antialiased" suppressHydrationWarning>'
         )
-        .replace('<body>', '<body><ThemeProvider>')
-        .replace('</body>', '</ThemeProvider></body>')
+        .replace('<body>', '<body>\n        <ThemeProvider>')
+        .replace('</body>', '  </ThemeProvider>\n      </body>')
   );
   const cssPath = `${root}styles.css`;
   setFile(
