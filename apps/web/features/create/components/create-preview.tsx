@@ -1,21 +1,30 @@
 'use client';
 
 import type { PackageManager } from 'create-gb-app/generate';
-import { type CreateFlags, FLAG_GROUPS } from 'create-gb-app/preset';
+import type { CreateFlags } from 'create-gb-app/preset';
 import {
   ChevronLeftIcon,
   FilesIcon,
   FoldersIcon,
   InfoIcon,
 } from 'lucide-react';
-import { startTransition, useEffect, useMemo, useState } from 'react';
+import {
+  memo,
+  startTransition,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
+import { usePackageManager } from '@/components/cheffolio/code-block-command';
 import { Button } from '@/components/ui/button';
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from '@/components/ui/resizable';
+import { Spinner } from '@/components/ui/spinner';
 
 import { defaultSelectedPath, type FileMap } from '../data/file-map';
 import { generatePreview } from '../lib/actions/generate-preview';
@@ -29,51 +38,102 @@ type NarrowPane = 'tree' | 'code';
 type PreviewResult = Awaited<ReturnType<typeof generatePreview>>;
 type PreviewTree = ReturnType<typeof treeFromPaths>;
 type PreviewFile = { path: string; contents: string };
+type PreviewResponse = {
+  key: string;
+  result: PreviewResult;
+};
+type PreviewCacheEntry = {
+  promise: ReturnType<typeof generatePreview>;
+  result?: PreviewResult;
+};
 
-const EMPTY_FILES: FileMap = {};
-
-const previewCache = new Map<string, ReturnType<typeof generatePreview>>();
+const PREVIEW_CACHE_LIMIT = 20;
+const previewCache = new Map<string, PreviewCacheEntry>();
 
 export function CreatePreview() {
-  const { flags, projectName, packageManager } = useCreate();
-  const rootName = resolveProjectName(projectName);
-  const requestKey = previewKey(flags, projectName, packageManager);
-  const [response, setResponse] = useState<{
-    key: string;
-    result: PreviewResult;
-  } | null>(null);
-  const result = response?.key === requestKey ? response.result : null;
-  const [selectedPath, setSelectedPath] = useState('');
-  const [narrowPane, setNarrowPane] = useState<NarrowPane>('tree');
+  const { flags, previewProjectName } = useCreate();
+  const [selectedManager] = usePackageManager();
+  const packageManager = selectedManager === 'prompt' ? 'bun' : selectedManager;
+  const requestKey = previewKey(flags, previewProjectName, packageManager);
+  const [response, setResponse] = useState<PreviewResponse | null>(() => {
+    const result = previewCache.get(requestKey)?.result;
+    return result ? { key: requestKey, result } : null;
+  });
+  const cachedResult = previewCache.get(requestKey)?.result;
+  const visibleResponse = cachedResult
+    ? { key: requestKey, result: cachedResult }
+    : response;
 
   useEffect(() => {
+    if (previewCache.get(requestKey)?.result) {
+      return;
+    }
+
     let cancelled = false;
-    void previewResult(flags, projectName, packageManager).then((next) => {
-      if (cancelled) {
-        return;
-      }
-      startTransition(() => {
-        setResponse({ key: requestKey, result: next });
+    void previewResult(requestKey)
+      .then((result) => {
+        if (!cancelled) {
+          startTransition(() => setResponse({ key: requestKey, result }));
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setResponse({
+            key: requestKey,
+            result: {
+              ok: false,
+              message: 'Could not generate the preview. Please try again.',
+              code: 'unknown',
+            },
+          });
+        }
       });
-    });
+
     return () => {
       cancelled = true;
     };
-  }, [flags, projectName, packageManager, requestKey]);
+  }, [requestKey]);
 
-  const files: FileMap = result?.ok ? result.files : EMPTY_FILES;
-  const paths = Object.keys(files);
-  const tree = useMemo(() => treeFromPaths(paths, rootName), [paths, rootName]);
+  if (!visibleResponse) {
+    return (
+      <div className="flex h-full items-center justify-center gap-2 p-4">
+        <Spinner className="size-4" />
+        Loading preview…
+      </div>
+    );
+  }
+
+  return <CreatePreviewContents response={visibleResponse} />;
+}
+
+function CreatePreviewContents({ response }: { response: PreviewResponse }) {
+  const [, deferredName] = JSON.parse(response.key) as [
+    CreateFlags,
+    string,
+    PackageManager,
+  ];
+  const result = response.result;
+  const rootName = resolveProjectName(deferredName);
+  const [selectedPath, setSelectedPath] = useState('');
+  const [narrowPane, setNarrowPane] = useState<NarrowPane>('tree');
+
+  const files: FileMap | null = result.ok ? result.files : null;
+  const paths = useMemo(() => Object.keys(files ?? {}).sort(), [files]);
+  const pathKey = paths.join('\0');
+  const tree = useMemo(
+    () => treeFromPaths(pathKey ? pathKey.split('\0') : [], rootName),
+    [pathKey, rootName]
+  );
   const resolvedPath =
-    selectedPath in files
+    files && selectedPath in files
       ? selectedPath
       : (defaultSelectedPath(paths) ?? paths[0] ?? '');
-  const contents = files[resolvedPath];
+  const contents = files?.[resolvedPath];
   const file = contents === undefined ? null : { path: resolvedPath, contents };
-
-  if (!result) {
-    return null;
-  }
+  const onSelectPath = useCallback((path: string) => {
+    setSelectedPath(path);
+    setNarrowPane('code');
+  }, []);
 
   if (!result.ok) {
     return (
@@ -82,14 +142,6 @@ export function CreatePreview() {
       </p>
     );
   }
-
-  const onSelectPath = (path: string) => {
-    if (!(path in files)) {
-      return;
-    }
-    setSelectedPath(path);
-    setNarrowPane('code');
-  };
 
   return (
     <div className="flex h-full min-h-0 flex-col">
@@ -135,7 +187,7 @@ export function CreatePreview() {
   );
 }
 
-function CreatePreviewTreePane({
+const CreatePreviewTreePane = memo(function CreatePreviewTreePane({
   tree,
   selectedPath,
   onSelectPath,
@@ -170,7 +222,7 @@ function CreatePreviewTreePane({
       </div>
     </div>
   );
-}
+});
 
 function CreatePreviewCodePane({
   file,
@@ -212,20 +264,42 @@ function previewKey(
   projectName: string,
   packageManager: PackageManager
 ) {
-  return `${packageManager}:${projectName}:${FLAG_GROUPS.map((group) => flags[group]).join(',')}`;
+  return JSON.stringify([flags, projectName, packageManager]);
 }
 
-function previewResult(
-  flags: CreateFlags,
-  projectName: string,
-  packageManager: PackageManager
-) {
-  const key = previewKey(flags, projectName, packageManager);
+function previewResult(key: string) {
   const cached = previewCache.get(key);
   if (cached) {
-    return cached;
+    previewCache.delete(key);
+    previewCache.set(key, cached);
+    return cached.promise;
   }
-  const next = generatePreview(flags, projectName, packageManager);
-  previewCache.set(key, next);
-  return next;
+  const [flags, projectName, packageManager] = JSON.parse(key) as [
+    CreateFlags,
+    string,
+    PackageManager,
+  ];
+  const entry: PreviewCacheEntry = {
+    promise: generatePreview(flags, projectName, packageManager),
+  };
+  previewCache.set(key, entry);
+  void entry.promise.then(
+    (result) => {
+      entry.result = result;
+    },
+    () => {
+      if (previewCache.get(key) === entry) {
+        previewCache.delete(key);
+      }
+    }
+  );
+
+  if (previewCache.size > PREVIEW_CACHE_LIMIT) {
+    const oldestKey = previewCache.keys().next().value;
+    if (oldestKey) {
+      previewCache.delete(oldestKey);
+    }
+  }
+
+  return entry.promise;
 }

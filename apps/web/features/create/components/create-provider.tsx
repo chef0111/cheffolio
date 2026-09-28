@@ -1,6 +1,5 @@
 'use client';
 
-import type { PackageManager } from 'create-gb-app/generate';
 import {
   APIS,
   AUTHS,
@@ -17,12 +16,11 @@ import {
   PROJECT_STRUCTURES,
   YES_DEFAULTS,
 } from 'create-gb-app/preset';
-import { parseAsString, parseAsStringLiteral, useQueryStates } from 'nuqs';
+import { parseAsStringLiteral, useQueryStates } from 'nuqs';
 import { createContext, type ReactNode, use, useCallback } from 'react';
 
-import { usePackageManager } from '@/components/cheffolio/code-block-command';
-
-import { buildCommand, DEFAULT_PROJECT_NAME } from '../lib/command';
+import { useProjectName } from '../hooks/use-project-name';
+import { buildCommand } from '../lib/command';
 import {
   applyFlagChange,
   isOptionEnabled,
@@ -34,15 +32,14 @@ type CreateContextValue = {
   setFlag: <K extends FlagGroup>(key: K, value: CreateFlags[K]) => void;
   setFlags: (flags: CreateFlags) => void;
   projectName: string;
+  previewProjectName: string;
   setProjectName: (name: string) => void;
   command: string;
-  packageManager: PackageManager;
 };
 
 const CreateContext = createContext<CreateContextValue | null>(null);
 
 const createSearchParams = {
-  name: parseAsString.withDefault(DEFAULT_PROJECT_NAME),
   frontend: parseAsStringLiteral(FRONTENDS).withDefault(YES_DEFAULTS.frontend),
   backend: parseAsStringLiteral(BACKENDS).withDefault(YES_DEFAULTS.backend),
   structure: parseAsStringLiteral(PROJECT_STRUCTURES).withDefault(
@@ -63,23 +60,23 @@ const CREATE_URL_KEYS = {
 } as const;
 
 export function CreateProvider({ children }: { children: ReactNode }) {
-  const [selectedManager] = usePackageManager();
-  const packageManager = selectedManager === 'prompt' ? 'bun' : selectedManager;
-  const [params, setParams] = useQueryStates(createSearchParams, {
+  const [rawFlags, setParams] = useQueryStates(createSearchParams, {
     history: 'replace',
     urlKeys: CREATE_URL_KEYS,
   });
+  const {
+    projectName,
+    previewProjectName,
+    setProjectName: setName,
+  } = useProjectName();
 
-  const { name: projectName, ...rawFlags } = params;
   const flags = normalizeFlags(rawFlags);
   const command = buildCommand(flags, projectName);
 
   const setFlag = useCallback(
     <K extends FlagGroup>(key: K, value: CreateFlags[K]) => {
       void setParams((current) => {
-        const { name, ...currentFlags } = current;
-        void name;
-        const next = normalizeFlags(currentFlags);
+        const next = normalizeFlags(current);
         if (!isOptionEnabled(next, key, value)) {
           return {};
         }
@@ -91,9 +88,9 @@ export function CreateProvider({ children }: { children: ReactNode }) {
 
   const setProjectName = useCallback(
     (name: string) => {
-      void setParams({ name });
+      void setName(name);
     },
-    [setParams]
+    [setName]
   );
 
   const setFlags = useCallback(
@@ -110,9 +107,9 @@ export function CreateProvider({ children }: { children: ReactNode }) {
         setFlag,
         setFlags,
         projectName,
+        previewProjectName,
         setProjectName,
         command,
-        packageManager,
       }}
     >
       {children}

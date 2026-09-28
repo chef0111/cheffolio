@@ -17,7 +17,7 @@ import { useCreate } from './create-provider';
 import { CreateSetupGuide } from './create-setup-guide';
 
 export function CreateActions() {
-  const { flags, setFlags } = useCreate();
+  const { flags, projectName, setFlags } = useCreate();
 
   const changeConfiguration = (next: typeof flags, message: string) => {
     const previous = { ...flags };
@@ -75,7 +75,11 @@ export function CreateActions() {
           variant="outline"
           title="Create configuration"
           url="/create"
-          getUrl={() => window.location.href}
+          getUrl={() => {
+            const url = new URL(window.location.href);
+            url.searchParams.set('name', projectName);
+            return url.href;
+          }}
         />
       </div>
     </div>
