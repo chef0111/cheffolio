@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 
 import { simpleOgImageUrl } from '@/app/og/params';
 import {
@@ -9,10 +10,9 @@ import {
 import { StripeSeparator } from '@/components/cheffolio/stripe-separator';
 import { jsonLdBreadcrumbList, JsonLdScript } from '@/components/json-ld';
 import { X_PROFILE } from '@/config/site';
-import { CreateWorkspace } from '@/features/create/components/create-workspace';
 
 const title = 'Create';
-const description = 'The Full-stack React Starter Kit for your next project';
+const description = 'The Create page is under construction. Check back later.';
 const ogImage = simpleOgImageUrl(title, description);
 const CREATE_PATH = '/create';
 
@@ -20,6 +20,10 @@ export function generateMetadata(): Metadata {
   return {
     title,
     description,
+    robots: {
+      index: false,
+      follow: true,
+    },
     alternates: {
       canonical: CREATE_PATH,
     },
@@ -58,13 +62,27 @@ export default function CreatePage() {
             {title}
           </PageHeadingTitle>
           <PageHeadingDescription className="pt-0 pb-2">
-            {description}
+            A space for creating new projects is on its way.
           </PageHeadingDescription>
         </PageHeading>
 
         <StripeSeparator />
 
-        <CreateWorkspace />
+        <section className="flex flex-1 flex-col items-center justify-center border-x px-4 pt-4 pb-12 text-center sm:pt-8 sm:pb-16">
+          <Image
+            src="https://assets.giabao.dev/create-under-construction.webp"
+            alt="A crane assembling a web page"
+            width={960}
+            height={640}
+            className="h-auto w-full max-w-md select-none! dark:invert"
+          />
+          <h2 className="font-heading text-3xl font-medium tracking-tight text-balance sm:text-4xl">
+            This page is under construction
+          </h2>
+          <p className="text-muted-foreground mt-4 max-w-md text-base text-balance">
+            Create is still in development. Please check back later.
+          </p>
+        </section>
       </div>
       <StripeSeparator />
     </>
