@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import type { WebPage, WithContext } from 'schema-dts';
 
 import { simpleOgImageUrl } from '@/app/og/params';
 import { MDCopyButtonGroup } from '@/components/cheffolio/page-actions';
@@ -11,6 +12,7 @@ import { Panel } from '@/components/cheffolio/panel';
 import { ShareMenu } from '@/components/cheffolio/share-menu';
 import { StripeSeparator } from '@/components/cheffolio/stripe-separator';
 import { jsonLdBreadcrumbList, JsonLdScript } from '@/components/json-ld';
+import { JSON_LD_ID } from '@/config/json-ld';
 import { RESUME_MD_PATH, RESUME_PATH, RESUME_PDF_PATH } from '@/config/resume';
 import { X_PROFILE } from '@/config/site';
 import {
@@ -28,10 +30,32 @@ import {
   ResumeViewerToolbar,
   ResumeViewerViewport,
 } from '@/features/resume/components/viewer/resume-viewer';
+import { absoluteUrl } from '@/lib/utils';
 
 const title = 'Resume';
 const description = 'View and download my professional resume';
 const ogImage = simpleOgImageUrl(title, description);
+
+function getResumeJsonLd(): WithContext<WebPage> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': absoluteUrl(RESUME_PATH),
+    name: title,
+    description,
+    url: absoluteUrl(RESUME_PATH),
+    isPartOf: { '@id': JSON_LD_ID.website },
+    about: { '@id': JSON_LD_ID.person },
+    mainEntity: {
+      '@type': 'DigitalDocument',
+      '@id': absoluteUrl(RESUME_PDF_PATH),
+      name: title,
+      url: absoluteUrl(RESUME_PDF_PATH),
+      encodingFormat: 'application/pdf',
+      author: { '@id': JSON_LD_ID.person },
+    },
+  };
+}
 
 export function generateMetadata(): Metadata {
   return {
@@ -62,6 +86,7 @@ export function generateMetadata(): Metadata {
 export default function ResumePage() {
   return (
     <>
+      <JsonLdScript data={getResumeJsonLd()} />
       <JsonLdScript
         data={jsonLdBreadcrumbList([
           { name: 'Home', href: '/' },
