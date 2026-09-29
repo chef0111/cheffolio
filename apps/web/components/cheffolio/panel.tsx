@@ -178,8 +178,7 @@ function PanelDescription({
     <div
       data-slot="panel-description"
       className={cn(
-        'text-muted-foreground relative py-4 font-mono text-sm text-balance',
-        getPanelDecorPositions(className).length > 0 && 'relative',
+        'text-muted-foreground relative py-4 text-sm text-balance',
         className
       )}
       {...props}

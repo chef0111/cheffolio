@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import { getTableOfContents } from 'fumadocs-core/content/toc';
 import { ArrowLeftIcon, ArrowRightIcon } from 'lucide-react';
 import type { Metadata, Route } from 'next';
@@ -10,12 +11,19 @@ import type { BlogPosting, WithContext } from 'schema-dts';
 import { simpleOgImageUrl } from '@/app/og/params';
 import { FullWidthDivider } from '@/components/cheffolio/full-width-divider';
 import { MDCopyButtonGroup } from '@/components/cheffolio/page-actions';
-import { Panel, PanelHeader, PanelTitle } from '@/components/cheffolio/panel';
+import {
+  Panel,
+  PanelContent,
+  PanelDescription,
+  PanelHeader,
+  PanelTitle,
+} from '@/components/cheffolio/panel';
 import { ShareMenu } from '@/components/cheffolio/share-menu';
 import { StripeSeparator } from '@/components/cheffolio/stripe-separator';
 import { jsonLdBreadcrumbList, JsonLdScript } from '@/components/json-ld';
 import { MDX } from '@/components/mdx';
 import { AdaptiveRing } from '@/components/ui/adaptive-ring';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Kbd } from '@/components/ui/kbd';
 import {
@@ -44,6 +52,7 @@ import {
   getBlogPosts,
   getDocBySlug,
 } from '@/lib/document';
+import { formatReadingTime } from '@/lib/reading-time';
 import { absoluteUrl } from '@/lib/utils';
 import type { Doc } from '@/types/document';
 
@@ -283,22 +292,51 @@ export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
 
             <Panel className="decor-t screen-line-bottom-none screen-line-top-none flex flex-1 flex-col p-0">
               <PanelHeader className="decor-b py-2">
-                <PanelTitle className="text-4xl font-medium tracking-tight text-balance">
+                <PanelTitle className="screen-line-bottom-none text-4xl font-medium tracking-tight text-balance">
                   {blog.metadata.title}
                 </PanelTitle>
+                <PanelDescription className="py-1 text-base">
+                  {blog.metadata.description}
+                </PanelDescription>
               </PanelHeader>
 
-              <Prose className="p-4">
-                <p className="text-muted-foreground not-typeset mb-(--typeset-flow)">
-                  {blog.metadata.description}
-                </p>
-
-                <TOCInline className="lg:hidden" items={toc} />
-
-                <div>
-                  <MDX content={blog.content} />
+              <PanelContent className="p-0">
+                <div className="text-muted-foreground not-typeset mb-(--typeset-flow) flex items-center justify-between border-b px-4 py-3">
+                  {blog.metadata.author && (
+                    <span className="text-foreground flex items-center gap-2 text-base">
+                      <Avatar className="size-6">
+                        <AvatarImage src={blog.metadata.avatar} />
+                        <AvatarFallback>
+                          {blog.metadata.author.charAt(0)}
+                        </AvatarFallback>
+                      </Avatar>
+                      {blog.metadata.author}
+                    </span>
+                  )}
+                  <span className="flex items-center gap-2 text-sm">
+                    <time
+                      dateTime={new Date(blog.metadata.createdAt).toISOString()}
+                      aria-label="Published on"
+                    >
+                      {format(
+                        new Date(blog.metadata.createdAt),
+                        'MMMM dd, yyyy'
+                      )}
+                    </time>
+                    <span>•</span>
+                    {blog.metadata.duration != null && (
+                      <span>{formatReadingTime(blog.metadata.duration)}</span>
+                    )}
+                  </span>
                 </div>
-              </Prose>
+                <Prose className="p-4 pt-0">
+                  <TOCInline className="lg:hidden" items={toc} />
+
+                  <div>
+                    <MDX content={blog.content} />
+                  </div>
+                </Prose>
+              </PanelContent>
             </Panel>
           </DocContentCol>
 

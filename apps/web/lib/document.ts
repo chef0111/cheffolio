@@ -3,6 +3,7 @@ import matter from 'gray-matter';
 import path from 'path';
 import { cache } from 'react';
 
+import { estimateReadingTime } from '@/lib/reading-time';
 import type {
   Doc,
   DocMetadata,
@@ -17,6 +18,15 @@ function parseFrontmatter(fileContent: string) {
     metadata: file.data as DocMetadata,
     content: file.content,
   };
+}
+
+/** Prefer frontmatter `duration`; otherwise estimate from the MDX body. */
+function resolveDuration(metadata: DocMetadata, content: string) {
+  if (typeof metadata.duration === 'number' && metadata.duration > 0) {
+    return Math.ceil(metadata.duration);
+  }
+
+  return estimateReadingTime(content).minutes;
 }
 
 function getMDXFiles(dir: string) {
@@ -49,7 +59,11 @@ function getMDXData(dir: string) {
       const slug = path.basename(file, path.extname(file));
 
       return {
-        metadata: { ...metadata, category },
+        metadata: {
+          ...metadata,
+          category,
+          duration: resolveDuration(metadata, content),
+        },
         slug,
         content,
       };

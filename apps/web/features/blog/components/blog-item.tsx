@@ -11,6 +11,7 @@ import {
   BLOG_NAV_FORWARD,
   BlogOgTransition,
 } from '@/features/blog/components/blog-og-transition';
+import { formatReadingTime } from '@/lib/reading-time';
 import type { Doc } from '@/types/document';
 
 type Heading = 'h2' | 'h3' | 'h4';
@@ -36,7 +37,7 @@ export function BlogItem({
       <div className="p-4 max-md:hidden">
         {blog.metadata.image && (
           <BlogOgTransition slug={blog.slug}>
-            <div className="relative select-none">
+            <div className="relative select-none!">
               <Image
                 className="ease-out-cubic aspect-40/21 max-w-60 grayscale transition-[filter] duration-300 group-hover/post:grayscale-0"
                 src={blog.metadata.image}
@@ -51,16 +52,23 @@ export function BlogItem({
         )}
       </div>
 
-      <div className="flex flex-col gap-1 p-4">
-        <dl className="mb-2">
-          <dt className="sr-only">Published on</dt>
-          <dd className="text-muted-foreground flex items-center gap-2 text-xs">
-            <CalendarIcon className="size-3.5" />
-            <time dateTime={new Date(blog.metadata.createdAt).toISOString()}>
-              {format(new Date(blog.metadata.createdAt), 'MMMM dd, yyyy')}
-            </time>
-          </dd>
-        </dl>
+      <div className="flex w-full flex-col gap-1 p-4">
+        <div className="text-muted-foreground mb-2 flex items-center justify-between">
+          <dl>
+            <dt className="sr-only">Published on</dt>
+            <dd className="flex items-center gap-2 text-xs">
+              <CalendarIcon className="size-3.5" />
+              <time dateTime={new Date(blog.metadata.createdAt).toISOString()}>
+                {format(new Date(blog.metadata.createdAt), 'MMMM dd, yyyy')}
+              </time>
+            </dd>
+          </dl>
+
+          <span className="group-hover/post:text-foreground flex items-center gap-1.5 pb-0.5 text-sm transition-colors">
+            Read more
+            <ChevronRightIcon className="size-4" />
+          </span>
+        </div>
 
         <Heading className="text-lg leading-snug font-medium text-pretty">
           <Link
@@ -85,7 +93,14 @@ export function BlogItem({
           {blog.metadata.description}
         </p>
 
-        <div className="text-muted-foreground mt-2 flex items-center justify-between text-sm">
+        <div className="text-muted-foreground mt-2 flex items-start gap-3 text-sm">
+          <span className="flex h-5 items-center gap-2 text-nowrap">
+            {blog.metadata.author && <span>{blog.metadata.author}</span>}
+            <span>•</span>
+            {blog.metadata.duration != null && (
+              <span>{formatReadingTime(blog.metadata.duration)}</span>
+            )}
+          </span>
           {blog.metadata.tags && blog.metadata.tags.length > 0 && (
             <ul className="flex flex-wrap gap-1.5">
               {blog.metadata.tags.map((tag, index) => (
@@ -95,20 +110,16 @@ export function BlogItem({
               ))}
             </ul>
           )}
-          <span className="group-hover/post:text-foreground flex items-center gap-1.5 transition-colors">
-            Read more
-            <ChevronRightIcon className="size-4" />
-          </span>
         </div>
       </div>
 
-      <div className="pointer-events-none absolute top-0 left-1/2 -mt-2 -ml-20 size-full mask-[radial-gradient(farthest-side_at_top,white,transparent)]">
+      <div className="pointer-events-none absolute top-0 left-1/2 -z-1 size-full mask-[radial-gradient(farthest-side_at_top,white,transparent)]">
         <GridPattern
           className="stroke-border absolute inset-0 size-full"
           height={25}
           width={25}
-          x={2}
-          y={7}
+          x={22}
+          y={-1}
         />
       </div>
     </div>

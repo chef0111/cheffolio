@@ -6,6 +6,10 @@ export type DocMetadata = {
    * Use an absolute URL or a path under /public. Recommended size: 1200x630.
    */
   image?: string;
+  /** Author of the post. */
+  author?: string;
+  /** Author avatar of the post. */
+  avatar?: string;
   /**
    * Category identifier, derived from the doc's content subfolder
    * (e.g. `content/blog/*` → "blog"). Not declared in frontmatter;
@@ -14,6 +18,12 @@ export type DocMetadata = {
   category?: string;
   /** Tags for the document. Used for filtering. */
   tags?: string[];
+  /**
+   * Estimated reading time in minutes.
+   * Optional in frontmatter as an override; otherwise computed from the MDX
+   * body (prose WPM + slower fenced-code pacing + Medium-style images).
+   */
+  duration?: number;
   /** Flag to show a "New" badge/highlight in the UI. */
   new?: boolean;
   updated?: boolean;
