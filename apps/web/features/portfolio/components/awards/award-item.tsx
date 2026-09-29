@@ -35,8 +35,8 @@ export function AwardItem({
       defaultOpen={award.isExpanded}
     >
       <div className="hover:bg-accent-muted active:bg-accent-muted my-auto flex items-center transition-colors">
-        <IntroItemIcon className="mx-4 sm:size-7">
-          <AwardIcon className="text-muted-foreground pointer-events-none size-4 sm:size-4.5" />
+        <IntroItemIcon size="lg" className="mx-4">
+          <AwardIcon />
         </IntroItemIcon>
 
         <div className="border-border relative flex-1 overflow-hidden border-l border-dashed">

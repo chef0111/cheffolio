@@ -39,8 +39,17 @@ export default function ThemeToggle() {
     playToggle();
     haptic();
 
-    if (!document.startViewTransition || isMobile) switchTheme();
-    else document.startViewTransition(switchTheme);
+    if (!document.startViewTransition || isMobile) {
+      switchTheme();
+      return;
+    }
+
+    const root = document.documentElement;
+    root.classList.add('theme-transitioning');
+    const transition = document.startViewTransition(switchTheme);
+    void transition.finished.finally(() => {
+      root.classList.remove('theme-transitioning');
+    });
   }, [playToggle, switchTheme, isMobile]);
 
   useHotkeys(

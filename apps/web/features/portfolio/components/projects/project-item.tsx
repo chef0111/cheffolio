@@ -52,8 +52,8 @@ export function ProjectItem({
           </div>
         ) : (
           <div className="bg-background m-1.5 mr-0 flex items-center rounded-md border">
-            <IntroItemIcon className="mx-3 size-8">
-              <BoxIcon className="size-5" />
+            <IntroItemIcon size="xl" className="mx-3">
+              <BoxIcon />
             </IntroItemIcon>
           </div>
         )}

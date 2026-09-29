@@ -47,7 +47,7 @@ export function ExperiencePositionItem({
       >
         <div className="relative z-1 mb-1 flex items-center gap-3">
           <IntroItemIcon>
-            <ExperienceIcon className="size-4" icon={position.icon} />
+            <ExperienceIcon icon={position.icon} />
           </IntroItemIcon>
 
           <div className="mx-1 flex min-w-0 flex-1 items-center gap-1">

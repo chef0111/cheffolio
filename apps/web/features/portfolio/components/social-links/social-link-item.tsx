@@ -2,6 +2,7 @@ import { ArrowUpRightIcon } from 'lucide-react';
 import Image from 'next/image';
 
 import { GridPattern } from '@/components/cheffolio/grid-pattern';
+import { AdaptiveRing } from '@/components/ui/adaptive-ring';
 import { UTM_PARAMS } from '@/config/site';
 import type { SocialProfile } from '@/features/portfolio/types/social-links';
 import { cn } from '@/lib/utils';
@@ -36,7 +37,7 @@ export function SocialLinkItem({
           height={32}
           quality={100}
         />
-        <div className="corner-squircle pointer-events-none absolute inset-0 rounded-lg ring-1 ring-black/10 ring-inset supports-corner-shape:rounded-[50%] dark:ring-white/15" />
+        <AdaptiveRing className="corner-squircle rounded-lg supports-corner-shape:rounded-[50%]" />
       </div>
 
       <h3 className="z-1 flex-1 font-medium">{title}</h3>

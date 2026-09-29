@@ -1,7 +1,6 @@
 import { ArrowRightIcon } from 'lucide-react';
 import Link from 'next/link';
 
-import { GridDivider } from '@/components/cheffolio/grid-divider';
 import {
   Panel,
   PanelContent,
@@ -12,11 +11,9 @@ import {
 import { Button } from '@/components/ui/button';
 import { BlogItem } from '@/features/blog/components/blog-item';
 import { getBlogPosts } from '@/lib/document';
-import { getRowCounts } from '@/utils/grid';
 
 export function Blog() {
   const blogPosts = getBlogPosts();
-  const rows = getRowCounts(blogPosts.length, 2);
 
   return (
     <Panel id="blog" className="screen-line-bottom-none screen-line-top-none">
@@ -28,18 +25,10 @@ export function Blog() {
       </PanelHeader>
 
       <PanelContent className="relative px-0">
-        <div className="pointer-events-none absolute inset-0 -z-1 grid grid-cols-1 gap-4 max-sm:hidden sm:grid-cols-2">
-          <div className="border-border border-r" />
-          <div className="border-border border-l" />
-        </div>
-
-        <GridDivider className="gap-4 max-sm:hidden" rows={rows} />
-
-        <ul className="border-border grid grid-cols-1 gap-4 border-y sm:grid-cols-2">
-          {blogPosts.slice(0, 4).map((blog) => (
+        <ul className="flex flex-col border-y">
+          {blogPosts.map((blog) => (
             <li key={blog.slug} className="group">
-              <BlogItem blog={blog} heading="h3" loading="lazy" />
-              <div className="border-border h-4 w-full border-y group-last:hidden sm:hidden" />
+              <BlogItem heading="h2" blog={blog} loading="lazy" />
             </li>
           ))}
         </ul>

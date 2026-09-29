@@ -113,7 +113,7 @@ function getGitHubSourceUrl(markdownUrl: string) {
 
 export function ViewOptions({
   markdownUrl,
-  variant,
+  variant = 'secondary',
 }: {
   markdownUrl: string;
   variant?: 'secondary' | 'outline';
@@ -195,7 +195,7 @@ export function ViewOptions({
 
 export function MDCopyButtonGroup({
   markdownUrl,
-  variant,
+  variant = 'secondary',
 }: {
   markdownUrl: string;
   variant?: 'secondary' | 'outline';

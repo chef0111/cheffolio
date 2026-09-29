@@ -4,7 +4,13 @@ import type { ImageProps } from 'next/image';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { GridPattern } from '@/components/cheffolio/grid-pattern';
+import { AdaptiveRing } from '@/components/ui/adaptive-ring';
 import { Tag } from '@/components/ui/tag';
+import {
+  BLOG_NAV_FORWARD,
+  BlogOgTransition,
+} from '@/features/blog/components/blog-og-transition';
 import type { Doc } from '@/types/document';
 
 type Heading = 'h2' | 'h3' | 'h4';
@@ -21,26 +27,46 @@ export function BlogItem({
   const Heading = heading ?? 'h2';
 
   return (
-    <div className="group/post hover:bg-accent-muted active:bg-accent-muted relative flex h-full flex-col gap-2 p-2 transition-[background-color] ease-out">
-      {blog.metadata.image && (
-        <div className="relative select-none [--image-radius:var(--radius-xl)]">
-          <Image
-            className="ease-out-cubic aspect-40/21 rounded-(--image-radius) grayscale transition-[filter] duration-300 group-hover/post:grayscale-0"
-            src={blog.metadata.image}
-            alt={blog.metadata.title}
-            width={1200}
-            height={630}
-            loading={loading}
-          />
-          <div className="pointer-events-none absolute inset-0 rounded-(--image-radius) inset-ring-1 inset-ring-black/15 dark:inset-ring-white/15" />
-        </div>
-      )}
+    <div className="group/post hover:bg-accent-muted active:bg-accent-muted relative flex items-center overflow-hidden transition-[background-color] ease-out">
+      <div
+        className="pointer-events-none absolute inset-y-0 left-68 -z-1 w-px bg-[linear-gradient(to_bottom,var(--border)_4px,transparent_2px)] bg-size-[1px_6px] bg-repeat-y max-md:hidden max-sm:hidden"
+        aria-hidden
+      />
 
-      <div className="flex flex-col gap-2 p-2">
+      <div className="p-4 max-md:hidden">
+        {blog.metadata.image && (
+          <BlogOgTransition slug={blog.slug}>
+            <div className="relative select-none">
+              <Image
+                className="ease-out-cubic aspect-40/21 max-w-60 grayscale transition-[filter] duration-300 group-hover/post:grayscale-0"
+                src={blog.metadata.image}
+                alt={blog.metadata.title}
+                width={400}
+                height={210}
+                loading={loading}
+              />
+              <AdaptiveRing />
+            </div>
+          </BlogOgTransition>
+        )}
+      </div>
+
+      <div className="flex flex-col gap-1 p-4">
+        <dl className="mb-2">
+          <dt className="sr-only">Published on</dt>
+          <dd className="text-muted-foreground flex items-center gap-2 text-xs">
+            <CalendarIcon className="size-3.5" />
+            <time dateTime={new Date(blog.metadata.createdAt).toISOString()}>
+              {format(new Date(blog.metadata.createdAt), 'MMMM dd, yyyy')}
+            </time>
+          </dd>
+        </dl>
+
         <Heading className="text-lg leading-snug font-medium text-pretty">
           <Link
             href={`/blog/${blog.slug}`}
             aria-label={`Read ${blog.metadata.title}`}
+            transitionTypes={[BLOG_NAV_FORWARD]}
           >
             <span className="absolute inset-0" aria-hidden />
             {blog.metadata.title}
@@ -55,31 +81,35 @@ export function BlogItem({
           )}
         </Heading>
 
-        {blog.metadata.tags && blog.metadata.tags.length > 0 && (
-          <ul className="flex flex-wrap gap-1.5">
-            {blog.metadata.tags.map((tag, index) => (
-              <li key={index} className="flex">
-                <Tag className="capitalize">{tag}</Tag>
-              </li>
-            ))}
-          </ul>
-        )}
+        <p className="text-muted-foreground text-sm text-pretty">
+          {blog.metadata.description}
+        </p>
 
-        <div className="text-muted-foreground flex items-center justify-between text-sm">
-          <dl>
-            <dt className="sr-only">Published on</dt>
-            <dd className="flex items-center gap-2">
-              <CalendarIcon className="size-4" />
-              <time dateTime={new Date(blog.metadata.createdAt).toISOString()}>
-                {format(new Date(blog.metadata.createdAt), 'dd-MM-yyyy')}
-              </time>
-            </dd>
-          </dl>
+        <div className="text-muted-foreground mt-2 flex items-center justify-between text-sm">
+          {blog.metadata.tags && blog.metadata.tags.length > 0 && (
+            <ul className="flex flex-wrap gap-1.5">
+              {blog.metadata.tags.map((tag, index) => (
+                <li key={index} className="flex">
+                  <Tag className="capitalize">{tag}</Tag>
+                </li>
+              ))}
+            </ul>
+          )}
           <span className="group-hover/post:text-foreground flex items-center gap-1.5 transition-colors">
             Read more
             <ChevronRightIcon className="size-4" />
           </span>
         </div>
+      </div>
+
+      <div className="pointer-events-none absolute top-0 left-1/2 -mt-2 -ml-20 size-full mask-[radial-gradient(farthest-side_at_top,white,transparent)]">
+        <GridPattern
+          className="stroke-border absolute inset-0 size-full"
+          height={25}
+          width={25}
+          x={2}
+          y={7}
+        />
       </div>
     </div>
   );

@@ -1,4 +1,3 @@
-import { format } from 'date-fns';
 import { getTableOfContents } from 'fumadocs-core/content/toc';
 import { ArrowLeftIcon, ArrowRightIcon } from 'lucide-react';
 import type { Metadata, Route } from 'next';
@@ -16,6 +15,7 @@ import { ShareMenu } from '@/components/cheffolio/share-menu';
 import { StripeSeparator } from '@/components/cheffolio/stripe-separator';
 import { jsonLdBreadcrumbList, JsonLdScript } from '@/components/json-ld';
 import { MDX } from '@/components/mdx';
+import { AdaptiveRing } from '@/components/ui/adaptive-ring';
 import { Button } from '@/components/ui/button';
 import { Kbd } from '@/components/ui/kbd';
 import {
@@ -26,6 +26,7 @@ import {
 import { Prose } from '@/components/ui/typography';
 import { JSON_LD_ID } from '@/config/json-ld';
 import { X_PROFILE } from '@/config/site';
+import { BlogOgTransition } from '@/features/blog/components/blog-og-transition';
 import { DocKeyboardShortcuts } from '@/features/blog/components/doc/doc-keyboard-shorcuts';
 import {
   DocContainer,
@@ -258,39 +259,24 @@ export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
               <div className="pointer-events-none absolute inset-x-4 inset-y-0 -z-1 border-x" />
               <FullWidthDivider className="top-4" contained />
               <FullWidthDivider className="bottom-4" contained />
-              <div className="relative aspect-40/21 w-full select-none">
-                <Image
-                  className="ease-out-cubic grayscale transition-[filter] duration-300 hover:grayscale-0"
-                  src={
-                    blog.metadata.image ??
-                    simpleOgImageUrl(
-                      blog.metadata.title,
-                      blog.metadata.description
-                    )
-                  }
-                  alt={blog.metadata.title}
-                  fill
-                  priority
-                />
-                <div className="pointer-events-none absolute inset-0 inset-ring-1 inset-ring-black/15 dark:inset-ring-white/15" />
-
-                <dl
-                  className="absolute bottom-4 left-4"
-                  data-slot="doc-created-at"
-                >
-                  <dt className="sr-only">Published on</dt>
-                  <dd className="text-sm text-zinc-500">
-                    <time
-                      dateTime={new Date(blog.metadata.createdAt).toISOString()}
-                    >
-                      {format(
-                        new Date(blog.metadata.createdAt),
-                        'MMMM dd, yyyy'
-                      )}
-                    </time>
-                  </dd>
-                </dl>
-              </div>
+              <BlogOgTransition slug={blog.slug}>
+                <div className="relative aspect-40/21 w-full select-none">
+                  <Image
+                    className="ease-out-cubic grayscale transition-[filter] duration-300 hover:grayscale-0"
+                    src={
+                      blog.metadata.image ??
+                      simpleOgImageUrl(
+                        blog.metadata.title,
+                        blog.metadata.description
+                      )
+                    }
+                    alt={blog.metadata.title}
+                    fill
+                    priority
+                  />
+                  <AdaptiveRing />
+                </div>
+              </BlogOgTransition>
             </div>
 
             <StripeSeparator />
