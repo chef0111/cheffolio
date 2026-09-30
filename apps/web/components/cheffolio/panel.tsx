@@ -82,7 +82,7 @@ function PanelDecor({
       />
       <PlusIcon
         data-slot="panel-plus-icon"
-        className="stroke-muted-foreground/30 relative size-full stroke-[1.5]"
+        className="stroke-muted-foreground/40 relative size-full stroke-[1.5]"
       />
     </span>
   );
