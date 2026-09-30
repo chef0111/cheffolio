@@ -1,0 +1,338 @@
+---
+title: Next.js 16.3 didn't invent instant navigation
+description: Instant navigation didn't start with Next.js 16.3. What changed, and when should you enable the new features?
+author: Gia Bảo
+avatar: https://assets.giabao.dev/chef0111-avatar.webp
+createdAt: 2026-09-30
+updatedAt: 2026-09-30
+tags: ['Next.js', 'Instant Navigation', 'Performance']
+---
+
+> You could build instant navigation before Next.js 16.3.
+
+If you already use the App Router, `loading.tsx`, and `Suspense`, you know the pattern. A link click shows loading UI while the server fetches the remaining content.
+
+The [16.3 announcement](https://nextjs.org/blog/next-16-3-instant-navigations) builds on that pattern with new prefetching behavior and tools to check your navigations.
+
+My take is that the team wants more apps to follow the Cache Components model consistently. The new features help you do that, especially when coding agents change your routes.
+
+Your existing app may already give users the immediate response they need. That matters when deciding what to enable.
+
+# "Instant" means the page starts showing up
+
+Think of a product page. You click a link and see the page structure with "Checking availability...". The stock count arrives later.
+
+That's an instant navigation. The browser shows destination UI without waiting for a new server response. Cached content, loading fallbacks, or both can provide that first view.
+
+The initial UI still has to be ready before the click. A cold cache or an unfinished prefetch can cause a wait, as the [instant navigation guide](https://nextjs.org/docs/app/guides/instant-navigation#what-instant-means) explains.
+
+# You could already do this in Next.js 15
+
+The [Next.js 15 docs](https://nextjs.org/docs/15/app/api-reference/file-conventions/loading) already described instant loading states through `loading.tsx`.
+
+Next.js wraps the page in a `Suspense` boundary using that file as its fallback. Once prefetched, the fallback can appear as soon as you click.
+
+Here's a product route's loading state:
+
+```tsx title="app/products/[slug]/loading.tsx"
+export default function Loading() {
+  return (
+    <main>
+      <p>Loading product...</p>
+      <p>Checking availability...</p>
+    </main>
+  );
+}
+```
+
+The page itself can wait for its data:
+
+```tsx title="app/products/[slug]/page.tsx"
+import { getInventory, getProduct } from '@/lib/product-data';
+
+type ProductPageProps = {
+  params: Promise<{ slug: string }>;
+};
+
+export default async function ProductPage({ params }: ProductPageProps) {
+  const { slug } = await params;
+  const [product, inventory] = await Promise.all([
+    getProduct(slug),
+    getInventory(slug),
+  ]);
+
+  return (
+    <main>
+      <h1>{product.name}</h1>
+      <p>{inventory} in stock</p>
+    </main>
+  );
+}
+```
+
+These examples leave out the database code. `getProduct(slug)` returns a product with a `name`, and `getInventory(slug)` returns its stock count.
+
+With the fallback prefetched, you see "Loading product..." before either query finishes. The queries run in parallel, and the page arrives when both are ready.
+
+The [Next.js 15 navigation guide](https://nextjs.org/docs/15/app/getting-started/linking-and-navigating#streaming) also covers manual `Suspense` boundaries for streaming individual parts of a page.
+
+The distinction is practical. `Suspense` defines what can render during a wait. Prefetching makes destination UI available before the click.
+
+You needed both pieces for immediate navigation before 16.3 too.
+
+# A `Suspense` boundary has to cover the wait
+
+Having `Suspense` in a file doesn't guarantee useful loading UI. Look at this page without a `loading.tsx` boundary:
+
+```tsx title="app/products/[slug]/page.tsx"
+import { Suspense } from 'react';
+
+import { getProduct } from '@/lib/product-data';
+
+type ProductPageProps = {
+  params: Promise<{ slug: string }>;
+};
+
+export default async function ProductPage({ params }: ProductPageProps) {
+  const { slug } = await params;
+  const product = await getProduct(slug);
+
+  return (
+    <main>
+      <Suspense fallback={<p>Loading product...</p>}>
+        <h1>{product.name}</h1>
+      </Suspense>
+    </main>
+  );
+}
+```
+
+The page awaits `getProduct()` before returning its boundary. That fallback cannot cover the wait. Only a boundary above the page could catch it.
+
+Move the reads into children, and the parent can return its UI first:
+
+```tsx title="app/products/[slug]/page.tsx"
+import { Suspense } from 'react';
+
+import { getInventory, getProduct } from '@/lib/product-data';
+
+type ProductPageProps = {
+  params: Promise<{ slug: string }>;
+};
+
+export default function ProductPage({ params }: ProductPageProps) {
+  return (
+    <main>
+      <p>Product details</p>
+      <Suspense fallback={<p>Loading product...</p>}>
+        <ProductInfo params={params} />
+      </Suspense>
+      <Suspense fallback={<p>Checking availability...</p>}>
+        <Inventory params={params} />
+      </Suspense>
+    </main>
+  );
+}
+
+async function ProductInfo({ params }: ProductPageProps) {
+  const { slug } = await params;
+  const product = await getProduct(slug);
+  return <h1>{product.name}</h1>;
+}
+
+async function Inventory({ params }: ProductPageProps) {
+  const { slug } = await params;
+  const inventory = await getInventory(slug);
+  return <p>{inventory} in stock</p>;
+}
+```
+
+Now "Product details" and the fallbacks can render while the children fetch their data independently. This structure supported streaming before 16.3.
+
+## Cache Components builds on that pattern
+
+With Cache Components, Next.js also prepares eligible UI ahead of time. Partial Prefetching makes the reusable UI available before navigation.
+
+The history goes back further than 16.3. Next.js 15 had experimental [`'use cache'`](https://nextjs.org/docs/15/app/api-reference/directives/use-cache) and [Partial Prerendering](https://nextjs.org/docs/15/app/getting-started/partial-prerendering), or PPR.
+
+PPR prepared static content and fallbacks ahead of a request, then streamed dynamic sections. The version 15 docs advised against using it in production.
+
+[Next.js 16 introduced Cache Components](https://nextjs.org/blog/next-16#cache-components) to bring these ideas together. Ordinary `Suspense` streaming alone doesn't give you the same prerendering and caching behavior.
+
+For our product page, suppose names can stay cached for the `'hours'` profile while inventory needs a fresh read:
+
+```ts title="lib/product-data.ts"
+import { cacheLife } from 'next/cache';
+
+import { readInventory, readProduct } from '@/lib/product-queries';
+
+export async function getProduct(slug: string) {
+  'use cache';
+  cacheLife('hours');
+  return readProduct(slug);
+}
+
+export async function getInventory(slug: string) {
+  return readInventory(slug);
+}
+```
+
+`readProduct` and `readInventory` stand in for database queries. [`'use cache'`](https://nextjs.org/docs/app/api-reference/directives/use-cache) caches the product result, with `slug` in the cache key.
+
+Inventory stays uncached and loads behind its own fallback. You choose that split based on how fresh each piece of data needs to be.
+
+# What actually changes in 16.3
+
+The router changes what it prefetches, and the development tools help you spot navigations that block. Those are concrete reasons to consider the update.
+
+## Links can share one loading shell
+
+With [Partial Prefetching](https://nextjs.org/docs/app/api-reference/config/next-config-js/partialPrefetching), Next.js prefetches one reusable App Shell per route. That shell contains initial UI that doesn't depend on a particular link's URL.
+
+For `/products/[slug]`, the shoes and hats links can share the same shell. Next.js doesn't need a separate shell prefetch for every product link.
+
+URL-specific content arrives after navigation by default. An explicit `prefetch={true}` can also fetch cached content for that URL.
+
+With both flags enabled, our links look like this:
+
+```tsx title="components/product-links.tsx"
+import Link from 'next/link';
+
+export function ProductLinks() {
+  return (
+    <nav aria-label="Products">
+      <Link href="/products/shoes">Shoes</Link>
+      <Link href="/products/hats">Hats</Link>
+      <Link href="/products/hats" prefetch={true}>
+        Hats with product details prefetched
+      </Link>
+      <Link href="/products/bags" prefetch={false}>
+        Bags without prefetching
+      </Link>
+    </nav>
+  );
+}
+```
+
+Each link makes a different choice:
+
+- The default shoes and hats links share the shell and its loading fallbacks.
+- The explicit hats prefetch can also fetch the cached product name.
+- The bags link requests no prefetch itself.
+
+Uncached inventory still loads after the click. The [prefetching guide](https://nextjs.org/docs/app/guides/optimizing-prefetching) explains how cached URL-specific content fits into this model.
+
+There's a migration detail here. Previously, `prefetch={true}` could include uncached dynamic content too. Partial Prefetching changes that behavior.
+
+If your app relies on full prefetches, review them before enabling the flag. The [migration guide](https://nextjs.org/docs/app/guides/adopting-partial-prefetching) covers what to preserve.
+
+## Next.js can show you what blocks
+
+With Cache Components enabled, [Instant Insights and Navigation Inspector](https://nextjs.org/blog/next-16-3#instant-navigations) help you check what happens on a link click.
+
+Instant Insights reports blocking navigations in development. Navigation Inspector pauses a transition at its initial UI so you can see what's ready before the data arrives.
+
+If a route intentionally waits for server content, you can [opt it out of validation](https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/instant#disabling-instant):
+
+```ts title="app/posts/[slug]/page.tsx"
+export const instant = false;
+```
+
+That export controls validation. It doesn't disable prefetching or remove a loading boundary.
+
+16.3 also [improves ISR for URLs you didn't prerender at build time](https://nextjs.org/docs/app/guides/incremental-static-regeneration-cache-components). Those URLs can serve a loading shell while Next.js prepares the prerendered result in the background.
+
+# Why I'd enable this for coding agents
+
+An instruction like "use `Suspense` for slow data" leaves room for mistakes. The earlier example already shows one.
+
+An agent can also put a boundary in the root layout and assume it covers every navigation. It can cover the initial load while missing transitions beneath a shared layout.
+
+The layout stays mounted, so the boundary needs to cover the part that changes. [Navigation validation](https://nextjs.org/docs/app/guides/instant-navigation#validate-instant-navigation) checks those paths.
+
+That's why I like the new tools for agent workflows. Diagnostics identify a problem. An [`instant()` test](https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/instant#testing-instant-navigation) gives the agent behavior to preserve.
+
+For our hats link, I want the product name to appear immediately and fresh inventory to arrive afterward. Here's how that expectation becomes a test:
+
+```ts title="e2e/product-navigation.spec.ts"
+import { expect, test } from '@playwright/test';
+import { instant } from '@next/playwright';
+
+test('product details appear before fresh inventory', async ({ page }) => {
+  await page.goto('/products/shoes');
+
+  await instant(page, async () => {
+    await page
+      .getByRole('link', {
+        name: 'Hats with product details prefetched',
+        exact: true,
+      })
+      .click();
+    await page.waitForURL((url) => url.pathname === '/products/hats');
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+      'Baseball Cap'
+    );
+    await expect(page.getByText('Checking availability...')).toBeVisible();
+  });
+
+  await expect(page.getByText('12 in stock', { exact: true })).toBeVisible();
+});
+```
+
+This example assumes the shoes page includes `ProductLinks` and the hats fixture has the name "Baseball Cap" with 12 in stock.
+
+[`instant()` holds back dynamic content](https://nextjs.org/docs/app/guides/instant-navigation#prevent-regressions-with-e2e-tests) during the callback. The prefetched product name must be ready, while "Checking availability..." stays visible.
+
+Waiting for the destination URL prevents the test from matching the source page's heading. After the callback, inventory can arrive.
+
+For a production test build, the helper needs this configuration:
+
+```ts title="next.config.ts"
+import type { NextConfig } from 'next';
+
+const nextConfig: NextConfig = {
+  cacheComponents: true,
+  partialPrefetching: true,
+  experimental: {
+    exposeTestingApiInProductionBuild: true,
+  },
+};
+
+export default nextConfig;
+```
+
+The testing API option belongs in the build used for these tests. Your deployed app doesn't need it for instant navigation.
+
+You still decide what needs to appear immediately and what must stay fresh. A passing check can't tell you whether a full-page spinner is a good experience.
+
+# So, should you enable the new features?
+
+If your app already navigates responsively, you can keep your approach. Knowing your loading boundaries and prefetch behavior matters more than adopting a new feature name.
+
+You can leave the opt-in features disabled when your current setup meets your needs. Just weigh that choice against the new prefetching behavior and tools.
+
+If you want to follow the Cache Components model, I'd enable its checks and adopt Partial Prefetching where it fits. I'd make the same choice when agents regularly change routes.
+
+The [configuration for both features](https://nextjs.org/docs/app/api-reference/config/next-config-js/partialPrefetching#usage) is:
+
+```ts
+import type { NextConfig } from 'next';
+
+const nextConfig: NextConfig = {
+  cacheComponents: true,
+  partialPrefetching: true,
+};
+
+export default nextConfig;
+```
+
+The flags do different jobs:
+
+- `cacheComponents` enables the caching and rendering model, along with navigation diagnostics.
+- `partialPrefetching` changes what links prefetch and requires Cache Components.
+
+For an existing app, this is a [migration](https://nextjs.org/docs/app/guides/migrating-to-cache-components). You still need to choose cache lifetimes, place boundaries, and write the tests you want.
+
+Leaving these flags off is separate from skipping a framework upgrade. [16.3 also improves development memory usage, builds, and server rendering](https://nextjs.org/blog/next-16-3#improvements-for-todays-apps).
+
+Instant navigation existed before 16.3. What makes this release worth considering is how it helps you, and your coding agents, keep that behavior consistent as the app changes.
