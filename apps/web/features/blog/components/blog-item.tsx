@@ -4,6 +4,7 @@ import type { ImageProps } from 'next/image';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { simpleOgImageUrl } from '@/app/og/params';
 import { GridPattern } from '@/components/cheffolio/grid-pattern';
 import { AdaptiveRing } from '@/components/ui/adaptive-ring';
 import { Tag } from '@/components/ui/tag';
@@ -27,6 +28,10 @@ export function BlogItem({
 }) {
   const Heading = heading ?? 'h2';
 
+  const ogImage =
+    blog.metadata.image ||
+    simpleOgImageUrl(blog.metadata.title, blog.metadata.description);
+
   return (
     <div className="group/post hover:bg-accent-muted active:bg-accent-muted relative flex items-center overflow-hidden transition-[background-color] ease-out">
       <div
@@ -35,21 +40,19 @@ export function BlogItem({
       />
 
       <div className="p-4 max-md:hidden">
-        {blog.metadata.image && (
-          <BlogOgTransition slug={blog.slug}>
-            <div className="relative select-none!">
-              <Image
-                className="ease-out-cubic aspect-40/21 max-w-60 grayscale transition-[filter] duration-300 group-hover/post:grayscale-0"
-                src={blog.metadata.image}
-                alt={blog.metadata.title}
-                width={400}
-                height={210}
-                loading={loading}
-              />
-              <AdaptiveRing />
-            </div>
-          </BlogOgTransition>
-        )}
+        <BlogOgTransition slug={blog.slug}>
+          <div className="relative select-none!">
+            <Image
+              className="ease-out-cubic aspect-40/21 max-w-60 grayscale transition-[filter] duration-300 group-hover/post:grayscale-0"
+              src={ogImage}
+              alt={blog.metadata.title}
+              width={400}
+              height={210}
+              loading={loading}
+            />
+            <AdaptiveRing />
+          </div>
+        </BlogOgTransition>
       </div>
 
       <div className="flex w-full flex-col gap-1 p-4">
@@ -105,7 +108,7 @@ export function BlogItem({
             <ul className="flex flex-wrap gap-1.5">
               {blog.metadata.tags.map((tag, index) => (
                 <li key={index} className="flex">
-                  <Tag className="capitalize">{tag}</Tag>
+                  <Tag>{tag}</Tag>
                 </li>
               ))}
             </ul>

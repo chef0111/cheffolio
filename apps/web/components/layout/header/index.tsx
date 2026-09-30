@@ -34,7 +34,7 @@ export function SiteHeader() {
           <SiteHeaderMark />
         </Suspense>
       </Link>
-      <div className="flex items-center gap-2 *:first:mr-2 max-sm:*:data-[slot=command-menu-trigger]:hidden">
+      <div className="flex items-center gap-2 *:first:mr-2 max-md:*:data-[slot=command-menu-trigger]:hidden">
         <Suspense fallback={<Nav items={DESKTOP_NAV} className="mr-2" />}>
           <NavDesktop items={DESKTOP_NAV} />
         </Suspense>

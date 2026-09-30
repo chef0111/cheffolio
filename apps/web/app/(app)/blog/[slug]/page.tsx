@@ -22,6 +22,8 @@ import { ShareMenu } from '@/components/cheffolio/share-menu';
 import { StripeSeparator } from '@/components/cheffolio/stripe-separator';
 import { jsonLdBreadcrumbList, JsonLdScript } from '@/components/json-ld';
 import { MDX } from '@/components/mdx';
+import { TOCInline } from '@/components/toc/toc-inline';
+import { TOCMinimap } from '@/components/toc/toc-minimap';
 import { AdaptiveRing } from '@/components/ui/adaptive-ring';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -44,8 +46,6 @@ import {
   DocRightCol,
 } from '@/features/blog/components/doc/doc-layout';
 import { DocPageRoot } from '@/features/blog/components/doc/doc-page-root';
-import { TOCInline } from '@/features/blog/components/doc/toc-inline';
-import { TOCMinimap } from '@/features/blog/components/doc/toc-minimap';
 import {
   BLOG_CATEGORY,
   findNeighbour,
@@ -280,7 +280,8 @@ export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
                       )
                     }
                     alt={blog.metadata.title}
-                    fill
+                    width={1200}
+                    height={630}
                     priority
                   />
                   <AdaptiveRing />
@@ -329,8 +330,8 @@ export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
                     )}
                   </span>
                 </div>
-                <Prose className="p-4 pt-0">
-                  <TOCInline className="lg:hidden" items={toc} />
+                <Prose className="p-4 pt-0 *:data-[slot=toc-inline]:mt-4">
+                  <TOCInline className="md:hidden" items={toc} />
 
                   <div>
                     <MDX content={blog.content} />
@@ -338,16 +339,13 @@ export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
                 </Prose>
               </PanelContent>
             </Panel>
+
+            <TOCMinimap items={toc} />
           </DocContentCol>
 
-          <DocRightCol>
-            <div className="sticky top-[calc(var(--doc-cols-top,0)+(--spacing(3)))] right-0 opacity-0 in-data-doc-cols-ready:opacity-100">
-              <TOCMinimap items={toc} />
-            </div>
-          </DocRightCol>
+          <DocRightCol />
         </DocGrid>
       </DocPageRoot>
-
       <StripeSeparator />
     </>
   );

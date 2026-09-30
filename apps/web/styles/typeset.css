@@ -9,8 +9,8 @@
     --typeset-font-heading: var(--font-heading);
     --typeset-font-mono: var(--font-mono);
     --typeset-size: 1em;
-    --typeset-leading: 1.5;
-    --typeset-flow: 1em;
+    --typeset-leading: 1.75;
+    --typeset-flow: 1.25em;
   }
 }
 

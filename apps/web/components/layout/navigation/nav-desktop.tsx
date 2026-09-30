@@ -12,7 +12,7 @@ import { isNavItemActive } from './utils/nav-active';
 export function NavDesktop({ items }: { items: NavItem<Route>[] }) {
   const pathname = usePathname();
 
-  return <Nav className="max-sm:hidden" items={items} activeId={pathname} />;
+  return <Nav className="max-md:hidden" items={items} activeId={pathname} />;
 }
 
 export function Nav({

@@ -27,6 +27,10 @@ const nextConfig: NextConfig = {
     ];
   },
   images: {
+    localPatterns: [
+      { pathname: '/**', search: '' },
+      { pathname: '/og/simple' },
+    ],
     remotePatterns: [
       {
         protocol: 'https',

@@ -12,7 +12,7 @@ export function SiteHeaderNav({ children }: { children?: React.ReactNode }) {
         className={cn(
           'border-x-border screen-line-top screen-line-bottom bg-background ease-out-cubic rounded-none border border-y-transparent transition-[translate,margin,border-color,border-radius,background-color,box-shadow] duration-200 before:z-0 after:z-0 motion-reduce:duration-150',
           scrolled &&
-            'border-border bg-background/95 screen-line-top-none screen-line-bottom-none supports-backdrop-filter:bg-background/50 mx-2 translate-y-2 rounded-lg shadow backdrop-blur-md motion-reduce:translate-y-0'
+            'border-border bg-background screen-line-top-none screen-line-bottom-none supports-backdrop-filter:bg-background/80 mx-2 translate-y-2 rounded-lg shadow backdrop-blur-md backdrop-saturate-150 motion-reduce:translate-y-0'
         )}
         aria-label="Site header"
       >

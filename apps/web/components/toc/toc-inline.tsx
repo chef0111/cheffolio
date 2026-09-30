@@ -29,6 +29,7 @@ export function TOCInline({
 
   return (
     <Collapsible
+      data-slot="toc-inline"
       className={cn(
         'not-typeset group/inline-toc bg-surface inset-ring-border/64 rounded-lg font-sans inset-ring-1',
         className
@@ -56,7 +57,7 @@ export function TOCInline({
               <Link
                 href={item.url}
                 data-depth={item.depth}
-                className="text-muted-foreground group-hover/toc-item:text-accent-foreground w-full text-sm data-[depth=3]:pl-4 data-[depth=4]:pl-8"
+                className="text-muted-foreground group-hover/toc-item:text-accent-foreground w-full text-sm data-[depth=2]:pl-4 data-[depth=3]:pl-8"
               >
                 {item.title}
               </Link>

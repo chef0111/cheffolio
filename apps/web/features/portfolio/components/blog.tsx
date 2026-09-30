@@ -27,7 +27,10 @@ export function Blog() {
       <PanelContent className="relative px-0">
         <ul className="flex flex-col border-y">
           {blogPosts.map((blog) => (
-            <li key={blog.slug} className="group">
+            <li
+              key={blog.slug}
+              className="group border-b last:border-b-0 last:border-none"
+            >
               <BlogItem heading="h2" blog={blog} loading="lazy" />
             </li>
           ))}
