@@ -10,10 +10,9 @@ import type { ResumeMetadata } from '@/types/document';
 
 import type { SectionPlan } from '../../lib/paginate-resume';
 import { resumeTheme, withBodyLineHeight } from '../../lib/pdf-theme';
-import { Entry } from './entry';
-import { SectionHeading } from './mdx-components';
+import { ResumeHeading, SectionHeading } from './mdx-components';
 import { ResumeHeader } from './resume-header';
-import { FlushItem, FlushList } from './resume-list';
+import { BulletList, FlushItem, FlushList } from './resume-list';
 
 type ResumeDocumentProps = {
   metadata: ResumeMetadata;
@@ -23,7 +22,7 @@ type ResumeDocumentProps = {
 
 const PDF_LEAVES = new Set<unknown>([
   SectionHeading,
-  Entry,
+  ResumeHeading,
   FlushList,
   FlushItem,
 ]);
@@ -31,8 +30,43 @@ function isSectionHeading(node: ReactNode) {
   return isValidElement(node) && node.type === SectionHeading;
 }
 
-function isEntry(node: ReactNode) {
-  return isValidElement(node) && node.type === Entry;
+function isResumeHeading(node: ReactNode) {
+  return isValidElement(node) && node.type === ResumeHeading;
+}
+
+function groupHeadingLists(nodes: ReactNode[]): ReactNode[] {
+  const grouped: ReactNode[] = [];
+
+  for (let index = 0; index < nodes.length; index++) {
+    const node = nodes[index];
+
+    if (!isResumeHeading(node)) {
+      grouped.push(node);
+      continue;
+    }
+
+    let listIndex = index + 1;
+
+    while (true) {
+      const candidate = nodes[listIndex];
+      if (typeof candidate !== 'string' || candidate.trim() !== '') break;
+      listIndex++;
+    }
+
+    const next = nodes[listIndex];
+    const list = isValidElement(next) && next.type === FlushList ? next : null;
+
+    grouped.push(
+      <KeepTogether key={`heading-${index}`}>
+        {node}
+        {list ? <BulletList>{list}</BulletList> : null}
+      </KeepTogether>
+    );
+
+    if (list) index = listIndex;
+  }
+
+  return grouped;
 }
 
 /**
@@ -71,14 +105,14 @@ export function splitResumeSections(children: ReactNode): ReactNode[][] {
 
   for (const node of flattenMdx(children)) {
     if (isSectionHeading(node) && current.length > 0) {
-      sections.push(current);
+      sections.push(groupHeadingLists(current));
       current = [node];
     } else {
       current.push(node);
     }
   }
 
-  if (current.length > 0) sections.push(current);
+  if (current.length > 0) sections.push(groupHeadingLists(current));
 
   return sections;
 }
@@ -96,7 +130,9 @@ export function ResumeSection({
   const heading = isSectionHeading(nodes[0]) ? nodes[0] : null;
   const content = heading ? nodes.slice(1) : nodes;
   const [first, ...rest] = content;
-  const bodyGap = content.some(isEntry)
+  const bodyGap = content.some(
+    (node) => isValidElement(node) && node.type === KeepTogether
+  )
     ? resumeTheme.spacing.componentGap
     : resumeTheme.spacing.paragraphGap;
 

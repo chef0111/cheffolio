@@ -77,7 +77,7 @@ function listItems(children: ReactNode) {
   });
 }
 
-/** Bullet list used inside Entry. Converts FlushItem rows to BulletItem. */
+/** Converts a resume heading's following list to bullet rows. */
 export function BulletList({ children }: WithChildren) {
   return (
     <View style={{ flexDirection: 'column', gap: 1, paddingBottom: 4 }}>

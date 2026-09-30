@@ -6,16 +6,11 @@ import remarkGfm from 'remark-gfm';
 import remarkMdx from 'remark-mdx';
 
 import { RESUME_CATEGORY } from '@/lib/document';
-import { remarkFlattenEntry } from '@/lib/remark-flatten-entry';
+import { parseResumeEntries } from '@/lib/parse-resume-entries';
+import { remarkResumeEntry } from '@/lib/remark-resume-entry';
 import type { Doc, ResumeDoc } from '@/types/document';
 
 const processor = remark().use(remarkMdx).use(remarkGfm).use(remarkHeading);
-
-const resumeProcessor = remark()
-  .use(remarkMdx)
-  .use(remarkGfm)
-  .use(remarkFlattenEntry)
-  .use(remarkHeading);
 
 function isResumeDoc(doc: Doc): doc is ResumeDoc {
   return doc.metadata.category === RESUME_CATEGORY;
@@ -39,10 +34,17 @@ export async function processMdxForLLMs(doc: Doc) {
   cacheLife('max');
 
   const resume = isResumeDoc(doc);
-
-  const processed = await (resume ? resumeProcessor : processor).process({
-    value: doc.content,
-  });
+  const { content, entries } = resume
+    ? parseResumeEntries(doc.content)
+    : { content: doc.content, entries: [] };
+  const mdxProcessor = resume
+    ? remark()
+        .use(remarkMdx)
+        .use(remarkGfm)
+        .use(remarkResumeEntry(entries, 'markdown'))
+        .use(remarkHeading)
+    : processor;
+  const processed = await mdxProcessor.process({ value: content });
 
   const header = resume ? resumeHeader(doc) : `# ${doc.metadata.title}`;
 

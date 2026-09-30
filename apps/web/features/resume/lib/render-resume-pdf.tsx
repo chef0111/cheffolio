@@ -4,7 +4,9 @@ import remarkGfm from 'remark-gfm';
 
 import { PdfcnThemeProvider } from '@/components/pdf/theme-provider';
 import { RESUME_FONT_FAMILY } from '@/config/resume';
+import { parseResumeEntries } from '@/lib/parse-resume-entries';
 import { pointToCssPixel } from '@/lib/pdfcn/pdf-primitives';
+import { remarkResumeEntry } from '@/lib/remark-resume-entry';
 import type { ResumeDoc } from '@/types/document';
 
 import { resumePdfComponents } from '../components/pdf/mdx-components';
@@ -64,11 +66,14 @@ function themed(node: ReactNode) {
 export async function renderResumePdf(doc: ResumeDoc): Promise<Uint8Array> {
   'use cache';
 
+  const { content: source, entries } = parseResumeEntries(doc.content);
   const { content } = await compileMDX({
-    source: doc.content,
+    source,
     components: resumePdfComponents,
     options: {
-      mdxOptions: { remarkPlugins: [remarkGfm] },
+      mdxOptions: {
+        remarkPlugins: [remarkGfm, remarkResumeEntry(entries, 'pdf')],
+      },
     },
   });
 
