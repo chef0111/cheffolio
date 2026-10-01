@@ -1,7 +1,6 @@
 import { mergeProps } from '@base-ui/react/merge-props';
 import { useRender } from '@base-ui/react/use-render';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { PlusIcon } from 'lucide-react';
 import React from 'react';
 
 import { cn } from '@/lib/utils';
@@ -63,7 +62,7 @@ export function getPanelDecorPositions(
   return PANEL_DECOR_POSITIONS.filter((position) => positions.has(position));
 }
 
-function PanelDecor({
+export function PanelDecor({
   className,
   position,
   ...props
@@ -76,14 +75,20 @@ function PanelDecor({
       className={cn(panelDecorVariants({ position }), className)}
       {...props}
     >
-      <PlusIcon
+      <svg
         data-slot="panel-plus-background"
-        className="stroke-background absolute size-7 stroke-5"
-      />
-      <PlusIcon
+        className="stroke-background absolute size-9 stroke-5"
+        viewBox="0 0 24 24"
+      >
+        <path d="M12 5v14M5 12h14" />
+      </svg>
+      <svg
         data-slot="panel-plus-icon"
         className="stroke-muted-foreground/40 relative size-full stroke-[1.5]"
-      />
+        viewBox="0 0 24 24"
+      >
+        <path d="M12 5v14M5 12h14" />
+      </svg>
     </span>
   );
 }

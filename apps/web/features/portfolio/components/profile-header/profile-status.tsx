@@ -33,7 +33,7 @@ export function ProfileStatus({ emoji, quote }: ProfileStatusProps) {
     <button
       type="button"
       className={cn(
-        'avatar-ring bg-background group/status extend-touch-target absolute bottom-3 left-25 z-10 flex cursor-default items-center text-xs select-none sm:bottom-3.5 sm:left-31.5 sm:text-sm'
+        'ring-border ring-offset-background bg-background group/status extend-touch-target absolute bottom-3 left-25 z-10 flex cursor-default items-center rounded-full border object-cover text-xs ring-1 ring-offset-2 select-none sm:bottom-3.5 sm:left-31.5 sm:text-sm'
       )}
       onClick={handleClick}
       onBlur={handleBlur}

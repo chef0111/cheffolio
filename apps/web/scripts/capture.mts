@@ -1,12 +1,14 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import type { Browser, Page } from 'puppeteer';
 import puppeteer from 'puppeteer';
 import sharp from 'sharp';
 
 const DEFAULT_ORIGIN = 'https://cheffolio.localhost';
-const outputDir = path.join(process.cwd(), '.cheffolio/screenshots');
+const scriptDir = path.dirname(fileURLToPath(import.meta.url));
+const outputDir = path.resolve(scriptDir, '../../../.cheffolio/screenshots');
 
 const SIZE = {
   desktop: {

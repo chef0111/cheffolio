@@ -31,13 +31,13 @@ export async function GET(request: Request) {
 
   return new ImageResponse(
     <div
-      tw="flex h-full w-full bg-[#09090b] text-white"
+      tw="flex h-full w-full text-white"
       style={{ fontFamily: 'Geist Sans', backgroundColor: '#09090b' }}
     >
-      <div tw="flex border absolute border-stone-700 border-dashed inset-y-0 left-16 w-[1px]" />
-      <div tw="flex border absolute border-stone-700 border-dashed inset-y-0 right-16 w-[1px]" />
-      <div tw="flex border absolute border-stone-700 inset-x-0 h-[1px] top-16" />
-      <div tw="flex border absolute border-stone-700 inset-x-0 h-[1px] bottom-16" />
+      <div tw="flex border absolute border-zinc-700 inset-y-0 left-16 w-[1px]" />
+      <div tw="flex border absolute border-zinc-700 inset-y-0 right-16 w-[1px]" />
+      <div tw="flex border absolute border-zinc-700 inset-x-0 h-[1px] top-16" />
+      <div tw="flex border absolute border-zinc-700 inset-x-0 h-[1px] bottom-16" />
 
       {PANEL_DECOR_POSITIONS.map((position, index) => (
         <div
@@ -46,26 +46,23 @@ export async function GET(request: Request) {
           style={{ ...position, width: 48, height: 48 }}
         >
           <svg
-            width={48}
-            height={48}
+            width={64}
+            height={64}
             viewBox="0 0 24 24"
             fill="none"
             stroke="#09090b"
             strokeWidth={5}
-            strokeLinecap="round"
             style={{ position: 'absolute' }}
           >
             <path d="M12 5v14M5 12h14" />
           </svg>
           <svg
-            width={30}
-            height={30}
+            width={32}
+            height={32}
             viewBox="0 0 24 24"
             fill="none"
-            stroke="#a9a9a9"
-            strokeOpacity={0.3}
-            strokeWidth={2.5}
-            strokeLinecap="round"
+            stroke="#494950"
+            strokeWidth={2}
           >
             <path d="M12 5v14M5 12h14" />
           </svg>
@@ -96,7 +93,7 @@ export async function GET(request: Request) {
           {title}
         </div>
         <div
-          tw="text-[40px] leading-[1.5] flex-grow-1 text-stone-400"
+          tw="text-[40px] leading-[1.5] flex-grow-1 text-zinc-400"
           style={{
             fontWeight: 500,
             textWrap: 'balance',
