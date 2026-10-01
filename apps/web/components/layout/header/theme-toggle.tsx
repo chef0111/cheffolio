@@ -3,7 +3,8 @@
 import { useCallback } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 
-import { MoonIcon, SunIcon } from '@/components/icons';
+import { MoonIcon } from '@/components/icons/moon';
+import { SunIcon } from '@/components/icons/sun';
 import { Button } from '@/components/ui/button';
 import { Kbd } from '@/components/ui/kbd';
 import {
@@ -13,18 +14,18 @@ import {
 } from '@/components/ui/tooltip';
 import { META_THEME_COLORS } from '@/config/site';
 import { useTheme } from '@/context/theme-provider';
-import { useMediaQuery } from '@/hooks/use-media-query';
 import { useMetaColor } from '@/hooks/use-meta-color';
-import { useSound } from '@/hooks/use-sound';
 import { haptic } from '@/lib/haptic';
 import { clickSoftSound } from '@/lib/soundcn/click-soft';
+import { playSound } from '@/lib/soundcn/sound-engine';
+
+function playToggleSound() {
+  void playSound(clickSoftSound.dataUri, { volume: 0.3 }).catch(() => {});
+}
 
 export default function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
   const { setMetaColor } = useMetaColor();
-
-  const isMobile = useMediaQuery('(max-width: 640px)');
-  const [playToggle] = useSound(clickSoftSound, { volume: 0.3 });
 
   const switchTheme = useCallback(() => {
     setTheme(resolvedTheme === 'light' ? 'dark' : 'light');
@@ -36,10 +37,13 @@ export default function ThemeToggle() {
   }, [resolvedTheme, setTheme, setMetaColor]);
 
   const toggleTheme = useCallback(() => {
-    playToggle();
+    playToggleSound();
     haptic();
 
-    if (!document.startViewTransition || isMobile) {
+    if (
+      !document.startViewTransition ||
+      window.matchMedia('(max-width: 640px)').matches
+    ) {
       switchTheme();
       return;
     }
@@ -50,18 +54,13 @@ export default function ThemeToggle() {
     void transition.finished.finally(() => {
       root.classList.remove('theme-transitioning');
     });
-  }, [playToggle, switchTheme, isMobile]);
+  }, [switchTheme]);
 
   useHotkeys(
     'd',
     () => {
-      playToggle();
-      setTheme(resolvedTheme === 'light' ? 'dark' : 'light');
-      setMetaColor(
-        resolvedTheme === 'dark'
-          ? META_THEME_COLORS.light
-          : META_THEME_COLORS.dark
-      );
+      playToggleSound();
+      switchTheme();
     },
     { preventDefault: true }
   );
