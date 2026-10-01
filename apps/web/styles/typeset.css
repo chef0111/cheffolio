@@ -57,31 +57,31 @@
     &:where(h1, h2, h3, h4, h5, h6) {
       color: var(--color-foreground, currentColor);
       font-family: var(--typeset-font-heading);
-      font-weight: 600;
+      font-weight: 500;
       margin-block-end: 0;
     }
     &:where(h1) {
-      font-size: 1.75em;
+      font-size: 2em;
       line-height: 1.3;
       margin-block-start: var(--typeset-flow);
     }
     &:where(h2) {
-      font-size: 1.25em;
+      font-size: 1.5em;
       line-height: 1.4;
       margin-block-start: calc(var(--typeset-flow) * 1.4);
     }
     &:where(h3) {
-      font-size: 1.125em;
+      font-size: 1.25em;
       line-height: 1.45;
       margin-block-start: var(--typeset-flow);
     }
     &:where(h4) {
-      font-size: 1em;
+      font-size: 1.125em;
       line-height: 1.5;
       margin-block-start: var(--typeset-flow);
     }
     &:where(h5) {
-      font-size: 0.875em;
+      font-size: 1em;
       line-height: 1.5;
       font-weight: 500;
       color: var(--typeset-muted);

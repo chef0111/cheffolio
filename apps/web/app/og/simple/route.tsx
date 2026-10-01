@@ -96,7 +96,7 @@ export async function GET(request: Request) {
           tw="text-[40px] leading-[1.5] flex-grow-1 text-zinc-400"
           style={{
             fontWeight: 500,
-            textWrap: 'balance',
+            textWrap: 'pretty',
           }}
         >
           {description}

@@ -1,6 +1,6 @@
 ---
-title: Next.js 16.3 didn't invent instant navigation
-description: Instant navigation didn't start with Next.js 16.3. What changed, and when should you enable the new features?
+title: Next.js had instant navigation before 16.3
+description: Next.js already supported instant navigation. What changed in 16.3, and when should you enable its new features?
 author: Gia Bảo
 avatar: https://assets.giabao.dev/chef0111-avatar.webp
 createdAt: 2026-09-30
@@ -18,7 +18,7 @@ My take is that the team wants more apps to follow the Cache Components model co
 
 Your existing app may already give users the immediate response they need. That matters when deciding what to enable.
 
-# "Instant" means the page starts showing up
+# What exactly does "instant" mean
 
 Think of a product page. You click a link and see the page structure with "Checking availability...". The stock count arrives later.
 
@@ -80,7 +80,7 @@ The distinction is practical. `Suspense` defines what can render during a wait. 
 
 You needed both pieces for immediate navigation before 16.3 too.
 
-# A `Suspense` boundary has to cover the wait
+# Put `Suspense` above the data fetch
 
 Having `Suspense` in a file doesn't guarantee useful loading UI. Look at this page without a `loading.tsx` boundary:
 
