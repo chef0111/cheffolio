@@ -10,6 +10,7 @@ import {
 import { StripeSeparator } from '@/components/cheffolio/stripe-separator';
 import { jsonLdBreadcrumbList, JsonLdScript } from '@/components/json-ld';
 import { X_PROFILE } from '@/config/site';
+import { CreateWorkspace } from '@/features/create/components/create-workspace';
 
 const title = 'Create';
 const description = 'The Create page is under construction. Check back later.';
@@ -63,6 +64,7 @@ export default function CreatePage() {
           </PageHeadingTitle>
           <PageHeadingDescription className="pt-0 pb-2">
             A space for creating new projects is on its way.
+            {/* {description} */}
           </PageHeadingDescription>
         </PageHeading>
 
@@ -83,6 +85,7 @@ export default function CreatePage() {
             Create is still in development. Please check back later.
           </p>
         </section>
+        {/* <CreateWorkspace /> */}
       </div>
       <StripeSeparator />
     </>
