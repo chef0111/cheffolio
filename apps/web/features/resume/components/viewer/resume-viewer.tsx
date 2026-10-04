@@ -1,7 +1,6 @@
 'use client';
 
 import { MaximizeIcon, ZoomInIcon, ZoomOutIcon } from 'lucide-react';
-import dynamic from 'next/dynamic';
 import React from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -10,6 +9,7 @@ import {
   ButtonGroupSeparator,
   ButtonGroupText,
 } from '@/components/ui/button-group';
+import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 
 import {
@@ -17,12 +17,7 @@ import {
   useResumePreviewReady,
   useResumeViewer,
 } from '../../context/resume-viewer-provider';
-import { ResumeViewerPlaceholder } from './resume-viewer-placeholder';
-
-const PdfPages = dynamic(
-  () => import('./pdf-pages').then((module) => module.PdfPages),
-  { ssr: false }
-);
+import { PdfPages } from './pdf-pages';
 
 /** Root: owns document URL, page count, and zoom. */
 export function ResumeViewer({
@@ -132,10 +127,10 @@ function ResumeViewerLoadingOverlay() {
     <div
       className={cn(
         'absolute inset-0 z-10 flex items-center',
-        isPreviewReady && 'pointer-events-none invisible'
+        isPreviewReady && 'pointer-events-none hidden'
       )}
     >
-      <ResumeViewerPlaceholder />
+      <Skeleton className="size-full rounded-none" />
     </div>
   );
 }

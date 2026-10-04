@@ -39,6 +39,8 @@ yarn-error.log*
 .scratch
 .codegraph
 CONTEXT.md
+docs/
+!apps/web/docs/*
 
 # env files (can opt-in for committing if needed)
 .env*
