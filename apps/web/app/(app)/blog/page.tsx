@@ -5,7 +5,7 @@ import type { Blog, WithContext } from 'schema-dts';
 import { simpleOgImageUrl } from '@/app/og/params';
 import {
   PageHeading,
-  PageHeadingTagline,
+  PageHeadingDescription,
   PageHeadingTitle,
 } from '@/components/cheffolio/page-heading';
 import { StripeSeparator } from '@/components/cheffolio/stripe-separator';
@@ -19,7 +19,7 @@ import { SearchInput } from '@/features/blog/components/search-input';
 import { getBlogPosts } from '@/lib/document';
 import { absoluteUrl } from '@/lib/utils';
 
-const title = 'Blog';
+const title = 'Dev Blog';
 const description =
   'Ideas, experiments, and insights from my journey as a developer.';
 
@@ -86,10 +86,12 @@ export default function BlogsPage() {
 
       <div className="mx-auto flex flex-1 flex-col md:max-w-4xl">
         <PageHeading className="pt-12">
-          <PageHeadingTagline>{title}</PageHeadingTagline>
-          <PageHeadingTitle className="decor-t screen-line-bottom-none">
-            {description}
+          <PageHeadingTitle className="decor-t screen-line-bottom-none pt-2 pb-0">
+            {title}
           </PageHeadingTitle>
+          <PageHeadingDescription className="pt-0 pb-2">
+            {description}
+          </PageHeadingDescription>
         </PageHeading>
 
         <StripeSeparator />

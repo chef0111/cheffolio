@@ -13,7 +13,7 @@ import { X_PROFILE } from '@/config/site';
 import { CreateWorkspace } from '@/features/create/components/create-workspace';
 
 const title = 'Create';
-const description = 'The Create page is under construction. Check back later.';
+const description = 'The Full-stack React Starter Kit for your next project';
 const ogImage = simpleOgImageUrl(title, description);
 const CREATE_PATH = '/create';
 
@@ -63,8 +63,7 @@ export default function CreatePage() {
             {title}
           </PageHeadingTitle>
           <PageHeadingDescription className="pt-0 pb-2">
-            A space for creating new projects is on its way.
-            {/* {description} */}
+            {description}
           </PageHeadingDescription>
         </PageHeading>
 
