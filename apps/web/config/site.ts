@@ -1,7 +1,7 @@
 import {
   FileUserIcon,
   HomeIcon,
-  LayoutPanelLeftIcon,
+  LayersPlusIcon,
   NewspaperIcon,
 } from 'lucide-react';
 
@@ -56,7 +56,7 @@ export const MOBILE_NAV: NavItem[] = [
   {
     title: 'Create',
     href: '/create',
-    icon: LayoutPanelLeftIcon,
+    icon: LayersPlusIcon,
   },
 ];
 

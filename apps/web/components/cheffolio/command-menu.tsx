@@ -9,7 +9,7 @@ import {
   FileUser,
   HomeIcon,
   LayersIcon,
-  LayoutPanelLeftIcon,
+  LayersPlusIcon,
   MailIcon,
   MonitorIcon,
   MoonStarIcon,
@@ -87,7 +87,7 @@ const MENU_LINKS: CommandLinkItem[] = [
     title: 'Create',
     href: '/create',
     type: 'page',
-    icon: LayoutPanelLeftIcon,
+    icon: LayersPlusIcon,
   },
 ];
 
