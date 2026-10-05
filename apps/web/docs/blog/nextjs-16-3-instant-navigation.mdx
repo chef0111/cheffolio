@@ -4,21 +4,23 @@ description: Next.js already supported instant navigation. What changed in 16.3,
 author: Gia Bảo
 avatar: https://assets.giabao.dev/chef0111-avatar.webp
 createdAt: 2026-09-30
-updatedAt: 2026-09-30
+updatedAt: 2026-10-05
 tags: ['Next.js', 'Instant Navigation', 'Performance']
 ---
 
-> You could build instant navigation before Next.js 16.3.
+It's been a while since [Next.js 16.3 announcement](https://nextjs.org/blog/next-16-3-instant-navigations) and the excitement around it has settled. If you read about "Instant Navigation" when it came out, you may have already moved on.
 
-If you already use the App Router, `loading.tsx`, and `Suspense`, you know the pattern. A link click shows loading UI while the server fetches the remaining content.
+However I wanted to revisit it with a question:
 
-The [16.3 announcement](https://nextjs.org/blog/next-16-3-instant-navigations) builds on that pattern with new prefetching behavior and tools to check your navigations.
+> What does this update change for an app that already gives users an immediate response?
 
-My take is that the team wants more apps to follow the Cache Components model consistently. The new features help you do that, especially when coding agents change your routes.
+You could build instant navigation before 16.3. If you already use the App Router, `loading.tsx`, and `Suspense`, you may know the pattern. Once prefetched, loading UI appears on a link click while the server fetches the remaining content.
 
-Your existing app may already give users the immediate response they need. That matters when deciding what to enable.
+16.3 builds on that pattern with new prefetching behavior and tools to check your navigations. My take is that the team wants more apps to follow the Cache Components model consistently, especially when coding agents change your routes.
 
-# What exactly does "instant" mean
+Whether those features help your app depends on what you already have and what you want Next.js to check for you.
+
+## What exactly does "instant" mean
 
 Think of a product page. You click a link and see the page structure with "Checking availability...". The stock count arrives later.
 
@@ -26,7 +28,7 @@ That's an instant navigation. The browser shows destination UI without waiting f
 
 The initial UI still has to be ready before the click. A cold cache or an unfinished prefetch can cause a wait, as the [instant navigation guide](https://nextjs.org/docs/app/guides/instant-navigation#what-instant-means) explains.
 
-# You could already do this in Next.js 15
+## You could already do this in Next.js 15
 
 The [Next.js 15 docs](https://nextjs.org/docs/15/app/api-reference/file-conventions/loading) already described instant loading states through `loading.tsx`.
 
@@ -80,7 +82,7 @@ The distinction is practical. `Suspense` defines what can render during a wait. 
 
 You needed both pieces for immediate navigation before 16.3 too.
 
-# Put `Suspense` above the data fetch
+## Put `Suspense` above the data fetch
 
 Having `Suspense` in a file doesn't guarantee useful loading UI. Look at this page without a `loading.tsx` boundary:
 
@@ -149,7 +151,7 @@ async function Inventory({ params }: ProductPageProps) {
 
 Now "Product details" and the fallbacks can render while the children fetch their data independently. This structure supported streaming before 16.3.
 
-## Cache Components builds on that pattern
+### Cache Components builds on that pattern
 
 With Cache Components, Next.js also prepares eligible UI ahead of time. Partial Prefetching makes the reusable UI available before navigation.
 
@@ -181,11 +183,11 @@ export async function getInventory(slug: string) {
 
 Inventory stays uncached and loads behind its own fallback. You choose that split based on how fresh each piece of data needs to be.
 
-# What actually changes in 16.3
+## What actually changes in 16.3
 
 The router changes what it prefetches, and the development tools help you spot navigations that block. Those are concrete reasons to consider the update.
 
-## Links can share one loading shell
+### Links can share one loading shell
 
 With [Partial Prefetching](https://nextjs.org/docs/app/api-reference/config/next-config-js/partialPrefetching), Next.js prefetches one reusable App Shell per route. That shell contains initial UI that doesn't depend on a particular link's URL.
 
@@ -226,7 +228,7 @@ There's a migration detail here. Previously, `prefetch={true}` could include unc
 
 If your app relies on full prefetches, review them before enabling the flag. The [migration guide](https://nextjs.org/docs/app/guides/adopting-partial-prefetching) covers what to preserve.
 
-## Next.js can show you what blocks
+### Next.js can show you what blocks
 
 With Cache Components enabled, [Instant Insights and Navigation Inspector](https://nextjs.org/blog/next-16-3#instant-navigations) help you check what happens on a link click.
 
@@ -242,7 +244,7 @@ That export controls validation. It doesn't disable prefetching or remove a load
 
 16.3 also [improves ISR for URLs you didn't prerender at build time](https://nextjs.org/docs/app/guides/incremental-static-regeneration-cache-components). Those URLs can serve a loading shell while Next.js prepares the prerendered result in the background.
 
-# Why I'd enable this for coding agents
+## Why I'd enable this for coding agents
 
 An instruction like "use `Suspense` for slow data" leaves room for mistakes. The earlier example already shows one.
 
@@ -305,7 +307,7 @@ The testing API option belongs in the build used for these tests. Your deployed 
 
 You still decide what needs to appear immediately and what must stay fresh. A passing check can't tell you whether a full-page spinner is a good experience.
 
-# So, should you enable the new features?
+## So, should you enable the new features?
 
 If your app already navigates responsively, you can keep your approach. Knowing your loading boundaries and prefetch behavior matters more than adopting a new feature name.
 
