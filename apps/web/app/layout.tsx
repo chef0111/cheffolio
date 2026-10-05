@@ -138,9 +138,11 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        <Script id="theme-init" strategy="beforeInteractive">
-          {darkModeScript}
-        </Script>
+        <script
+          type="text/javascript"
+          dangerouslySetInnerHTML={{ __html: darkModeScript }}
+        />
+        <Script src={`data:text/javascript;base64,${btoa(darkModeScript)}`} />
         <JsonLdScript data={getWebSiteJsonLd()} />
       </head>
       <body>
