@@ -39,10 +39,10 @@ export default function Page() {
         <About />
         <StripeSeparator />
 
-        <Blog />
+        <TechStack />
         <StripeSeparator />
 
-        <TechStack />
+        <Blog />
         <StripeSeparator />
 
         <Experiences />
