@@ -6,17 +6,17 @@ Next.js 16 (App Router) portfolio, blog, and shadcn registry website.
 
 ## Project structure
 
-| Directory | Purpose |
-| -------------------------- | -------------------------------------------------------- |
-| `apps/web/` | Next.js site (App Router, blog, Create, resume) |
-| `packages/create-gb-app/` | CLI and generate/preset source the site imports |
-| `apps/web/app/` | App Router pages, layouts, API routes |
-| `apps/web/components/cheffolio/` | Shared UI components |
-| `apps/web/features/` | Feature modules: `blog`, `portfolio`, `create`, `resume` |
-| `apps/web/config/` | Site (`site.ts`), JSON-LD config |
-| `apps/web/scripts/` | Build scripts (capture) run with Bun |
-| `apps/web/hooks/`, `lib/`, `utils/` | Hooks, libraries, utilities |
-| `apps/web/docs/` | Documentation content (blog, resume) |
+| Directory                           | Purpose                                                  |
+| ----------------------------------- | -------------------------------------------------------- |
+| `apps/web/`                         | Next.js site (App Router, blog, Create, resume)          |
+| `packages/create-gb-app/`           | CLI and generate/preset source the site imports          |
+| `apps/web/app/`                     | App Router pages, layouts, API routes                    |
+| `apps/web/components/cheffolio/`    | Shared UI components                                     |
+| `apps/web/features/`                | Feature modules: `blog`, `portfolio`, `create`, `resume` |
+| `apps/web/config/`                  | Site (`site.ts`), JSON-LD config                         |
+| `apps/web/scripts/`                 | Build scripts (capture) run with Bun                     |
+| `apps/web/hooks/`, `lib/`, `utils/` | Hooks, libraries, utilities                              |
+| `apps/web/docs/`                    | Documentation content (blog, resume)                     |
 
 ## Content system
 

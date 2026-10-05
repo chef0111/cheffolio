@@ -14,7 +14,11 @@ if (!doc) {
 
 const pdf = await renderResumePdf(doc);
 
-await mkdir(path.dirname(OUTPUT_PATH), { recursive: true });
-await writeFile(OUTPUT_PATH, pdf);
+if (process.argv.includes('--stdout')) {
+  process.stdout.write(pdf);
+} else {
+  await mkdir(path.dirname(OUTPUT_PATH), { recursive: true });
+  await writeFile(OUTPUT_PATH, pdf);
 
-console.log(`Wrote ${OUTPUT_PATH} (${pdf.byteLength} bytes)`);
+  console.log(`Wrote ${OUTPUT_PATH} (${pdf.byteLength} bytes)`);
+}

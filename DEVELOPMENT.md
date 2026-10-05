@@ -51,6 +51,8 @@ bun run dev
 
 The application should now be available at https://cheffolio.localhost. `bun run dev` runs `turbo run dev --filter=web`. The public origin stays `https://cheffolio.localhost`.
 
+In development, `/resume.pdf` renders from the current MDX and PDF components on each request. Refresh `/resume` after editing content or PDF styles. Production continues serving the static PDF generated before `next build`.
+
 ## Building for Production
 
 ```bash

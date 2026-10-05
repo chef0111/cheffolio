@@ -73,6 +73,9 @@ const nextConfig: NextConfig = {
     return {
       // beforeFiles so these run before prerendered pages are served;
       beforeFiles: [
+        ...(process.env.NODE_ENV === 'development'
+          ? [{ source: '/resume.pdf', destination: '/api/resume' }]
+          : []),
         {
           source: '/:section(blog|resume)/:slug.md',
           destination: '/doc.md/:slug',
