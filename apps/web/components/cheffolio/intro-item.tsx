@@ -69,7 +69,7 @@ export function IntroItemLink({
   return (
     <a
       data-slot="intro-item-link"
-      className={cn('underline-offset-4 hover:underline', className)}
+      className={className}
       target="_blank"
       rel="noopener"
       title="Open link"

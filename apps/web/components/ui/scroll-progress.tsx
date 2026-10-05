@@ -146,7 +146,7 @@ function ScrollProgressTrigger() {
       onPointerDown={() => setKeyboardInteraction(false)}
       className={cn(
         'text-surface-foreground relative flex h-12 items-center gap-4 rounded-full pr-3 pl-4 text-left text-base font-medium outline-none',
-        !open && 'max-w-64',
+        !open && 'max-w-64 min-w-44',
         keyboardInteraction && 'transition-none active:scale-100'
       )}
     >

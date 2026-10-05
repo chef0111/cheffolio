@@ -1,12 +1,13 @@
 import { DownloadIcon, FileUser } from 'lucide-react';
+import Link from 'next/link';
 
 import {
   IntroItem,
   IntroItemContent,
   IntroItemIcon,
-  IntroItemLink,
 } from '@/components/cheffolio/intro-item';
 import { Button } from '@/components/ui/button';
+import { DrawUnderline } from '@/components/ui/draw-underline';
 import { RESUME_PDF_FILENAME } from '@/config/resume';
 import { USER } from '@/features/portfolio/data/user';
 
@@ -18,9 +19,9 @@ export function ResumeItem() {
       </IntroItemIcon>
 
       <IntroItemContent>
-        <IntroItemLink href={USER.resume!} aria-label="Personal resume">
-          Personal Resume
-        </IntroItemLink>
+        <Link href={USER.resume!} aria-label="Personal resume">
+          <DrawUnderline>Personal Resume</DrawUnderline>
+        </Link>
       </IntroItemContent>
 
       <div className="ease-out-cubic -translate-x-3 opacity-0 transition-opacity group-hover:opacity-100">

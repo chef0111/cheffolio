@@ -10,6 +10,7 @@ import {
   IntroItemIcon,
   IntroItemLink,
 } from '@/components/cheffolio/intro-item';
+import { DrawUnderline } from '@/components/ui/draw-underline';
 import { UTM_PARAMS } from '@/config/site';
 import { addQueryParams } from '@/utils/url';
 
@@ -46,7 +47,7 @@ export function JobItem({
                 rel: 'noopener noreferrer',
               })}
         >
-          {company}
+          <DrawUnderline>{company}</DrawUnderline>
         </IntroItemLink>
       </IntroItemContent>
     </IntroItem>

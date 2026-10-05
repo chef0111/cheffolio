@@ -9,7 +9,7 @@ import {
   FileUser,
   HomeIcon,
   LayersIcon,
-  LayoutPanelLeftIcon,
+  LayersPlusIcon,
   MailIcon,
   MonitorIcon,
   MoonStarIcon,
@@ -87,7 +87,7 @@ const MENU_LINKS: CommandLinkItem[] = [
     title: 'Create',
     href: '/create',
     type: 'page',
-    icon: LayoutPanelLeftIcon,
+    icon: LayersPlusIcon,
   },
 ];
 
@@ -103,6 +103,12 @@ const PORTFOLIO_LINKS: CommandLinkItem[] = [
     href: '/#stack',
     type: 'section',
     icon: LayersIcon,
+  },
+  {
+    title: 'Blog',
+    href: '/#blog',
+    type: 'section',
+    icon: NewspaperIcon,
   },
   {
     title: 'Experience',
@@ -272,11 +278,8 @@ export function CommandMenuDialog({ blogs }: { blogs: DocPreview[] }) {
           />
 
           <CommandGroup heading="Personal Info">
-            <CommandItem onSelect={() => handleOpenLink(USER.resume!)}>
-              <FileUser className="text-muted-foreground" />
-              Personal Resume
-            </CommandItem>
             <CommandItem
+              onMouseEnter={() => setSelectedCommandType('command')}
               onSelect={() =>
                 handleDownload(USER.resumeDownloadUrl!, RESUME_PDF_FILENAME)
               }
@@ -285,6 +288,7 @@ export function CommandMenuDialog({ blogs }: { blogs: DocPreview[] }) {
               Download Resume
             </CommandItem>
             <CommandItem
+              onMouseEnter={() => setSelectedCommandType('command')}
               onSelect={() => {
                 handleCopy(
                   decodeEmail(USER.email),
@@ -296,6 +300,7 @@ export function CommandMenuDialog({ blogs }: { blogs: DocPreview[] }) {
               Copy Email Address
             </CommandItem>
             <CommandItem
+              onMouseEnter={() => setSelectedCommandType('command')}
               onSelect={() => {
                 handleCopy(
                   decodePhoneNumber(USER.phoneNumber),
@@ -311,6 +316,7 @@ export function CommandMenuDialog({ blogs }: { blogs: DocPreview[] }) {
           <CommandGroup heading="Theme">
             <CommandItem
               keywords={['theme']}
+              onMouseEnter={() => setSelectedCommandType('command')}
               onSelect={() => handleSetTheme('light')}
             >
               <SunMediumIcon className="text-muted-foreground" />
@@ -318,6 +324,7 @@ export function CommandMenuDialog({ blogs }: { blogs: DocPreview[] }) {
             </CommandItem>
             <CommandItem
               keywords={['theme']}
+              onMouseEnter={() => setSelectedCommandType('command')}
               onSelect={() => handleSetTheme('dark')}
             >
               <MoonStarIcon className="text-muted-foreground" />
@@ -325,6 +332,7 @@ export function CommandMenuDialog({ blogs }: { blogs: DocPreview[] }) {
             </CommandItem>
             <CommandItem
               keywords={['theme']}
+              onMouseEnter={() => setSelectedCommandType('command')}
               onSelect={() => handleSetTheme('system')}
             >
               <MonitorIcon className="text-muted-foreground" />

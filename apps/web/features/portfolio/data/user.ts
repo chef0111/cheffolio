@@ -1,11 +1,10 @@
-import { RESUME_PATH, RESUME_PDF_PATH } from '@/config/resume';
 import type { User } from '@/features/portfolio/types/user';
 
 export const USER: User = {
   firstName: 'Gia Bảo',
   lastName: 'Lê Trần',
   displayName: 'Gia Bảo',
-  username: 'chef0111',
+  username: 'gbaolt',
   alternateName: ['Lê Trần Gia Bảo', 'chef0111', 'giabao', 'baoltg', 'gbaolt'],
   gender: 'male',
   pronouns: 'he/him',
@@ -28,8 +27,8 @@ export const USER: User = {
       website: 'https://uit.edu.vn',
     },
   ],
-  resume: RESUME_PATH,
-  resumeDownloadUrl: RESUME_PDF_PATH,
+  resume: '/resume',
+  resumeDownloadUrl: '/resume.pdf',
   skills: [
     'React',
     'Next.js',
@@ -77,6 +76,9 @@ export const USER: User = {
     'giabao dev portfolio',
     'giabao.dev portfolio',
     'gia bảo dev portfolio',
+    'gbaolt',
+    'gbaolt dev',
+    '@gbaolt',
     'chef0111',
     'chef0111 dev',
     '@chef0111',

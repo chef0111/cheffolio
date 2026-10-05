@@ -13,6 +13,7 @@ import {
   IntroItemLink,
 } from '@/components/cheffolio/intro-item';
 import { Panel, PanelContent } from '@/components/cheffolio/panel';
+import { DrawUnderline } from '@/components/ui/draw-underline';
 import { USER } from '@/features/portfolio/data/user';
 import type { User } from '@/features/portfolio/types/user';
 import { urlToName } from '@/utils/url';
@@ -61,7 +62,7 @@ export function Overview() {
                 href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(USER.address)}`}
                 aria-label={`Location: ${USER.address}`}
               >
-                {USER.address}
+                <DrawUnderline>{USER.address}</DrawUnderline>
               </IntroItemLink>
             </IntroItemContent>
           </IntroItem>
@@ -79,7 +80,7 @@ export function Overview() {
                 href={USER.website}
                 aria-label={`Personal website: ${urlToName(USER.website)}`}
               >
-                {urlToName(USER.website)}
+                <DrawUnderline>{urlToName(USER.website)}</DrawUnderline>
               </IntroItemLink>
             </IntroItemContent>
           </IntroItem>
