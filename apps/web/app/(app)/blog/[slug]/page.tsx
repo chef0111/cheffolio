@@ -11,13 +11,7 @@ import type { BlogPosting, WithContext } from 'schema-dts';
 import { simpleOgImageUrl } from '@/app/og/params';
 import { FullWidthDivider } from '@/components/cheffolio/full-width-divider';
 import { MDCopyButtonGroup } from '@/components/cheffolio/page-actions';
-import {
-  Panel,
-  PanelContent,
-  PanelDescription,
-  PanelHeader,
-  PanelTitle,
-} from '@/components/cheffolio/panel';
+import { Panel, PanelContent, PanelHeader } from '@/components/cheffolio/panel';
 import { ShareMenu } from '@/components/cheffolio/share-menu';
 import { StripeSeparator } from '@/components/cheffolio/stripe-separator';
 import { jsonLdBreadcrumbList, JsonLdScript } from '@/components/json-ld';
@@ -293,12 +287,12 @@ export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
 
             <Panel className="decor-t screen-line-bottom-none screen-line-top-none flex flex-1 flex-col p-0">
               <PanelHeader className="decor-b py-2">
-                <PanelTitle className="screen-line-bottom-none text-4xl font-medium tracking-tight text-balance">
+                <h1 className="screen-line-bottom-none text-4xl font-medium tracking-tight text-balance">
                   {blog.metadata.title}
-                </PanelTitle>
-                <PanelDescription className="py-1 text-base">
+                </h1>
+                <p className="text-muted-foreground py-1 text-base">
                   {blog.metadata.description}
-                </PanelDescription>
+                </p>
               </PanelHeader>
 
               <PanelContent className="p-0">
