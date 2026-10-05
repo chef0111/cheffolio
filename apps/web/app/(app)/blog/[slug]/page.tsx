@@ -285,7 +285,7 @@ export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
 
             <StripeSeparator />
 
-            <Panel className="decor-t screen-line-bottom-none screen-line-top-none flex flex-1 flex-col p-0">
+            <Panel className="decor-t screen-line-bottom-none screen-line-top-none z-0 flex flex-1 flex-col p-0">
               <PanelHeader className="decor-b py-2">
                 <h1 className="screen-line-bottom-none text-4xl font-medium tracking-tight text-balance">
                   {blog.metadata.title}
