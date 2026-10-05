@@ -1,0 +1,112 @@
+import type { Metadata } from 'next';
+import { Suspense } from 'react';
+import type { Blog, WithContext } from 'schema-dts';
+
+import { simpleOgImageUrl } from '@/app/og/params';
+import {
+  PageHeading,
+  PageHeadingDescription,
+  PageHeadingTitle,
+} from '@/components/cheffolio/page-heading';
+import { StripeSeparator } from '@/components/cheffolio/stripe-separator';
+import { jsonLdBreadcrumbList, JsonLdScript } from '@/components/json-ld';
+import { JSON_LD_ID } from '@/config/json-ld';
+import { X_PROFILE } from '@/config/site';
+import { BlogList } from '@/features/blog/components/blog-list';
+import { BlogListFiltered } from '@/features/blog/components/blog-list-filtered';
+import { BlogSearchInput } from '@/features/blog/components/blog-search-input';
+import { SearchInput } from '@/features/blog/components/search-input';
+import { getBlogPosts } from '@/lib/document';
+import { absoluteUrl } from '@/lib/utils';
+
+const title = 'Dev Blog';
+const description =
+  'Ideas, experiments, and insights from my journey as a developer.';
+
+const ogImage = simpleOgImageUrl(title, description);
+
+export const metadata: Metadata = {
+  title,
+  description,
+  alternates: {
+    canonical: '/blog',
+  },
+  openGraph: {
+    url: '/blog',
+    type: 'website',
+    images: {
+      url: ogImage,
+      width: 1200,
+      height: 630,
+      alt: title,
+    },
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: X_PROFILE,
+    creator: X_PROFILE,
+    images: [ogImage],
+  },
+};
+
+function getBlogJsonLd(
+  blogs: { slug: string; metadata: { title: string; createdAt: string } }[]
+): WithContext<Blog> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Blog',
+    '@id': absoluteUrl('/blog'),
+    name: title,
+    description,
+    url: absoluteUrl('/blog'),
+    isPartOf: { '@id': JSON_LD_ID.website },
+    blogPost: blogs.map((blog) => ({
+      '@type': 'BlogPosting',
+      '@id': absoluteUrl(`/blog/${blog.slug}`),
+      headline: blog.metadata.title,
+      url: absoluteUrl(`/blog/${blog.slug}`),
+      datePublished: new Date(blog.metadata.createdAt).toISOString(),
+    })),
+  };
+}
+
+export default function BlogsPage() {
+  const blogPosts = getBlogPosts();
+
+  return (
+    <div className="flex w-full flex-1 flex-col">
+      <JsonLdScript data={getBlogJsonLd(blogPosts)} />
+
+      <JsonLdScript
+        data={jsonLdBreadcrumbList([
+          { name: 'Home', href: '/' },
+          { name: 'Blog', href: '/blog' },
+        ])}
+      />
+
+      <div className="mx-auto flex flex-1 flex-col md:max-w-4xl">
+        <PageHeading className="pt-12">
+          <PageHeadingTitle className="decor-t screen-line-bottom-none pt-2 pb-0">
+            {title}
+          </PageHeadingTitle>
+          <PageHeadingDescription className="pt-0 pb-2">
+            {description}
+          </PageHeadingDescription>
+        </PageHeading>
+
+        <StripeSeparator />
+
+        <div className="border-x p-2">
+          <Suspense fallback={<SearchInput />}>
+            <BlogSearchInput />
+          </Suspense>
+        </div>
+
+        <Suspense fallback={<BlogList blogs={blogPosts} />}>
+          <BlogListFiltered blogs={blogPosts} />
+        </Suspense>
+        <StripeSeparator />
+      </div>
+    </div>
+  );
+}

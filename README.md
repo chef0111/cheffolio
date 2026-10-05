@@ -18,12 +18,13 @@
 
 → Official live site: [giabao.dev](https://giabao.dev)
 
-## Features
+## Featured
 
 - Sectioned portfolio layout
 - Supports `Light` and `Dark` themes
 - Keyboard-first command menu — `Ctrl + K` | `⌘ + K`
 - SEO optimized (Open Graph, Twitter metadata, JSON-LD, sitemap, robots)
+- Latest Next.js 16 practices — Cache Components, Instant Navigations,…
 - Installable as a PWA
 
 ## Stats

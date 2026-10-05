@@ -1,0 +1,12 @@
+ create-gb-app my-gb-app --auth none       
+  ▶ Self                                
+    Nest                                
+    Convex                              
+  ▶ Next                                
+    Start                               
+ AutBetter Auth                         
+    Clerk                               
+ ┌────────────────────────────────────┐ 
+ │Command                             │ 
+ └APIavisibleilableapp─--auth─none────┘ 
+ Tab cycles. Escape exits. Enter on     

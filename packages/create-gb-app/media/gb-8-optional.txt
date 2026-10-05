@@ -1,0 +1,2 @@
+PASS
+wrapper keys=name,version,license,bin,scripts,os,cpu,optionalDependencies

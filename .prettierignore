@@ -6,4 +6,3 @@ coverage
 .prettierignore
 .eslintignore
 stories
-docs

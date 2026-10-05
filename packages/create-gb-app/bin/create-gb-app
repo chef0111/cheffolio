@@ -1,0 +1,5 @@
+#!/bin/sh
+echo "Error: create-gb-app's postinstall script was not run." >&2
+echo "" >&2
+echo "This occurs when using --ignore-scripts during installation." >&2
+exit 1

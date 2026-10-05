@@ -1,0 +1,81 @@
+import type { EmitCtx } from '../../types/generate';
+import { DEPENDENCY_VERSIONS } from '../dependency-versions';
+import { setFile } from '../files';
+import { isAppsLayout, isStart } from '../paths';
+
+export function emitStripe(ctx: EmitCtx): void {
+  ctx.pkg.dependencies.stripe = DEPENDENCY_VERSIONS['stripe'];
+  const webhookPath = isAppsLayout(ctx.stack)
+    ? 'apps/server/src/stripe.webhook.ts'
+    : isStart(ctx.stack)
+      ? 'src/routes/api/stripe/webhook.ts'
+      : 'app/api/stripe/webhook/route.ts';
+  const portalPath = isAppsLayout(ctx.stack)
+    ? 'apps/web/app/portal/page.tsx'
+    : isStart(ctx.stack)
+      ? 'src/routes/portal.tsx'
+      : 'app/portal/page.tsx';
+  const checkoutPath = isAppsLayout(ctx.stack)
+    ? 'apps/server/src/stripe.checkout.ts'
+    : isStart(ctx.stack)
+      ? 'src/routes/api/stripe/checkout.ts'
+      : 'app/api/stripe/checkout/route.ts';
+
+  setFile(
+    ctx.files,
+    webhookPath,
+    `export async function POST(request: Request) {
+  const stripe = new (await import("stripe")).default(process.env.STRIPE_SECRET_KEY as string);
+  const body = await request.text();
+  const signature = request.headers.get("stripe-signature");
+  if (!signature) {
+    return new Response("missing signature", { status: 400 });
+  }
+  stripe.webhooks.constructEvent(body, signature, process.env.STRIPE_WEBHOOK_SECRET as string);
+  return new Response("ok");
+}
+`
+  );
+  setFile(
+    ctx.files,
+    portalPath,
+    `export default function PortalPage() {
+  return (
+    <main>
+      <h1>Customer portal</h1>
+      <form action="/api/stripe/portal" method="post">
+        <button type="submit">Open portal</button>
+      </form>
+    </main>
+  );
+}
+`
+  );
+  setFile(
+    ctx.files,
+    checkoutPath,
+    `export async function POST() {
+  const stripe = new (await import("stripe")).default(process.env.STRIPE_SECRET_KEY as string);
+  const session = await stripe.checkout.sessions.create({
+    mode: "subscription",
+    line_items: [{ price: process.env.STRIPE_PRO_PRICE_ID, quantity: 1 }],
+    success_url: "http://localhost:3000/notes",
+    cancel_url: "http://localhost:3000/notes",
+  });
+  return Response.redirect(session.url ?? "/notes", 303);
+}
+`
+  );
+
+  const env = ctx.files['.env'] ?? '';
+  const extra = `STRIPE_SECRET_KEY="sk_test_replace_me"
+STRIPE_WEBHOOK_SECRET="whsec_replace_me"
+STRIPE_PRO_PRICE_ID="price_pro"
+`;
+  setFile(ctx.files, '.env', `${env}${extra}`);
+  setFile(
+    ctx.files,
+    '.env.example',
+    `${ctx.files['.env.example'] ?? env}${extra}`
+  );
+}

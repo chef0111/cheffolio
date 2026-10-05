@@ -1,0 +1,37 @@
+drizzle on Self
+PASS schema=true prisma=false
+.env
+.env.example
+.gitignore
+app/
+app/globals.css
+app/layout.tsx
+app/notes/
+app/notes/notes-client.tsx
+app/notes/page.tsx
+app/page.tsx
+app/providers.tsx
+app/rpc/
+app/rpc/[[...rest]]/
+app/rpc/[[...rest]]/route.ts
+components/
+components/ui/
+components/ui/button.tsx
+components/ui/card.tsx
+components/ui/input.tsx
+components.json
+drizzle.config.ts
+eslint.config.mjs
+lib/
+lib/db.ts
+lib/orpc.ts
+lib/query-client.ts
+lib/schema.ts
+lib/utils.ts
+next-env.d.ts
+next.config.ts
+package.json
+postcss.config.mjs
+prettier.config.mjs
+router.ts
+tsconfig.json

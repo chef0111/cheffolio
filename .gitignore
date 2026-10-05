@@ -1,8 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
-/.pnp
+node_modules
+.pnp
 .pnp.*
 .yarn/*
 !.yarn/patches
@@ -11,11 +11,15 @@
 !.yarn/versions
 
 # testing
-/coverage
+coverage
 
 # next.js
-/.next/
-/out/
+.next/
+out/
+
+# generated
+public/resume.pdf
+apps/web/public/resume.pdf
 
 # production
 /build
@@ -23,7 +27,6 @@
 # misc
 .DS_Store
 *.pem
-.codegraph
 
 # debug
 npm-debug.log*
@@ -31,7 +34,13 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
+# cheffolio
 .cheffolio
+.scratch
+.codegraph
+CONTEXT.md
+docs/
+!apps/web/docs/
 
 # env files (can opt-in for committing if needed)
 .env*
@@ -46,3 +55,7 @@ next-env.d.ts
 
 # eslint
 .eslintcache
+
+# turbo
+.turbo
+

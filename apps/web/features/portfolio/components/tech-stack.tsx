@@ -1,0 +1,94 @@
+import {
+  Panel,
+  PanelContent,
+  PanelHeader,
+  PanelTitle,
+} from '@/components/cheffolio/panel';
+import { cn } from '@/lib/utils';
+
+import { TECH_STACK } from '../data/tech-stack';
+import type { TechStack as TechStackType } from '../types/tech-stack';
+
+const ID = 'stack';
+
+const categories = Object.entries(groupByCategory(TECH_STACK));
+
+export function TechStack() {
+  return (
+    <Panel id={ID} className="screen-line-bottom-none screen-line-top-none">
+      <PanelHeader className="decor-b">
+        <PanelTitle>Tech Stack</PanelTitle>
+      </PanelHeader>
+
+      <PanelContent className="p-0 [--badge-height:--spacing(7.5)] [--col-left-width:--spacing(48)]">
+        <ul>
+          <div
+            className="pointer-events-none absolute inset-y-0 left-(--col-left-width) -z-1 w-px bg-[linear-gradient(to_bottom,var(--border)_4px,transparent_2px)] bg-size-[1px_6px] bg-repeat-y max-sm:hidden"
+            aria-hidden
+          />
+
+          {categories.map(([category, items], index) => {
+            const categoryId = `${ID}-${category
+              .toLowerCase()
+              .replace(/[^a-z0-9]+/g, '-')
+              .replace(/(^-|-$)/g, '')}`;
+
+            return (
+              <li
+                key={category}
+                className={cn(
+                  'border-border grid items-start gap-y-2 border-b py-3.25 last:border-b-0 last:border-none sm:grid-cols-[var(--col-left-width)_1fr]'
+                )}
+              >
+                <div
+                  id={categoryId}
+                  className="text-muted-foreground pl-4 text-sm/(--badge-height)"
+                >
+                  <span
+                    className="text-muted-foreground/50 mr-1.5 font-mono select-none"
+                    aria-hidden
+                  >
+                    {(index + 1).toString().padStart(2, '0')}
+                  </span>
+                  {category}
+                </div>
+
+                <ul
+                  aria-labelledby={categoryId}
+                  className="flex flex-wrap gap-1.5 px-4"
+                >
+                  {items.map((item) => {
+                    return (
+                      <li key={item.key} className="flex">
+                        <a
+                          href={item.href}
+                          target="_blank"
+                          rel="noopener"
+                          className="text-foreground inset-ring-border bg-muted/50 flex h-(--badge-height) items-center justify-center gap-1.25 rounded-full px-2 font-mono text-xs inset-ring-1 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0"
+                        >
+                          {item.icon}
+                          {item.title}
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </li>
+            );
+          })}
+        </ul>
+      </PanelContent>
+    </Panel>
+  );
+}
+
+function groupByCategory(
+  items: TechStackType[]
+): Record<string, TechStackType[]> {
+  return items.reduce<Record<string, TechStackType[]>>((acc, item) => {
+    for (const category of item.categories) {
+      (acc[category] ??= []).push(item);
+    }
+    return acc;
+  }, {});
+}

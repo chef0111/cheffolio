@@ -1,0 +1,10 @@
+docker postgres
+PASS
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: gb_7_docker
+    ports:
+      - "5432:5432"

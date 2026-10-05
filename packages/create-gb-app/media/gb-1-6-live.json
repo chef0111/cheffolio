@@ -1,0 +1,74 @@
+{
+  "gb1-l1-backend": "self",
+  "gb1-l1-api": "orpc",
+  "gb1-l2": {
+    "frontend": "next",
+    "auth": "better-auth",
+    "payments": "none",
+    "dbSetup": "none"
+  },
+  "gb1-l3": "nest-requires-orpc",
+  "gb1-l4": "polar-requires-better-auth",
+  "gb1-l5": "payments-require-auth",
+  "gb1-l6": "convex-database-off",
+  "gb1-l7": "sqlite-docker-forbidden",
+  "gb1-l8": "neon-requires-postgres",
+  "gb1-l9": "clerk-polar-forbidden",
+  "gb1-l10": {
+    "backend": "nest",
+    "api": "orpc",
+    "monorepo": true
+  },
+  "gb2-perf-ms": 68.36300000000001,
+  "gb2-fileCount": 31,
+  "gb2-l1": {
+    "packageJson": true,
+    "turbo": false
+  },
+  "gb2-l2": true,
+  "gb2-l3": {
+    "toNextJsHandler": true,
+    "noStartCookies": true
+  },
+  "gb2-l4": true,
+  "gb2-l5": true,
+  "gb2-l6": {
+    "empty": true,
+    "rule": "nest-requires-orpc"
+  },
+  "gb2-l7": true,
+  "gb2-l8": true,
+  "gb2-l9": true,
+  "gb2-l10": true,
+  "gb4-buildTree-ms": 1.441900000000004,
+  "gb4-l2": true,
+  "gb4-l3": true,
+  "gb4-l4": true,
+  "gb4-l5": true,
+  "gb4-l6": true,
+  "gb4-l8": "nest-requires-orpc",
+  "gb4-l9": true,
+  "gb4-l10": true,
+  "gb5-buildTree-ms": 2.1540999999999997,
+  "gb5-l2": true,
+  "gb5-l3": true,
+  "gb5-l4": true,
+  "gb5-l5": true,
+  "gb5-l6": true,
+  "gb5-l7": true,
+  "gb5-l8": true,
+  "gb5-l9": true,
+  "gb6-buildTree-ms": 0.7416000000000054,
+  "gb6-l2": true,
+  "gb6-l3": true,
+  "gb6-l4": true,
+  "gb6-l5": true,
+  "gb6-l6": {
+    "rule": "convex-database-off",
+    "empty": true
+  },
+  "gb6-l7": true,
+  "gb6-l8": true,
+  "gb6-l9": true,
+  "gb6-l10": true
+}
