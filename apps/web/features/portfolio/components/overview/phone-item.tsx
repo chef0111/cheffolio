@@ -13,6 +13,7 @@ import {
   IntroItemIcon,
   IntroItemLink,
 } from '@/components/cheffolio/intro-item';
+import { DrawUnderline } from '@/components/ui/draw-underline';
 import { useIsClient } from '@/hooks/use-is-client';
 import { copyText } from '@/utils/copy';
 import { decodePhoneNumber, formatPhoneNumber } from '@/utils/string';
@@ -56,7 +57,11 @@ export function PhoneItem({ phoneNumber }: PhoneItemProps) {
           }
           suppressHydrationWarning
         >
-          {isClient ? phoneNumberFormatted : '[Phone protected]'}
+          <DrawUnderline>
+            <span id={`phone-text-${id}`} suppressHydrationWarning>
+              {isClient ? phoneNumberFormatted : '[Phone protected]'}
+            </span>
+          </DrawUnderline>
         </IntroItemLink>
       </IntroItemContent>
 
@@ -72,7 +77,10 @@ export function PhoneItem({ phoneNumber }: PhoneItemProps) {
         />
       </div>
 
-      <RevealEncodedText id={`phone-${id}`} text={btoa(phoneNumberFormatted)} />
+      <RevealEncodedText
+        id={`phone-text-${id}`}
+        text={btoa(phoneNumberFormatted)}
+      />
     </IntroItem>
   );
 }

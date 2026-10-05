@@ -13,6 +13,7 @@ import {
   IntroItemIcon,
   IntroItemLink,
 } from '@/components/cheffolio/intro-item';
+import { DrawUnderline } from '@/components/ui/draw-underline';
 import { useIsClient } from '@/hooks/use-is-client';
 import { copyText } from '@/utils/copy';
 import { decodeEmail } from '@/utils/string';
@@ -55,7 +56,11 @@ export function EmailItem({ email }: EmailItemProps) {
           }
           suppressHydrationWarning
         >
-          {isClient ? emailDecoded : '[Email protected]'}
+          <DrawUnderline>
+            <span id={`email-text-${id}`} suppressHydrationWarning>
+              {isClient ? emailDecoded : '[Email protected]'}
+            </span>
+          </DrawUnderline>
         </IntroItemLink>
       </IntroItemContent>
 
@@ -71,7 +76,7 @@ export function EmailItem({ email }: EmailItemProps) {
         />
       </div>
 
-      <RevealEncodedText id={`email-${id}`} text={email} />
+      <RevealEncodedText id={`email-text-${id}`} text={email} />
     </IntroItem>
   );
 }
