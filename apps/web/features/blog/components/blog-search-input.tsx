@@ -7,9 +7,10 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { InputGroupAddon, InputGroupButton } from '@/components/ui/input-group';
 
 import { useSearchQuery } from '../hooks/use-search-query';
+import { BlogTagFilter, type BlogTagOption } from './blog-tag-filter';
 import { SearchInput } from './search-input';
 
-export function BlogSearchInput() {
+export function BlogSearchInput({ tags }: { tags: BlogTagOption[] }) {
   const { query, setQuery } = useSearchQuery();
   const inputRef = React.useRef<HTMLInputElement>(null);
 
@@ -19,11 +20,19 @@ export function BlogSearchInput() {
     { preventDefault: true },
     { enableOnFormTags: true }
   );
-  useHotkeys('esc', () => setQuery(null), { enableOnFormTags: true });
+  useHotkeys(
+    'esc',
+    (event) => {
+      if (event.target === inputRef.current) setQuery(null);
+    },
+    { enableOnFormTags: true }
+  );
 
   return (
     <SearchInput
       ref={inputRef}
+      aria-label="Search blog"
+      filter={<BlogTagFilter options={tags} />}
       value={query}
       onChange={(e) => {
         setQuery(e.target.value);

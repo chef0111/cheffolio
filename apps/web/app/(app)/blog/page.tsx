@@ -72,6 +72,17 @@ function getBlogJsonLd(
 
 export default function BlogsPage() {
   const blogPosts = getBlogPosts();
+  const tagCounts = new Map<string, number>();
+
+  for (const post of blogPosts) {
+    for (const tag of new Set(post.metadata.tags)) {
+      tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
+    }
+  }
+
+  const tags = Array.from(tagCounts, ([tag, count]) => ({ tag, count })).sort(
+    (a, b) => a.tag.localeCompare(b.tag)
+  );
 
   return (
     <div className="flex w-full flex-1 flex-col">
@@ -98,7 +109,7 @@ export default function BlogsPage() {
 
         <div className="border-x p-2">
           <Suspense fallback={<SearchInput />}>
-            <BlogSearchInput />
+            <BlogSearchInput tags={tags} />
           </Suspense>
         </div>
 
