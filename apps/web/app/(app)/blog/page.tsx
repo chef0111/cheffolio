@@ -95,7 +95,7 @@ export default function BlogsPage() {
         ])}
       />
 
-      <div className="mx-auto flex flex-1 flex-col md:max-w-4xl">
+      <div className="mx-auto flex w-full flex-1 flex-col md:max-w-4xl">
         <PageHeading className="pt-12">
           <PageHeadingTitle className="decor-t screen-line-bottom-none pt-2 pb-0">
             {title}
