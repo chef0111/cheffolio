@@ -12,6 +12,8 @@ import type {
 export const EASE_OUT = [0.23, 1, 0.32, 1] as const;
 export const LABEL_VERTICAL_PADDING = 6;
 
+const EASE_IN_OUT = [0.77, 0, 0.175, 1] as const;
+
 type Size = { width: number; height: number };
 type ScrollTrackingOptions = Pick<
   ScrollProgressProps,
@@ -52,8 +54,9 @@ export function useScrollProgress({
     : sizes.trigger;
   const layoutTransition = {
     layout: {
+      type: 'tween' as const,
       duration: reduceMotion || keyboardInteraction ? 0 : open ? 0.25 : 0.18,
-      ease: EASE_OUT,
+      ease: open ? EASE_IN_OUT : EASE_OUT,
     },
   };
   const labelMotion: SectionLabelMotion = {
