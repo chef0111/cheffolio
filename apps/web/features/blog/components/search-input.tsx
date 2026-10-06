@@ -23,7 +23,11 @@ export function SearchInput({ children, filter, ...props }: SearchInputProps) {
 
         {children}
 
-        <InputGroupAddon align="inline-end" data-slot="search-input-kbd">
+        <InputGroupAddon
+          align="inline-end"
+          data-slot="search-input-kbd"
+          className="translate-x-0.5"
+        >
           <Kbd className="mr-px size-6 rounded-sm!">/</Kbd>
         </InputGroupAddon>
         {filter && (
