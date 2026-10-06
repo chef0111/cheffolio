@@ -92,7 +92,7 @@ export function useScrollProgress({
     if (!heading) return;
 
     event.preventDefault();
-    labelMotionRef.current = true;
+    labelMotionRef.current = event.detail === 0;
     setKeyboardInteraction(event.detail === 0);
     setOpen(false);
     history.pushState(null, '', `#${encodeURIComponent(id)}`);
