@@ -6,10 +6,11 @@
 </a>
 
 <p align="center">
-  <a href="https://nextjs.org"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/Next.js.svg?size=xs&amp;logo=nextdotjs" /><img alt="Next.js" src="https://shieldcn.dev/badge/Next.js.svg?size=xs&amp;mode=light&amp;logo=nextdotjs" /></picture></a>
-  <a href="https://tailwindcss.com"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/Tailwind_CSS.svg?variant=branded&amp;size=xs&amp;logo=tailwindcss" /><img alt="Tailwind CSS" src="https://shieldcn.dev/badge/Tailwind_CSS.svg?variant=branded&amp;size=xs&amp;mode=light&amp;logo=tailwindcss" /></picture></a>
-  <picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/shadcn/ui.svg?size=xs&amp;logo=shadcnui" /><img alt="shadcn/ui" src="https://shieldcn.dev/badge/shadcn/ui.svg?size=xs&amp;mode=light&amp;logo=shadcnui" /></picture>
-  <a href="https://github.com/chef0111/cheffolio"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/github/chef0111/cheffolio/license.svg?variant=secondary&amp;size=xs" /><img alt="License" src="https://shieldcn.dev/github/chef0111/cheffolio/license.svg?variant=secondary&amp;size=xs&amp;mode=light" /></picture></a>
+  <a href="https://nextjs.org"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/Next.js.svg?size=xs&amp;font=geist&amp;logo=nextdotjs" /><img alt="Next.js" src="https://shieldcn.dev/badge/Next.js.svg?size=xs&amp;mode=light&amp;font=geist&amp;logo=nextdotjs" /></picture></a>
+  <a href="https://tailwindcss.com"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/Tailwind_CSS.svg?variant=branded&amp;size=xs&amp;font=geist&amp;logo=tailwindcss" /><img alt="Tailwind CSS" src="https://shieldcn.dev/badge/Tailwind_CSS.svg?variant=branded&amp;size=xs&amp;mode=light&amp;font=geist&amp;logo=tailwindcss" /></picture></a>
+  <a href="https://ui.shadcn.com"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/shadcn/ui.svg?size=xs&amp;font=geist&amp;logo=shadcnui" /><img alt="shadcn/ui" src="https://shieldcn.dev/badge/shadcn/ui.svg?size=xs&amp;mode=light&amp;font=geist&amp;logo=shadcnui" /></picture></a>
+  <a href="https://turborepo.dev"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/Turborepo.svg?variant=branded&amp;size=xs&amp;font=geist&amp;logo=turborepo" /><img alt="badge" src="https://shieldcn.dev/badge/Turborepo.svg?variant=branded&amp;size=xs&amp;mode=light&amp;font=geist&amp;logo=turborepo" /></picture></a>
+  <a href="https://github.com/chef0111/cheffolio"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/github/chef0111/cheffolio/license.svg?variant=secondary&amp;size=xs&amp;font=geist" /><img alt="License" src="https://shieldcn.dev/github/chef0111/cheffolio/license.svg?variant=secondary&amp;size=xs&amp;mode=light&amp;font=geist" /></picture></a>
 </p>
 
 ## Overview
@@ -26,6 +27,21 @@
 - SEO optimized (Open Graph, Twitter metadata, JSON-LD, sitemap, robots)
 - Latest Next.js 16 practices — Cache Components, Instant Navigations,…
 - Installable as a PWA
+
+## Content
+
+Content is distributed across MDX files in [docs](apps/web/docs/):
+
+- Blog posts rendered from MDX
+- Code blocks with syntax highlighting
+- Dynamic Open Graph images for link previews
+- Raw `.md` endpoints for LLMs
+
+## Resume
+
+- PDF resume generation using markdown
+- Highly customizable React components for PDF rendering
+- Raw `resume.pdf` endpoint for browser-native PDF view
 
 ## Stats
 
