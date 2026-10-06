@@ -14,7 +14,7 @@ import { FooterCopyright } from './copyright';
 export function SiteFooter() {
   return (
     <footer
-      className="not-found-hidden relative w-full min-w-0 px-2"
+      className="not-found-hidden relative w-full min-w-0 px-3"
       aria-label="Site footer"
     >
       <div className="border-border screen-line-bottom layout-wide:container mx-auto border-x md:max-w-4xl">
