@@ -154,7 +154,7 @@ function ComboboxItem({
     >
       <ComboboxPrimitive.ItemIndicator
         keepMounted
-        className="data-highlighted:text-foreground pointers-event-none"
+        className="data-highlighted:text-primary-foreground pointer-events-none"
         render={(indicatorProps, state) => (
           <Checkbox
             {...indicatorProps}
