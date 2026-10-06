@@ -1,8 +1,10 @@
 import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
 
 import { ScrollFadeOverlay } from '@/components/cheffolio/scroll-fade-overlay';
 import { SiteFooter } from '@/components/layout/footer';
 import { SiteHeader } from '@/components/layout/header';
+import { LayoutState } from '@/components/layout/layout-state';
 import { SiteFooterNav } from '@/components/layout/navigation/site-footer-nav';
 import { getBlogPosts } from '@/lib/document';
 import type { DocPreview } from '@/types/document';
@@ -30,6 +32,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       data-slot="app-layout"
       className="relative isolate flex min-h-dvh flex-col overflow-x-clip"
     >
+      <Suspense>
+        <LayoutState />
+      </Suspense>
       <SiteHeader />
       <CommandMenuDialog blogs={blogPreviews} />
       <main className="flex w-full max-w-screen flex-1 flex-col overflow-x-clip px-3">

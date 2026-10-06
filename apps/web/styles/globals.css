@@ -11,9 +11,9 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-@custom-variant layout-wide (&:where([data-slot='app-layout']:has(> main > [data-slot='layout-wide']:not([style*='display: none'])) *));
+@custom-variant layout-wide (&:where([data-slot='app-layout']:has(> [data-slot='layout-state'][data-layout-wide]) *));
 
-@custom-variant doc-page (&:where([data-slot='app-layout']:has(> main [data-slot='doc-page']:not([style*='display: none'], [style*='display: none'] *)) *));
+@custom-variant doc-page (&:where([data-slot='app-layout']:has(> [data-slot='layout-state'][data-doc-page]) *));
 
 @custom-variant supports-corner-shape {
   @supports (corner-shape: initial) {

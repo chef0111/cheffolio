@@ -367,7 +367,7 @@ function SectionLabel({
         <motion.span
           key={section.id}
           data-slot="scroll-progress-label"
-          className="absolute inset-x-0 top-1/2 block -translate-y-1/2 truncate"
+          className="absolute inset-x-0 top-1/2 block -translate-y-1/2 truncate select-none!"
           custom={labelMotion}
           initial={labelMotion.mode === 'instant' ? false : 'enter'}
           animate="visible"
