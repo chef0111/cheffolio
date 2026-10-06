@@ -37,11 +37,11 @@ export function BlogTagFilter({ options }: { options: BlogTagOption[] }) {
       <ComboboxTrigger
         render={
           <Button
-            variant="ghost"
+            variant="outline"
             size="xs"
             className={cn(
-              'mr-px rounded-sm',
-              tags.length === 0 && 'size-7 pe-1.5'
+              'has-data-[icon=inline-start]:ps mr-0.75 h-6 rounded-sm px-1.5 transition-colors active:scale-none! has-data-[icon=inline-end]:pe-1',
+              tags.length === 0 && 'w-6 pe-1.5'
             )}
           />
         }
@@ -65,7 +65,7 @@ export function BlogTagFilter({ options }: { options: BlogTagOption[] }) {
       </ComboboxTrigger>
       <ComboboxContent
         align="end"
-        className="w-56"
+        className="max-w-56 min-w-48"
         onClick={(event) => event.stopPropagation()}
       >
         <ComboboxInput
