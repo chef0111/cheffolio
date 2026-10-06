@@ -6,6 +6,11 @@ import Link from 'next/link';
 
 import { simpleOgImageUrl } from '@/app/og/params';
 import { GridPattern } from '@/components/cheffolio/grid-pattern';
+import {
+  Status,
+  StatusIndicator,
+  StatusLabel,
+} from '@/components/kibo-ui/status';
 import { AdaptiveRing } from '@/components/ui/adaptive-ring';
 import { Tag } from '@/components/ui/tag';
 import {
@@ -84,11 +89,15 @@ export function BlogItem({
           </Link>
 
           {(blog.metadata.new || blog.metadata.updated) && (
-            <span className="bg-info pointer-events-none ml-2 inline-block size-2 -translate-y-px rounded-full">
-              <span className="sr-only">
+            <Status
+              status="maintenance"
+              className="ml-1 inline-block bg-transparent pt-2"
+            >
+              <StatusIndicator />
+              <StatusLabel className="sr-only">
                 {blog.metadata.new ? ' (New)' : ' (Updated)'}
-              </span>
-            </span>
+              </StatusLabel>
+            </Status>
           )}
         </Heading>
 

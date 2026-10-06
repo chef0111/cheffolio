@@ -296,7 +296,7 @@ export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
               </PanelHeader>
 
               <PanelContent className="p-0">
-                <div className="text-muted-foreground not-typeset mb-(--typeset-flow) flex items-center justify-between border-b px-4 py-3">
+                <div className="text-muted-foreground not-typeset mb-(--typeset-flow) flex items-center justify-between gap-1 border-b px-4 py-3 max-sm:flex-col max-sm:items-start">
                   {blog.metadata.author && (
                     <span className="text-foreground flex items-center gap-2 text-base">
                       <Avatar className="size-6">
@@ -308,7 +308,7 @@ export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
                       {blog.metadata.author}
                     </span>
                   )}
-                  <span className="flex items-center gap-2 text-sm">
+                  <span className="flex items-center gap-2 text-sm max-sm:ml-8">
                     <time
                       dateTime={new Date(blog.metadata.createdAt).toISOString()}
                       aria-label="Published on"

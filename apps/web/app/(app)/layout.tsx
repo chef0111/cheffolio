@@ -32,7 +32,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     >
       <SiteHeader />
       <CommandMenuDialog blogs={blogPreviews} />
-      <main className="flex w-full max-w-screen flex-1 flex-col overflow-x-clip px-2">
+      <main className="flex w-full max-w-screen flex-1 flex-col overflow-x-clip px-3">
         {children}
       </main>
       <ScrollToTop />
