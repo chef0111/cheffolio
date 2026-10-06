@@ -6,12 +6,12 @@ function getCSSVariable(name: string) {
 
 function initColors() {
   return {
-    background: getCSSVariable('--dk-background'),
-    foreground: getCSSVariable('--dk-foreground'),
-    mutedForeground: getCSSVariable('--dk-muted-foreground'),
-    brick: getCSSVariable('--dk-brick'),
-    brickHighlight: getCSSVariable('--dk-brick-highlight'),
-    brickShadow: getCSSVariable('--dk-brick-shadow'),
+    background: getCSSVariable('--nf-background'),
+    foreground: getCSSVariable('--nf-foreground'),
+    mutedForeground: getCSSVariable('--nf-muted-foreground'),
+    brick: getCSSVariable('--nf-brick'),
+    brickHighlight: getCSSVariable('--nf-brick-highlight'),
+    brickShadow: getCSSVariable('--nf-brick-shadow'),
   } as const;
 }
 

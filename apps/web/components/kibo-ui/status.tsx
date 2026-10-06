@@ -26,8 +26,8 @@ export const StatusIndicator = ({
       className={cn(
         'absolute inline-flex h-full w-full animate-ping rounded-full opacity-75',
         'group-[.online]:bg-emerald-500',
-        'group-[.offline]:bg-red-500',
-        'group-[.maintenance]:bg-blue-500',
+        'group-[.offline]:bg-destructive',
+        'group-[.maintenance]:bg-info',
         'group-[.degraded]:bg-amber-500'
       )}
     />
@@ -35,8 +35,8 @@ export const StatusIndicator = ({
       className={cn(
         'relative inline-flex h-2 w-2 rounded-full',
         'group-[.online]:bg-emerald-500',
-        'group-[.offline]:bg-red-500',
-        'group-[.maintenance]:bg-blue-500',
+        'group-[.offline]:bg-destructive',
+        'group-[.maintenance]:bg-info',
         'group-[.degraded]:bg-amber-500'
       )}
     />
