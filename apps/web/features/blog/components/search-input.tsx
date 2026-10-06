@@ -7,9 +7,11 @@ import {
 } from '@/components/ui/input-group';
 import { Kbd } from '@/components/ui/kbd';
 
-type SearchInputProps = React.ComponentProps<typeof InputGroupInput>;
+type SearchInputProps = React.ComponentProps<typeof InputGroupInput> & {
+  filter?: React.ReactNode;
+};
 
-export function SearchInput({ children, ...props }: SearchInputProps) {
+export function SearchInput({ children, filter, ...props }: SearchInputProps) {
   return (
     <div className="bg-muted/50 dark:bg-muted/20 border-border w-full rounded-xl border p-1.5">
       <InputGroup className="bg-background dark:bg-input/20 h-10 rounded-lg shadow-md ring-transparent!">
@@ -21,9 +23,16 @@ export function SearchInput({ children, ...props }: SearchInputProps) {
 
         {children}
 
-        <InputGroupAddon align="inline-end" data-slot="search-input-kbd">
+        <InputGroupAddon
+          align="inline-end"
+          data-slot="search-input-kbd"
+          className="translate-x-px"
+        >
           <Kbd className="mr-px size-6 rounded-sm!">/</Kbd>
         </InputGroupAddon>
+        {filter && (
+          <InputGroupAddon align="inline-end">{filter}</InputGroupAddon>
+        )}
       </InputGroup>
     </div>
   );

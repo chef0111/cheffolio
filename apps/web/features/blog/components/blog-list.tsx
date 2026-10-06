@@ -27,7 +27,7 @@ export function BlogListNoResults() {
     <BlogListEmptyState
       icon={<SearchXIcon />}
       title="No posts found."
-      description="Try a different search, or clear the query."
+      description="Try a different search, or clear the query and tag filters."
     />
   );
 }

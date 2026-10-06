@@ -3,6 +3,7 @@
 import type { Doc } from '@/types/document';
 
 import { useSearchQuery } from './use-search-query';
+import { useTagFilter } from './use-tag-filter';
 
 const normalize = (text: string) => text.toLowerCase().replaceAll(' ', '');
 
@@ -25,5 +26,13 @@ const searchBlogs = (posts: Doc[], query: string | null) => {
 
 export function useFilteredBlogs(posts: Doc[]) {
   const { query } = useSearchQuery();
-  return searchBlogs(posts, query);
+  const { tags } = useTagFilter();
+  const searchResults = searchBlogs(posts, query);
+
+  if (tags.length === 0) return searchResults;
+
+  const selectedTags = new Set(tags);
+  return searchResults.filter((post) =>
+    post.metadata.tags?.some((tag) => selectedTags.has(tag))
+  );
 }
