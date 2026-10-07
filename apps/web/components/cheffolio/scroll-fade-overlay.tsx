@@ -6,9 +6,11 @@ import { cn } from '@/lib/utils';
 export function ScrollFadeOverlay({
   align,
   fadeOut = true,
+  className,
 }: {
   align: 'top' | 'bottom';
   fadeOut?: boolean;
+  className?: string;
 }) {
   const isTop = align === 'top';
   const pageOverflows = useOverflows(fadeOut);
@@ -29,7 +31,8 @@ export function ScrollFadeOverlay({
             : '-top-0.5'
           : fadeOut
             ? 'scroll-fade-effect-bottom -bottom-0.5'
-            : '-bottom-0.5'
+            : '-bottom-0.5',
+        className
       )}
       aria-hidden
     >

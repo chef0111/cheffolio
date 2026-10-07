@@ -83,6 +83,7 @@ export function BlogItem({
             href={`/blog/${blog.slug}`}
             aria-label={`Read ${blog.metadata.title}`}
             transitionTypes={[BLOG_NAV_FORWARD]}
+            prefetch={true}
           >
             <span className="absolute inset-0" aria-hidden />
             {blog.metadata.title}

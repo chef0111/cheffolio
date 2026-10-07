@@ -3,15 +3,9 @@ import type { WebPage, WithContext } from 'schema-dts';
 
 import { simpleOgImageUrl } from '@/app/og/params';
 import { MDCopyButtonGroup } from '@/components/cheffolio/page-actions';
-import {
-  PageHeading,
-  PageHeadingDescription,
-  PageHeadingTitle,
-} from '@/components/cheffolio/page-heading';
-import { Panel } from '@/components/cheffolio/panel';
 import { ShareMenu } from '@/components/cheffolio/share-menu';
-import { StripeSeparator } from '@/components/cheffolio/stripe-separator';
 import { jsonLdBreadcrumbList, JsonLdScript } from '@/components/json-ld';
+import { AppShell } from '@/components/layout/app-shell';
 import { JSON_LD_ID } from '@/config/json-ld';
 import { RESUME_MD_PATH, RESUME_PATH, RESUME_PDF_PATH } from '@/config/resume';
 import { X_PROFILE } from '@/config/site';
@@ -30,6 +24,7 @@ import {
   ResumeViewerToolbar,
   ResumeViewerViewport,
 } from '@/features/resume/components/viewer/resume-viewer';
+import { ResumeViewerZoomShortcuts } from '@/features/resume/components/viewer/resume-viewer-zoom-shortcuts';
 import { absoluteUrl } from '@/lib/utils';
 
 const title = 'Resume';
@@ -94,20 +89,17 @@ export default function ResumePage() {
         ])}
       />
 
-      <div className="mx-auto flex w-full flex-1 flex-col md:max-w-4xl">
-        <PageHeading className="pt-12">
-          <PageHeadingTitle className="decor-t screen-line-bottom-none pt-2 pb-0">
-            {title}
-          </PageHeadingTitle>
-          <PageHeadingDescription className="pt-0 pb-2">
-            {description}
-          </PageHeadingDescription>
-        </PageHeading>
-
-        <DocPageRoot className="flex flex-1 flex-col">
+      <AppShell
+        title={title}
+        description={description}
+        className="md:max-w-4xl"
+      >
+        <DocPageRoot className="flex h-full flex-1 flex-col border-x">
           <ResumeViewer src={RESUME_PDF_PATH}>
+            <ResumeViewerZoomShortcuts />
+
             <DocContainer>
-              <Panel className="decor-t screen-line-bottom-none flex items-center justify-between p-2">
+              <div className="flex items-center justify-between p-2">
                 <ResumeViewerToolbar className="[@media(max-width:360px)]:hidden" />
 
                 <div className="ml-auto flex items-center gap-2">
@@ -115,28 +107,25 @@ export default function ResumePage() {
                   <ShareMenu title={title} url={RESUME_PATH} />
                   <DownloadResumeButton />
                 </div>
-              </Panel>
-
-              <StripeSeparator />
+              </div>
             </DocContainer>
 
             <DocGrid className="flex-1 grid-rows-1">
               <DocLeftCol />
 
-              <DocContentCol className="flex h-full flex-col">
-                <Panel className="decor-t screen-line-bottom-none screen-line-top-none flex flex-1 flex-col py-4">
+              <DocContentCol className="border-t">
+                <div className="py-4">
                   <ResumeViewerViewport className="border-y">
                     <ResumeViewerPages />
                   </ResumeViewerViewport>
-                </Panel>
+                </div>
               </DocContentCol>
 
               <DocRightCol />
             </DocGrid>
           </ResumeViewer>
         </DocPageRoot>
-      </div>
-      <StripeSeparator />
+      </AppShell>
     </>
   );
 }

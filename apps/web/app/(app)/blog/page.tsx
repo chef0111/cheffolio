@@ -3,13 +3,8 @@ import { Suspense } from 'react';
 import type { Blog, WithContext } from 'schema-dts';
 
 import { simpleOgImageUrl } from '@/app/og/params';
-import {
-  PageHeading,
-  PageHeadingDescription,
-  PageHeadingTitle,
-} from '@/components/cheffolio/page-heading';
-import { StripeSeparator } from '@/components/cheffolio/stripe-separator';
 import { jsonLdBreadcrumbList, JsonLdScript } from '@/components/json-ld';
+import { AppShell } from '@/components/layout/app-shell';
 import { JSON_LD_ID } from '@/config/json-ld';
 import { X_PROFILE } from '@/config/site';
 import { BlogList } from '@/features/blog/components/blog-list';
@@ -95,18 +90,11 @@ export default function BlogsPage() {
         ])}
       />
 
-      <div className="mx-auto flex w-full flex-1 flex-col md:max-w-4xl">
-        <PageHeading className="pt-12">
-          <PageHeadingTitle className="decor-t screen-line-bottom-none pt-2 pb-0">
-            {title}
-          </PageHeadingTitle>
-          <PageHeadingDescription className="pt-0 pb-2">
-            {description}
-          </PageHeadingDescription>
-        </PageHeading>
-
-        <StripeSeparator />
-
+      <AppShell
+        title={title}
+        description={description}
+        className="md:max-w-4xl"
+      >
         <div className="border-x p-2">
           <Suspense fallback={<SearchInput />}>
             <BlogSearchInput tags={tags} />
@@ -116,8 +104,7 @@ export default function BlogsPage() {
         <Suspense fallback={<BlogList blogs={blogPosts} />}>
           <BlogListFiltered blogs={blogPosts} />
         </Suspense>
-        <StripeSeparator />
-      </div>
+      </AppShell>
     </div>
   );
 }
