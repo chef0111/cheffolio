@@ -2,13 +2,8 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 
 import { simpleOgImageUrl } from '@/app/og/params';
-import {
-  PageHeading,
-  PageHeadingDescription,
-  PageHeadingTitle,
-} from '@/components/cheffolio/page-heading';
-import { StripeSeparator } from '@/components/cheffolio/stripe-separator';
 import { jsonLdBreadcrumbList, JsonLdScript } from '@/components/json-ld';
+import { AppShell } from '@/components/layout/app-shell';
 import { X_PROFILE } from '@/config/site';
 import { CreateWorkspace } from '@/features/create/components/create-workspace';
 
@@ -57,18 +52,7 @@ export default function CreatePage() {
         ])}
       />
 
-      <div className="mx-auto flex w-full flex-1 flex-col">
-        <PageHeading className="pt-12">
-          <PageHeadingTitle className="decor-t screen-line-bottom-none pt-2 pb-0">
-            {title}
-          </PageHeadingTitle>
-          <PageHeadingDescription className="pt-0 pb-2">
-            {description}
-          </PageHeadingDescription>
-        </PageHeading>
-
-        <StripeSeparator />
-
+      <AppShell title={title} description={description}>
         <section className="flex flex-1 flex-col items-center justify-center border-x px-4 pt-4 pb-12 text-center sm:pt-8 sm:pb-16">
           <Image
             src="https://assets.giabao.dev/create-under-construction.webp"
@@ -85,8 +69,7 @@ export default function CreatePage() {
           </p>
         </section>
         {/* <CreateWorkspace /> */}
-      </div>
-      <StripeSeparator />
+      </AppShell>
     </>
   );
 }

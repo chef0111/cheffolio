@@ -2,8 +2,11 @@
 
 import React from 'react';
 
+import { cn } from '@/lib/utils';
+
 export function DocPageRoot({
   children,
+  className,
   ...props
 }: React.ComponentPropsWithoutRef<'div'> & { children: React.ReactNode }) {
   const ref = React.useRef<HTMLDivElement>(null);
@@ -36,7 +39,7 @@ export function DocPageRoot({
   }, []);
 
   return (
-    <div ref={ref} {...props}>
+    <div ref={ref} className={cn('overflow-x-hidden', className)} {...props}>
       {children}
     </div>
   );

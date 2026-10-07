@@ -1,9 +1,11 @@
 'use client';
 
+import type { VariantProps } from 'class-variance-authority';
 import { MaximizeIcon, ZoomInIcon, ZoomOutIcon } from 'lucide-react';
 import React from 'react';
 
 import { Button } from '@/components/ui/button';
+import type { buttonGroupVariants } from '@/components/ui/button-group';
 import {
   ButtonGroup,
   ButtonGroupSeparator,
@@ -42,54 +44,56 @@ export function ResumeViewer({
 export function ResumeViewerToolbar({
   className,
   ...props
-}: React.ComponentProps<'div'>) {
+}: React.ComponentProps<'div'> & VariantProps<typeof buttonGroupVariants>) {
   const { numPages, zoom, zoomIn, zoomOut, fitWidth } = useResumeViewer();
 
   const isLoaded = numPages > 0;
   const isFitWidth = zoom === 1;
 
+  const separator = 'mt-px h-7.5!';
+
   return (
-    <div
+    <ButtonGroup
       data-slot="resume-viewer-toolbar"
-      className={cn('flex flex-wrap items-center justify-between', className)}
+      className={cn('overflow-y-hidden', className)}
       {...props}
     >
-      <ButtonGroup aria-label="Zoom">
-        <Button
-          variant="secondary"
-          size="icon-sm"
-          aria-label="Zoom out"
-          disabled={!isLoaded}
-          onClick={zoomOut}
-        >
-          <ZoomOutIcon />
-        </Button>
-        <ButtonGroupSeparator className="ml-[-0.5px]" />
-        <ButtonGroupText className="bg-secondary min-w-12 justify-center border-transparent text-xs tabular-nums">
-          {Math.round(zoom * 100)}%
-        </ButtonGroupText>
-        <ButtonGroupSeparator />
-        <Button
-          variant="secondary"
-          size="icon-sm"
-          aria-label="Zoom in"
-          disabled={!isLoaded}
-          onClick={zoomIn}
-        >
-          <ZoomInIcon />
-        </Button>
-        <ButtonGroupSeparator className="ml-[-0.5px] w-px" />
-        <Button
-          variant="secondary"
-          size="icon-sm"
-          aria-label="Fit width"
-          disabled={!isLoaded || isFitWidth}
-          onClick={fitWidth}
-        >
-          <MaximizeIcon />
-        </Button>
-      </ButtonGroup>
-    </div>
+      <Button
+        variant="secondary"
+        size="icon-sm"
+        aria-label="Zoom out"
+        disabled={!isLoaded}
+        onClick={zoomOut}
+        className="-mr-px"
+      >
+        <ZoomOutIcon />
+      </Button>
+      <ButtonGroupSeparator className={separator} />
+      <ButtonGroupText className="bg-secondary mt-px h-7.5 min-w-12 justify-center overflow-y-hidden border-transparent text-xs tabular-nums">
+        {Math.round(zoom * 100)}%
+      </ButtonGroupText>
+      <ButtonGroupSeparator className={separator} />
+      <Button
+        variant="secondary"
+        size="icon-sm"
+        aria-label="Zoom in"
+        disabled={!isLoaded}
+        onClick={zoomIn}
+        className="-mr-px"
+      >
+        <ZoomInIcon />
+      </Button>
+      <ButtonGroupSeparator className={separator} />
+      <Button
+        variant="secondary"
+        size="icon-sm"
+        aria-label="Fit width"
+        disabled={!isLoaded || isFitWidth}
+        onClick={fitWidth}
+      >
+        <MaximizeIcon />
+      </Button>
+    </ButtonGroup>
   );
 }
 
