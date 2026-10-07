@@ -3,7 +3,7 @@
 import '@/lib/pdf-worker';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
-import '../../styles/pdf-text-layer.css';
+import '../styles/pdf-text-layer.css';
 
 import React from 'react';
 import { Document, Page } from 'react-pdf';
@@ -14,7 +14,7 @@ import { RESUME_PDF_FILENAME, RESUME_PDF_PATH } from '@/config/resume';
 import {
   useResumePreviewReady,
   useResumeViewer,
-} from '../../context/resume-viewer-provider';
+} from '../context/resume-viewer-provider';
 
 const PAGE_GAP_PX = 16;
 const MAX_PAGE_WIDTH_PX = 900;
@@ -38,12 +38,12 @@ function useStableWidth(elementRef: React.RefObject<HTMLElement | null>) {
     if (!element) return;
 
     const read = () => {
-      const next = Math.round(element.clientWidth);
+      const next = Math.floor(element.getBoundingClientRect().width);
 
       setWidth((current) => {
         if (next <= 0) return current;
         if (current === 0) return next;
-        if (Math.abs(current - next) < WIDTH_SNAP_PX) return current;
+        if (next >= current && next - current < WIDTH_SNAP_PX) return current;
         return next;
       });
     };
@@ -114,7 +114,7 @@ function PdfDocument({
           key={`${src}:${retryKey}`}
           file={src}
           suspense={false}
-          className="flex w-full flex-col items-center"
+          className="flex w-full flex-col items-center-safe"
           loading={null}
           error={<ResumeViewerError onRetry={retry} />}
           externalLinkTarget="_blank"

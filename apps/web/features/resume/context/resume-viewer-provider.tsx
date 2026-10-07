@@ -20,7 +20,13 @@ export type ResumeViewerActions = {
   fitWidth: () => void;
 };
 
-export type ResumeViewerContextValue = ResumeViewerState & ResumeViewerActions;
+export type ResumeViewerMeta = {
+  viewportRef: React.RefObject<HTMLDivElement | null>;
+};
+
+export type ResumeViewerContextValue = ResumeViewerState &
+  ResumeViewerActions &
+  ResumeViewerMeta;
 
 const ResumeViewerContext =
   React.createContext<ResumeViewerContextValue | null>(null);
@@ -70,6 +76,7 @@ export function ResumeViewerProvider({
   const [zoom, setZoom] = React.useState(1);
   const [previewSrc, setPreviewSrc] = React.useState(src);
   const [isPreviewReady, setPreviewReady] = React.useState(false);
+  const viewportRef = React.useRef<HTMLDivElement>(null);
 
   if (previewSrc !== src) {
     setPreviewSrc(src);
@@ -98,8 +105,9 @@ export function ResumeViewerProvider({
       zoomIn,
       zoomOut,
       fitWidth,
+      viewportRef,
     }),
-    [src, numPages, zoom, zoomIn, zoomOut, fitWidth]
+    [src, numPages, zoom, zoomIn, zoomOut, fitWidth, viewportRef]
   );
 
   const preview = React.useMemo(

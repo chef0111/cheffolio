@@ -24,6 +24,7 @@ import {
   ResumeViewerToolbar,
   ResumeViewerViewport,
 } from '@/features/resume/components/viewer/resume-viewer';
+import { ResumeViewerZoomShortcuts } from '@/features/resume/components/viewer/resume-viewer-zoom-shortcuts';
 import { absoluteUrl } from '@/lib/utils';
 
 const title = 'Resume';
@@ -95,6 +96,8 @@ export default function ResumePage() {
       >
         <DocPageRoot className="flex h-full flex-1 flex-col border-x">
           <ResumeViewer src={RESUME_PDF_PATH}>
+            <ResumeViewerZoomShortcuts />
+
             <DocContainer>
               <div className="flex items-center justify-between p-2">
                 <ResumeViewerToolbar className="[@media(max-width:360px)]:hidden" />

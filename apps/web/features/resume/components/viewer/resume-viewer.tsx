@@ -19,7 +19,7 @@ import {
   useResumePreviewReady,
   useResumeViewer,
 } from '../../context/resume-viewer-provider';
-import { PdfPages } from './pdf-pages';
+import { PdfPages } from '../pdf-pages';
 
 /** Root: owns document URL, page count, and zoom. */
 export function ResumeViewer({
@@ -100,13 +100,49 @@ export function ResumeViewerToolbar({
 /** Fixed-height scroll box the pages stack inside. */
 export function ResumeViewerViewport({
   className,
+  onPointerDown,
   ...props
 }: React.ComponentProps<'div'>) {
+  const { zoom, viewportRef } = useResumeViewer();
+
+  React.useLayoutEffect(() => {
+    const viewport = viewportRef.current;
+    const page = viewport?.querySelector('[data-slot="resume-viewer-page"]');
+    if (!viewport || !page) return;
+
+    const viewportBounds = viewport.getBoundingClientRect();
+    const pageBounds = page.getBoundingClientRect();
+
+    viewport.scrollLeft +=
+      pageBounds.left +
+      pageBounds.width / 2 -
+      (viewportBounds.left + viewport.clientLeft + viewport.clientWidth / 2);
+  }, [zoom, viewportRef]);
+
   return (
     <div
+      ref={viewportRef}
       data-slot="resume-viewer-viewport"
+      role="region"
+      aria-label="Resume PDF"
+      tabIndex={0}
+      onPointerDown={(event) => {
+        onPointerDown?.(event);
+        if (event.defaultPrevented || event.button !== 0) return;
+
+        const target = event.target;
+        const interactive =
+          target instanceof Element
+            ? target.closest(
+                'a[href], button, input, select, textarea, [contenteditable], [tabindex]'
+              )
+            : null;
+        if (interactive && interactive !== event.currentTarget) return;
+
+        event.currentTarget.focus({ preventScroll: true });
+      }}
       className={cn(
-        'bg-background aspect-3/4 min-h-120 w-full scrollbar-gutter-stable overflow-y-scroll p-4',
+        'bg-background aspect-3/4 min-h-120 w-full scrollbar-gutter-stable overflow-y-scroll p-4 outline-none',
         className
       )}
       {...props}
@@ -117,7 +153,7 @@ export function ResumeViewerViewport({
 /** Lazily loads react-pdf on the client only. */
 export function ResumeViewerPages() {
   return (
-    <div className="relative flex min-h-full w-full flex-col items-center">
+    <div className="relative flex min-h-full w-full flex-col items-center-safe">
       <ResumeViewerLoadingOverlay />
       <PdfPages />
     </div>
