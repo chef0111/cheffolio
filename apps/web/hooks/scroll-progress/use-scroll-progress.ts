@@ -1,9 +1,13 @@
 'use client';
 
 import type { Popover } from '@base-ui/react/popover';
-import { useReducedMotion, useScroll } from 'motion/react';
-import * as React from 'react';
+import { type MotionValue, useScroll } from 'motion/react';
+import React from 'react';
 
+import { useScrollProgressMorph } from '@/hooks/scroll-progress/use-scroll-progress-morph';
+import { useSectionLabelNavigation } from '@/hooks/scroll-progress/use-section-label-navigation';
+import { useMediaQuery } from '@/hooks/use-media-query';
+import type { ScrollProgressSize } from '@/lib/scroll-progress-morph';
 import type {
   ScrollProgressProps,
   SectionLabelMotion,
@@ -12,9 +16,6 @@ import type {
 export const EASE_OUT = [0.23, 1, 0.32, 1] as const;
 export const LABEL_VERTICAL_PADDING = 6;
 
-const EASE_IN_OUT = [0.77, 0, 0.175, 1] as const;
-
-type Size = { width: number; height: number };
 type ScrollTrackingOptions = Pick<
   ScrollProgressProps,
   'sections' | 'containerRef' | 'offset'
@@ -25,7 +26,7 @@ export function useScrollProgress({
   containerRef,
   offset = 160,
 }: ScrollTrackingOptions) {
-  const reduceMotion = !!useReducedMotion();
+  const reduceMotion = useMediaQuery('(prefers-reduced-motion: reduce)');
   const { scrollYProgress } = useScroll(
     containerRef ? { container: containerRef } : undefined
   );
@@ -36,15 +37,24 @@ export function useScrollProgress({
   const [popupElement, setPopupElement] = React.useState<HTMLDivElement | null>(
     null
   );
-  const { activeHeading, visibleHeadingIds, labelMotionRef } =
+  const { activeHeading, visibleHeadingIds, labelMotionRef, trackingReady } =
     useHeadingTracking({
       sections,
       containerRef,
       offset,
+      scrollYProgress,
     });
-  const sizes = usePopupSizes(triggerRef, popupElement, open);
   const activeSection =
     sections.find(({ id }) => id === activeHeading.id) ?? sections[0];
+  const {
+    navigation: labelNavigation,
+    startNavigation,
+    finishLabel,
+    stripRef,
+    cancelNavigation,
+  } = useSectionLabelNavigation({ sections, containerRef, reduceMotion });
+  const labelSection = labelNavigation?.sections.at(-1) ?? activeSection;
+  const sizes = usePopupSizes(triggerRef, popupElement, open, labelSection?.id);
   const minimumDepth = Math.min(...sections.map(({ depth }) => depth ?? 2));
   const surfaceSize = open
     ? {
@@ -52,72 +62,98 @@ export function useScrollProgress({
         height: sizes.popup.height + sizes.trigger.height,
       }
     : sizes.trigger;
-  const layoutTransition = {
-    layout: {
-      type: 'tween' as const,
-      duration: reduceMotion || keyboardInteraction ? 0 : open ? 0.25 : 0.18,
-      ease: open ? EASE_IN_OUT : EASE_OUT,
-    },
-  };
+  const { surfaceRef, contentReady, surfaceReady } = useScrollProgressMorph({
+    triggerRef,
+    popupElement,
+    open,
+    instant: !trackingReady || reduceMotion || keyboardInteraction,
+    triggerSize: sizes.trigger,
+    surfaceSize,
+    measured: sizes.measured,
+  });
+  const animateLabel =
+    trackingReady && (labelNavigation?.animate ?? activeHeading.animate);
   const labelMotion: SectionLabelMotion = {
     direction: activeHeading.direction,
     edgeOffset: Math.max(0, sizes.trigger.height / 2 - LABEL_VERTICAL_PADDING),
-    mode: !activeHeading.animate ? 'instant' : reduceMotion ? 'fade' : 'slide',
-    duration: activeHeading.animate ? (reduceMotion ? 0.3 : 0.5) : 0,
+    mode: !animateLabel ? 'instant' : reduceMotion ? 'fade' : 'slide',
+    duration: animateLabel ? (reduceMotion ? 0.3 : 0.4) : 0,
   };
   const onOpenChange: NonNullable<Popover.Root.Props['onOpenChange']> = (
     nextOpen,
     { event }
   ) => {
+    if (nextOpen) cancelNavigation();
     setKeyboardInteraction(
       event.type.startsWith('key') ||
         (event instanceof MouseEvent && event.detail === 0)
     );
     setOpen(nextOpen);
   };
-  function selectSection(
-    event: React.MouseEvent<HTMLAnchorElement>,
-    id: string
-  ) {
-    if (
-      event.button !== 0 ||
-      event.metaKey ||
-      event.ctrlKey ||
-      event.shiftKey ||
-      event.altKey
+  const selectSection = React.useCallback(
+    function selectSection(
+      event: React.MouseEvent<HTMLAnchorElement>,
+      id: string
     ) {
-      return;
-    }
-    const heading = document.getElementById(id);
-    if (!heading) return;
+      if (
+        event.button !== 0 ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.altKey
+      ) {
+        return;
+      }
+      const heading = document.getElementById(id);
+      if (!heading) return;
 
-    event.preventDefault();
-    labelMotionRef.current = event.detail === 0;
-    setKeyboardInteraction(event.detail === 0);
-    setOpen(false);
-    history.pushState(null, '', `#${encodeURIComponent(id)}`);
-    heading.scrollIntoView({
-      behavior: reduceMotion || event.detail === 0 ? 'instant' : 'smooth',
-      block: 'start',
-    });
-  }
+      event.preventDefault();
+      if (labelSection)
+        startNavigation(labelSection.id, id, event.detail !== 0);
+      labelMotionRef.current = event.detail === 0;
+      setKeyboardInteraction(event.detail === 0);
+      setOpen(false);
+      history.pushState(null, '', `#${encodeURIComponent(id)}`);
+      heading.scrollIntoView({
+        behavior: reduceMotion || event.detail === 0 ? 'instant' : 'smooth',
+        block: 'start',
+      });
+    },
+    [reduceMotion, labelMotionRef, labelSection, startNavigation]
+  );
 
   return {
     state: {
       sections,
       activeSection,
+      labelSection,
+      labelNavigation,
       visibleHeadingIds,
       minimumDepth,
       open,
       keyboardInteraction,
       sizes,
       surfaceSize,
-      layoutTransition,
+      contentReady,
+      surfaceReady,
+      ready: trackingReady && surfaceReady && sizes.measured,
       labelMotion,
       scrollYProgress,
     },
-    actions: { onOpenChange, selectSection, setKeyboardInteraction },
-    meta: { triggerRef, activeLinkRef, popupElement, setPopupElement },
+    actions: {
+      onOpenChange,
+      selectSection,
+      setKeyboardInteraction,
+      finishLabel,
+    },
+    meta: {
+      triggerRef,
+      stripRef,
+      surfaceRef,
+      activeLinkRef,
+      popupElement,
+      setPopupElement,
+    },
   };
 }
 
@@ -125,8 +161,11 @@ function useHeadingTracking({
   sections,
   containerRef,
   offset = 160,
-}: ScrollTrackingOptions) {
+  scrollYProgress,
+}: ScrollTrackingOptions & { scrollYProgress: MotionValue<number> }) {
   const labelMotionRef = React.useRef(false);
+  const [initializedSource, setInitializedSource] =
+    React.useState<ScrollTrackingOptions | null>(null);
   const [activeHeading, setActiveHeading] = React.useState({
     id: sections[0]?.id,
     direction: 1,
@@ -155,10 +194,32 @@ function useHeadingTracking({
     document.body.append(readingArea);
     let frame = 0;
     let initialized = false;
+    let geometryDirty = true;
+    let disposed = false;
+    let previousScrollTop: number | undefined;
+    let previousScrollHeight: number | undefined;
+    let headingBounds: {
+      id: string;
+      top: number;
+      bottom: number;
+      index: number;
+    }[] = [];
+    let contentRoot =
+      headings.find(({ element }) => element)?.element?.parentElement ??
+      document.body;
+    while (
+      contentRoot.parentElement &&
+      headings.some(({ element }) => element && !contentRoot.contains(element))
+    ) {
+      contentRoot = contentRoot.parentElement;
+    }
 
     const update = () => {
       frame = 0;
       const containerBounds = containerRef?.current?.getBoundingClientRect();
+      const scrollTop = containerRef?.current?.scrollTop ?? window.scrollY;
+      const geometryChanged = geometryDirty;
+      const origin = containerBounds?.top ?? 0;
       const anchor = (containerBounds?.top ?? 0) + offset;
       const readingBounds = readingArea.getBoundingClientRect();
       const visibleTop = Math.max(readingBounds.top, containerBounds?.top ?? 0);
@@ -168,14 +229,30 @@ function useHeadingTracking({
       );
       const visibleIds = new Set<string>();
       let activeIndex = -1;
-      headings.forEach(({ id, element }, index) => {
-        if (!element) return;
-        const bounds = element.getBoundingClientRect();
-        if (bounds.top <= anchor) activeIndex = index;
+      // Document-space bounds stay valid during scrolling; remeasure only after layout changes.
+      if (geometryDirty) {
+        headingBounds = [];
+        headings.forEach(({ id }, index) => {
+          const element = document.getElementById(id);
+          if (!element) return;
+          const bounds = element.getBoundingClientRect();
+          headingBounds.push({
+            id,
+            index,
+            top: bounds.top - origin + scrollTop,
+            bottom: bounds.bottom - origin + scrollTop,
+          });
+        });
+        geometryDirty = false;
+      }
+      headingBounds.forEach(({ id, top, bottom, index }) => {
+        const viewportTop = top + origin - scrollTop;
+        const viewportBottom = bottom + origin - scrollTop;
+        if (viewportTop <= anchor) activeIndex = index;
         if (
           visibleTop < visibleBottom &&
-          bounds.bottom > visibleTop &&
-          bounds.top < visibleBottom
+          viewportBottom > visibleTop &&
+          viewportTop < visibleBottom
         ) {
           visibleIds.add(id);
         }
@@ -202,27 +279,84 @@ function useHeadingTracking({
               animate,
             }
       );
-      initialized = true;
+      if (!initialized) {
+        // Seed both indicators from the same restored position before revealing the pill.
+        const scrollElement =
+          containerRef?.current ?? document.scrollingElement;
+        const scrollHeight = scrollElement?.scrollHeight ?? 0;
+        const viewportHeight =
+          scrollElement?.clientHeight ?? window.innerHeight;
+        const scrollRange = scrollHeight - viewportHeight;
+        scrollYProgress.set(
+          scrollRange > 0
+            ? Math.min(1, Math.max(0, scrollTop / scrollRange))
+            : 0
+        );
+        // Restoration can follow load/pageshow; confirm the next frame agrees.
+        if (
+          document.readyState === 'complete' &&
+          !geometryChanged &&
+          previousScrollTop === scrollTop &&
+          previousScrollHeight === scrollHeight
+        ) {
+          initialized = true;
+          setInitializedSource({ sections, containerRef, offset });
+        } else {
+          previousScrollTop = scrollTop;
+          previousScrollHeight = scrollHeight;
+          if (document.readyState === 'complete') scheduleUpdate();
+        }
+      }
     };
     const scheduleUpdate = () => {
       if (!frame) frame = requestAnimationFrame(update);
     };
+    const invalidateGeometry = () => {
+      if (disposed) return;
+      geometryDirty = true;
+      scheduleUpdate();
+    };
+    const onContentLoad = (event: Event) => {
+      if (event.target instanceof Node && contentRoot.contains(event.target))
+        invalidateGeometry();
+    };
 
     scheduleUpdate();
     scroller.addEventListener('scroll', scheduleUpdate, { passive: true });
-    window.addEventListener('resize', scheduleUpdate);
-    const observer = new ResizeObserver(scheduleUpdate);
+    window.addEventListener('resize', invalidateGeometry);
+    window.addEventListener('load', invalidateGeometry);
+    window.addEventListener('pageshow', invalidateGeometry);
+    document.addEventListener('load', onContentLoad, true);
+    document.fonts.addEventListener('loadingdone', invalidateGeometry);
+    void document.fonts.ready.then(invalidateGeometry);
+    const observer = new ResizeObserver(invalidateGeometry);
     observer.observe(containerRef?.current ?? document.body);
     observer.observe(readingArea);
+    observer.observe(contentRoot);
+    [...contentRoot.children].forEach((element) => observer.observe(element));
+    const mutationObserver = new MutationObserver(invalidateGeometry);
+    mutationObserver.observe(contentRoot, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+      attributes: true,
+      attributeFilter: ['hidden', 'open'],
+    });
 
     return () => {
+      disposed = true;
       cancelAnimationFrame(frame);
       observer.disconnect();
+      mutationObserver.disconnect();
       readingArea.remove();
       scroller.removeEventListener('scroll', scheduleUpdate);
-      window.removeEventListener('resize', scheduleUpdate);
+      window.removeEventListener('resize', invalidateGeometry);
+      window.removeEventListener('load', invalidateGeometry);
+      window.removeEventListener('pageshow', invalidateGeometry);
+      document.removeEventListener('load', onContentLoad, true);
+      document.fonts.removeEventListener('loadingdone', invalidateGeometry);
     };
-  }, [sections, containerRef, offset]);
+  }, [sections, containerRef, offset, scrollYProgress]);
 
   React.useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -255,38 +389,58 @@ function useHeadingTracking({
     };
   }, []);
 
-  return { activeHeading, visibleHeadingIds, labelMotionRef };
+  return {
+    activeHeading,
+    visibleHeadingIds,
+    labelMotionRef,
+    trackingReady:
+      initializedSource?.sections === sections &&
+      initializedSource?.containerRef === containerRef &&
+      initializedSource?.offset === offset,
+  };
 }
 
 function usePopupSizes(
   triggerRef: React.RefObject<HTMLButtonElement | null>,
   popupElement: HTMLElement | null,
-  open: boolean
+  open: boolean,
+  labelId: string | undefined
 ) {
   const [sizes, setSizes] = React.useState<{
-    trigger: Size;
-    popup: Size;
+    trigger: ScrollProgressSize;
+    popup: ScrollProgressSize;
+    measured: boolean;
   }>({
     trigger: { width: 256, height: 48 },
     popup: { width: 360, height: 48 },
+    measured: false,
   });
   React.useLayoutEffect(() => {
     const trigger = triggerRef.current;
-    if (!trigger) return;
+    if (!trigger) {
+      setSizes((previous) =>
+        previous.measured ? { ...previous, measured: false } : previous
+      );
+      return;
+    }
 
     const popup = popupElement;
     const measure = () => {
+      if (!trigger.offsetHeight || !trigger.offsetWidth) return;
       setSizes((previous) => {
         const next = {
+          measured: true,
           trigger: {
             width: open ? previous.trigger.width : trigger.offsetWidth,
             height: trigger.offsetHeight,
           },
-          popup: popup
-            ? { width: popup.offsetWidth, height: popup.offsetHeight }
-            : previous.popup,
+          popup:
+            popup && open && popup.offsetWidth > 0
+              ? { width: popup.offsetWidth, height: popup.offsetHeight }
+              : previous.popup,
         };
-        return next.trigger.width === previous.trigger.width &&
+        return previous.measured &&
+          next.trigger.width === previous.trigger.width &&
           next.trigger.height === previous.trigger.height &&
           next.popup.width === previous.popup.width &&
           next.popup.height === previous.popup.height
@@ -300,7 +454,7 @@ function usePopupSizes(
     observer.observe(trigger);
     if (popup) observer.observe(popup);
     return () => observer.disconnect();
-  }, [open, popupElement, triggerRef]);
+  }, [open, popupElement, triggerRef, labelId]);
 
   return sizes;
 }

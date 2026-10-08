@@ -85,10 +85,11 @@ export function useTocScroll(
 export function useActiveLinkScroll(
   listRef: React.RefObject<HTMLElement | null>,
   activeLinkRef: React.RefObject<HTMLAnchorElement | null>,
-  popupElement: HTMLElement | null
+  popupElement: HTMLElement | null,
+  open: boolean
 ) {
   React.useEffect(() => {
-    if (!popupElement) return;
+    if (!popupElement || !open) return;
     const frame = requestAnimationFrame(() => {
       const list = listRef.current;
       const link = activeLinkRef.current;
@@ -104,5 +105,5 @@ export function useActiveLinkScroll(
       }
     });
     return () => cancelAnimationFrame(frame);
-  }, [listRef, activeLinkRef, popupElement]);
+  }, [listRef, activeLinkRef, popupElement, open]);
 }

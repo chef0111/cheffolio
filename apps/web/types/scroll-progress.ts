@@ -16,3 +16,9 @@ export type SectionLabelMotion = {
   mode: 'slide' | 'fade' | 'instant';
   duration: number;
 };
+
+export type SectionLabelNavigation = {
+  sections: ScrollProgressSection[];
+  direction: number;
+  animate: boolean;
+};

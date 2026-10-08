@@ -20,17 +20,31 @@ import {
   useActiveLinkScroll,
   useTocScroll,
 } from '@/hooks/scroll-progress/use-toc-scroll';
-import { useTriggerLabelReveal } from '@/hooks/scroll-progress/use-trigger-label-reveal';
+import {
+  SURFACE_SHADOW_PADDING,
+  SURFACE_TILE_POSITIONS,
+} from '@/lib/scroll-progress-morph';
 import { cn } from '@/lib/utils';
 import type {
   ScrollProgressProps,
   ScrollProgressSection,
   SectionLabelMotion,
+  SectionLabelNavigation,
 } from '@/types/scroll-progress';
 
 type ScrollProgressContextValue = ReturnType<typeof useScrollProgress>;
 const ScrollProgressContext =
   React.createContext<ScrollProgressContextValue | null>(null);
+type ScrollProgressSectionsContextValue = {
+  sections: ScrollProgressSection[];
+  activeSectionId: string | undefined;
+  visibleHeadingIds: Set<string>;
+  minimumDepth: number;
+  selectSection: ScrollProgressContextValue['actions']['selectSection'];
+  activeLinkRef: React.RefObject<HTMLAnchorElement | null>;
+};
+const ScrollProgressSectionsContext =
+  React.createContext<ScrollProgressSectionsContextValue | null>(null);
 
 function useScrollProgressContext() {
   const context = React.use(ScrollProgressContext);
@@ -43,60 +57,115 @@ function useScrollProgressContext() {
 
 export function ScrollProgress({
   className,
+  style,
   sections,
   containerRef,
   offset = 160.5,
   ...props
 }: ScrollProgressProps) {
   const controller = useScrollProgress({ sections, containerRef, offset });
+  const sectionsContext = React.useMemo(
+    () => ({
+      sections,
+      activeSectionId: controller.state.activeSection?.id,
+      visibleHeadingIds: controller.state.visibleHeadingIds,
+      minimumDepth: controller.state.minimumDepth,
+      selectSection: controller.actions.selectSection,
+      activeLinkRef: controller.meta.activeLinkRef,
+    }),
+    [
+      sections,
+      controller.state.activeSection?.id,
+      controller.state.visibleHeadingIds,
+      controller.state.minimumDepth,
+      controller.actions.selectSection,
+      controller.meta.activeLinkRef,
+    ]
+  );
   if (!controller.state.activeSection) return null;
 
   return (
     <ScrollProgressContext value={controller}>
-      <div
-        data-slot="scroll-progress"
-        className={cn(
-          'fixed bottom-[calc(env(safe-area-inset-bottom)+5.5rem)] left-1/2 z-100 w-max max-w-[calc(100vw-2rem)] -translate-x-1/2 font-sans sm:bottom-[calc(env(safe-area-inset-bottom)+1.5rem)]',
-          className
-        )}
-        {...props}
-      >
-        <motion.div layoutRoot className="relative">
-          <ScrollProgressBackground />
-          <Popover
-            open={controller.state.open}
-            onOpenChange={controller.actions.onOpenChange}
-          >
-            <ScrollProgressTrigger />
-            <ScrollProgressContent />
-          </Popover>
-        </motion.div>
-      </div>
+      <ScrollProgressSectionsContext value={sectionsContext}>
+        <div
+          data-slot="scroll-progress"
+          className={cn(
+            'fixed bottom-[calc(env(safe-area-inset-bottom)+5.5rem)] left-1/2 z-100 w-max max-w-[calc(100vw-2rem)] -translate-x-1/2 font-sans sm:bottom-[calc(env(safe-area-inset-bottom)+1.5rem)]',
+            className
+          )}
+          {...props}
+          data-ready={controller.state.ready}
+          aria-hidden={controller.state.ready ? props['aria-hidden'] : true}
+          inert={!controller.state.ready || props.inert}
+          style={{
+            ...style,
+            visibility: controller.state.ready ? style?.visibility : 'hidden',
+          }}
+        >
+          <div className="relative">
+            <ScrollProgressBackground />
+            <Popover
+              open={controller.state.open}
+              onOpenChange={controller.actions.onOpenChange}
+            >
+              <ScrollProgressTrigger />
+              <ScrollProgressContent />
+            </Popover>
+          </div>
+        </div>
+      </ScrollProgressSectionsContext>
     </ScrollProgressContext>
   );
 }
 
 function ScrollProgressBackground() {
   const {
-    state: { surfaceSize, sizes, layoutTransition },
+    state: { sizes },
+    meta: { surfaceRef },
   } = useScrollProgressContext();
+  // Only straight edges stretch; corners, border thickness and shadows stay unscaled.
   return (
     <div
-      className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2"
+      ref={surfaceRef}
+      data-slot="scroll-progress-background"
+      className="pointer-events-none absolute inset-0"
       aria-hidden
     >
-      <motion.div
-        data-slot="scroll-progress-background"
-        layout
-        initial={false}
-        className="bg-surface ring-foreground/10 border-border/50 border shadow-sm ring-1"
-        style={{
-          width: surfaceSize.width,
-          height: surfaceSize.height,
-          borderRadius: sizes.trigger.height / 2,
-        }}
-        transition={layoutTransition}
-      />
+      {SURFACE_TILE_POSITIONS.map(([column, row]) => {
+        const radius = sizes.trigger.height / 2;
+        const offsets = [SURFACE_SHADOW_PADDING, -radius, -radius * 3];
+        return (
+          <div
+            key={`${column}-${row}`}
+            className="absolute origin-top-left overflow-hidden"
+            style={{
+              left: column === 0 ? 0 : column === 1 ? radius : '100%',
+              top: row === 0 ? 0 : row === 1 ? radius : '100%',
+              translate: `${column === 0 ? -SURFACE_SHADOW_PADDING : column === 1 ? 0 : -radius}px ${row === 0 ? -SURFACE_SHADOW_PADDING : row === 1 ? 0 : -radius}px`,
+              width:
+                column === 1
+                  ? `calc(100% - ${radius * 2}px)`
+                  : radius + SURFACE_SHADOW_PADDING,
+              height:
+                row === 1
+                  ? `calc(100% - ${radius * 2}px)`
+                  : radius + SURFACE_SHADOW_PADDING,
+            }}
+          >
+            <div
+              className="bg-surface ring-foreground/10 border-border/50 absolute border shadow-sm ring-1"
+              style={{
+                width:
+                  column === 1 ? `calc(100% + ${radius * 2}px)` : radius * 4,
+                height: row === 1 ? `calc(100% + ${radius * 2}px)` : radius * 4,
+                borderRadius: radius,
+                left: offsets[column],
+                top: offsets[row],
+              }}
+            />
+          </div>
+        );
+      })}
     </div>
   );
 }
@@ -105,41 +174,23 @@ function ScrollProgressTrigger() {
   const {
     state: {
       open,
+      ready,
       keyboardInteraction,
       sizes,
-      layoutTransition,
-      activeSection,
+      labelSection,
+      labelNavigation,
       labelMotion,
       scrollYProgress,
     },
-    actions: { setKeyboardInteraction },
-    meta: { triggerRef },
+    actions: { setKeyboardInteraction, finishLabel },
+    meta: { triggerRef, stripRef },
   } = useScrollProgressContext();
-  const {
-    start: startReveal,
-    stop: stopReveal,
-    viewportRef,
-    maskRef,
-    contentRef,
-    ringRef,
-  } = useTriggerLabelReveal({
-    triggerRef,
-    open,
-    popupWidth: sizes.popup.width,
-  });
-  if (!activeSection) return null;
+  if (!labelSection) return null;
 
   return (
     <PopoverTrigger
       ref={triggerRef}
-      render={
-        <motion.button
-          layout
-          transition={layoutTransition}
-          onLayoutAnimationStart={startReveal}
-          onLayoutAnimationComplete={stopReveal}
-        />
-      }
+      disabled={!ready}
       style={open ? { width: sizes.popup.width } : undefined}
       aria-label={open ? 'Hide table of contents' : 'Show table of contents'}
       onKeyDown={() => setKeyboardInteraction(true)}
@@ -150,49 +201,51 @@ function ScrollProgressTrigger() {
         keyboardInteraction && 'transition-none active:scale-100'
       )}
     >
-      <motion.span
-        layout="position"
-        transition={layoutTransition}
+      <span
+        data-slot="scroll-progress-dot"
         aria-hidden
         className="bg-foreground size-2 shrink-0 rounded-full"
       />
-      <motion.span
-        ref={viewportRef}
-        layout="position"
-        transition={layoutTransition}
+      <span
         data-slot="scroll-progress-label-viewport"
         className="flex min-w-0 flex-1 self-stretch overflow-hidden"
         style={{ marginBlock: LABEL_VERTICAL_PADDING }}
       >
         <span
-          ref={maskRef}
           data-slot="scroll-progress-label-mask"
           className="flex min-w-0 flex-1 overflow-hidden"
         >
-          <span ref={contentRef} className="flex min-w-0 flex-1">
-            <SectionLabel section={activeSection} motion={labelMotion} />
+          <span
+            data-slot="scroll-progress-label-content"
+            className="flex min-w-0 flex-1"
+          >
+            {labelNavigation && labelMotion.mode === 'slide' ? (
+              <NavigationSectionLabel
+                navigation={labelNavigation}
+                rowHeight={labelMotion.edgeOffset * 2}
+                stripRef={stripRef}
+                onComplete={finishLabel}
+              />
+            ) : (
+              <SectionLabel section={labelSection} motion={labelMotion} />
+            )}
           </span>
         </span>
-      </motion.span>
-      <motion.span
-        ref={ringRef}
-        layout="position"
-        transition={layoutTransition}
-        className="shrink-0"
-      >
+      </span>
+      <span data-slot="scroll-progress-ring" className="shrink-0">
         <ProgressRing progress={scrollYProgress} />
-      </motion.span>
+      </span>
     </PopoverTrigger>
   );
 }
 
 function ScrollProgressContent() {
   const {
-    state: { keyboardInteraction },
+    state: { keyboardInteraction, contentReady },
     meta: { setPopupElement, activeLinkRef },
   } = useScrollProgressContext();
   return (
-    <PopoverPrimitive.Portal>
+    <PopoverPrimitive.Portal keepMounted>
       <PopoverPrimitive.Positioner
         side="top"
         sideOffset={0}
@@ -206,8 +259,9 @@ function ScrollProgressContent() {
             interaction === 'keyboard' ? activeLinkRef.current : false
           }
           data-slot="scroll-progress-surface"
+          data-ready={contentReady}
           className={cn(
-            'text-surface-foreground border-border/80 relative flex w-[min(360px,calc(100vw-2rem))] origin-(--transform-origin) flex-col overflow-hidden rounded-t-3xl border-b transition-[opacity,translate] delay-150 duration-100 ease-[cubic-bezier(0.23,1,0.32,1)] outline-none data-ending-style:pointer-events-none data-ending-style:translate-y-1 data-ending-style:opacity-0 data-ending-style:delay-0 data-starting-style:translate-y-1 data-starting-style:opacity-0 motion-reduce:translate-none! motion-reduce:delay-0 motion-reduce:duration-120',
+            'text-surface-foreground border-border/80 relative flex w-[min(360px,calc(100vw-2rem))] origin-(--transform-origin) flex-col overflow-hidden rounded-t-3xl border-b transition-[opacity,translate] duration-100 ease-[cubic-bezier(0.23,1,0.32,1)] outline-none data-ending-style:pointer-events-none data-ending-style:translate-y-1 data-ending-style:opacity-0 data-starting-style:translate-y-1 data-starting-style:opacity-0 data-[ready=false]:pointer-events-none data-[ready=false]:translate-y-1 data-[ready=false]:opacity-0 motion-reduce:translate-none! motion-reduce:duration-120',
             keyboardInteraction && 'translate-none! transition-none!'
           )}
         >
@@ -223,12 +277,12 @@ function ScrollProgressContent() {
 
 function ScrollProgressSectionList() {
   const {
-    state: { sections, open },
+    state: { open },
     meta: { popupElement, activeLinkRef },
   } = useScrollProgressContext();
   const listRef = React.useRef<HTMLElement>(null);
   const scroll = useTocScroll(listRef, popupElement, open);
-  useActiveLinkScroll(listRef, activeLinkRef, popupElement);
+  useActiveLinkScroll(listRef, activeLinkRef, popupElement, open);
   return (
     <div className="relative" onWheel={scroll.stop}>
       <nav
@@ -237,31 +291,57 @@ function ScrollProgressSectionList() {
         className="no-scrollbar scroll-fade max-h-[min(360px,calc(100dvh-14rem))] overflow-y-auto overscroll-contain p-2 sm:max-h-[min(360px,calc(100dvh-10rem))]"
       >
         <TOCScrollChevron direction="up" scroll={scroll} />
-        <ul className="flex flex-col gap-1">
-          {sections.map((section) => (
-            <li key={section.id}>
-              <ScrollProgressSectionLink section={section} />
-            </li>
-          ))}
-        </ul>
+        <ScrollProgressSections />
         <TOCScrollChevron direction="down" scroll={scroll} />
       </nav>
     </div>
   );
 }
 
+function ScrollProgressSections() {
+  const context = React.use(ScrollProgressSectionsContext);
+  if (!context) throw new Error('Sections must be inside ScrollProgress.');
+  const {
+    sections,
+    activeSectionId,
+    visibleHeadingIds,
+    minimumDepth,
+    selectSection,
+    activeLinkRef,
+  } = context;
+  return (
+    <ul className="flex flex-col gap-1">
+      {sections.map((section) => (
+        <li key={section.id}>
+          <ScrollProgressSectionLink
+            section={section}
+            active={section.id === activeSectionId}
+            visible={visibleHeadingIds.has(section.id)}
+            minimumDepth={minimumDepth}
+            selectSection={selectSection}
+            activeLinkRef={activeLinkRef}
+          />
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 function ScrollProgressSectionLink({
   section,
+  active,
+  visible,
+  minimumDepth,
+  selectSection,
+  activeLinkRef,
 }: {
   section: ScrollProgressSection;
+  active: boolean;
+  visible: boolean;
+  minimumDepth: number;
+  selectSection: ScrollProgressContextValue['actions']['selectSection'];
+  activeLinkRef: React.RefObject<HTMLAnchorElement | null>;
 }) {
-  const {
-    state: { activeSection, visibleHeadingIds, minimumDepth },
-    actions: { selectSection },
-    meta: { activeLinkRef },
-  } = useScrollProgressContext();
-  const active = section.id === activeSection?.id;
-  const visible = visibleHeadingIds.has(section.id);
   return (
     <a
       ref={active ? activeLinkRef : undefined}
@@ -389,6 +469,80 @@ function SectionLabel({
           {section.label}
         </motion.span>
       </AnimatePresence>
+    </span>
+  );
+}
+
+function NavigationSectionLabel({
+  navigation,
+  rowHeight,
+  stripRef,
+  onComplete,
+}: {
+  navigation: SectionLabelNavigation;
+  rowHeight: number;
+  stripRef: React.RefObject<HTMLSpanElement | null>;
+  onComplete: (navigation: SectionLabelNavigation) => void;
+}) {
+  const height = Math.max(1, rowHeight);
+  const rows =
+    navigation.direction > 0
+      ? navigation.sections
+      : navigation.sections.toReversed();
+  const target = navigation.sections.at(-1)!;
+
+  React.useLayoutEffect(() => {
+    const strip = stripRef.current;
+    if (!strip) return;
+    const distance = (navigation.sections.length - 1) * height;
+    const from = navigation.direction > 0 ? 0 : -distance;
+    const to = navigation.direction > 0 ? -distance : 0;
+    strip.style.transform = `translateY(${to}px)`;
+
+    const animation = strip.animate(
+      [
+        { transform: `translateY(${from}px)` },
+        { transform: `translateY(${to}px)` },
+      ],
+      { duration: 500, easing: 'cubic-bezier(0.23, 1, 0.32, 1)', fill: 'both' }
+    );
+    void animation.finished.then(
+      () => {
+        animation.cancel();
+        onComplete(navigation);
+      },
+      () => {}
+    );
+    return () => {
+      animation.cancel();
+    };
+  }, [navigation, height, stripRef, onComplete]);
+
+  return (
+    <span className="relative flex min-w-0 flex-1 items-center text-sm">
+      <span aria-hidden className="invisible block truncate">
+        {target.label}
+      </span>
+      <span className="sr-only">{target.label}</span>
+      <span
+        ref={stripRef}
+        aria-hidden
+        data-slot="scroll-progress-label-strip"
+        className="absolute inset-x-0 top-1/2"
+        style={{ marginTop: -height / 2 }}
+      >
+        {rows.map((section) => (
+          <span
+            key={section.id}
+            className="flex items-center"
+            style={{ height }}
+          >
+            <span className="block min-w-0 truncate select-none!">
+              {section.label}
+            </span>
+          </span>
+        ))}
+      </span>
     </span>
   );
 }
