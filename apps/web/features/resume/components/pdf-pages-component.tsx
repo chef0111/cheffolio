@@ -14,6 +14,7 @@ import { RESUME_PDF_FILENAME, RESUME_PDF_PATH } from '@/config/resume';
 import {
   useResumePreviewReady,
   useResumeViewer,
+  useResumeViewerDocument,
 } from '../context/resume-viewer-provider';
 
 const PAGE_GAP_PX = 16;
@@ -60,118 +61,145 @@ function useStableWidth(elementRef: React.RefObject<HTMLElement | null>) {
 }
 
 export function PdfPages() {
-  const { src, zoom, setNumPages } = useResumeViewer();
+  const { src, setNumPages } = useResumeViewerDocument();
   const { setPreviewReady } = useResumePreviewReady();
 
   return (
-    <PdfDocument
-      key={src}
-      src={src}
-      zoom={zoom}
-      setNumPages={setNumPages}
-      setPreviewReady={setPreviewReady}
-    />
+    <PdfPagesLayout>
+      <PdfDocument
+        key={src}
+        src={src}
+        setNumPages={setNumPages}
+        setPreviewReady={setPreviewReady}
+      />
+    </PdfPagesLayout>
+  );
+}
+
+function PdfPagesLayout({ children }: { children: React.ReactNode }) {
+  const { zoom } = useResumeViewer();
+  const sizerRef = React.useRef<HTMLDivElement>(null);
+  const sizerWidth = useStableWidth(sizerRef);
+  const fitWidth = Math.min(sizerWidth, MAX_PAGE_WIDTH_PX);
+  const pageWidth = Math.max(0, Math.floor(fitWidth * zoom));
+
+  return (
+    <div
+      className="flex min-h-full w-full flex-col items-center"
+      style={
+        {
+          '--resume-page-width': `${pageWidth}px`,
+          '--resume-page-scale': pageWidth / MAX_PAGE_WIDTH_PX,
+        } as React.CSSProperties
+      }
+    >
+      <div ref={sizerRef} className="w-full max-w-225" />
+      {pageWidth > 0 ? children : null}
+    </div>
   );
 }
 
 function PdfDocument({
   src,
-  zoom,
   setNumPages,
   setPreviewReady,
 }: {
   src: string;
-  zoom: number;
   setNumPages: (numPages: number) => void;
   setPreviewReady: (ready: boolean) => void;
 }) {
-  const sizerRef = React.useRef<HTMLDivElement>(null);
-  const sizerWidth = useStableWidth(sizerRef);
   const [loadedPages, setLoadedPages] = React.useState(0);
   const [retryKey, setRetryKey] = React.useState(0);
 
-  const fitWidth = Math.min(sizerWidth, MAX_PAGE_WIDTH_PX);
-  const pageWidth = Math.max(0, Math.floor(fitWidth * zoom));
-
-  const settleDocumentError = () => {
+  const settleDocumentError = React.useCallback(() => {
     setNumPages(0);
     setPreviewReady(true);
-  };
+  }, [setNumPages, setPreviewReady]);
 
-  const retry = () => {
+  const retry = React.useCallback(() => {
     setPreviewReady(false);
     setLoadedPages(0);
     setNumPages(0);
     setRetryKey((current) => current + 1);
-  };
+  }, [setNumPages, setPreviewReady]);
+
+  const settleFirstPage = React.useCallback(() => {
+    setPreviewReady(true);
+  }, [setPreviewReady]);
 
   return (
-    <div className="flex min-h-full w-full flex-col items-center">
-      <div ref={sizerRef} className="w-full max-w-225" />
+    <Document
+      key={`${src}:${retryKey}`}
+      file={src}
+      suspense={false}
+      className="flex w-full flex-col items-center-safe"
+      loading={null}
+      error={<ResumeViewerError onRetry={retry} />}
+      externalLinkTarget="_blank"
+      externalLinkRel="noopener noreferrer"
+      onLoadSuccess={(pdf) => {
+        setLoadedPages(pdf.numPages);
+        setNumPages(pdf.numPages);
+      }}
+      onLoadError={settleDocumentError}
+      onSourceError={settleDocumentError}
+    >
+      <div
+        data-slot="resume-viewer-pages"
+        className="flex flex-col items-center"
+        style={{ gap: PAGE_GAP_PX }}
+      >
+        {Array.from({ length: loadedPages }, (_, index) => {
+          const pageNumber = index + 1;
 
-      {pageWidth > 0 ? (
-        <Document
-          key={`${src}:${retryKey}`}
-          file={src}
-          suspense={false}
-          className="flex w-full flex-col items-center-safe"
-          loading={null}
-          error={<ResumeViewerError onRetry={retry} />}
-          externalLinkTarget="_blank"
-          externalLinkRel="noopener noreferrer"
-          onLoadSuccess={(pdf) => {
-            setLoadedPages(pdf.numPages);
-            setNumPages(pdf.numPages);
-          }}
-          onLoadError={settleDocumentError}
-          onSourceError={settleDocumentError}
-        >
-          <div
-            data-slot="resume-viewer-pages"
-            className="flex flex-col items-center"
-            style={{ gap: PAGE_GAP_PX }}
-          >
-            {Array.from({ length: loadedPages }, (_, index) => {
-              const pageNumber = index + 1;
-
-              return (
-                <div
-                  key={pageNumber}
-                  data-slot="resume-viewer-page"
-                  data-page-number={pageNumber}
-                  className="bg-white shadow-sm"
-                  style={{ width: pageWidth, aspectRatio: ASPECT_RATIO }}
-                >
-                  <PdfPage
-                    pageNumber={pageNumber}
-                    width={pageWidth}
-                    onFirstPageSettled={
-                      pageNumber === 1 ? () => setPreviewReady(true) : undefined
-                    }
-                    onRetry={retry}
-                  />
-                </div>
-              );
-            })}
-          </div>
-        </Document>
-      ) : null}
-    </div>
+          return (
+            <div
+              key={pageNumber}
+              data-slot="resume-viewer-page"
+              data-page-number={pageNumber}
+              className="relative overflow-hidden bg-white shadow-sm"
+              style={{
+                width: 'var(--resume-page-width)',
+                aspectRatio: ASPECT_RATIO,
+              }}
+            >
+              <div
+                className="absolute top-0 left-0 origin-top-left"
+                style={{
+                  width: MAX_PAGE_WIDTH_PX,
+                  transform: 'scale(var(--resume-page-scale))',
+                }}
+              >
+                <PdfPage
+                  pageNumber={pageNumber}
+                  onFirstPageSettled={
+                    pageNumber === 1 ? settleFirstPage : undefined
+                  }
+                  onRetry={retry}
+                />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </Document>
   );
 }
 
 function PdfPage({
   pageNumber,
-  width,
   onFirstPageSettled,
   onRetry,
 }: {
   pageNumber: number;
-  width: number;
   onFirstPageSettled?: () => void;
   onRetry: () => void;
 }) {
   const pageRef = React.useRef<HTMLDivElement>(null);
+  // Keep raster density stable during zoom while retaining detail when enlarged.
+  const [devicePixelRatio] = React.useState(() =>
+    Math.max(2, window.devicePixelRatio)
+  );
 
   const nameAnnotationLinks = () => {
     pageRef.current
@@ -185,7 +213,8 @@ function PdfPage({
   return (
     <Page
       pageNumber={pageNumber}
-      width={width}
+      width={MAX_PAGE_WIDTH_PX}
+      devicePixelRatio={devicePixelRatio}
       suspense={false}
       inputRef={pageRef}
       loading={null}

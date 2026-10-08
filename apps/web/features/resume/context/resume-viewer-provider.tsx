@@ -31,6 +31,11 @@ export type ResumeViewerContextValue = ResumeViewerState &
 const ResumeViewerContext =
   React.createContext<ResumeViewerContextValue | null>(null);
 
+const ResumeViewerDocumentContext = React.createContext<Pick<
+  ResumeViewerContextValue,
+  'src' | 'setNumPages'
+> | null>(null);
+
 const PreviewReadyContext = React.createContext<{
   isPreviewReady: boolean;
   setPreviewReady: (ready: boolean) => void;
@@ -50,6 +55,18 @@ export function useResumeViewer() {
 
 export function useResumePreviewReady() {
   const context = React.use(PreviewReadyContext);
+
+  if (!context) {
+    throw new Error(
+      'ResumeViewer parts must be rendered inside <ResumeViewer>'
+    );
+  }
+
+  return context;
+}
+
+export function useResumeViewerDocument() {
+  const context = React.use(ResumeViewerDocumentContext);
 
   if (!context) {
     throw new Error(
@@ -115,9 +132,13 @@ export function ResumeViewerProvider({
     [isPreviewReady]
   );
 
+  const document = React.useMemo(() => ({ src, setNumPages }), [src]);
+
   return (
     <ResumeViewerContext value={value}>
-      <PreviewReadyContext value={preview}>{children}</PreviewReadyContext>
+      <ResumeViewerDocumentContext value={document}>
+        <PreviewReadyContext value={preview}>{children}</PreviewReadyContext>
+      </ResumeViewerDocumentContext>
     </ResumeViewerContext>
   );
 }
