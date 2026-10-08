@@ -69,7 +69,7 @@ export function ResumeViewerZoomShortcuts() {
       accumulatedDelta += delta;
       lastWheelTime = now;
 
-      // Avoid rerendering PDF canvases for every high-resolution wheel event.
+      // Keep high-resolution wheel gestures from producing excessive zoom steps.
       if (Math.abs(accumulatedDelta) < 40 || now - lastZoomTime < 100) return;
 
       accumulatedDelta = 0;
