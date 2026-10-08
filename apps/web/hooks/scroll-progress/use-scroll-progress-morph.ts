@@ -5,6 +5,7 @@ import * as React from 'react';
 import {
   type ScrollProgressSize,
   SURFACE_SHADOW_PADDING,
+  SURFACE_TILE_OVERLAP,
   SURFACE_TILE_POSITIONS,
   surfaceTileTransform,
 } from '@/lib/scroll-progress-morph';
@@ -95,8 +96,8 @@ export function useScrollProgressMorph({
         left: '50%',
         top: '100%',
         translate: 'none',
-        width: `${column === 1 ? radius * 2 : radius + SURFACE_SHADOW_PADDING}px`,
-        height: `${row === 1 ? radius * 2 : radius + SURFACE_SHADOW_PADDING}px`,
+        width: `${column === 1 ? radius * 2 : radius + SURFACE_SHADOW_PADDING + SURFACE_TILE_OVERLAP}px`,
+        height: `${row === 1 ? radius * 2 : radius + SURFACE_SHADOW_PADDING + SURFACE_TILE_OVERLAP}px`,
       });
       transition(
         tile,
