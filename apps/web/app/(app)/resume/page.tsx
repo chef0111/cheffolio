@@ -110,7 +110,7 @@ export default function ResumePage() {
               </div>
             </DocContainer>
 
-            <DocGrid className="flex-1 grid-rows-1">
+            <DocGrid className="flex-1 grid-rows-1 overflow-x-hidden">
               <DocLeftCol />
 
               <DocContentCol className="border-t">

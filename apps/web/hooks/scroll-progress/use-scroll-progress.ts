@@ -55,8 +55,9 @@ export function useScrollProgress({
   } = useSectionLabelNavigation({ sections, containerRef, reduceMotion });
   const labelSection = labelNavigation?.sections.at(-1) ?? activeSection;
   const sizes = usePopupSizes(triggerRef, popupElement, open, labelSection?.id);
+  const expanded = open && sizes.popupMeasured;
   const minimumDepth = Math.min(...sections.map(({ depth }) => depth ?? 2));
-  const surfaceSize = open
+  const surfaceSize = expanded
     ? {
         width: sizes.popup.width,
         height: sizes.popup.height + sizes.trigger.height,
@@ -64,12 +65,11 @@ export function useScrollProgress({
     : sizes.trigger;
   const { surfaceRef, contentReady, surfaceReady } = useScrollProgressMorph({
     triggerRef,
-    popupElement,
     open,
     instant: !trackingReady || reduceMotion || keyboardInteraction,
     triggerSize: sizes.trigger,
     surfaceSize,
-    measured: sizes.measured,
+    measured: sizes.measured && sizes.popupMeasured,
   });
   const animateLabel =
     trackingReady && (labelNavigation?.animate ?? activeHeading.animate);
@@ -86,7 +86,9 @@ export function useScrollProgress({
     if (nextOpen) cancelNavigation();
     setKeyboardInteraction(
       event.type.startsWith('key') ||
-        (event instanceof MouseEvent && event.detail === 0)
+        (event.type === 'click' &&
+          event instanceof MouseEvent &&
+          event.detail === 0)
     );
     setOpen(nextOpen);
   };
@@ -131,12 +133,14 @@ export function useScrollProgress({
       visibleHeadingIds,
       minimumDepth,
       open,
+      expanded,
       keyboardInteraction,
       sizes,
       surfaceSize,
-      contentReady,
+      contentReady: expanded && contentReady,
       surfaceReady,
-      ready: trackingReady && surfaceReady && sizes.measured,
+      ready:
+        trackingReady && surfaceReady && sizes.measured && sizes.popupMeasured,
       labelMotion,
       scrollYProgress,
     },
@@ -410,10 +414,12 @@ function usePopupSizes(
     trigger: ScrollProgressSize;
     popup: ScrollProgressSize;
     measured: boolean;
+    popupMeasured: boolean;
   }>({
     trigger: { width: 256, height: 48 },
     popup: { width: 360, height: 48 },
     measured: false,
+    popupMeasured: false,
   });
   React.useLayoutEffect(() => {
     const trigger = triggerRef.current;
@@ -428,18 +434,23 @@ function usePopupSizes(
     const measure = () => {
       if (!trigger.offsetHeight || !trigger.offsetWidth) return;
       setSizes((previous) => {
+        const popupMeasured = Boolean(
+          popup && popup.offsetWidth > 0 && popup.offsetHeight > 0
+        );
         const next = {
           measured: true,
+          popupMeasured,
           trigger: {
             width: open ? previous.trigger.width : trigger.offsetWidth,
             height: trigger.offsetHeight,
           },
           popup:
-            popup && open && popup.offsetWidth > 0
+            popup && popupMeasured
               ? { width: popup.offsetWidth, height: popup.offsetHeight }
               : previous.popup,
         };
         return previous.measured &&
+          next.popupMeasured === previous.popupMeasured &&
           next.trigger.width === previous.trigger.width &&
           next.trigger.height === previous.trigger.height &&
           next.popup.width === previous.popup.width &&

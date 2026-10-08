@@ -179,6 +179,7 @@ function ScrollProgressTrigger() {
   const {
     state: {
       open,
+      expanded,
       ready,
       keyboardInteraction,
       sizes,
@@ -196,13 +197,13 @@ function ScrollProgressTrigger() {
     <PopoverTrigger
       ref={triggerRef}
       disabled={!ready}
-      style={open ? { width: sizes.popup.width } : undefined}
+      style={expanded ? { width: sizes.popup.width } : undefined}
       aria-label={open ? 'Hide table of contents' : 'Show table of contents'}
       onKeyDown={() => setKeyboardInteraction(true)}
       onPointerDown={() => setKeyboardInteraction(false)}
       className={cn(
         'text-surface-foreground relative flex h-12 items-center gap-4 rounded-full pr-3 pl-4 text-left text-base font-medium outline-none',
-        !open && 'max-w-64 min-w-44',
+        !expanded && 'max-w-64 min-w-44',
         keyboardInteraction && 'transition-none active:scale-100'
       )}
     >
@@ -246,12 +247,16 @@ function ScrollProgressTrigger() {
 
 function ScrollProgressContent() {
   const {
-    state: { keyboardInteraction, contentReady },
+    state: { open, keyboardInteraction, contentReady },
     meta: { setPopupElement, activeLinkRef },
   } = useScrollProgressContext();
   return (
     <PopoverPrimitive.Portal keepMounted>
       <PopoverPrimitive.Positioner
+        // Keep the closed menu measurable so preparation finishes before the pill appears.
+        hidden={false}
+        inert={!open}
+        aria-hidden={!open}
         side="top"
         sideOffset={0}
         positionMethod="fixed"
