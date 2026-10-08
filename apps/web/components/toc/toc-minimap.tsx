@@ -1,9 +1,15 @@
 'use client';
 
 import type { TOCItemType } from 'fumadocs-core/toc';
+import dynamic from 'next/dynamic';
 
-import { ScrollProgress } from '@/components/ui/scroll-progress';
 import { cn } from '@/lib/utils';
+
+const ScrollProgress = dynamic(
+  () =>
+    import('@/components/ui/scroll-progress').then((mod) => mod.ScrollProgress),
+  { ssr: false, loading: () => null }
+);
 
 export function TOCMinimap({
   items,
