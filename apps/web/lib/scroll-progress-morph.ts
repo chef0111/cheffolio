@@ -1,6 +1,8 @@
 export type ScrollProgressSize = { width: number; height: number };
 
 export const SURFACE_SHADOW_PADDING = 8;
+// Overlap inward-facing clips to hide seams at fractional device pixels.
+export const SURFACE_TILE_OVERLAP = 1;
 export const SURFACE_TILE_POSITIONS = [
   [0, 0],
   [1, 0],
@@ -22,9 +24,13 @@ export function surfaceTileTransform(
   const x = [
     -width / 2 - SURFACE_SHADOW_PADDING,
     -width / 2 + radius,
-    width / 2 - radius,
+    width / 2 - radius - SURFACE_TILE_OVERLAP,
   ][column];
-  const y = [-height - SURFACE_SHADOW_PADDING, -height + radius, -radius][row];
+  const y = [
+    -height - SURFACE_SHADOW_PADDING,
+    -height + radius,
+    -radius - SURFACE_TILE_OVERLAP,
+  ][row];
   const scaleX =
     column === 1 ? Math.max(0, width - radius * 2) / (radius * 2) : 1;
   const scaleY =

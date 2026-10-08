@@ -5,6 +5,7 @@ import * as React from 'react';
 import {
   type ScrollProgressSize,
   SURFACE_SHADOW_PADDING,
+  SURFACE_TILE_OVERLAP,
   SURFACE_TILE_POSITIONS,
   surfaceTileTransform,
 } from '@/lib/scroll-progress-morph';
@@ -14,7 +15,6 @@ const CLOSE_EASING = 'cubic-bezier(0.23,1,0.32,1)';
 
 export function useScrollProgressMorph({
   triggerRef,
-  popupElement,
   open,
   instant,
   triggerSize,
@@ -22,7 +22,6 @@ export function useScrollProgressMorph({
   measured,
 }: {
   triggerRef: React.RefObject<HTMLButtonElement | null>;
-  popupElement: HTMLElement | null;
   open: boolean;
   instant: boolean;
   triggerSize: ScrollProgressSize;
@@ -51,7 +50,6 @@ export function useScrollProgressMorph({
       return;
     }
     if (!measured) return;
-    if (open && !popupElement) return;
     const tiles = [...surface.children] as HTMLElement[];
     if (tiles.length !== SURFACE_TILE_POSITIONS.length) return;
 
@@ -95,8 +93,8 @@ export function useScrollProgressMorph({
         left: '50%',
         top: '100%',
         translate: 'none',
-        width: `${column === 1 ? radius * 2 : radius + SURFACE_SHADOW_PADDING}px`,
-        height: `${row === 1 ? radius * 2 : radius + SURFACE_SHADOW_PADDING}px`,
+        width: `${column === 1 ? radius * 2 : radius + SURFACE_SHADOW_PADDING + SURFACE_TILE_OVERLAP}px`,
+        height: `${row === 1 ? radius * 2 : radius + SURFACE_SHADOW_PADDING + SURFACE_TILE_OVERLAP}px`,
       });
       transition(
         tile,
@@ -137,13 +135,6 @@ export function useScrollProgressMorph({
     animationsRef.current = animations;
     setContentReady(open && animations.length === 0);
 
-    // All layers share one native timeline; no React or JavaScript frame loop is needed.
-    const startTime = document.timeline.currentTime;
-    if (typeof startTime === 'number') {
-      animations.forEach((animation) => {
-        animation.startTime = startTime;
-      });
-    }
     Promise.all(animations.map((animation) => animation.finished)).then(
       () => {
         if (generationRef.current !== generation) return;
@@ -156,7 +147,6 @@ export function useScrollProgressMorph({
   }, [
     open,
     instant,
-    popupElement,
     triggerRef,
     triggerSize.height,
     surfaceWidth,

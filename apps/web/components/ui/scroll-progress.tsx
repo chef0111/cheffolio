@@ -22,6 +22,7 @@ import {
 } from '@/hooks/scroll-progress/use-toc-scroll';
 import {
   SURFACE_SHADOW_PADDING,
+  SURFACE_TILE_OVERLAP,
   SURFACE_TILE_POSITIONS,
 } from '@/lib/scroll-progress-morph';
 import { cn } from '@/lib/utils';
@@ -90,7 +91,7 @@ export function ScrollProgress({
         <div
           data-slot="scroll-progress"
           className={cn(
-            'fixed bottom-[calc(env(safe-area-inset-bottom)+5.5rem)] left-1/2 z-100 w-max max-w-[calc(100vw-2rem)] -translate-x-1/2 font-sans sm:bottom-[calc(env(safe-area-inset-bottom)+1.5rem)]',
+            'fixed bottom-[calc(env(safe-area-inset-bottom)+5.5rem)] left-1/2 z-100 w-max max-w-[calc(100vw-2rem)] -translate-x-1/2 font-sans transition-opacity duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none sm:bottom-[calc(env(safe-area-inset-bottom)+1.5rem)]',
             className
           )}
           {...props}
@@ -99,6 +100,7 @@ export function ScrollProgress({
           inert={!controller.state.ready || props.inert}
           style={{
             ...style,
+            opacity: controller.state.ready ? style?.opacity : 0,
             visibility: controller.state.ready ? style?.visibility : 'hidden',
           }}
         >
@@ -133,7 +135,11 @@ function ScrollProgressBackground() {
     >
       {SURFACE_TILE_POSITIONS.map(([column, row]) => {
         const radius = sizes.trigger.height / 2;
-        const offsets = [SURFACE_SHADOW_PADDING, -radius, -radius * 3];
+        const offsets = [
+          SURFACE_SHADOW_PADDING,
+          -radius,
+          -radius * 3 + SURFACE_TILE_OVERLAP,
+        ];
         return (
           <div
             key={`${column}-${row}`}
@@ -141,15 +147,15 @@ function ScrollProgressBackground() {
             style={{
               left: column === 0 ? 0 : column === 1 ? radius : '100%',
               top: row === 0 ? 0 : row === 1 ? radius : '100%',
-              translate: `${column === 0 ? -SURFACE_SHADOW_PADDING : column === 1 ? 0 : -radius}px ${row === 0 ? -SURFACE_SHADOW_PADDING : row === 1 ? 0 : -radius}px`,
+              translate: `${column === 0 ? -SURFACE_SHADOW_PADDING : column === 1 ? 0 : -radius - SURFACE_TILE_OVERLAP}px ${row === 0 ? -SURFACE_SHADOW_PADDING : row === 1 ? 0 : -radius - SURFACE_TILE_OVERLAP}px`,
               width:
                 column === 1
                   ? `calc(100% - ${radius * 2}px)`
-                  : radius + SURFACE_SHADOW_PADDING,
+                  : radius + SURFACE_SHADOW_PADDING + SURFACE_TILE_OVERLAP,
               height:
                 row === 1
                   ? `calc(100% - ${radius * 2}px)`
-                  : radius + SURFACE_SHADOW_PADDING,
+                  : radius + SURFACE_SHADOW_PADDING + SURFACE_TILE_OVERLAP,
             }}
           >
             <div
@@ -174,6 +180,7 @@ function ScrollProgressTrigger() {
   const {
     state: {
       open,
+      expanded,
       ready,
       keyboardInteraction,
       sizes,
@@ -191,13 +198,13 @@ function ScrollProgressTrigger() {
     <PopoverTrigger
       ref={triggerRef}
       disabled={!ready}
-      style={open ? { width: sizes.popup.width } : undefined}
+      style={expanded ? { width: sizes.popup.width } : undefined}
       aria-label={open ? 'Hide table of contents' : 'Show table of contents'}
       onKeyDown={() => setKeyboardInteraction(true)}
       onPointerDown={() => setKeyboardInteraction(false)}
       className={cn(
         'text-surface-foreground relative flex h-12 items-center gap-4 rounded-full pr-3 pl-4 text-left text-base font-medium outline-none',
-        !open && 'max-w-64 min-w-44',
+        !expanded && 'max-w-64 min-w-44',
         keyboardInteraction && 'transition-none active:scale-100'
       )}
     >
@@ -241,12 +248,16 @@ function ScrollProgressTrigger() {
 
 function ScrollProgressContent() {
   const {
-    state: { keyboardInteraction, contentReady },
+    state: { open, keyboardInteraction, contentReady },
     meta: { setPopupElement, activeLinkRef },
   } = useScrollProgressContext();
   return (
     <PopoverPrimitive.Portal keepMounted>
       <PopoverPrimitive.Positioner
+        // Keep the closed menu measurable so preparation finishes before the pill appears.
+        hidden={false}
+        inert={!open}
+        aria-hidden={!open}
         side="top"
         sideOffset={0}
         positionMethod="fixed"
@@ -261,11 +272,11 @@ function ScrollProgressContent() {
           data-slot="scroll-progress-surface"
           data-ready={contentReady}
           className={cn(
-            'text-surface-foreground border-border/80 relative flex w-[min(360px,calc(100vw-2rem))] origin-(--transform-origin) flex-col overflow-hidden rounded-t-3xl border-b transition-[opacity,translate] duration-100 ease-[cubic-bezier(0.23,1,0.32,1)] outline-none data-ending-style:pointer-events-none data-ending-style:translate-y-1 data-ending-style:opacity-0 data-starting-style:translate-y-1 data-starting-style:opacity-0 data-[ready=false]:pointer-events-none data-[ready=false]:translate-y-1 data-[ready=false]:opacity-0 motion-reduce:translate-none! motion-reduce:duration-120',
+            'text-surface-foreground relative flex w-[min(360px,calc(100vw-2rem))] origin-(--transform-origin) flex-col overflow-hidden rounded-t-3xl border-b transition-[opacity,translate] duration-100 ease-[cubic-bezier(0.23,1,0.32,1)] outline-none data-ending-style:pointer-events-none data-ending-style:translate-y-1 data-ending-style:opacity-0 data-starting-style:translate-y-1 data-starting-style:opacity-0 data-[ready=false]:pointer-events-none data-[ready=false]:translate-y-1 data-[ready=false]:opacity-0 motion-reduce:translate-none! motion-reduce:duration-120',
             keyboardInteraction && 'translate-none! transition-none!'
           )}
         >
-          <PopoverTitle className="text-muted-foreground px-5 pt-4 pb-2 text-xs font-semibold uppercase">
+          <PopoverTitle className="text-muted-foreground border-b px-5 pt-4 pb-2 text-xs font-semibold uppercase">
             Table of contents
           </PopoverTitle>
           <ScrollProgressSectionList />
