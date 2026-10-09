@@ -14,14 +14,14 @@ export const SOCIAL = {
   github: {
     icon: `${baseUrl}/github.webp`,
     title: 'GitHub',
-    profile: 'chef0111',
+    profile: 'gbaolt',
     href: USER.socialLinks.github,
     sameAs: true,
   },
   linkedin: {
     icon: `${baseUrl}/linkedin.webp`,
     title: 'LinkedIn',
-    profile: 'chef0111',
+    profile: 'gbaolt',
     href: USER.socialLinks.linkedin,
     sameAs: true,
   },

@@ -41,11 +41,11 @@ export const metadata: Metadata = {
   keywords: SITE_INFO.keywords,
   authors: [
     {
-      name: 'chef0111',
+      name: 'gbaolt',
       url: SITE_INFO.url,
     },
   ],
-  creator: 'chef0111',
+  creator: 'gbaolt',
   openGraph: {
     siteName: SITE_INFO.name,
     url: '/',

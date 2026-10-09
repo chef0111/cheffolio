@@ -7,6 +7,7 @@ The [MIT license](./LICENSE) covers the source code in this repository. It does 
 These are not part of the MIT grant, including where the files live in this repository:
 
 - **giabao.dev**
+- **gbaolt**
 - **chef0111**
 - **Coding as Chef**
 - The logo defined by `Brand` and `BrandMark` in [`components/cheffolio/brand.tsx`](./components/cheffolio/brand.tsx), including copies used as favicons, app icons, and screenshots
@@ -15,7 +16,7 @@ These are not part of the MIT grant, including where the files live in this repo
 
 - Use the code under the MIT license
 - Say that your work is based on, forked from, or inspired by this repository
-- Link to [giabao.dev](https://giabao.dev) or [github.com/chef0111/cheffolio](https://github.com/chef0111/cheffolio)
+- Link to [giabao.dev](https://giabao.dev) or [github.com/gbaolt/cheffolio](https://github.com/gbaolt/cheffolio)
 - Show screenshots of the site in articles, talks, and reviews
 
 ## Permission required
@@ -37,4 +38,4 @@ Keep the rest of the MIT-licensed code, including other files under `components/
 
 ## Questions
 
-[Open an issue](https://github.com/chef0111/cheffolio/issues). Say which name or logo you want to use, where you will use it, and why.
+[Open an issue](https://github.com/gbaolt/cheffolio/issues). Say which name or logo you want to use, where you will use it, and why.

@@ -1,7 +1,25 @@
 {
   "name": "cheffolio",
   "private": true,
-  "packageManager": "bun@1.3.4",
+  "packageManager": "bun@1.4.2",
+  "homepage": "https://giabao.dev",
+  "license": "MIT",
+  "author": {
+    "name": "Le Tran Gia Bao",
+    "email": "letrangiabao14@gmail.com",
+    "url": "https://github.com/gbaolt"
+  },
+  "contributors": [
+    {
+      "name": "Le Tran Gia Bao",
+      "email": "letrangiabao14@gmail.com",
+      "url": "https://github.com/gbaolt"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gbaolt/cheffolio.git"
+  },
   "workspaces": {
     "packages": [
       "apps/*",

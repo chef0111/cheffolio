@@ -108,7 +108,7 @@ function getGitHubSourceUrl(markdownUrl: string) {
   const path = markdownUrl.replace(/^\//, '').replace(/\.md$/, '');
   const filePath = path.includes('/') ? path : `${path}/${path}`;
 
-  return `https://github.com/chef0111/cheffolio/blob/main/docs/${filePath}.mdx`;
+  return `https://github.com/gbaolt/cheffolio/blob/main/docs/${filePath}.mdx`;
 }
 
 export function ViewOptions({

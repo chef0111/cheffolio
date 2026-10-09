@@ -10,7 +10,7 @@
   <a href="https://tailwindcss.com"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/Tailwind_CSS.svg?variant=branded&amp;size=xs&amp;font=geist&amp;logo=tailwindcss" /><img alt="Tailwind CSS" src="https://shieldcn.dev/badge/Tailwind_CSS.svg?variant=branded&amp;size=xs&amp;mode=light&amp;font=geist&amp;logo=tailwindcss" /></picture></a>
   <a href="https://ui.shadcn.com"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/shadcn/ui.svg?size=xs&amp;font=geist&amp;logo=shadcnui" /><img alt="shadcn/ui" src="https://shieldcn.dev/badge/shadcn/ui.svg?size=xs&amp;mode=light&amp;font=geist&amp;logo=shadcnui" /></picture></a>
   <a href="https://turborepo.dev"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/Turborepo.svg?variant=branded&amp;size=xs&amp;font=geist&amp;logo=turborepo" /><img alt="badge" src="https://shieldcn.dev/badge/Turborepo.svg?variant=branded&amp;size=xs&amp;mode=light&amp;font=geist&amp;logo=turborepo" /></picture></a>
-  <a href="https://github.com/chef0111/cheffolio"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/github/chef0111/cheffolio/license.svg?variant=secondary&amp;size=xs&amp;font=geist" /><img alt="License" src="https://shieldcn.dev/github/chef0111/cheffolio/license.svg?variant=secondary&amp;size=xs&amp;mode=light&amp;font=geist" /></picture></a>
+  <a href="https://github.com/gbaolt/cheffolio"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/github/gbaolt/cheffolio/license.svg?variant=secondary&amp;size=xs&amp;font=geist" /><img alt="License" src="https://shieldcn.dev/github/gbaolt/cheffolio/license.svg?variant=secondary&amp;size=xs&amp;mode=light&amp;font=geist" /></picture></a>
 </p>
 
 ## Overview
@@ -45,7 +45,7 @@ Content is distributed across MDX files in [docs](apps/web/docs/):
 
 ## Stats
 
-![Stats](https://repobeats.axiom.co/api/embed/f5f65e9b9763db7fd386d2417b89d4e5c2fdc6c3.svg 'Repobeats analytics image')
+![Stats](https://repobeats.axiom.co/api/embed/a0fdaf5bec54896f3667ea587ddcf54f07f61802.svg 'Repobeats analytics image')
 
 ## Development
 

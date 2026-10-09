@@ -67,6 +67,6 @@ export const UTM_PARAMS = {
 export const X_PROFILE = SOCIAL.x.profile;
 export const GITHUB_PROFILE = SOCIAL.github.profile;
 
-export const GITHUB_REPO_URL = 'https://github.com/chef0111/cheffolio';
+export const GITHUB_REPO_URL = 'https://github.com/gbaolt/cheffolio';
 
 export const FOOTER_SLOGAN = 'Coding as Chef';

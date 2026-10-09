@@ -86,7 +86,7 @@ across multiple arenas with positive feedback from organizers and athletes.
       start: '02.2026',
       end: '03.2026',
     },
-    link: 'https://github.com/chef0111/physthink',
+    link: 'https://github.com/gbaolt/physthink',
     skills: [
       'Next.js 16',
       'TypeScript',
@@ -114,7 +114,7 @@ across multiple arenas with positive feedback from organizers and athletes.
       start: '09.2025',
       end: '01.2026',
     },
-    link: 'https://github.com/chef0111/dev4room',
+    link: 'https://github.com/gbaolt/dev4room',
     skills: [
       'Next.js 16',
       'TypeScript',
@@ -142,7 +142,7 @@ across multiple arenas with positive feedback from organizers and athletes.
       start: '05.2026',
       end: '06.2026',
     },
-    link: 'https://github.com/chef0111/standup-log',
+    link: 'https://github.com/gbaolt/standup-log',
     skills: [
       'Expo SDK 55',
       'Supabase',
