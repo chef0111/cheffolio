@@ -91,7 +91,7 @@ export function ScrollProgress({
         <div
           data-slot="scroll-progress"
           className={cn(
-            'fixed bottom-[calc(env(safe-area-inset-bottom)+5.5rem)] left-1/2 z-100 w-max max-w-[calc(100vw-2rem)] -translate-x-1/2 font-sans transition-opacity duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none sm:bottom-[calc(env(safe-area-inset-bottom)+1.5rem)]',
+            'fixed bottom-[calc(env(safe-area-inset-bottom)+1.25rem)] left-1/2 z-100 w-max max-w-[calc(100vw-2rem)] -translate-x-1/2 font-sans transition-opacity duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none',
             className
           )}
           {...props}

@@ -1,37 +1,21 @@
 'use client';
 
-import { useOverflows } from '@/hooks/use-overflows';
 import { cn } from '@/lib/utils';
 
-export function ScrollFadeOverlay({
+export function FadeOverlay({
   align,
-  fadeOut = true,
   className,
 }: {
   align: 'top' | 'bottom';
-  fadeOut?: boolean;
   className?: string;
 }) {
   const isTop = align === 'top';
-  const pageOverflows = useOverflows(fadeOut);
-
-  // Scroll timelines stay at 0% when the page does not overflow, so the fade
-  // never runs and a short page would keep a stuck overlay.
-  if (fadeOut && !pageOverflows) {
-    return null;
-  }
 
   return (
     <div
       className={cn(
         'not-found-hidden pointer-events-none fixed inset-x-0 z-50',
-        isTop
-          ? fadeOut
-            ? 'scroll-fade-effect-top -top-0.5'
-            : '-top-0.5'
-          : fadeOut
-            ? 'scroll-fade-effect-bottom -bottom-0.5'
-            : '-bottom-0.5',
+        isTop ? '-top-0.5' : '-bottom-0.5',
         className
       )}
       aria-hidden
