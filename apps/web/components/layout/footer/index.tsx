@@ -81,9 +81,9 @@ export function SiteFooter() {
 
       <div
         data-slot="footer-margin"
-        className="md:doc-page:block pb-[env(safe-area-inset-bottom,0px)] md:hidden"
+        className="md:doc-page:block pb-[env(safe-area-inset-bottom,1px)] md:hidden"
       >
-        <div className="flex h-23" />
+        <div className="flex h-22" />
       </div>
     </footer>
   );

@@ -9,10 +9,10 @@ import { notFound } from 'next/navigation';
 import type { BlogPosting, WithContext } from 'schema-dts';
 
 import { simpleOgImageUrl } from '@/app/og/params';
+import { FadeOverlay } from '@/components/cheffolio/fade-overlay';
 import { FullWidthDivider } from '@/components/cheffolio/full-width-divider';
 import { MDCopyButtonGroup } from '@/components/cheffolio/page-actions';
 import { Panel, PanelContent, PanelHeader } from '@/components/cheffolio/panel';
-import { ScrollFadeOverlay } from '@/components/cheffolio/scroll-fade-overlay';
 import { ShareMenu } from '@/components/cheffolio/share-menu';
 import { StripeSeparator } from '@/components/cheffolio/stripe-separator';
 import { jsonLdBreadcrumbList, JsonLdScript } from '@/components/json-ld';
@@ -340,7 +340,7 @@ export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
       </DocPageRoot>
 
       <StripeSeparator />
-      <ScrollFadeOverlay align="bottom" className="max-md:hidden" />
+      <FadeOverlay align="bottom" className="max-md:hidden" />
     </>
   );
 }
