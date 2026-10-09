@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 
-import { ScrollFadeOverlay } from '@/components/cheffolio/scroll-fade-overlay';
+import { FadeOverlay } from '@/components/cheffolio/fade-overlay';
 import { SiteFooter } from '@/components/layout/footer';
 import { SiteHeader } from '@/components/layout/header';
 import { LayoutState } from '@/components/layout/layout-state';
@@ -41,8 +41,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         {children}
       </main>
       <ScrollToTop />
-      <ScrollFadeOverlay align="top" fadeOut={false} />
-      <ScrollFadeOverlay align="bottom" className="md:hidden" />
+      <FadeOverlay align="top" />
+      <FadeOverlay align="bottom" className="md:hidden" />
       <SiteFooterNav />
       <SiteFooter />
     </div>

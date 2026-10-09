@@ -32,11 +32,11 @@ export const SOCIAL = {
     href: USER.socialLinks.discord,
     sameAs: true,
   },
-  facebook: {
-    icon: `${baseUrl}/facebook.webp`,
-    title: 'Facebook',
+  dailydotdev: {
+    icon: `${baseUrl}/dailydotdev.webp`,
+    title: 'daily.dev',
     profile: 'giabao.67.05',
-    href: USER.socialLinks.facebook,
+    href: USER.socialLinks.dailydotdev,
     sameAs: true,
   },
   instagram: {

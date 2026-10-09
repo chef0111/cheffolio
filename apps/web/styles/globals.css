@@ -280,42 +280,6 @@
   }
 }
 
-@utility scroll-fade-effect-top {
-  --scroll-buffer: 1.75rem;
-
-  @supports (animation-timeline: scroll()) {
-    animation-name: show-top-fade;
-    animation-duration: auto;
-    animation-timeline: scroll(root block);
-    animation-range: 0 var(--scroll-buffer);
-    animation-fill-mode: both;
-  }
-}
-
-@utility scroll-fade-effect-bottom {
-  --scroll-buffer: 1.75rem;
-
-  @supports (animation-timeline: scroll()) {
-    animation-name: hide-bottom-fade;
-    animation-duration: auto;
-    animation-timeline: scroll(root block);
-    animation-range: calc(100% - var(--scroll-buffer)) 100%;
-    animation-fill-mode: both;
-  }
-}
-
-@keyframes show-top-fade {
-  from {
-    transform: translateY(-100%);
-  }
-}
-
-@keyframes hide-bottom-fade {
-  to {
-    transform: translateY(100%);
-  }
-}
-
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
