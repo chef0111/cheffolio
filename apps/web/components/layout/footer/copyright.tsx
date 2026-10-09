@@ -8,12 +8,12 @@ export function FooterCopyright() {
     <p className="text-muted-foreground font-pixel-square text-center text-sm">
       &copy; {new Date().getFullYear()} giabao.dev, built by{' '}
       <a
-        href={addQueryParams('https://github.com/chef0111', UTM_PARAMS)}
+        href={addQueryParams('https://github.com/gbaolt', UTM_PARAMS)}
         target="_blank"
         rel="noopener noreferrer"
         className="link-underline hover:text-foreground"
       >
-        chef0111
+        gbaolt
       </a>
     </p>
   );

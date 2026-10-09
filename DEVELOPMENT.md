@@ -15,7 +15,7 @@ Ensure you have the following installed:
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/chef0111/cheffolio.git
+git clone https://github.com/gbaolt/cheffolio.git
 cd cheffolio
 ```
 

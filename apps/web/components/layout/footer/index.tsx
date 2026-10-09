@@ -70,7 +70,7 @@ export function SiteFooter() {
           <Suspense
             fallback={
               <p className="text-muted-foreground font-pixel-square text-center text-sm">
-                &copy; 2026 giabao.dev, built by chef0111
+                &copy; 2026 giabao.dev, built by gbaolt
               </p>
             }
           >

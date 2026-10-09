@@ -5,7 +5,7 @@ export const USER: User = {
   lastName: 'Lê Trần',
   displayName: 'Gia Bảo',
   username: 'gbaolt',
-  alternateName: ['Lê Trần Gia Bảo', 'chef0111', 'giabao', 'baoltg', 'gbaolt'],
+  alternateName: ['Lê Trần Gia Bảo', 'gbaolt', 'giabao', 'baoltg', 'gbaolt'],
   gender: 'male',
   pronouns: 'he/him',
   bio: 'Love building catchy things.',
@@ -42,10 +42,10 @@ export const USER: User = {
 - Focused on high-performance and user-centric applications, with attention to scalability and clean design.
 - Creator of [Kyorbit](https://kyorbit.tku.io.vn): Taekwondo tournament-management platform, designed to support training and competing.
 `,
-  avatar: 'https://assets.giabao.dev/chef0111-avatar.webp',
+  avatar: 'https://assets.giabao.dev/gbaolt-avatar.webp',
   socialLinks: {
     x: 'https://x.com/gbaolt',
-    github: 'https://github.com/chef0111',
+    github: 'https://github.com/gbaolt',
     linkedin: 'https://linkedin.com/in/gbaolt',
     discord: 'https://discord.com/users/chef.0111',
     dailydotdev: 'https://daily.dev/gbaolt',
