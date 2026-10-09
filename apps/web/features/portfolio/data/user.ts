@@ -48,7 +48,7 @@ export const USER: User = {
     github: 'https://github.com/chef0111',
     linkedin: 'https://linkedin.com/in/gbaolt',
     discord: 'https://discord.com/users/chef.0111',
-    facebook: 'https://facebook.com/gbaolt.6705',
+    dailydotdev: 'https://daily.dev/gbaolt',
     instagram: 'https://www.instagram.com/gbaolt',
   },
   ogImage: 'https://assets.giabao.dev/screenshot-ogImage.jpeg?t=1790836087',
@@ -93,5 +93,5 @@ export const USER: User = {
     'cheffolio',
   ],
   dateCreated: '2026-03-22',
-  dateModified: '2026-10-06',
+  dateModified: '2026-10-09',
 };
