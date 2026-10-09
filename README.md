@@ -45,7 +45,7 @@ Content is distributed across MDX files in [docs](apps/web/docs/):
 
 ## Stats
 
-![Stats](https://repobeats.axiom.co/api/embed/f5f65e9b9763db7fd386d2417b89d4e5c2fdc6c3.svg 'Repobeats analytics image')
+![Stats](https://repobeats.axiom.co/api/embed/a0fdaf5bec54896f3667ea587ddcf54f07f61802.svg 'Repobeats analytics image')
 
 ## Development
 
