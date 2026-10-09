@@ -13,10 +13,6 @@ import {
 } from '@/components/kibo-ui/status';
 import { AdaptiveRing } from '@/components/ui/adaptive-ring';
 import { Tag } from '@/components/ui/tag';
-import {
-  BLOG_NAV_FORWARD,
-  BlogOgTransition,
-} from '@/features/blog/components/blog-og-transition';
 import { formatReadingTime } from '@/lib/reading-time';
 import type { Doc } from '@/types/document';
 
@@ -45,19 +41,17 @@ export function BlogItem({
       />
 
       <div className="p-4 max-md:hidden">
-        <BlogOgTransition slug={blog.slug}>
-          <div className="relative select-none!">
-            <Image
-              className="ease-out-cubic aspect-40/21 max-w-60 grayscale transition-[filter] duration-300 group-hover/post:grayscale-0"
-              src={ogImage}
-              alt={blog.metadata.title}
-              width={400}
-              height={210}
-              loading={loading}
-            />
-            <AdaptiveRing />
-          </div>
-        </BlogOgTransition>
+        <div className="relative select-none!">
+          <Image
+            className="ease-out-cubic aspect-40/21 max-w-60 grayscale transition-[filter] duration-300 group-hover/post:grayscale-0"
+            src={ogImage}
+            alt={blog.metadata.title}
+            width={400}
+            height={210}
+            loading={loading}
+          />
+          <AdaptiveRing />
+        </div>
       </div>
 
       <div className="flex w-full flex-col gap-1 p-4">
@@ -82,7 +76,6 @@ export function BlogItem({
           <Link
             href={`/blog/${blog.slug}`}
             aria-label={`Read ${blog.metadata.title}`}
-            transitionTypes={[BLOG_NAV_FORWARD]}
             prefetch={true}
           >
             <span className="absolute inset-0" aria-hidden />

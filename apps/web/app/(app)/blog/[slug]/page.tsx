@@ -31,7 +31,6 @@ import {
 import { Prose } from '@/components/ui/typography';
 import { JSON_LD_ID } from '@/config/json-ld';
 import { X_PROFILE } from '@/config/site';
-import { BlogOgTransition } from '@/features/blog/components/blog-og-transition';
 import { DocKeyboardShortcuts } from '@/features/blog/components/doc/doc-keyboard-shorcuts';
 import {
   DocContainer,
@@ -263,25 +262,23 @@ export default async function BlogPage({ params }: PageProps<'/blog/[slug]'>) {
               <div className="pointer-events-none absolute inset-x-4 inset-y-0 -z-1 border-x" />
               <FullWidthDivider className="top-4" contained />
               <FullWidthDivider className="bottom-4" contained />
-              <BlogOgTransition slug={blog.slug}>
-                <div className="relative aspect-40/21 w-full select-none">
-                  <Image
-                    className="ease-out-cubic grayscale transition-[filter] duration-300 hover:grayscale-0"
-                    src={
-                      blog.metadata.image ??
-                      simpleOgImageUrl(
-                        blog.metadata.title,
-                        blog.metadata.description
-                      )
-                    }
-                    alt={blog.metadata.title}
-                    width={1200}
-                    height={630}
-                    priority
-                  />
-                  <AdaptiveRing />
-                </div>
-              </BlogOgTransition>
+              <div className="relative aspect-40/21 w-full select-none">
+                <Image
+                  className="ease-out-cubic grayscale transition-[filter] duration-300 hover:grayscale-0"
+                  src={
+                    blog.metadata.image ??
+                    simpleOgImageUrl(
+                      blog.metadata.title,
+                      blog.metadata.description
+                    )
+                  }
+                  alt={blog.metadata.title}
+                  width={1200}
+                  height={630}
+                  priority
+                />
+                <AdaptiveRing />
+              </div>
             </div>
 
             <StripeSeparator />
