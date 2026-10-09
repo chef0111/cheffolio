@@ -1,6 +1,7 @@
-import { GridDivider } from '@/components/cheffolio/grid-divider';
+import { FullWidthDivider } from '@/components/cheffolio/full-width-divider';
 import { Panel } from '@/components/cheffolio/panel';
 import { SOCIAL, SOCIAL_LINKS } from '@/features/portfolio/data/social-links';
+import { cn } from '@/lib/utils';
 
 import { SocialLinkItem } from './social-link-item';
 
@@ -41,5 +42,37 @@ export function SocialLinks() {
         </div>
       </div>
     </Panel>
+  );
+}
+
+function GridDivider({
+  rows,
+  className,
+  style,
+  ...props
+}: React.ComponentProps<'div'> & {
+  rows: number;
+}) {
+  if (rows <= 0) return null;
+
+  return (
+    <div
+      aria-hidden="true"
+      className={cn('pointer-events-none absolute inset-0 grid', className)}
+      style={{
+        gridTemplateRows: `repeat(${rows}, minmax(0, 1fr))`,
+        ...style,
+      }}
+      {...props}
+    >
+      {Array.from({ length: rows }, (_, row) => (
+        <div key={row} className="relative">
+          {row > 0 && <FullWidthDivider contained className="top-0" />}
+          {row < rows - 1 && (
+            <FullWidthDivider contained className="bottom-0" />
+          )}
+        </div>
+      ))}
+    </div>
   );
 }
