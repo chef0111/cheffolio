@@ -17,7 +17,7 @@
   "scripts": {
     "dev": "bun src/index.ts",
     "test": "bun test",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "bun check",
     "lint": "eslint . --cache --cache-location .eslintcache",
     "lint:fix": "eslint --fix . --cache --cache-location .eslintcache",
     "format": "prettier --write \"**/*.{ts,tsx,md,mdx}\" --cache",

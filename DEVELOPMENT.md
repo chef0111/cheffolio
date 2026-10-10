@@ -7,7 +7,7 @@ This guide outlines the steps required to set up and run the project in a local 
 Ensure you have the following installed:
 
 - [Node.js](https://nodejs.org/) (Latest LTS version recommended)
-- [bun](https://bun.sh/)
+- [Bun](https://bun.sh/) 1.4.3+ for `bun check`
 - [Git](https://git-scm.com/)
 
 ## Setup

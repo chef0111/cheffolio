@@ -1,7 +1,7 @@
 {
   "name": "cheffolio",
   "private": true,
-  "packageManager": "bun@1.4.2",
+  "packageManager": "bun@1.4.3",
   "homepage": "https://giabao.dev",
   "license": "MIT",
   "author": {

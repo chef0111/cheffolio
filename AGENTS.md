@@ -51,7 +51,7 @@ bun run build               # Production build (`turbo run build --filter=web`)
 bun run lint                # ESLint
 bun run lint:fix            # ESLint with --fix
 bun run format              # Prettier
-bun run typecheck           # Type checking (tsc --noEmit)
+bun run typecheck           # Type checking (bun check)
 bun run upgrade:next        # Upgrade Next.js
 bun run upgrade:tailwind    # Upgrade Tailwind CSS
 bun run capture             # Capture screenshots of components
