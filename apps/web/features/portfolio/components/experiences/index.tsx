@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { FullWidthDivider } from '@/components/cheffolio/full-width-divider';
+import { FullWidthDivider } from '@/components/app/full-width-divider';
 import {
   Panel,
   PanelContent,
   PanelHeader,
   PanelTitle,
-} from '@/components/cheffolio/panel';
+} from '@/components/app/panel';
 import { EXPERIENCES } from '@/features/portfolio/data/experiences';
 
 import { ExperienceItem } from './experience-item';

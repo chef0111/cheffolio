@@ -1,13 +1,13 @@
 {
   "name": "web",
-  "portless": "cheffolio",
+  "portless": "gbaolt",
   "version": "0.1.0",
   "description": "A minimal, shadcn/ui-inspired dev portfolio.",
   "scripts": {
-    "dev": "bun run render:resume && portless cheffolio next dev",
+    "dev": "bun run render:resume && portless gbaolt next dev",
     "build": "bun run render:resume && next build",
-    "start": "portless cheffolio next start",
-    "next": "bun run build && portless cheffolio next start",
+    "start": "portless gbaolt next start",
+    "next": "bun run build && portless gbaolt next start",
     "lint": "eslint . --cache --cache-location .eslintcache",
     "lint:fix": "eslint --fix . --cache --cache-location .eslintcache",
     "format": "prettier --write \"**/*.{ts,tsx,md,mdx}\" --cache",

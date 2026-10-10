@@ -1,7 +1,7 @@
 import { FolderTree, Settings2Icon } from 'lucide-react';
 import { lazy, Suspense } from 'react';
 
-import { UrlTabs } from '@/components/cheffolio/url-tabs';
+import { UrlTabs } from '@/components/app/url-tabs';
 import { Spinner } from '@/components/ui/spinner';
 import {
   TabsContent,

@@ -7,7 +7,7 @@ import rehypeExternalLinks from 'rehype-external-links';
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
 
-import { usePackageManager } from '@/components/cheffolio/code-block-command';
+import { usePackageManager } from '@/components/ncdai/code-block-command';
 import { Prose } from '@/components/ui/typography';
 
 import { mdxComponents } from './components';

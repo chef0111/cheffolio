@@ -4,7 +4,7 @@ import { useMotionValueEvent, useScroll } from 'motion/react';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
-import { BrandMark } from '@/components/cheffolio/brand';
+import { BrandMark } from '@/components/app/brand';
 
 const calcDistance = (el: HTMLElement) => {
   const rect = el.getBoundingClientRect();

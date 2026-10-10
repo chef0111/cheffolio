@@ -9,12 +9,12 @@ import { notFound } from 'next/navigation';
 import type { BlogPosting, WithContext } from 'schema-dts';
 
 import { simpleOgImageUrl } from '@/app/og/params';
-import { FadeOverlay } from '@/components/cheffolio/fade-overlay';
-import { FullWidthDivider } from '@/components/cheffolio/full-width-divider';
-import { MDCopyButtonGroup } from '@/components/cheffolio/page-actions';
-import { Panel, PanelContent, PanelHeader } from '@/components/cheffolio/panel';
-import { ShareMenu } from '@/components/cheffolio/share-menu';
-import { StripeSeparator } from '@/components/cheffolio/stripe-separator';
+import { FadeOverlay } from '@/components/app/fade-overlay';
+import { FullWidthDivider } from '@/components/app/full-width-divider';
+import { MDCopyButtonGroup } from '@/components/app/page-actions';
+import { Panel, PanelContent, PanelHeader } from '@/components/app/panel';
+import { ShareMenu } from '@/components/app/share-menu';
+import { StripeSeparator } from '@/components/app/stripe-separator';
 import { jsonLdBreadcrumbList, JsonLdScript } from '@/components/json-ld';
 import { MDX } from '@/components/mdx';
 import { TOCInline } from '@/components/toc/toc-inline';

@@ -4,8 +4,8 @@ import { CheckIcon, CircleXIcon, CopyIcon } from 'lucide-react';
 import { motion } from 'motion/react';
 import type { ComponentProps } from 'react';
 
+import { IconSwap, IconSwapItem } from '@/components/ncdai/icon-swap';
 import { Button } from '@/components/ui/button';
-import { IconSwap, IconSwapItem } from '@/components/ui/icon-swap';
 import type { CopyState } from '@/hooks/use-copy';
 import { useCopy } from '@/hooks/use-copy';
 import { cn } from '@/lib/utils';

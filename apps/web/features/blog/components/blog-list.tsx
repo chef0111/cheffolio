@@ -1,6 +1,6 @@
 import { FileTextIcon, SearchXIcon } from 'lucide-react';
 
-import { Panel } from '@/components/cheffolio/panel';
+import { Panel } from '@/components/app/panel';
 import {
   Empty,
   EmptyDescription,

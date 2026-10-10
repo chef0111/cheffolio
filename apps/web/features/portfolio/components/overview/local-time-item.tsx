@@ -6,7 +6,7 @@ import {
   IntroItem,
   IntroItemContent,
   IntroItemIcon,
-} from '@/components/cheffolio/intro-item';
+} from '@/components/app/intro-item';
 import { InlineScript } from '@/components/inline-script';
 import {
   Tooltip,

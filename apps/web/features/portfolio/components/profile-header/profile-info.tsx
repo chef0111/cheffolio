@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import { PanelContent } from '@/components/cheffolio/panel';
+import { PanelContent } from '@/components/app/panel';
 import { VerifiedIcon } from '@/components/icons/verified-icon';
 import { AdaptiveRing } from '@/components/ui/adaptive-ring';
 import { Label } from '@/components/ui/label';

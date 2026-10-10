@@ -34,8 +34,8 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# cheffolio
-.cheffolio
+# app
+.gbaolt
 .scratch
 .codegraph
 CONTEXT.md

@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { simpleOgImageUrl } from '@/app/og/params';
-import { GridPattern } from '@/components/cheffolio/grid-pattern';
+import { GridPattern } from '@/components/app/grid-pattern';
 import {
   Status,
   StatusIndicator,

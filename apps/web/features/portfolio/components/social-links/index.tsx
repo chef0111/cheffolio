@@ -1,5 +1,5 @@
-import { FullWidthDivider } from '@/components/cheffolio/full-width-divider';
-import { Panel } from '@/components/cheffolio/panel';
+import { FullWidthDivider } from '@/components/app/full-width-divider';
+import { Panel } from '@/components/app/panel';
 import { SOCIAL, SOCIAL_LINKS } from '@/features/portfolio/data/social-links';
 import { cn } from '@/lib/utils';
 

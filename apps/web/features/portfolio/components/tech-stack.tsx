@@ -3,7 +3,7 @@ import {
   PanelContent,
   PanelHeader,
   PanelTitle,
-} from '@/components/cheffolio/panel';
+} from '@/components/app/panel';
 import { cn } from '@/lib/utils';
 
 import { TECH_STACK } from '../data/tech-stack';

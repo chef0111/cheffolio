@@ -2,10 +2,10 @@ import {
   PageHeading,
   PageHeadingDescription,
   PageHeadingTitle,
-} from '@/components/cheffolio/page-heading';
+} from '@/components/app/page-heading';
 import { cn } from '@/lib/utils';
 
-import { StripeSeparator } from '../cheffolio/stripe-separator';
+import { StripeSeparator } from '../app/stripe-separator';
 
 type AppShellProps = {
   title: string;

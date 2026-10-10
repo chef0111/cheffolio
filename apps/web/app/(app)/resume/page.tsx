@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import type { WebPage, WithContext } from 'schema-dts';
 
 import { simpleOgImageUrl } from '@/app/og/params';
-import { MDCopyButtonGroup } from '@/components/cheffolio/page-actions';
-import { ShareMenu } from '@/components/cheffolio/share-menu';
+import { MDCopyButtonGroup } from '@/components/app/page-actions';
+import { ShareMenu } from '@/components/app/share-menu';
 import { jsonLdBreadcrumbList, JsonLdScript } from '@/components/json-ld';
 import { AppShell } from '@/components/layout/app-shell';
 import { JSON_LD_ID } from '@/config/json-ld';

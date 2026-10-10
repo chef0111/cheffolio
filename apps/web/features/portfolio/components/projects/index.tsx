@@ -1,11 +1,11 @@
-import { CollapsibleList } from '@/components/cheffolio/collapsible-list';
+import { CollapsibleList } from '@/components/app/collapsible-list';
 import {
   Panel,
   PanelContent,
   PanelHeader,
   PanelTitle,
   PanelTitleSup,
-} from '@/components/cheffolio/panel';
+} from '@/components/app/panel';
 import { PROJECTS } from '@/features/portfolio/data/projects';
 
 import { ProjectItem } from './project-item';

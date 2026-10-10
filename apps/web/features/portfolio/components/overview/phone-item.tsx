@@ -6,13 +6,13 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { toast } from 'sonner';
 import { useWebHaptics } from 'web-haptics/react';
 
-import { CopyButton } from '@/components/cheffolio/copy-button';
 import {
   IntroItem,
   IntroItemContent,
   IntroItemIcon,
   IntroItemLink,
-} from '@/components/cheffolio/intro-item';
+} from '@/components/app/intro-item';
+import { CopyButton } from '@/components/ncdai/copy-button';
 import { DrawUnderline } from '@/components/ui/draw-underline';
 import { useIsClient } from '@/hooks/use-is-client';
 import { copyText } from '@/utils/copy';

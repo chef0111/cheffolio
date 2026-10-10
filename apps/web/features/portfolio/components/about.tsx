@@ -1,10 +1,10 @@
-import { Markdown } from '@/components/cheffolio/markdown';
+import { Markdown } from '@/components/app/markdown';
 import {
   Panel,
   PanelContent,
   PanelHeader,
   PanelTitle,
-} from '@/components/cheffolio/panel';
+} from '@/components/app/panel';
 
 import { USER } from '../data/user';
 import { GitHubContributions } from './github-contributions';

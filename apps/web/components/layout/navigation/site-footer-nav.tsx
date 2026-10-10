@@ -2,7 +2,7 @@
 
 import { Suspense } from 'react';
 
-import { CommandMenu } from '@/components/cheffolio/command-menu';
+import { CommandMenu } from '@/components/app/command-menu';
 import { MOBILE_NAV } from '@/config/site';
 
 import { NavMobile } from './nav-mobile';

@@ -15,8 +15,8 @@ Ensure you have the following installed:
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/gbaolt/cheffolio.git
-cd cheffolio
+git clone https://github.com/gbaolt/giabao.dev.git dev-portfolio
+cd dev-portfolio
 ```
 
 ### 2. Install Portless
@@ -49,7 +49,7 @@ Then, update the necessary environment variables inside `apps/web/.env.local`.
 bun run dev
 ```
 
-The application should now be available at https://cheffolio.localhost. `bun run dev` runs `turbo run dev --filter=web`. The public origin stays `https://cheffolio.localhost`.
+The application should now be available at `https://gbaolt.localhost`.
 
 In development, `/resume.pdf` renders from the current MDX and PDF components on each request. Refresh `/resume` after editing content or PDF styles. Production continues serving the static PDF generated before `next build`.
 
@@ -75,11 +75,11 @@ Start the app first:
 bun run dev
 ```
 
-The app is at https://cheffolio.localhost. Then:
+The app is at `https://gbaolt.localhost`. Then:
 
 ```bash
-bun run capture       # Capture screenshots into .cheffolio/screenshots
+bun run capture       # Capture screenshots into .gbaolt/screenshots
 bun run capture:sync  # Upload the folder to Cloudflare R2
 ```
 
-Set the `R2_*` credentials from `apps/web/.env.example` before running `capture:sync`. The command uploads `.cheffolio/screenshots` to the bucket root (skips dotfiles), replaces keys that already exist, and leaves other remote objects untouched.
+Set the `R2_*` credentials from `apps/web/.env.example` before running `capture:sync`. The command uploads `.gbaolt/screenshots` to the bucket root (skips dotfiles), replaces keys that already exist, and leaves other remote objects untouched.

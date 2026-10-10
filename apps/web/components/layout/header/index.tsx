@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { Suspense } from 'react';
 
-import { BrandMark } from '@/components/cheffolio/brand';
-import { CommandMenu } from '@/components/cheffolio/command-menu';
+import { BrandMark } from '@/components/app/brand';
+import { CommandMenu } from '@/components/app/command-menu';
 import { GitHubIcon } from '@/components/icons';
 import { Nav, NavDesktop } from '@/components/layout/navigation/nav-desktop';
 import { SiteHeaderNav } from '@/components/layout/navigation/site-header-nav';

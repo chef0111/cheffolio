@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import type { ProfilePage, WithContext } from 'schema-dts';
 
-import { StripeSeparator } from '@/components/cheffolio/stripe-separator';
+import { StripeSeparator } from '@/components/app/stripe-separator';
 import { JsonLdScript } from '@/components/json-ld';
 import { JSON_LD_ID } from '@/config/json-ld';
 import { About } from '@/features/portfolio/components/about';

@@ -4,10 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { getR2ClientFromEnv, syncDirToR2 } from './lib/r2.mts';
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
-const screenshotsDir = path.resolve(
-  scriptDir,
-  '../../../.cheffolio/screenshots'
-);
+const screenshotsDir = path.resolve(scriptDir, '../../../.gbaolt/screenshots');
 
 async function main() {
   const client = getR2ClientFromEnv();

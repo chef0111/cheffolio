@@ -6,9 +6,9 @@ import type { Browser, Page } from 'puppeteer';
 import puppeteer from 'puppeteer';
 import sharp from 'sharp';
 
-const DEFAULT_ORIGIN = 'https://cheffolio.localhost';
+const DEFAULT_ORIGIN = 'https://gbaolt.localhost';
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
-const outputDir = path.resolve(scriptDir, '../../../.cheffolio/screenshots');
+const outputDir = path.resolve(scriptDir, '../../../.gbaolt/screenshots');
 
 const SIZE = {
   desktop: {

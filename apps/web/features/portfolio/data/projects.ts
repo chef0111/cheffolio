@@ -22,7 +22,7 @@ export const PROJECTS: Project[] = [
       'Portfolio',
     ],
     description: 'A minimal, pixel-perfect, shadcn/ui inspired dev portfolio.',
-    logo: `${baseUrl}/cheffolio.svg`,
+    logo: `${baseUrl}/giabaodotdev.svg`,
     isExpanded: true,
   },
   {

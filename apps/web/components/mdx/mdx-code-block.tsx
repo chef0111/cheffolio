@@ -1,6 +1,6 @@
 import type { ComponentProps } from 'react';
 
-import { CopyButton } from '@/components/cheffolio/copy-button';
+import { CopyButton } from '@/components/ncdai/copy-button';
 import { cn } from '@/lib/utils';
 
 import { getIconExtension } from './extensions/get-icon';
