@@ -1,9 +1,9 @@
 import { format } from 'date-fns';
 import { AwardIcon } from 'lucide-react';
 
-import { GridPattern } from '@/components/cheffolio/grid-pattern';
-import { IntroItemIcon } from '@/components/cheffolio/intro-item';
-import { Markdown } from '@/components/cheffolio/markdown';
+import { GridPattern } from '@/components/app/grid-pattern';
+import { IntroItemIcon } from '@/components/app/intro-item';
+import { Markdown } from '@/components/app/markdown';
 import {
   CollapsibleContent,
   CollapsibleTrigger,

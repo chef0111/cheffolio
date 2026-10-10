@@ -1,13 +1,13 @@
 import { compareDesc } from 'date-fns';
 
-import { CollapsibleList } from '@/components/cheffolio/collapsible-list';
+import { CollapsibleList } from '@/components/app/collapsible-list';
 import {
   Panel,
   PanelContent,
   PanelHeader,
   PanelTitle,
   PanelTitleSup,
-} from '@/components/cheffolio/panel';
+} from '@/components/app/panel';
 import { AWARDS } from '@/features/portfolio/data/awards';
 
 import { AwardItem } from './award-item';

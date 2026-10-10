@@ -2,8 +2,8 @@
 
 import type { CreateFlags } from 'create-gb-app/preset';
 
-import type { PackageManager } from '@/components/cheffolio/code-block-command';
-import { usePackageManager } from '@/components/cheffolio/code-block-command';
+import type { PackageManager } from '@/components/ncdai/code-block-command';
+import { usePackageManager } from '@/components/ncdai/code-block-command';
 
 import { useCreate } from '../components/create-provider';
 

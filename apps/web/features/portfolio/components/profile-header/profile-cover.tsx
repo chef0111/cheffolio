@@ -3,9 +3,9 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 
-import { BrandMark } from '@/components/cheffolio/brand';
-import { CanvasReveal } from '@/components/cheffolio/canvas-reveal';
-import { PanelContent } from '@/components/cheffolio/panel';
+import { CanvasReveal } from '@/components/aceternity/canvas-reveal';
+import { BrandMark } from '@/components/app/brand';
+import { PanelContent } from '@/components/app/panel';
 import { Label } from '@/components/ui/label';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { cn } from '@/lib/utils';

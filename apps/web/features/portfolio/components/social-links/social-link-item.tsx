@@ -1,7 +1,7 @@
 import { ArrowUpRightIcon } from 'lucide-react';
 import Image from 'next/image';
 
-import { GridPattern } from '@/components/cheffolio/grid-pattern';
+import { GridPattern } from '@/components/app/grid-pattern';
 import { AdaptiveRing } from '@/components/ui/adaptive-ring';
 import { UTM_PARAMS } from '@/config/site';
 import type { SocialProfile } from '@/features/portfolio/types/social-links';

@@ -3,7 +3,7 @@
 import { RotateCcwIcon, ShuffleIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { ShareMenu } from '@/components/cheffolio/share-menu';
+import { ShareMenu } from '@/components/app/share-menu';
 import { Button } from '@/components/ui/button';
 import {
   Tooltip,

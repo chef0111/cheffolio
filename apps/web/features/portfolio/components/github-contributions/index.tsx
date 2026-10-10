@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 
-import { PanelContent } from '@/components/cheffolio/panel';
+import { PanelContent } from '@/components/app/panel';
 import { getGitHubContributions } from '@/features/portfolio/data/github-contributions';
 
 import { GitHubContributionFallback, GitHubContributionGraph } from './graph';

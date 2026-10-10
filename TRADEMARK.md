@@ -10,13 +10,13 @@ These are not part of the MIT grant, including where the files live in this repo
 - **gbaolt**
 - **chef0111**
 - **Coding as Chef**
-- The logo defined by `Brand` and `BrandMark` in [`components/cheffolio/brand.tsx`](./components/cheffolio/brand.tsx), including copies used as favicons, app icons, and screenshots
+- The logo defined by `Brand` and `BrandMark` in [`components/app/brand.tsx`](./components/app/brand.tsx), including copies used as favicons, app icons, and screenshots
 
 ## No permission needed
 
 - Use the code under the MIT license
 - Say that your work is based on, forked from, or inspired by this repository
-- Link to [giabao.dev](https://giabao.dev) or [github.com/gbaolt/cheffolio](https://github.com/gbaolt/cheffolio)
+- Link to [giabao.dev](https://giabao.dev) or [github.com/gbaolt/giabao.dev](https://github.com/gbaolt/giabao.dev)
 - Show screenshots of the site in articles, talks, and reviews
 
 ## Permission required
@@ -29,13 +29,13 @@ These are not part of the MIT grant, including where the files live in this repo
 
 Replace the branding before you publish:
 
-- `Brand` and `BrandMark` in `components/cheffolio/brand.tsx`
+- `Brand` and `BrandMark` in `components/app/brand.tsx`
 - Personal details in `features/portfolio/data/user.ts`
 - `config/site.ts`
 - `app/manifest.webmanifest`
 
-Keep the rest of the MIT-licensed code, including other files under `components/cheffolio/`.
+Keep the rest of the MIT-licensed code, including other files under `components/app/`.
 
 ## Questions
 
-[Open an issue](https://github.com/gbaolt/cheffolio/issues). Say which name or logo you want to use, where you will use it, and why.
+[Open an issue](https://github.com/gbaolt/giabao.dev/issues). Say which name or logo you want to use, where you will use it, and why.

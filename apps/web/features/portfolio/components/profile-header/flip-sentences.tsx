@@ -3,7 +3,7 @@
 import { useInView, usePageInView } from 'motion/react';
 import { useRef } from 'react';
 
-import { TextFlip } from '@/components/cheffolio/text-flip';
+import { TextFlip } from '@/components/ncdai/text-flip';
 
 export function FlipSentences({
   children,

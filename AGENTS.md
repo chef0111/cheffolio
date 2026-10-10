@@ -1,8 +1,8 @@
-# AI agent guidelines for cheffolio (giabao.dev)
+# AI agent guidelines for this project
 
-Next.js 16 (App Router) portfolio, blog, and shadcn registry website.
+Next.js 16 (App Router) portfolio, blog, resume and project scaffolder website.
 
-**Stack**: TypeScript, React 19, Tailwind CSS v4, MDX, Bun, Vercel
+**Stack**: Turborepo, TypeScript, React 19, Tailwind CSS v4, MDX, Bun, Vercel
 
 ## Project structure
 
@@ -11,7 +11,7 @@ Next.js 16 (App Router) portfolio, blog, and shadcn registry website.
 | `apps/web/`                         | Next.js site (App Router, blog, Create, resume)          |
 | `packages/create-gb-app/`           | CLI and generate/preset source the site imports          |
 | `apps/web/app/`                     | App Router pages, layouts, API routes                    |
-| `apps/web/components/cheffolio/`    | Shared UI components                                     |
+| `apps/web/components/app/`          | Shared UI components                                     |
 | `apps/web/features/`                | Feature modules: `blog`, `portfolio`, `create`, `resume` |
 | `apps/web/config/`                  | Site (`site.ts`), JSON-LD config                         |
 | `apps/web/scripts/`                 | Build scripts (capture) run with Bun                     |
@@ -25,8 +25,8 @@ All content lives in `apps/web/docs/blog/` and `apps/web/docs/resume/` as MDX fi
 - **Data layer**: `apps/web/features/blog/lib/data.ts` (`getAllDocs`, `getDocBySlug`)
 - **Blog UI**: `apps/web/features/blog/components/`
 - **Portfolio UI**: `apps/web/features/portfolio/components/`
-- **Create UI**: `apps/web/features/create/components/`
 - **Resume UI**: `apps/web/features/resume/components/`
+- **Create UI**: `apps/web/features/create/components/`
 
 ## Coding guidelines
 
@@ -63,4 +63,4 @@ Website scripts also run with `bun run --filter web <script>`.
 
 ### Local dev URL
 
-A dev server is usually already running behind `https://cheffolio.localhost` (see Portless `"cheffolio"` on the `web` package and `NEXT_PUBLIC_APP_URL` in `apps/web/.env.local`). Use that origin to test pages and routes, never `http://localhost:3000` or a raw port. It also makes generated absolute URLs match what the code produces.
+A dev server is usually already running behind `https://gbaolt.localhost` (see Portless `"gbaolt"` on the `web` package and `NEXT_PUBLIC_APP_URL` in `apps/web/.env.local`). Use that origin to test pages and routes, never `http://localhost:3000` or a raw port. It also makes generated absolute URLs match what the code produces.

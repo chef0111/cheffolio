@@ -1,7 +1,7 @@
 import { InfinityIcon } from 'lucide-react';
 
-import { IntroItemIcon } from '@/components/cheffolio/intro-item';
-import { Markdown } from '@/components/cheffolio/markdown';
+import { IntroItemIcon } from '@/components/app/intro-item';
+import { Markdown } from '@/components/app/markdown';
 import {
   Status,
   StatusIndicator,

@@ -1,4 +1,4 @@
-import { BrandMark } from '@/components/cheffolio/brand';
+import { BrandMark } from '@/components/app/brand';
 
 export default function AppLoading() {
   return (

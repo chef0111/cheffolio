@@ -9,7 +9,7 @@ import {
   IntroItemContent,
   IntroItemIcon,
   IntroItemLink,
-} from '@/components/cheffolio/intro-item';
+} from '@/components/app/intro-item';
 import { DrawUnderline } from '@/components/ui/draw-underline';
 import { UTM_PARAMS } from '@/config/site';
 import { addQueryParams } from '@/utils/url';

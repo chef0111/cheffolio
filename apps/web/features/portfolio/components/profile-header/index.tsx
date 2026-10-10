@@ -1,4 +1,4 @@
-import { FullWidthDivider } from '@/components/cheffolio/full-width-divider';
+import { FullWidthDivider } from '@/components/app/full-width-divider';
 
 import { ProfileCover } from './profile-cover';
 import { ProfileInfo } from './profile-info';

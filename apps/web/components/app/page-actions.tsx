@@ -3,13 +3,13 @@
 import { ChevronDownIcon } from 'lucide-react';
 import React from 'react';
 
-import { CopyStateIcon } from '@/components/cheffolio/copy-button';
 import {
   ClaudeIcon,
   GitHubIcon,
   MarkdownIcon,
   OpenAIIcon,
 } from '@/components/icons';
+import { CopyStateIcon } from '@/components/ncdai/copy-button';
 import { Button } from '@/components/ui/button';
 import {
   ButtonGroup,

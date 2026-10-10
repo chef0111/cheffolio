@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 
-import { FadeOverlay } from '@/components/cheffolio/fade-overlay';
+import { FadeOverlay } from '@/components/app/fade-overlay';
 import { SiteFooter } from '@/components/layout/footer';
 import { SiteHeader } from '@/components/layout/header';
 import { LayoutState } from '@/components/layout/layout-state';
@@ -10,12 +10,10 @@ import { getBlogPosts } from '@/lib/document';
 import type { DocPreview } from '@/types/document';
 
 const ScrollToTop = dynamic(() =>
-  import('@/components/cheffolio/scroll-to-top').then((mod) => mod.ScrollToTop)
+  import('@/components/app/scroll-to-top').then((mod) => mod.ScrollToTop)
 );
 const CommandMenuDialog = dynamic(() =>
-  import('@/components/cheffolio/command-menu').then(
-    (mod) => mod.CommandMenuDialog
-  )
+  import('@/components/app/command-menu').then((mod) => mod.CommandMenuDialog)
 );
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {

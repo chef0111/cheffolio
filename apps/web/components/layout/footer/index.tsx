@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 
-import { Brand } from '@/components/cheffolio/brand';
-import { PanelContent } from '@/components/cheffolio/panel';
+import { Brand } from '@/components/app/brand';
+import { PanelContent } from '@/components/app/panel';
 import { GitHubIcon, LinkedInIcon, XIcon } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import { FOOTER_SLOGAN, GITHUB_REPO_URL, UTM_PARAMS } from '@/config/site';

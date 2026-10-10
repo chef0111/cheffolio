@@ -4,7 +4,7 @@ import { HomeIcon, RotateCwIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect } from 'react';
 
-import { FullWidthDivider } from '@/components/cheffolio/full-width-divider';
+import { FullWidthDivider } from '@/components/app/full-width-divider';
 import { Button } from '@/components/ui/button';
 import {
   Empty,

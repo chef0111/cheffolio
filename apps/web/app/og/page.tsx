@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
-import { BrandMark } from '@/components/cheffolio/brand';
-import { Panel, PanelDecor } from '@/components/cheffolio/panel';
+import { BrandMark } from '@/components/app/brand';
+import { Panel, PanelDecor } from '@/components/app/panel';
 
 export const metadata: Metadata = {
   robots: {

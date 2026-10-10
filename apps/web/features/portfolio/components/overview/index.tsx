@@ -11,8 +11,8 @@ import {
   IntroItemContent,
   IntroItemIcon,
   IntroItemLink,
-} from '@/components/cheffolio/intro-item';
-import { Panel, PanelContent } from '@/components/cheffolio/panel';
+} from '@/components/app/intro-item';
+import { Panel, PanelContent } from '@/components/app/panel';
 import { DrawUnderline } from '@/components/ui/draw-underline';
 import { USER } from '@/features/portfolio/data/user';
 import type { User } from '@/features/portfolio/types/user';

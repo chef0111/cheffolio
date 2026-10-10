@@ -6,8 +6,8 @@ import { atomWithStorage } from 'jotai/utils';
 import { TerminalIcon, TextAlignStartIcon } from 'lucide-react';
 import { useMemo } from 'react';
 
-import { CopyButton } from '@/components/cheffolio/copy-button';
-import { IconSwap, IconSwapItem } from '@/components/ui/icon-swap';
+import { CopyButton } from '@/components/ncdai/copy-button';
+import { IconSwap, IconSwapItem } from '@/components/ncdai/icon-swap';
 import {
   Tabs,
   TabsContent,

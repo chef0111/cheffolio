@@ -7,7 +7,7 @@ import {
   PanelHeader,
   PanelTitle,
   PanelTitleSup,
-} from '@/components/cheffolio/panel';
+} from '@/components/app/panel';
 import { Button } from '@/components/ui/button';
 import { BlogItem } from '@/features/blog/components/blog-item';
 import { getBlogPosts } from '@/lib/document';

@@ -5,7 +5,7 @@ import {
   IntroItem,
   IntroItemContent,
   IntroItemIcon,
-} from '@/components/cheffolio/intro-item';
+} from '@/components/app/intro-item';
 import { Button } from '@/components/ui/button';
 import { DrawUnderline } from '@/components/ui/draw-underline';
 import { RESUME_PDF_FILENAME } from '@/config/resume';
